@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Holzlager V76</title>
+<title>Holzlager V77</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -252,7 +252,7 @@ body.accessLocked #authModal .btn{
 <nav><div class="brand">HOLZ<br>LAGER</div>
 <button class="nav active" data-page="map">⌖ Karte</button>
 <button class="nav" data-page="inventory">▦ Material</button>
-<button class="nav" data-page="control">✓ Kontrolle</button><button class="nav" data-page="reserved">◆ Reserviert</button><button class="nav" data-page="archive">▣ Archiv</button><button class="nav" data-page="manage">⚙ Verwalten</button></nav>
+<button class="nav" data-page="control">✓ Kontrolle</button><button class="nav" data-page="reserved">◆ Reserviert</button><button class="nav" data-page="archive">▣ Archiv</button><button class="nav" data-page="defects">⚠ Mängel</button><button class="nav" data-page="manage">⚙ Verwalten</button></nav>
 <main>
 <header><div class="actions"><button class="btn secondary" id="backBtn" onclick="goBack()" style="display:none">← Zurück</button><h1 id="title">Aussenlager</h1></div><div class="actions"><span id="syncStatusBadge" class="syncBadge" title="Speicherstatus">Lokal</span><button id="authHeaderBtn" class="btn secondary authBtn" onclick="openAuthModal()">Anmelden</button><select id="activeUserSelect" onchange="switchActiveUser(this.value)" title="Aktiver Benutzer"></select><span id="activeRoleBadge" class="statusbadge"></span><button class="btn secondary" id="drawBtn" onclick="startDraw()">+ Fläche erstellen</button><button class="btn" onclick="openMaterial()">+ Material erfassen</button></div></header>
 
@@ -382,16 +382,17 @@ body.accessLocked #authModal .btn{
 </div>
 </section>
 
+
+<section class="page" id="page-defects">
+<header><div><h1>Mängel</h1><p>Alle erfassten Materialmängel, gruppiert nach Kommission.</p></div></header>
+<div class="card">
+ <div class="manageHead"><div><h2 style="margin:0">Mängelliste</h2><p class="muted">Kommission → Material → Mangel → Fotos</p></div><button class="btn secondary" onclick="renderDefectsPage()">Aktualisieren</button></div>
+ <div id="defectsPageBody"></div>
+</div>
+</section>
 <section class="page" id="page-manage">
 <div class="grid">
 
-<div class="card" id="defectManageCard">
-  <div class="manageHead">
-    <div><h2 style="margin:0">Mängel</h2><p class="muted">Alle erfassten Materialmängel, gruppiert nach Kommission.</p></div>
-    <button class="btn" onclick="openDefectsOverview()">Mängel öffnen</button>
-  </div>
-  <div id="defectManageSummary" class="authState muted">Noch keine Mängel erfasst.</div>
-</div>
 <div class="card" id="systemCheckCard">
 <div class="manageHead"><div><h2 style="margin:0">Systemcheck</h2><p class="muted">Prüft Datenkonsistenz, Reservierungen, Lagerorte und Synchronisationskonflikte.</p></div><button class="btn" onclick="runSystemCheck(true)">Jetzt prüfen</button></div>
 <div id="systemCheckSummary" class="authState muted">Noch nicht geprüft.</div>
@@ -1787,7 +1788,7 @@ function showPage(p,fromBack=false){
  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
  E('page-'+p).classList.add('active');
  document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('active',x.dataset.page===p));
- E('title').textContent=p==='map'?'Aussenlager':p==='production'?'Produktionshalle':p==='inventory'?'Materialübersicht':p==='control'?'Lagerkontrolle':p==='reserved'?'Reservierte Materialien':p==='archive'?'Materialarchiv':'Lager verwalten';
+ E('title').textContent=p==='map'?'Aussenlager':p==='production'?'Produktionshalle':p==='inventory'?'Materialübersicht':p==='control'?'Lagerkontrolle':p==='reserved'?'Reservierte Materialien':p==='archive'?'Materialarchiv':p==='defects'?'Mängel':'Lager verwalten';
  E('drawBtn').style.display=((p==='map'||p==='production')&&canManageStructure())?'inline-block':'none';
  E('backBtn').style.display=p==='map'?'none':'inline-block';
  if(p==='production')renderAreas();
@@ -1795,6 +1796,7 @@ function showPage(p,fromBack=false){
  if(p==='control')renderControl();
  if(p==='reserved')renderReserved();
  if(p==='archive')renderArchive();
+ if(p==='defects')renderDefectsPage();
  if(p==='manage')renderManage()
 }
 let productionZoom=1,outsideZoom=1;
@@ -1924,7 +1926,11 @@ function renderDefectManageSummary(){
  let packages=(st.packages||[]).filter(p=>(p.defects||[]).length),count=packages.reduce((n,p)=>n+(p.defects||[]).length,0);
  el.textContent=count?`${count} Mangel${count===1?'':'/Mängel'} in ${packages.length} Materialeintrag${packages.length===1?'':'/-einträgen'}.`:'Noch keine Mängel erfasst.';
 }
-function openDefectsOverview(){renderDefectsOverview();E('defectsOverviewModal').classList.add('open')}
+function openDefectsOverview(){showPage('defects')}
+function renderDefectsPage(){
+ let page=E('defectsPageBody'),old=E('defectsOverviewBody');if(!page||!old)return;
+ renderDefectsOverview();page.innerHTML=old.innerHTML;
+}
 function renderDefectsOverview(){
  let host=E('defectsOverviewBody');if(!host)return;
  let ps=(st.packages||[]).filter(p=>(p.defects||[]).length);
@@ -2569,7 +2575,7 @@ function toggleProductionMoveLock(v){if(!requireAdmin())return;
  persist();renderManage()
 }
 function toggleMaterialDelete(v){if(!requireAdmin())return;ensureV24();st.settings.allowMaterialDelete=!!v;persist();renderManage()}
-function renderManage(){ensureIdSettings();ensureCommissions();ensureV24();renderCloudSettings();renderDefectManageSummary();
+function renderManage(){ensureIdSettings();ensureCommissions();ensureV24();renderCloudSettings();
  if(E('userManageCard'))E('userManageCard').style.display=canAdmin()?'':'none';
  if(E('userManage'))E('userManage').innerHTML=st.users.map(u=>`<div class="manageItem"><div class="manageHead"><div><b>${esc(u.name)}</b> <span class="statusbadge ${roleClass(u.role)}">${esc(u.role)}</span><div class="muted">${u.active?'Aktiv':'Deaktiviert'}${u.id===st.activeUserId?' · aktuell angemeldet':''}</div></div><div class="toolbar"><select onchange="updateUserRole('${u.id}',this.value)"><option ${u.role==='Mitarbeiter'?'selected':''}>Mitarbeiter</option><option ${u.role==='Lagerverantwortlicher'?'selected':''}>Lagerverantwortlicher</option><option ${u.role==='Administrator'?'selected':''}>Administrator</option></select><button class="btn secondary" onclick="renameUser('${u.id}')">Umbenennen</button><button class="btn ${u.active?'danger':'secondary'}" onclick="toggleUserActive('${u.id}')">${u.active?'Deaktivieren':'Aktivieren'}</button></div></div></div>`).join('');
  if(E('lockProductionMove')){E('lockProductionMove').checked=!!st.settings.lockProductionMove;E('lockProductionMove').disabled=!canAdmin()}
