@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Holzlager V78</title>
+<title>Holzlager V80</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -248,13 +248,20 @@ body.accessLocked #authModal .btn{
 }
 /* V78: Unterdialoge während laufender Materialerfassung */
 #matModal.v78BehindChild{visibility:hidden}
+
+/* V79: Mängelstatus, Badge und PDF-Export */
+.defectNavBtn{position:relative}
+.defectBadge{display:inline-flex;align-items:center;justify-content:center;min-width:21px;height:21px;padding:0 6px;margin-left:5px;border-radius:999px;background:#d52121;color:#fff;font-size:12px;font-weight:900;line-height:1}
+.defectStatusOpen{display:inline-block;padding:3px 8px;border-radius:999px;background:#ffe6e6;color:#a20f0f;font-weight:800;font-size:12px}
+.defectStatusReported{display:inline-block;padding:3px 8px;border-radius:999px;background:#e8efe9;color:#315b39;font-weight:800;font-size:12px}
+.defectPdfProgress{margin-top:8px;font-size:12px}
 </style></head>
 <body class="accessLocked">
 <div class="app">
 <nav><div class="brand">HOLZ<br>LAGER</div>
 <button class="nav active" data-page="map">⌖ Karte</button>
 <button class="nav" data-page="inventory">▦ Material</button>
-<button class="nav" data-page="control">✓ Kontrolle</button><button class="nav" data-page="reserved">◆ Reserviert</button><button class="nav" data-page="archive">▣ Archiv</button><button class="nav" data-page="defects">⚠ Mängel</button><button class="nav" data-page="manage">⚙ Verwalten</button></nav>
+<button class="nav" data-page="control">✓ Kontrolle</button><button class="nav" data-page="reserved">◆ Reserviert</button><button class="nav" data-page="archive">▣ Archiv</button><button class="nav defectNavBtn" data-page="defects">⚠ Mängel <span id="defectOpenBadge" class="defectBadge" style="display:none">0</span></button><button class="nav" data-page="manage">⚙ Verwalten</button></nav>
 <main>
 <header><div class="actions"><button class="btn secondary" id="backBtn" onclick="goBack()" style="display:none">← Zurück</button><h1 id="title">Aussenlager</h1></div><div class="actions"><span id="syncStatusBadge" class="syncBadge" title="Speicherstatus">Lokal</span><button id="authHeaderBtn" class="btn secondary authBtn" onclick="openAuthModal()">Anmelden</button><select id="activeUserSelect" onchange="switchActiveUser(this.value)" title="Aktiver Benutzer"></select><span id="activeRoleBadge" class="statusbadge"></span><button class="btn secondary" id="drawBtn" onclick="startDraw()">+ Fläche erstellen</button><button class="btn" onclick="openMaterial()">+ Material erfassen</button></div></header>
 
@@ -385,10 +392,17 @@ body.accessLocked #authModal .btn{
 </section>
 
 
+
 <section class="page" id="page-defects">
-<header><div><h1>Mängel</h1><p>Alle erfassten Materialmängel, gruppiert nach Kommission.</p></div></header>
+<header><div><h1>Mängel</h1><p id="defectsPageSubtitle">Nicht gemeldete Materialmängel, gruppiert nach Kommission.</p></div></header>
 <div class="card">
- <div class="manageHead"><div><h2 style="margin:0">Mängelliste</h2><p class="muted">Kommission → Material → Mangel → Fotos</p></div><button class="btn secondary" onclick="renderDefectsPage()">Aktualisieren</button></div>
+ <div class="manageHead">
+   <div><h2 style="margin:0">Mängelliste</h2><p class="muted">Kommission → Material → Mangel → Fotos</p></div>
+   <div class="toolbar">
+     <button id="reportedDefectsBtn" class="btn secondary" onclick="toggleReportedDefects()">Mängel gemeldet</button>
+     <button class="btn" onclick="exportOpenDefectsPDFs()">PDF exportieren</button>
+   </div>
+ </div>
  <div id="defectsPageBody"></div>
 </div>
 </section>
@@ -1802,7 +1816,7 @@ function showPage(p,fromBack=false){
  if(p==='control')renderControl();
  if(p==='reserved')renderReserved();
  if(p==='archive')renderArchive();
- if(p==='defects')renderDefectsPage();
+ if(p==='defects')renderDefectsPage();updateDefectBadge();
  if(p==='manage')renderManage()
 }
 let productionZoom=1,outsideZoom=1;
@@ -1854,7 +1868,7 @@ function removeSubMaterialRow(i){v75SubMaterials.splice(i,1);renderSubMaterialsE
 function updateSubMaterial(i,k,v){if(v75SubMaterials[i])v75SubMaterials[i][k]=v}
 function renderSubMaterialsEditor(){let el=E('subMaterialsEditor');if(!el)return;el.innerHTML=v75SubMaterials.length?v75SubMaterials.map((m,i)=>`<div class="subMaterialRow"><div class="subMaterialGrid"><label class="wide">Material<input value="${esc(m.material||'')}" oninput="updateSubMaterial(${i},'material',this.value)"></label><label>Breite [m]<input inputmode="decimal" value="${esc(m.width||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'width',this.value)"></label><label>Höhe [m]<input inputmode="decimal" value="${esc(m.height||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'height',this.value)"></label><label>Länge [m]<input inputmode="decimal" value="${esc(m.length||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'length',this.value)"></label><label>Menge<input inputmode="numeric" value="${esc(m.qty||'')}" oninput="updateSubMaterial(${i},'qty',this.value)"></label><button class="btn danger" type="button" onclick="removeSubMaterialRow(${i})">Entfernen</button></div></div>`).join(''):'<p class="muted">Keine zusätzlichen Materialien.</p>'}
 function addDefectEditor(openPhoto=false){
- v75Defects.push({description:'',photos:[]});renderDefectsEditor();
+ v75Defects.push({description:'',photos:[],createdAt:new Date().toISOString()});renderDefectsEditor();
  if(openPhoto)setTimeout(()=>openDefectPhotoPicker(v75Defects.length-1),80);
 }
 function openDefectPhotoPicker(di){
@@ -1866,7 +1880,7 @@ function updateDefectDescription(i,v){if(v75Defects[i])v75Defects[i].description
 
 function updateDefectPhotoDescription(di,pi,v){let p=v75Defects[di]?.photos?.[pi];if(p)p.description=v}
 function removeDefectPhoto(di,pi){v75Defects[di]?.photos?.splice(pi,1);renderDefectsEditor()}
-function renderDefectsEditor(){let el=E('defectsEditor');if(!el)return;el.innerHTML=v75Defects.length?v75Defects.map((d,di)=>`<div class="defectEditor"><div class="manageHead"><b>Mangel ${di+1}</b><button class="btn danger" type="button" onclick="removeDefectEditor(${di})">Mangel löschen</button></div><label>Beschreibung<textarea oninput="updateDefectDescription(${di},this.value)">${esc(d.description||'')}</textarea></label><div class="toolbar"><button class="btn secondary" type="button" onclick="openDefectPhotoPicker(${di})">📷 Foto aufnehmen / Fotomediathek</button></div><input id="defectPhotoInput_${di}" type="file" accept="image/*" style="display:none" onchange="startDefectPhotoEditor(${di},this)"><div class="muted">Danach öffnet sich das Foto sofort zum freihändigen Markieren.</div><div class="defectPhotos">${(d.photos||[]).map((p,pi)=>`<div class="defectPhotoCard"><img src="${p.data}" onclick="openPhotoViewer(this.src)"><textarea placeholder="Foto beschreiben…" oninput="updateDefectPhotoDescription(${di},${pi},this.value)">${esc(p.description||'')}</textarea><button class="btn danger" type="button" onclick="removeDefectPhoto(${di},${pi})">Foto löschen</button></div>`).join('')}</div></div>`).join(''):'<p class="muted">Keine Materialmängel erfasst.</p>'}
+function renderDefectsEditor(){let el=E('defectsEditor');if(!el)return;el.innerHTML=v75Defects.length?v75Defects.map((d,di)=>`<div class="defectEditor"><div class="manageHead"><div><b>Mangel ${di+1}</b><div class="muted">Erfasst: ${d.createdAt?esc(formatDateTime(d.createdAt)):'bei älterem Mangel nicht vorhanden'}</div></div><button class="btn danger" type="button" onclick="removeDefectEditor(${di})">Mangel löschen</button></div><label>Beschreibung<textarea oninput="updateDefectDescription(${di},this.value)">${esc(d.description||'')}</textarea></label><div class="toolbar"><button class="btn secondary" type="button" onclick="openDefectPhotoPicker(${di})">📷 Foto aufnehmen / Fotomediathek</button></div><input id="defectPhotoInput_${di}" type="file" accept="image/*" style="display:none" onchange="startDefectPhotoEditor(${di},this)"><div class="muted">Danach öffnet sich das Foto sofort zum freihändigen Markieren.</div><div class="defectPhotos">${(d.photos||[]).map((p,pi)=>`<div class="defectPhotoCard"><img src="${p.data}" onclick="openPhotoViewer(this.src)"><textarea placeholder="Foto beschreiben…" oninput="updateDefectPhotoDescription(${di},${pi},this.value)">${esc(p.description||'')}</textarea><button class="btn danger" type="button" onclick="removeDefectPhoto(${di},${pi})">Foto löschen</button></div>`).join('')}</div></div>`).join(''):'<p class="muted">Keine Materialmängel erfasst.</p>'}
 function openCameraCounter(){
  E('cameraCounterInput').value='';
  E('cameraCounterPreview').innerHTML=v75CounterPhoto?`<img src="${v75CounterPhoto}" onclick="openPhotoViewer(this.src)">`:'';
@@ -1949,9 +1963,65 @@ function renderDefectManageSummary(){
  el.textContent=count?`${count} Mangel${count===1?'':'/Mängel'} in ${packages.length} Materialeintrag${packages.length===1?'':'/-einträgen'}.`:'Noch keine Mängel erfasst.';
 }
 function openDefectsOverview(){showPage('defects')}
+let showReportedDefects=false;
+
+function defectIsReported(d){return !!d?.reported}
+function openDefectCount(){
+ return (st.packages||[]).reduce((n,p)=>n+(p.defects||[]).filter(d=>!defectIsReported(d)).length,0)
+}
+function updateDefectBadge(){
+ let el=E('defectOpenBadge');if(!el)return;
+ let n=openDefectCount();
+ el.textContent=String(n);
+ el.style.display=n?'inline-flex':'none';
+}
+function toggleReportedDefects(){
+ showReportedDefects=!showReportedDefects;
+ renderDefectsPage();
+}
+function setDefectReported(packageId,defectIndex,reported){
+ let p=st.packages.find(x=>x.id===packageId),d=p?.defects?.[defectIndex];if(!p||!d)return;
+ d.reported=!!reported;
+ d.reportedAt=reported?new Date().toISOString():'';
+ d.reportedBy=reported?(cloudMember?.username||cur?.username||''):'';
+ save();
+ if(cloudReady())pushPackageToCloud?.(p).catch(()=>{});
+ renderDefectsPage();updateDefectBadge();
+}
 function renderDefectsPage(){
- let page=E('defectsPageBody'),old=E('defectsOverviewBody');if(!page||!old)return;
- renderDefectsOverview();page.innerHTML=old.innerHTML;
+ let page=E('defectsPageBody');if(!page)return;
+ let btn=E('reportedDefectsBtn'),sub=E('defectsPageSubtitle');
+ if(btn)btn.textContent=showReportedDefects?'Offene Mängel':'Mängel gemeldet';
+ if(sub)sub.textContent=showReportedDefects?'Bereits gemeldete Materialmängel, gruppiert nach Kommission.':'Nicht gemeldete Materialmängel, gruppiert nach Kommission.';
+ let ps=(st.packages||[]).filter(p=>(p.defects||[]).some(d=>defectIsReported(d)===showReportedDefects));
+ if(!ps.length){
+   page.innerHTML=`<p class="muted">${showReportedDefects?'Noch keine gemeldeten Mängel.':'Keine offenen Mängel.'}</p>`;
+   updateDefectBadge();return;
+ }
+ let groups={};
+ ps.forEach(p=>{
+   let k=(p.project||'Ohne Kommission').trim()||'Ohne Kommission';
+   (groups[k]||(groups[k]=[])).push(p);
+ });
+ let names=Object.keys(groups).sort((a,b)=>a.localeCompare(b,'de'));
+ page.innerHTML=names.map(name=>{
+   let arr=groups[name],cnt=arr.reduce((n,p)=>n+(p.defects||[]).filter(d=>defectIsReported(d)===showReportedDefects).length,0);
+   return `<div class="defectCommissionGroup"><div class="defectCommissionHead"><span>${esc(name)}</span><span>${cnt} ${showReportedDefects?'gemeldet':'offen'}</span></div>
+   ${arr.map(p=>{
+     let defects=(p.defects||[]).map((d,di)=>({d,di})).filter(x=>defectIsReported(x.d)===showReportedDefects).map(({d,di})=>`
+       <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #d5dbd7">
+         <div class="manageHead">
+           <div><b>Mangel ${di+1}</b>${d.description?` – ${esc(d.description)}`:''}<div class="muted">Erfasst: ${d.createdAt?esc(formatDateTime(d.createdAt)):'bei älterem Mangel nicht vorhanden'}</div><span class="${d.reported?'defectStatusReported':'defectStatusOpen'}">${d.reported?'gemeldet':'nicht gemeldet'}</span>
+           ${d.reportedAt?` <span class="muted">${esc(formatDateTime(d.reportedAt))}${d.reportedBy?' · '+esc(d.reportedBy):''}</span>`:''}</div>
+           <button class="btn ${d.reported?'secondary':''}" onclick="setDefectReported('${p.id}',${di},${d.reported?'false':'true'})">${d.reported?'Wieder öffnen':'Als gemeldet markieren'}</button>
+         </div>
+         <div class="defectOverviewPhotos">${(d.photos||[]).map(ph=>`<div><img src="${ph.data}" alt="Mängelfoto" onclick="openPhotoViewer(this.src)">${ph.description?`<div class="defectOverviewPhotoCaption">${esc(ph.description)}</div>`:''}</div>`).join('')}</div>
+       </div>`).join('');
+     if(!defects)return '';
+     return `<div class="defectOverviewItem"><div class="manageHead"><div><b>${esc(p.elementId||'–')} · ${esc(p.material||'–')}</b><div class="muted">${esc(packageLocation(p))}</div></div><div class="toolbar"><button class="btn secondary" onclick="jump('${p.rackId}','${p.id}')">Zu Lagerort</button><button class="btn" onclick="editPackage('${p.id}')">Material bearbeiten</button></div></div>${defects}</div>`;
+   }).join('')}</div>`;
+ }).join('');
+ updateDefectBadge();
 }
 function renderDefectsOverview(){
  let host=E('defectsOverviewBody');if(!host)return;
@@ -2139,7 +2209,7 @@ function updateProductionMoveButton(){
  if(locked)b.textContent='Produktion verschieben 🔒';
  else if(!productionMoveMode)b.textContent='Produktion verschieben';
 }
-function renderAreas(){
+function renderAreas(){updateDefectBadge();
  renderOneAreaMap('outside');renderOneAreaMap('production');renderProductionHotspot();
 }
 
@@ -2778,6 +2848,84 @@ async function importBackup(file){
 }
 
 
+
+function safePdfName(s){return String(s||'Ohne Kommission').replace(/[\\/:*?"<>|]+/g,'_').trim()||'Ohne Kommission'}
+function openDefectsByCommission(){
+ let groups={};
+ (st.packages||[]).forEach(p=>{
+   let open=(p.defects||[]).map((d,di)=>({d,di})).filter(x=>!defectIsReported(x.d));
+   if(!open.length)return;
+   let k=(p.project||'Ohne Kommission').trim()||'Ohne Kommission';
+   (groups[k]||(groups[k]=[])).push({p,open});
+ });
+ return groups;
+}
+function imgDataForPdf(src){
+ return new Promise(resolve=>{
+   if(!src)return resolve(null);
+   if(/^data:image\/(jpeg|jpg|png|webp);/i.test(src))return resolve(src);
+   let img=new Image();img.crossOrigin='anonymous';
+   img.onload=()=>{try{
+     let c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;
+     c.getContext('2d').drawImage(img,0,0);
+     resolve(c.toDataURL('image/jpeg',0.9));
+   }catch(e){resolve(null)}};
+   img.onerror=()=>resolve(null);img.src=src;
+ });
+}
+async function exportOpenDefectsPDFs(){
+ let groups=openDefectsByCommission(),names=Object.keys(groups).sort((a,b)=>a.localeCompare(b,'de'));
+ if(!names.length){alert('Es gibt keine nicht gemeldeten Mängel zum Exportieren.');return}
+ try{
+   await loadExternalScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',()=>!!window.jspdf?.jsPDF);
+   const {jsPDF}=window.jspdf;
+   for(let gi=0;gi<names.length;gi++){
+     let name=names[gi],items=groups[name],doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+     let pw=doc.internal.pageSize.getWidth(),ph=doc.internal.pageSize.getHeight(),y=16;
+     const newPage=()=>{doc.addPage();y=16};
+     const need=hgt=>{if(y+hgt>ph-14)newPage()};
+     doc.setFontSize(17);doc.text('Mängelbericht',14,y);y+=8;
+     doc.setFontSize(12);doc.text(`Kommission: ${name}`,14,y);y+=6;
+     doc.setFontSize(8);doc.text(`Export: ${formatDateTime(new Date().toISOString())} · nur nicht gemeldete Mängel`,14,y);y+=9;
+     for(let item of items){
+       let p=item.p;
+       need(18);doc.setFontSize(11);doc.setFont(undefined,'bold');doc.text(`${p.elementId||'–'} · ${p.material||'–'}`,14,y);y+=5;
+       doc.setFont(undefined,'normal');doc.setFontSize(8);doc.text(`Lagerort: ${packageLocation(p)}`,14,y);y+=6;
+       for(let obj of item.open){
+         let d=obj.d;
+         need(14);doc.setFontSize(9);doc.setFont(undefined,'bold');doc.text(`Mangel ${obj.di+1}`,14,y);y+=5;
+         doc.setFont(undefined,'normal');doc.setFontSize(8);
+         let captured=d.createdAt?formatDateTime(d.createdAt):'bei älterem Mangel nicht vorhanden';
+         need(5);doc.text(`Erfasst: ${captured}`,14,y);y+=5;
+         let lines=doc.splitTextToSize(d.description||'Keine Beschreibung',pw-28);need(lines.length*4+4);doc.text(lines,14,y);y+=lines.length*4+3;
+         let defectPhotos=(d.photos||[]);
+         if(!defectPhotos.length){need(5);doc.setFontSize(7);doc.text('Keine Mängelfotos vorhanden.',14,y);y+=5}
+         for(let photoIndex=0;photoIndex<defectPhotos.length;photoIndex++){
+           let phObj=defectPhotos[photoIndex];
+           need(5);doc.setFontSize(7);doc.setFont(undefined,'bold');doc.text(`Mängelfoto ${photoIndex+1} von ${defectPhotos.length}`,14,y);doc.setFont(undefined,'normal');y+=4;
+           let data=await imgDataForPdf(phObj.data);
+           if(data){
+             let props=doc.getImageProperties(data),maxW=120,maxH=85,sc=Math.min(maxW/props.width,maxH/props.height),iw=props.width*sc,ih=props.height*sc;
+             need(ih+12);
+             let fmt=/^data:image\/png/i.test(data)?'PNG':'JPEG';
+             try{doc.addImage(data,fmt,14,y,iw,ih)}catch(e){try{doc.addImage(data,fmt==='PNG'?'JPEG':'PNG',14,y,iw,ih)}catch(_){}}
+             y+=ih+3;
+           }
+           if(phObj.description){let cap=doc.splitTextToSize(phObj.description,pw-28);need(cap.length*3.5+3);doc.setFontSize(7);doc.text(cap,14,y);y+=cap.length*3.5+3}
+         }
+         y+=4;
+       }
+       y+=4;
+     }
+     let pages=doc.getNumberOfPages();
+     for(let pi=1;pi<=pages;pi++){doc.setPage(pi);doc.setFontSize(7);doc.text(`Seite ${pi} / ${pages}`,pw-28,ph-7)}
+     doc.save(`Maengel_${safePdfName(name)}_${exportDateStamp()}.pdf`);
+     if(gi<names.length-1)await new Promise(r=>setTimeout(r,350));
+   }
+ }catch(err){
+   alert('PDF-Export konnte nicht erstellt werden. Bitte Internetverbindung prüfen und erneut versuchen.');
+ }
+}
 function inventoryExportRows(){
  const header=['Element-ID','ID-Kategorie','Material','Breite [m]','Höhe [m]','Länge [m]','Meter m1','Fläche m²','Menge','Kommission','Verwendungsort','Status','Reserviert','Frei','Lagerfläche','Gestell','Ebene','Erfasst am'];
  const rows=[header];
