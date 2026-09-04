@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Holzlager V77</title>
+<title>Holzlager V78</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -246,6 +246,8 @@ body.accessLocked #authModal .btn{
  .defectPhotoEditorBox,.defectsOverviewBox{width:calc(100vw - 36px)}
  .defectCanvasWrap{max-height:55vh}
 }
+/* V78: Unterdialoge während laufender Materialerfassung */
+#matModal.v78BehindChild{visibility:hidden}
 </style></head>
 <body class="accessLocked">
 <div class="app">
@@ -504,11 +506,12 @@ body.accessLocked #authModal .btn{
     <button class="btn secondary" type="button" onclick="cancelDefectPhotoEditor()">Abbrechen</button>
   </div>
 </div></div>
-<div class="modal" id="cameraCounterModal"><div class="box"><div class="manageHead"><div><h2 style="margin:0">Kamerazählung</h2><p class="muted">Holzpaket möglichst frontal fotografieren.</p></div><button class="x" onclick="closeM('cameraCounterModal')">×</button></div>
-<input id="cameraCounterInput" type="file" accept="image/*" capture="environment" onchange="prepareCounterPhoto(this)">
+<div class="modal" id="cameraCounterModal"><div class="box"><div class="manageHead"><div><h2 style="margin:0">Kamerazählung</h2><p class="muted">Holzpaket möglichst frontal fotografieren.</p></div><button class="x" onclick="closeCameraCounter()">×</button></div>
+<input id="cameraCounterInput" type="file" accept="image/*" style="display:none" onchange="prepareCounterPhoto(this)">
+<div class="toolbar"><button class="btn secondary" type="button" onclick="E('cameraCounterInput').click()">📷 Neues Foto aufnehmen / auswählen</button></div>
 <div id="cameraCounterPreview" class="cameraCounterPreview"></div><div id="cameraCounterStatus" class="muted" style="margin-top:8px">Foto aufnehmen oder auswählen.</div>
 <label style="margin-top:12px">Erkannte / bestätigte Menge<input id="cameraCounterQty" type="number" min="0" step="1" inputmode="numeric"></label>
-<div class="toolbar"><button class="btn secondary" type="button" onclick="analyseCounterPhoto()">Automatisch zählen</button><button class="btn" type="button" onclick="acceptCameraCount()">Menge übernehmen</button><button class="btn secondary" type="button" onclick="closeM('cameraCounterModal')">Abbrechen</button></div>
+<div class="toolbar"><button class="btn secondary" type="button" onclick="analyseCounterPhoto()">Automatisch zählen</button><button class="btn" type="button" onclick="acceptCameraCount()">Menge übernehmen</button><button class="btn secondary" type="button" onclick="closeCameraCounter()">Abbrechen</button></div>
 <p class="muted">Testfunktion: Die automatische Zählung ist eine Schätzung. Ergebnis vor dem Übernehmen kontrollieren.</p></div></div>
 <div class="modal" id="photoViewerModal"><div class="box photoViewerBox">
   <div class="photoViewerHead">
@@ -609,7 +612,10 @@ body.accessLocked #authModal .btn{
 <option value="">– Kategorie wählen –</option><option value="A">DUO / BSH / KVH</option><option value="B">Werkstoffplatten Holz</option><option value="C">Werkstoffplatten NICHT Holz</option><option value="E">Dämmung</option><option value="TB">Terrassenbretter</option><option value="D">Schalung / Massivholzbretter aller Arten</option>
 </select></label>
 <label class="f">Element-ID<input id="mElementId" placeholder="z. B. A-023"></label>
-<label class="f">Foto hochladen / ersetzen<input id="mPhoto" type="file" accept="image/*" onchange="previewSelectedMaterialPhoto()"></label>
+<div class="f"><b>Materialfoto</b>
+<div class="toolbar" style="margin-top:7px"><button class="btn secondary" type="button" onclick="E('mPhoto').click()">📷 Foto aufnehmen / auswählen</button></div>
+<input id="mPhoto" type="file" accept="image/*" style="display:none" onchange="previewSelectedMaterialPhoto()">
+<small class="muted">Direkt Kamera oder Fotomediathek wählen.</small></div>
 <div class="f span2 materialPhotoEditor" id="mPhotoEditor" style="display:none">
   <div id="mPhotoPreview"></div>
   <div class="toolbar">
@@ -619,7 +625,7 @@ body.accessLocked #authModal .btn{
 </div>
 
 <div class="f span2 v75Section"><div class="manageHead"><div><b>Weitere Materialien im Paket</b><div class="muted">Testfunktion V75 – kann später wieder entfernt werden.</div></div><button class="btn secondary" type="button" onclick="addSubMaterialRow()">+ Material</button></div><div id="subMaterialsEditor"></div></div>
-<div class="f span2 v75Section"><div class="manageHead"><div><b>Materialmängel</b><div class="muted">Mehrere Mängel, Beschreibungen und Fotos.</div></div><button class="btn secondary" type="button" onclick="addDefectEditor()">+ Mangel</button></div><div id="defectsEditor"></div></div>
+<div class="f span2 v75Section"><div class="manageHead"><div><b>Materialmängel</b><div class="muted">Mehrere Mängel, Beschreibungen und Fotos.</div></div><button class="btn secondary" type="button" onclick="addDefectEditor(true)">+ Mangel mit Foto</button></div><div id="defectsEditor"></div></div>
 <label class="f span2">Bemerkung<textarea id="mNote" rows="3"></textarea></label><div class="span2"><button class="btn">Speichern</button></div>
 </form></div></div>
 
@@ -1847,17 +1853,33 @@ function addSubMaterialRow(){v75SubMaterials.push({material:'',width:'',height:'
 function removeSubMaterialRow(i){v75SubMaterials.splice(i,1);renderSubMaterialsEditor()}
 function updateSubMaterial(i,k,v){if(v75SubMaterials[i])v75SubMaterials[i][k]=v}
 function renderSubMaterialsEditor(){let el=E('subMaterialsEditor');if(!el)return;el.innerHTML=v75SubMaterials.length?v75SubMaterials.map((m,i)=>`<div class="subMaterialRow"><div class="subMaterialGrid"><label class="wide">Material<input value="${esc(m.material||'')}" oninput="updateSubMaterial(${i},'material',this.value)"></label><label>Breite [m]<input inputmode="decimal" value="${esc(m.width||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'width',this.value)"></label><label>Höhe [m]<input inputmode="decimal" value="${esc(m.height||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'height',this.value)"></label><label>Länge [m]<input inputmode="decimal" value="${esc(m.length||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'length',this.value)"></label><label>Menge<input inputmode="numeric" value="${esc(m.qty||'')}" oninput="updateSubMaterial(${i},'qty',this.value)"></label><button class="btn danger" type="button" onclick="removeSubMaterialRow(${i})">Entfernen</button></div></div>`).join(''):'<p class="muted">Keine zusätzlichen Materialien.</p>'}
-function addDefectEditor(){v75Defects.push({description:'',photos:[]});renderDefectsEditor()}
+function addDefectEditor(openPhoto=false){
+ v75Defects.push({description:'',photos:[]});renderDefectsEditor();
+ if(openPhoto)setTimeout(()=>openDefectPhotoPicker(v75Defects.length-1),80);
+}
+function openDefectPhotoPicker(di){
+ let inp=E('defectPhotoInput_'+di);
+ if(inp){inp.value='';inp.click()}
+}
 function removeDefectEditor(i){if(confirm('Mangel und Fotos entfernen?')){v75Defects.splice(i,1);renderDefectsEditor()}}
 function updateDefectDescription(i,v){if(v75Defects[i])v75Defects[i].description=v}
 
 function updateDefectPhotoDescription(di,pi,v){let p=v75Defects[di]?.photos?.[pi];if(p)p.description=v}
 function removeDefectPhoto(di,pi){v75Defects[di]?.photos?.splice(pi,1);renderDefectsEditor()}
-function renderDefectsEditor(){let el=E('defectsEditor');if(!el)return;el.innerHTML=v75Defects.length?v75Defects.map((d,di)=>`<div class="defectEditor"><div class="manageHead"><b>Mangel ${di+1}</b><button class="btn danger" type="button" onclick="removeDefectEditor(${di})">Mangel löschen</button></div><label>Beschreibung<textarea oninput="updateDefectDescription(${di},this.value)">${esc(d.description||'')}</textarea></label><label>Foto hinzufügen<input type="file" accept="image/*" onchange="startDefectPhotoEditor(${di},this)"></label><div class="muted">Auf iPhone/iPad kannst du „Foto aufnehmen“ oder „Fotomediathek“ wählen. Vor dem Übernehmen kannst du den Schaden freihand markieren.</div><div class="defectPhotos">${(d.photos||[]).map((p,pi)=>`<div class="defectPhotoCard"><img src="${p.data}" onclick="openPhotoViewer(this.src)"><textarea placeholder="Foto beschreiben…" oninput="updateDefectPhotoDescription(${di},${pi},this.value)">${esc(p.description||'')}</textarea><button class="btn danger" type="button" onclick="removeDefectPhoto(${di},${pi})">Foto löschen</button></div>`).join('')}</div></div>`).join(''):'<p class="muted">Keine Materialmängel erfasst.</p>'}
-function openCameraCounter(){E('cameraCounterInput').value='';E('cameraCounterPreview').innerHTML=v75CounterPhoto?`<img src="${v75CounterPhoto}" onclick="openPhotoViewer(this.src)">`:'';E('cameraCounterQty').value=E('mQty').value||'';E('cameraCounterStatus').textContent=v75CounterPhoto?'Zählfoto vorhanden. Neu fotografieren oder erneut zählen.':'Foto aufnehmen oder auswählen.';E('cameraCounterModal').classList.add('open')}
+function renderDefectsEditor(){let el=E('defectsEditor');if(!el)return;el.innerHTML=v75Defects.length?v75Defects.map((d,di)=>`<div class="defectEditor"><div class="manageHead"><b>Mangel ${di+1}</b><button class="btn danger" type="button" onclick="removeDefectEditor(${di})">Mangel löschen</button></div><label>Beschreibung<textarea oninput="updateDefectDescription(${di},this.value)">${esc(d.description||'')}</textarea></label><div class="toolbar"><button class="btn secondary" type="button" onclick="openDefectPhotoPicker(${di})">📷 Foto aufnehmen / Fotomediathek</button></div><input id="defectPhotoInput_${di}" type="file" accept="image/*" style="display:none" onchange="startDefectPhotoEditor(${di},this)"><div class="muted">Danach öffnet sich das Foto sofort zum freihändigen Markieren.</div><div class="defectPhotos">${(d.photos||[]).map((p,pi)=>`<div class="defectPhotoCard"><img src="${p.data}" onclick="openPhotoViewer(this.src)"><textarea placeholder="Foto beschreiben…" oninput="updateDefectPhotoDescription(${di},${pi},this.value)">${esc(p.description||'')}</textarea><button class="btn danger" type="button" onclick="removeDefectPhoto(${di},${pi})">Foto löschen</button></div>`).join('')}</div></div>`).join(''):'<p class="muted">Keine Materialmängel erfasst.</p>'}
+function openCameraCounter(){
+ E('cameraCounterInput').value='';
+ E('cameraCounterPreview').innerHTML=v75CounterPhoto?`<img src="${v75CounterPhoto}" onclick="openPhotoViewer(this.src)">`:'';
+ E('cameraCounterQty').value=E('mQty').value||'';
+ E('cameraCounterStatus').textContent=v75CounterPhoto?'Zählfoto vorhanden. Neu fotografieren oder erneut zählen.':'Kamera oder Fotomediathek wählen.';
+ E('matModal')?.classList.add('v78BehindChild');
+ E('cameraCounterModal').classList.add('open');
+ setTimeout(()=>E('cameraCounterInput').click(),80);
+}
+function closeCameraCounter(){closeM('cameraCounterModal');E('matModal')?.classList.remove('v78BehindChild')}
 async function prepareCounterPhoto(input){let f=input?.files?.[0];if(!f)return;if(!/^image\//.test(f.type||'')){alert('Bitte ein Foto auswählen.');return}v75CounterPhoto=await fileURL(f);v75CounterPhotoName=f.name||'Zählfoto';E('cameraCounterPreview').innerHTML=`<img src="${v75CounterPhoto}" onclick="openPhotoViewer(this.src)">`;E('cameraCounterStatus').textContent='Foto bereit. Automatisch zählen oder Menge manuell eintragen.'}
 function analyseCounterPhoto(){if(!v75CounterPhoto){alert('Bitte zuerst ein Foto aufnehmen.');return}E('cameraCounterStatus').textContent='Bild wird ausgewertet…';let img=new Image();img.onload=()=>{try{let max=800,sc=Math.min(1,max/img.width,max/img.height),w=Math.round(img.width*sc),hh=Math.round(img.height*sc),c=document.createElement('canvas');c.width=w;c.height=hh;let x=c.getContext('2d');x.drawImage(img,0,0,w,hh);let d=x.getImageData(0,0,w,hh).data,g=new Float32Array(w*hh);for(let i=0,j=0;i<d.length;i+=4,j++)g[j]=.299*d[i]+.587*d[i+1]+.114*d[i+2];let vals=[];for(let y=2;y<hh-2;y+=3)for(let xx=2;xx<w-2;xx+=3){let k=y*w+xx;vals.push(Math.abs(g[k+1]-g[k-1])+Math.abs(g[k+w]-g[k-w]))}let mean=vals.reduce((a,b)=>a+b,0)/Math.max(1,vals.length),sd=Math.sqrt(vals.reduce((a,b)=>a+(b-mean)*(b-mean),0)/Math.max(1,vals.length)),thr=mean+1.35*sd,cnt=vals.filter(v=>v>thr).length,estimate=Math.max(1,Math.round(cnt/55));E('cameraCounterQty').value=estimate;E('cameraCounterStatus').textContent='Test-Schätzung: '+estimate+' Stück. Bitte unbedingt prüfen und korrigieren.'}catch(e){E('cameraCounterStatus').textContent='Schätzung nicht möglich. Menge bitte manuell eintragen.'}};img.src=v75CounterPhoto}
-function acceptCameraCount(){let q=+E('cameraCounterQty').value;if(!Number.isFinite(q)||q<0){alert('Bitte gültige Menge eingeben.');return}E('mQty').value=String(Math.round(q));closeM('cameraCounterModal');renderCounterSavedPhoto()}
+function acceptCameraCount(){let q=+E('cameraCounterQty').value;if(!Number.isFinite(q)||q<0){alert('Bitte gültige Menge eingeben.');return}E('mQty').value=String(Math.round(q));closeCameraCounter();renderCounterSavedPhoto()}
 function renderCounterSavedPhoto(){let el=E('counterSavedPhotoHost');if(!el)return;el.innerHTML=v75CounterPhoto?`<span class="counterSavedPhoto"><br><b>Zählfoto</b><br><img src="${v75CounterPhoto}" onclick="openPhotoViewer(this.src)"><br><button class="btn danger" type="button" onclick="v75CounterPhoto='';v75CounterPhotoName='';renderCounterSavedPhoto()">Zählfoto löschen</button></span>`:''}
 
 let defectEditIndex=-1,defectEditImage=null,defectEditStrokes=[],defectCurrentStroke=null,defectEditFileName='';
@@ -1865,7 +1887,7 @@ function startDefectPhotoEditor(di,input){
  let f=input?.files?.[0];if(!f)return;
  input.value='';
  if(!/^image\//.test(f.type||'')){alert('Bitte ein Foto auswählen.');return}
- defectEditIndex=di;defectEditFileName=f.name||'Mängelfoto';defectEditStrokes=[];defectCurrentStroke=null;
+ defectEditIndex=di;defectEditFileName=f.name||'Mängelfoto';defectEditStrokes=[];defectCurrentStroke=null;E('matModal')?.classList.add('v78BehindChild');
  let reader=new FileReader();
  reader.onload=()=>{
    let img=new Image();
@@ -1912,7 +1934,7 @@ function redrawDefectCanvas(){
 }
 function undoDefectStroke(){if(defectEditStrokes.length){defectEditStrokes.pop();redrawDefectCanvas()}}
 function clearDefectMarks(){defectEditStrokes=[];redrawDefectCanvas()}
-function cancelDefectPhotoEditor(){closeM('defectPhotoEditorModal');defectEditIndex=-1;defectEditImage=null;defectEditStrokes=[];defectCurrentStroke=null}
+function cancelDefectPhotoEditor(){closeM('defectPhotoEditorModal');E('matModal')?.classList.remove('v78BehindChild');defectEditIndex=-1;defectEditImage=null;defectEditStrokes=[];defectCurrentStroke=null}
 function saveEditedDefectPhoto(){
  let d=v75Defects[defectEditIndex],c=E('defectPhotoCanvas');if(!d||!c){cancelDefectPhotoEditor();return}
  let data=c.toDataURL('image/jpeg',0.9),description=E('defectPhotoDescription').value.trim();
