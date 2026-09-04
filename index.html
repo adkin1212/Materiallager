@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Holzlager V69</title>
+<title>Holzlager V70</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -102,8 +102,51 @@ table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px so
   color:#68736e !important;
 }
 
+
+/* V70: App-Zugriff erst nach gültiger Cloud-Anmeldung */
+body.accessLocked{
+  background:#f3f6f4 !important;
+  min-height:100vh;
+}
+body.accessLocked .app{
+  display:none !important;
+}
+body.accessLocked #authModal{
+  display:grid !important;
+  z-index:110 !important;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(15,77,60,.10), transparent 34%),
+    linear-gradient(135deg,#eef4f1,#f8faf9) !important;
+}
+body.accessLocked #authModal .modalbox{
+  max-width:520px !important;
+  border:1px solid #d7e0db;
+  box-shadow:0 24px 70px rgba(17,43,34,.20) !important;
+}
+body.accessLocked #authModal .manageHead > button{
+  display:none !important;
+}
+body.accessLocked #authModal .manageHead h2::before{
+  content:"HOLZLAGER · ";
+  color:#0f4d3c;
+  font-weight:950;
+}
+body.accessLocked #authModal .authBox{
+  margin-top:14px;
+}
+body.accessLocked #authModal input{
+  min-height:46px;
+  font-size:16px;
+}
+body.accessLocked #authModal .btn{
+  min-height:44px;
+}
+#forcePasswordModal{
+  z-index:130 !important;
+}
+
 </style></head>
-<body>
+<body class="accessLocked">
 <div class="app">
 <nav><div class="brand">HOLZ<br>LAGER</div>
 <button class="nav active" data-page="map">⌖ Karte</button>
@@ -313,7 +356,7 @@ table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px so
 <div class="modal" id="renameModal"><div class="box"><div class="mh"><h2 id="renameTitle">Umbenennen</h2><button class="x" onclick="closeM('renameModal')">✕</button></div><form class="form" onsubmit="saveRename(event)"><label class="f span2">Neuer Name<input id="renameValue" required></label><div class="span2"><button class="btn">Speichern</button></div></form></div></div>
 
 <div class="modal" id="authModal"><div class="modalbox" style="max-width:520px">
-<div class="manageHead"><div><h2 style="margin:0">Cloud-Anmeldung</h2><p class="muted">Anmeldung mit Benutzername und PIN/Passwort – ohne sichtbare E-Mail-Adresse.</p></div><button class="btn secondary" onclick="closeM('authModal')">Schliessen</button></div>
+<div class="manageHead"><div><h2 style="margin:0">Cloud-Anmeldung</h2><p class="muted">Bitte anmelden. Erst nach erfolgreicher Cloud-Anmeldung wird das Materiallager freigeschaltet.</p></div><button class="btn secondary" onclick="closeM('authModal')">Schliessen</button></div>
 <div id="authSignedOut" class="authBox">
 <label><b>Benutzername</b><input id="authUsername" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="z.B. peter"></label>
 <label><b>PIN / Passwort</b><input id="authPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="mind. 6 Zeichen"></label>
@@ -750,7 +793,7 @@ function roleClass(r){return r==='Administrator'?'roleAdmin':r==='Lagerverantwor
 
 const CLOUD_SETUP_KEY='holzlager_cloud_setup_v57';
 function cloudSetupComplete(){
- return localStorage.getItem(CLOUD_SETUP_KEY)==='complete';
+ return true;
 }
 function cloudSetupMode(){
  return !cloudSetupComplete();
@@ -860,6 +903,7 @@ async function clearPasswordChangeRequirement(){
    if(!r.ok)throw new Error((await r.text())||('HTTP '+r.status));
    mustChangePassword=false;
    E('forcePasswordModal')?.classList.remove('open');
+   renderAuthUI();
    return true;
  }catch(e){
    alert('Das neue Passwort wurde gesetzt, aber die Pflicht konnte nicht abgeschlossen werden:\n'+String(e.message||e));
@@ -995,7 +1039,17 @@ async function signUpCloud(){
  }
 }
 async function signOutCloud(){
- saveAuthSession(null);cloudMember=null;stopCloudPolling();renderAuthUI();refresh();alert('Abgemeldet.');
+ mustChangePassword=false;
+ saveAuthSession(null);cloudMember=null;stopCloudPolling();renderAuthUI();refresh();
+ alert('Abgemeldet.');
+}
+function applyAccessGate(){
+ let allowed=!!(authSession&&cloudMember&&!mustChangePassword);
+ document.body.classList.toggle('accessLocked',!allowed);
+ let modal=E('authModal');
+ if(!modal)return;
+ if(!allowed && !mustChangePassword)modal.classList.add('open');
+ if(allowed)modal.classList.remove('open');
 }
 function renderAuthUI(){
  let signed=!!authSession,so=E('authSignedOut'),si=E('authSignedIn'),id=E('authIdentity'),hb=E('authHeaderBtn'),ms=E('authManageState');
@@ -1007,6 +1061,7 @@ function renderAuthUI(){
  if(ms)ms.innerHTML=signed?`Angemeldet als <b>${esc(name)}</b> · Benutzer: <b>${esc(uname||'–')}</b> · Rolle: <b>${esc(role)}</b>`:'Noch nicht angemeldet.';
  let cub=E('cloudUsersBox');if(cub)cub.style.display=(signed&&role==='Administrator')?'':'none';
  if(signed&&role==='Administrator')setTimeout(renderCloudUsers,0);
+ applyAccessGate();
 }
 
 async function claimCloudMembership(username,silent=false){
@@ -1106,7 +1161,12 @@ async function refreshCloudIdentity(attemptClaim=true){
    }
 
    if(cloudMember?.role==='Administrator')markCloudSetupComplete();
-   if(cloudMember){setTimeout(()=>startCloudPolling(),0);setTimeout(()=>getPasswordChangeRequirement(),0);}
+   if(cloudMember){
+     await getPasswordChangeRequirement();
+     setTimeout(()=>startCloudPolling(),0);
+   }else{
+     mustChangePassword=false;
+   }
    renderAuthUI();renderUserHeader();
    if(!cloudMember)setSyncStatus('err','Angemeldet – Cloud-Lagerfreigabe fehlt');
    return !!cloudMember;
@@ -1355,8 +1415,25 @@ async function pullEntitySync(manual=false){
  finally{cloudBusy=false}
 }
 
-function defaultCloudConfig(){return {mode:'local',url:'',anonKey:'',warehouseId:'hauptlager',autoSync:false}}
-function loadCloudConfig(){try{return Object.assign(defaultCloudConfig(),JSON.parse(localStorage.getItem(CLOUD_KEY)||'{}'))}catch(e){return defaultCloudConfig()}}
+function defaultCloudConfig(){return {
+ mode:'supabase',
+ url:'https://cujeruudyvheoftayfjn.supabase.co',
+ anonKey:'sb_publishable_jVxtv8opR8EOHV1HNdVaBw_psssn08J',
+ warehouseId:'hauptlager',
+ autoSync:true
+}}
+function loadCloudConfig(){
+ let d=defaultCloudConfig(),saved={};
+ try{saved=JSON.parse(localStorage.getItem(CLOUD_KEY)||'{}')||{}}catch(e){}
+ // V70 ist eine reine Cloud-App. Öffentliche Verbindungsdaten sind fest vorbelegt.
+ return Object.assign({},saved,{
+   mode:'supabase',
+   url:d.url,
+   anonKey:d.anonKey,
+   warehouseId:d.warehouseId,
+   autoSync:true
+ });
+}
 let cloudCfg=loadCloudConfig(),cloudTimer=null,cloudBusy=false,lastCloudMessage='';
 
 function cloudReady(){
@@ -1396,12 +1473,13 @@ async function testCloudConnection(){
 }
 function saveCloudSettings(showMessage=true){
  if(!requireCloudSetupAdmin())return false;
+ let d=defaultCloudConfig();
  cloudCfg={
-   mode:E('cloudMode')?.value||'local',
-   url:(E('cloudUrl')?.value||'').trim(),
-   anonKey:(E('cloudAnonKey')?.value||'').trim(),
-   warehouseId:(E('cloudWarehouseId')?.value||'hauptlager').trim()||'hauptlager',
-   autoSync:!!E('cloudAutoSync')?.checked
+   mode:'supabase',
+   url:d.url,
+   anonKey:d.anonKey,
+   warehouseId:d.warehouseId,
+   autoSync:true
  };
  if(cloudCfg.anonKey.toLowerCase().includes('service_role')){alert('Bitte niemals einen service_role-Schlüssel in der Browser-App speichern. Verwende nur den anon/publishable key.');return false}
  if(cloudCfg.mode==='supabase' && (!/^https:\/\/.+\.supabase\.co\/?$/.test(cloudCfg.url)||!cloudCfg.anonKey)){
@@ -1415,11 +1493,11 @@ function saveCloudSettings(showMessage=true){
 }
 function renderCloudSettings(){
  cloudCfg=loadCloudConfig();
- if(E('cloudMode'))E('cloudMode').value=cloudCfg.mode;
- if(E('cloudUrl'))E('cloudUrl').value=cloudCfg.url;
- if(E('cloudAnonKey'))E('cloudAnonKey').value=cloudCfg.anonKey;
- if(E('cloudWarehouseId'))E('cloudWarehouseId').value=cloudCfg.warehouseId;
- if(E('cloudAutoSync'))E('cloudAutoSync').checked=!!cloudCfg.autoSync;
+ if(E('cloudMode')){E('cloudMode').value='supabase';E('cloudMode').disabled=true}
+ if(E('cloudUrl')){E('cloudUrl').value=cloudCfg.url;E('cloudUrl').readOnly=true}
+ if(E('cloudAnonKey')){E('cloudAnonKey').value=cloudCfg.anonKey;E('cloudAnonKey').readOnly=true}
+ if(E('cloudWarehouseId')){E('cloudWarehouseId').value=cloudCfg.warehouseId;E('cloudWarehouseId').readOnly=true}
+ if(E('cloudAutoSync')){E('cloudAutoSync').checked=true;E('cloudAutoSync').disabled=true}
  setSyncStatus('',cloudCfg.mode==='supabase'?'Cloud-Modus':'Lokaler Modus');renderAuthUI();
  if(cloudCfg.mode==='supabase'&&authSession&&!cloudMember)setTimeout(()=>refreshCloudIdentity().then(startCloudPolling),0);
  renderSyncConflicts();renderPhotoStorageState();
