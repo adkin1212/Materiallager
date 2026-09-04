@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Holzlager V70</title>
+<title>Holzlager V71</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -145,6 +145,25 @@ body.accessLocked #authModal .btn{
   z-index:130 !important;
 }
 
+
+/* V71: schnelle Element-ID-Suche auf beiden Karten */
+.idQuickSearch{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding-left:10px;border-left:1px solid #d9e1dd}
+.idQuickSearch .idLabel{font-weight:800;white-space:nowrap}
+.idPrefixGroup{display:flex;gap:3px;flex-wrap:wrap}
+.idPrefixBtn{border:1px solid #b9c7c0;background:#fff;color:#173d31;border-radius:7px;padding:7px 9px;font-weight:900;cursor:pointer;min-width:34px}
+.idPrefixBtn.active{background:#0f4d3c;color:#fff;border-color:#0f4d3c}
+.idNumberInput{width:92px!important;min-width:92px!important;background:#fff!important;color:#111!important;font-weight:800}
+#quickMaterialModal .modalbox{max-width:620px;background:#fff!important;color:#17261f!important}
+.quickMaterialHero{text-align:center;padding:8px 0 14px}
+.quickMaterialHero .quickId{font-size:28px;font-weight:950;color:#0f4d3c}
+.quickMaterialHero .quickName{font-size:20px;font-weight:900;margin-top:3px}
+.quickLocation{background:#eef4f1;border:1px solid #d4dfda;border-radius:10px;padding:10px 12px;text-align:center;font-weight:800;margin-bottom:14px}
+.quickEditGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quickEditGrid label{font-weight:800;display:flex;flex-direction:column;gap:5px}
+.quickEditGrid input,.quickEditGrid select{background:#fff!important;color:#111!important;border:1px solid #9ca8a2!important;min-height:43px;padding:8px;border-radius:8px}
+.quickEditGrid .span2{grid-column:1/-1}
+@media(max-width:760px){.quickEditGrid{grid-template-columns:1fr}.quickEditGrid .span2{grid-column:auto}.idQuickSearch{padding-left:0;border-left:0}}
+
 </style></head>
 <body class="accessLocked">
 <div class="app">
@@ -162,6 +181,19 @@ body.accessLocked #authModal .btn{
 <div class="toolbar" style="margin:0">
 <label style="font-weight:800">Kommission hervorheben</label>
 <select id="mapCommissionFilter" onchange="setMapCommission(this.value)"></select>
+<div class="idQuickSearch">
+<span class="idLabel">ID-Nr.</span>
+<div class="idPrefixGroup">
+<button type="button" class="idPrefixBtn" data-idprefix="A" onclick="setMapIdPrefix('A')">A</button>
+<button type="button" class="idPrefixBtn" data-idprefix="B" onclick="setMapIdPrefix('B')">B</button>
+<button type="button" class="idPrefixBtn" data-idprefix="C" onclick="setMapIdPrefix('C')">C</button>
+<button type="button" class="idPrefixBtn" data-idprefix="D" onclick="setMapIdPrefix('D')">D</button>
+<button type="button" class="idPrefixBtn" data-idprefix="E" onclick="setMapIdPrefix('E')">E</button>
+<button type="button" class="idPrefixBtn" data-idprefix="TB" onclick="setMapIdPrefix('TB')">TB</button>
+</div>
+<input id="mapIdNumber" class="idNumberInput" inputmode="numeric" pattern="[0-9]*" placeholder="Nr." oninput="mirrorMapIdNumber(this.value,'mapIdNumber')" onkeydown="if(event.key==='Enter'){event.preventDefault();findMapElement('mapIdNumber')}">
+<button class="btn" type="button" onclick="findMapElement('mapIdNumber')">Suchen</button>
+</div>
 </div>
 <div class="toolbar" style="margin:0">
 <button class="btn secondary" onclick="zoomOutside(-0.2)">−</button>
@@ -204,6 +236,19 @@ body.accessLocked #authModal .btn{
       <div><h2 style="margin:0">Grundriss Produktionshalle</h2><p class="muted">Einrichtung Zimmereihalle · Massstab 1:100</p></div>
       <div class="toolbar">
 <select id="productionCommissionFilter" onchange="setMapCommission(this.value)"></select>
+<div class="idQuickSearch">
+<span class="idLabel">ID-Nr.</span>
+<div class="idPrefixGroup">
+<button type="button" class="idPrefixBtn" data-idprefix="A" onclick="setMapIdPrefix('A')">A</button>
+<button type="button" class="idPrefixBtn" data-idprefix="B" onclick="setMapIdPrefix('B')">B</button>
+<button type="button" class="idPrefixBtn" data-idprefix="C" onclick="setMapIdPrefix('C')">C</button>
+<button type="button" class="idPrefixBtn" data-idprefix="D" onclick="setMapIdPrefix('D')">D</button>
+<button type="button" class="idPrefixBtn" data-idprefix="E" onclick="setMapIdPrefix('E')">E</button>
+<button type="button" class="idPrefixBtn" data-idprefix="TB" onclick="setMapIdPrefix('TB')">TB</button>
+</div>
+<input id="productionIdNumber" class="idNumberInput" inputmode="numeric" pattern="[0-9]*" placeholder="Nr." oninput="mirrorMapIdNumber(this.value,'productionIdNumber')" onkeydown="if(event.key==='Enter'){event.preventDefault();findMapElement('productionIdNumber')}">
+<button class="btn" type="button" onclick="findMapElement('productionIdNumber')">Suchen</button>
+</div>
 <button class="btn secondary" onclick="zoomProduction(-0.2)">−</button><button class="btn secondary" onclick="zoomProduction(0.2)">+</button><button class="btn secondary" onclick="resetProductionZoom()">Ansicht zurücksetzen</button>
 </div>
     </div>
@@ -283,7 +328,7 @@ body.accessLocked #authModal .btn{
     <button class="btn" onclick="saveCloudSettings()">Einstellungen speichern</button>
     <button class="btn secondary" onclick="openAuthModal()">Anmelden / Konto</button>
     <button class="btn secondary" onclick="testCloudConnection()">Verbindung testen</button>
-    <button class="btn secondary" onclick="pushEntitySync(true)">Lokale Daten → Cloud</button><button class="btn danger" onclick="forceRepairStructureV61()">Struktur einmalig reparieren</button>
+    <button class="btn secondary" onclick="pushEntitySync(true)">Lokale Daten → Cloud</button>
     <button class="btn secondary" onclick="pullEntitySync(true)">Cloud → dieses Gerät</button>
     <button class="btn secondary" onclick="migrateLocalPhotosToCloud()">Lokale Fotos → Cloud</button>
   </div>
@@ -388,6 +433,30 @@ body.accessLocked #authModal .btn{
 <label><b>Wiederholen</b><input id="passwordResetConfirm" type="password" autocomplete="new-password"></label>
 <div class="toolbar"><button class="btn secondary" type="button" onclick="generateTemporaryPin()">8-stellige PIN erzeugen</button><button class="btn" type="button" onclick="adminResetCloudPassword()">Passwort zurücksetzen</button></div>
 <p class="muted">Der Administrator setzt ein temporäres Passwort. Der Benutzer meldet sich damit an und kann es unter „Anmelden / Konto“ → „Passwort ändern“ selbst ersetzen.</p>
+</div>
+</div></div>
+
+
+<div class="modal" id="quickMaterialModal"><div class="modalbox">
+<div class="manageHead">
+  <div><h2 style="margin:0">Material direkt bearbeiten</h2><p class="muted">Element-ID-Schnellzugriff</p></div>
+  <button class="btn secondary" onclick="closeM('quickMaterialModal')">Schliessen</button>
+</div>
+<input type="hidden" id="quickPackageId">
+<div class="quickMaterialHero">
+  <div class="quickId" id="quickElementId">–</div>
+  <div class="quickName" id="quickMaterialName">–</div>
+</div>
+<div class="quickLocation" id="quickCurrentLocation">–</div>
+<div class="quickEditGrid">
+  <label>Menge<input id="quickQty"></label>
+  <label>Status<select id="quickStatus"><option>Kommission</option><option>Lagerware</option><option>aufgebraucht</option></select></label>
+  <label class="span2">Gestell<select id="quickRack" onchange="fillQuickLevels()"></select></label>
+  <label class="span2">Ebene<select id="quickLevel"></select></label>
+</div>
+<div class="toolbar" style="justify-content:center;margin-top:18px">
+  <button class="btn" onclick="saveQuickMaterial()">Änderungen speichern</button>
+  <button class="btn secondary" onclick="openFullMaterialFromQuick()">Vollständig bearbeiten</button>
 </div>
 </div></div>
 
@@ -1304,6 +1373,8 @@ async function forceRepairStructureV61(){
 
 function applyRemoteEntities(remote,preserveKeys=new Set()){
  let next=JSON.parse(JSON.stringify(st));
+ let remoteEntityCount=Object.values(remote||{}).filter(x=>x&&x.type&&x.type!=='__state').length;
+ let protectUnexpectedEmpty=(remoteEntityCount===0 && entityCollections().some(t=>(st[t]||[]).length));
  entityCollections().forEach(type=>{
    let arr=[];
    Object.values(remote).filter(x=>x.type===type).forEach(x=>{
@@ -1318,7 +1389,10 @@ function applyRemoteEntities(remote,preserveKeys=new Set()){
      let id=entityId(type,o,i),k=cloudKey(type,id);
      if(preserveKeys.has(k)&&!remote[k]&&!arr.some(a=>entityId(type,a,0)===id))arr.push(o);
    });
-   next[type]=arr;
+   // V71-Schutz: Ein unerwartet komplett leerer Cloud-Abruf darf lokale Bestände
+   // nicht automatisch auf leer setzen. Ein bewusster Lösch-Sync läuft weiterhin über RPC/Versionen.
+   if(protectUnexpectedEmpty && arr.length===0 && (st[type]||[]).length)next[type]=JSON.parse(JSON.stringify(st[type]));
+   else next[type]=arr;
  });
  let s=remote['__state|main']?.data;
  if(s){
@@ -1598,6 +1672,85 @@ function svgForMap(mapType){return E(mapType==='production'?'productionAreaSvg':
 function sideForMap(mapType){return E(mapType==='production'?'productionSide':'side')}
 function drawbarForMap(mapType){return E(mapType==='production'?'productionDrawbar':'drawbar')}
 function currentDrawingMap(){return currentPage==='production'?'production':'outside'}
+let mapIdPrefix='A';
+function renderMapIdPrefix(){
+ document.querySelectorAll('.idPrefixBtn[data-idprefix]').forEach(b=>b.classList.toggle('active',b.dataset.idprefix===mapIdPrefix));
+}
+function setMapIdPrefix(prefix){
+ mapIdPrefix=String(prefix||'A').toUpperCase();
+ renderMapIdPrefix();
+ let id=currentPage==='production'?'productionIdNumber':'mapIdNumber';
+ setTimeout(()=>E(id)?.focus(),0);
+}
+function mirrorMapIdNumber(v,source){
+ let clean=String(v||'').replace(/\D/g,'');
+ if(E(source)&&E(source).value!==clean)E(source).value=clean;
+ ['mapIdNumber','productionIdNumber'].forEach(id=>{if(id!==source&&E(id))E(id).value=clean});
+}
+function findMapElement(sourceId){
+ let raw=String(E(sourceId)?.value||'').replace(/\D/g,'');
+ if(!raw){alert('Bitte nur die Nummer der Element-ID eingeben.');E(sourceId)?.focus();return}
+ let num=Number(raw);
+ let p=st.packages.find(p=>{let x=parseElementId(p.elementId);return x&&x.prefix===mapIdPrefix&&x.num===num});
+ if(!p){alert('Element-ID '+formatElementId(mapIdPrefix,num)+' wurde nicht gefunden.');return}
+ ['mapIdNumber','productionIdNumber'].forEach(id=>{if(E(id))E(id).value=String(num)});
+ selectedPackage=p.id;
+ jump(p.rackId,p.id);
+ setTimeout(()=>openQuickMaterial(p.id),80);
+}
+function openQuickMaterial(pid){
+ let p=st.packages.find(x=>x.id===pid);if(!p)return;
+ let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels?.[p.levelIndex];
+ E('quickPackageId').value=p.id;
+ E('quickElementId').textContent=p.elementId||'–';
+ E('quickMaterialName').textContent=p.material||'Material';
+ E('quickQty').value=p.qty??'';
+ E('quickStatus').value=p.status||'Kommission';
+ E('quickRack').innerHTML=st.racks.map(x=>`<option value="${x.id}">${esc(areaName(x.areaId))} – ${esc(x.name)}</option>`).join('');
+ E('quickRack').value=p.rackId;
+ fillQuickLevels();
+ E('quickLevel').value=String(p.levelIndex);
+ E('quickCurrentLocation').textContent=`${areaName(r?.areaId)} · ${r?.name||'–'} · ${l?.name||'–'}`;
+ E('quickMaterialModal').classList.add('open');
+ setTimeout(()=>E('quickQty')?.focus(),80);
+}
+function fillQuickLevels(){
+ let r=st.racks.find(x=>x.id===E('quickRack')?.value);
+ if(!E('quickLevel'))return;
+ E('quickLevel').innerHTML=(r?.levels||[]).map((l,i)=>`<option value="${i}">${esc(l.name)} (${l.length||'–'} × ${l.width||'–'} · H ${l.height||'–'} m)</option>`).join('');
+}
+function openFullMaterialFromQuick(){
+ let id=E('quickPackageId')?.value;closeM('quickMaterialModal');if(id)editPackage(id);
+}
+function saveQuickMaterial(){
+ let id=E('quickPackageId')?.value,p=st.packages.find(x=>x.id===id);if(!p)return;
+ let r=st.racks.find(x=>x.id===E('quickRack')?.value),li=Number(E('quickLevel')?.value),l=r?.levels?.[li];
+ if(!r||!l){alert('Bitte einen gültigen Lagerort wählen.');return}
+ let before=packageSnapshot(p),qtyBefore=p.qty,resBefore=reservedQty(p);
+ let oldRack=st.racks.find(x=>x.id===p.rackId),oldLevel=oldRack?.levels?.[p.levelIndex];
+ let from=`${areaName(oldRack?.areaId)} / ${oldRack?.name||'–'} / ${oldLevel?.name||'–'}`;
+ let to=`${areaName(r.areaId)} / ${r.name} / ${l.name}`;
+ if(p.rackId!==r.id||p.levelIndex!==li){
+   if(!p.movements)p.movements=[];
+   let mv={at:new Date().toISOString(),from,to};
+   p.movements.push(mv);st.movements.push({packageId:p.id,elementId:p.elementId||'',...mv});
+ }
+ p.rackId=r.id;p.levelIndex=li;p.qty=String(E('quickQty')?.value??'').trim();p.status=E('quickStatus')?.value||'Kommission';
+ if(resBefore>0&&String(qtyBefore??'')!==String(p.qty??'')){
+   let overAfter=overReservedQty(p);
+   addHistory(p,'Menge bei Reservierung geändert',`${qtyBefore||'–'} → ${p.qty||'–'} · reserviert ${resBefore}${overAfter>0?' · überreserviert +'+overAfter:''}`);
+ }
+ let after=packageSnapshot(p),changeText=historyChangeText(before,after);
+ if(changeText)addHistory(p,'Schnell geändert',changeText);
+ if(before.status!=='aufgebraucht'&&after.status==='aufgebraucht'){p.archivedAt=new Date().toISOString();addHistory(p,'Archiviert','Status auf aufgebraucht geändert')}
+ if(before.status==='aufgebraucht'&&after.status!=='aufgebraucht'){p.archivedAt='';addHistory(p,'Reaktiviert','Material aus Archiv reaktiviert')}
+ persist();
+ closeM('quickMaterialModal');
+ selectedPackage=p.id;
+ jump(p.rackId,p.id);
+ setTimeout(()=>{let t=document.querySelector('.pkg.target');if(t)t.scrollIntoView({behavior:'smooth',block:'center',inline:'center'})},100);
+}
+
 let mapCommission='';
 function setMapCommission(v){
  mapCommission=v||'';
@@ -1610,6 +1763,7 @@ function renderMapCommissionFilters(){
  ensureCommissions();
  let opts='<option value="">– Keine Kommission hervorgehoben –</option>'+st.commissions.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}${c.status==='Abgeschlossen'?' (abgeschlossen)':''}</option>`).join('');
  ['mapCommissionFilter','productionCommissionFilter'].forEach(id=>{let el=E(id);if(el){el.innerHTML=opts;el.value=mapCommission}});
+ renderMapIdPrefix();
 }
 function areaHasCommission(a,commission){
  if(!commission)return false;
@@ -2045,7 +2199,11 @@ function renderInv(){
  E('sLvl').textContent=st.racks.reduce((n,r)=>n+r.levels.length,0);
  E('sMat').textContent=new Set(st.packages.map(p=>p.material.toLowerCase())).size
 }
-function jump(rid,pid){let r=st.racks.find(x=>x.id===rid),a=st.areas.find(x=>x.id===r?.areaId);selectedPackage=pid;showPage(areaMapType(a)==='production'?'production':'map');renderAreas();openRack(rid)}
+function jump(rid,pid){
+ let r=st.racks.find(x=>x.id===rid),a=st.areas.find(x=>x.id===r?.areaId);
+ selectedPackage=pid;showPage(areaMapType(a)==='production'?'production':'map');renderAreas();openRack(rid);
+ setTimeout(()=>{let t=document.querySelector('.pkg.target');if(t)t.scrollIntoView({behavior:'smooth',block:'center',inline:'center'})},80);
+}
 function renderFilters(){E('areaFilter').innerHTML='<option value="">Alle Lagerflächen</option>'+st.areas.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}
 
 function toggleProductionMoveLock(v){if(!requireAdmin())return;
