@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Holzlager V84</title>
+<title>Holzlager V97</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -61,9 +61,9 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:11px 16px;dis
 table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px solid #e7ebe8;font-size:13px;text-align:left}th{font-size:12px;color:#56615b;background:#f8faf8}.tablewrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:12px}.sort{cursor:pointer}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}.stat b{font-size:22px;display:block}.stat span{font-size:12px;color:var(--mut)}
 .manageList{display:flex;flex-direction:column;gap:8px}.manageItem{border:1px solid var(--line);border-radius:10px;padding:10px}.manageHead{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.modal{position:fixed;inset:0;background:#0006;display:none;place-items:center;padding:15px;z-index:40}.modal.open{display:grid}.box{background:#fff;border-radius:15px;max-width:760px;width:100%;max-height:92vh;overflow:auto;padding:15px}.mh{display:flex;justify-content:space-between;align-items:center}.x{border:0;background:#eee;border-radius:8px;padding:6px 9px}.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}.f{font-size:12px;color:#59655f}.f input,.f select,.f textarea{display:block;width:100%;margin-top:4px;padding:9px;border:1px solid var(--line);border-radius:8px}.span2{grid-column:1/-1}
+.modal{position:fixed;inset:0;background:#0006;display:none;place-items:center;padding:15px;z-index:40}.modal.open{display:grid}.box{background:#fff;border-radius:15px;max-width:760px;width:100%;max-height:92vh;overflow:auto;padding:15px}.mh{display:flex;justify-content:space-between;align-items:center}.x{border:0;background:#eee;border-radius:8px;padding:6px 9px}.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}.f{font-size:12px;color:#59655f}.f input,.f select,.f textarea{display:block;width:100%;margin-top:4px;padding:9px;border:1px solid var(--line);border-radius:8px}.span2{grid-column:1/-1}.dimRow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 @media(max-width:900px){.app{grid-template-columns:1fr}nav{display:flex;gap:5px;overflow:auto;position:sticky;top:0;z-index:20}.brand{display:none}.nav{min-width:84px}.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr}.span2{grid-column:auto}header{align-items:flex-start;flex-direction:column}.mapin{min-width:760px}}
-@media(max-width:600px){.sumGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.sumGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.dimRow{grid-template-columns:1fr}}
 
 /* V69: Anmeldung und Passwortdialoge besser lesbar */
 #authModal .modalbox,
@@ -285,6 +285,45 @@ body.accessLocked #authModal .btn{
 .stdRow input{width:100%}
 .stdBadge{display:inline-flex;align-items:center;justify-content:center;min-width:21px;height:21px;padding:0 6px;margin-left:5px;border-radius:999px;background:#d52121;color:#fff;font-size:12px;font-weight:900}
 @media(max-width:760px){.stdRow{grid-template-columns:1fr 1fr}.stdRow>div:first-child{grid-column:1/-1}}
+
+/* V85 Standardkontrolle aus vorhandenem Lagerbestand */
+.stdMatchList{margin-top:8px;border:1px solid #d9dfda;border-radius:12px;overflow:hidden}
+.stdMatchRow{display:grid;grid-template-columns:30px minmax(180px,2fr) 95px minmax(130px,1fr);gap:8px;align-items:center;padding:9px 10px;border-bottom:1px solid #e8ece9;background:#fff}
+.stdMatchRow:last-child{border-bottom:0}
+.stdMatchRow.bad{background:#fff0f0}
+.stdRackGroup{border:1px solid #d9dedb;border-radius:12px;overflow:hidden;margin:14px 0}
+.stdRackHead{padding:10px 12px;background:#123a63;color:#fff;font-weight:800}.stdRackHead .muted{color:#dbe8f5}
+.stdPkgRow{display:grid;grid-template-columns:minmax(180px,2fr) minmax(120px,1.2fr) 110px 150px;gap:10px;align-items:center;padding:10px 12px;border-top:1px solid #e5e8e6}
+.stdPkgRow.changed{background:#fff4f1}
+@media(max-width:760px){.stdPkgRow{grid-template-columns:1fr 1fr}.stdPkgRow>div:first-child{grid-column:1/-1}}
+
+.stdCalc{font-size:12px;color:#647068}
+.stdDiff{font-weight:900;color:#b31515}
+.stdCorrect{font-weight:900;color:#2f6b3c}
+
+.fullRackGroup{border:1px solid #d7e5da;border-radius:12px;overflow:hidden;margin:14px 0}
+.fullRackHead{padding:10px 12px;background:#1f5f38;color:#fff;font-weight:800}
+.fullRackHead .muted{color:#dcebdd}
+.fullPkgRow{display:grid;grid-template-columns:minmax(220px,2fr) minmax(160px,1.4fr) 120px minmax(270px,auto);gap:10px;align-items:center;padding:10px 12px;border-top:1px solid #e5e8e6}
+.fullPkgRow.done{background:#edf7ef}
+.fullPkgRow.miss{background:#f9e9e7}
+.fullPkgRow.changed{background:#fff5df}
+@media(max-width:900px){.fullPkgRow{grid-template-columns:1fr 1fr}.fullPkgRow>div:first-child{grid-column:1/-1}.fullPkgRow .toolbar{grid-column:1/-1}}
+
+
+.controlSortHead{display:grid;gap:10px;align-items:center;padding:8px 12px;font-size:12px;font-weight:800;background:#eef3ef;border-top:1px solid #dfe5e1}
+.controlSortHead button{border:0;background:transparent;text-align:left;font:inherit;font-weight:800;cursor:pointer;padding:4px 2px}
+.controlSortHead button:hover{text-decoration:underline}
+.controlSortHead.std{grid-template-columns:minmax(220px,2fr) 120px 120px 120px 140px}
+.controlSortHead.full{grid-template-columns:minmax(180px,1.6fr) 110px 90px 90px 90px 110px minmax(140px,1.2fr) 100px minmax(250px,auto)}
+.stdPkgRow{grid-template-columns:minmax(220px,2fr) 120px 120px 120px 140px}
+.fullPkgRow{grid-template-columns:minmax(180px,1.6fr) 110px 90px 90px 90px 110px minmax(140px,1.2fr) 100px minmax(250px,auto)}
+@media(max-width:900px){
+ .controlSortHead.std,.controlSortHead.full{display:none}
+ .stdPkgRow,.fullPkgRow{grid-template-columns:1fr 1fr}
+ .stdPkgRow>div:first-child,.fullPkgRow>div:first-child{grid-column:1/-1}
+ .fullPkgRow .toolbar{grid-column:1/-1}
+}
 </style></head>
 <body class="accessLocked">
 <div class="app">
@@ -556,7 +595,7 @@ body.accessLocked #authModal .btn{
     <input type="checkbox" id="allowDeleteMaterials" onchange="toggleMaterialDelete(this.checked)">
     Materialien löschen erlauben
   </label>
-  <p class="muted">Ist diese Einstellung deaktiviert, können Materialien nicht endgültig gelöscht werden. Archivieren bleibt weiterhin möglich.</p>
+  <p class="muted">Ist diese Einstellung deaktiviert, können weder Materialeinträge noch Materialien im Dropdown/Materialstamm endgültig gelöscht werden. Archivieren bleibt weiterhin möglich.</p>
 </div>
 <div class="card">
   <h2>Datensicherung</h2>
@@ -682,8 +721,24 @@ body.accessLocked #authModal .btn{
 
 <div class="modal" id="matModal"><div class="box"><div class="mh"><h2 id="matTitle">Material / Paket erfassen</h2><button class="x" onclick="closeM('matModal')">✕</button></div><form class="form" onsubmit="saveMat(event)">
 <label class="f">Gestell<select id="mRack" required onchange="fillLevels()"></select></label><label class="f">Ebene<select id="mLevel" required></select></label>
-<label class="f">Material<input id="mMaterial" required></label><label class="f">Breite [m]<input id="mWid" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 0.12"></label>
-<label class="f">Höhe [m]<input id="mHei" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 0.60"></label><label class="f">Länge [m]<input id="mLen" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 6.00"></label>
+<label class="f">Material
+<select id="mMaterial" required onchange="materialCatalogChanged()"></select>
+<div class="toolbar" style="margin-top:6px">
+ <button class="btn secondary" type="button" onclick="openNewMaterialCatalog()">+ Neues Material</button>
+ <button class="btn secondary" type="button" onclick="openMaterialCatalogManager()">Materialien bearbeiten</button>
+</div>
+</label>
+<label class="f" id="mQualityWrap" style="display:none">Qualität
+<select id="mQuality">
+ <option value="">– Qualität wählen –</option>
+</select>
+<small class="muted">Nur für 1-SP / 3-SP.</small>
+</label>
+<div class="span2 dimRow">
+ <label class="f">Breite [m]<input id="mWid" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 0.12"></label>
+ <label class="f">Höhe [m]<input id="mHei" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 0.60"></label>
+ <label class="f">Länge [m]<input id="mLen" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 6.00"></label>
+</div>
 <label class="f">Menge<input id="mQty" inputmode="numeric">
 <button class="btn secondary" type="button" style="margin-top:7px" onclick="openCameraCounter()">📷 Kamerazählung</button>
 <span id="counterSavedPhotoHost"></span></label><label class="f">Anzahl gleiche Paletten<input id="mBatchCount" type="number" min="1" step="1" value="1" placeholder="z. B. 20"><small class="muted">Nur bei Neuerfassung: erstellt jede Palette als eigenen Eintrag mit eigener Element-ID.</small></label><label class="f">Paketstatus<select id="mStatus"><option>Kommission</option><option>Lagerware</option><option>aufgebraucht</option></select></label><div class="f span2">Verwendungsort<div class="toolbar" style="margin-top:4px"><label><input type="checkbox" id="mUseProd"> Produktion</label><label><input type="checkbox" id="mUseSite"> Baustelle</label></div></div>
@@ -709,6 +764,43 @@ body.accessLocked #authModal .btn{
 <label class="f span2">Bemerkung<textarea id="mNote" rows="3"></textarea></label><div class="span2"><button class="btn">Speichern</button></div>
 </form></div></div>
 
+
+<div class="modal" id="materialCatalogModal"><div class="box"><div class="mh"><h2>Neues Material für Dropdown</h2><button class="x" onclick="closeM('materialCatalogModal')">✕</button></div>
+<form class="form" onsubmit="saveNewMaterialCatalog(event)">
+<label class="f span2">Materialbezeichnung<input id="mcName" required placeholder="z. B. BSH, OSB, Fermacell"></label>
+<label class="f span2">ID-Kategorie<select id="mcCategory" required>
+<option value="">– Kategorie wählen –</option>
+<option value="A">A – DUO / BSH / KVH</option>
+<option value="B">B – Werkstoffplatten Holz</option>
+<option value="C">C – Werkstoffplatten NICHT Holz</option>
+<option value="E">E – Dämmung</option>
+<option value="TB">TB – Terrassenbretter</option>
+<option value="D">D – Schalung / Massivholzbretter aller Arten</option>
+</select><small class="muted">Diese Kategorie wird beim späteren Auswählen dieses Materials automatisch übernommen. Damit erhält auch die Element-ID den richtigen Buchstaben.</small></label>
+<div class="span2"><button class="btn">Material anlegen und auswählen</button></div>
+</form></div></div>
+
+<div class="modal" id="materialCatalogManagerModal"><div class="box"><div class="mh"><h2>Material-Dropdown bearbeiten</h2><button class="x" onclick="closeM('materialCatalogManagerModal')">✕</button></div>
+<div class="help"><b>Materialstamm aufräumen.</b><br>Beim Löschen werden aktuell auch alle Pakete mit genau diesem Material vollständig gelöscht.</div>
+<div id="materialCatalogManagerList" class="manageList"></div>
+</div></div>
+
+<div class="modal" id="materialCatalogEditModal"><div class="box"><div class="mh"><h2>Material bearbeiten</h2><button class="x" onclick="closeM('materialCatalogEditModal')">✕</button></div>
+<form class="form" onsubmit="saveMaterialCatalogEdit(event)">
+<input type="hidden" id="mceId">
+<input type="hidden" id="mceOldName">
+<label class="f span2">Materialbezeichnung<input id="mceName" required></label>
+<label class="f span2">ID-Kategorie<select id="mceCategory" required>
+<option value="">– Kategorie wählen –</option>
+<option value="A">A – DUO / BSH / KVH</option>
+<option value="B">B – Werkstoffplatten Holz</option>
+<option value="C">C – Werkstoffplatten NICHT Holz</option>
+<option value="E">E – Dämmung</option>
+<option value="TB">TB – Terrassenbretter</option>
+<option value="D">D – Schalung / Massivholzbretter aller Arten</option>
+</select></label>
+<div class="span2"><button class="btn">Änderungen speichern</button></div>
+</form></div></div>
 
 <div class="modal" id="reserveModal"><div class="box"><div class="mh"><h2>Material reservieren</h2><button class="x" onclick="closeM('reserveModal')">✕</button></div>
 <form class="form" onsubmit="saveReservation(event)">
@@ -858,15 +950,65 @@ function packageLocation(p){
  let r=st.racks.find(x=>x.id===p?.rackId),l=r?.levels[p?.levelIndex];
  return `${areaName(r?.areaId)} / ${r?.name||'–'} / ${l?.name||'–'}`
 }
+function standardRackGroup(p){
+ let r=st.racks.find(x=>x.id===p?.rackId);
+ return {key:r?.id||'ohne',name:r?.name||'Ohne Gestell',area:areaName(r?.areaId),level:r?.levels?.[p?.levelIndex]?.name||'–'};
+}
+let standardControlSort={key:'level',dir:1};
+let fullControlSort={key:'level',dir:1};
+function sortToggle(which,key){
+ let s=which==='standard'?standardControlSort:fullControlSort;
+ if(s.key===key)s.dir*=-1;else{s.key=key;s.dir=1}
+ if(which==='standard')renderStandardControl();else renderFullControl();
+}
+function sortArrow(which,key){
+ let s=which==='standard'?standardControlSort:fullControlSort;
+ return s.key===key?(s.dir===1?' ▲':' ▼'):'';
+}
+function cmpVal(a,b){
+ let na=Number(a),nb=Number(b),aNum=a!==''&&a!==null&&a!==undefined&&!Number.isNaN(na),bNum=b!==''&&b!==null&&b!==undefined&&!Number.isNaN(nb);
+ if(aNum&&bNum)return na-nb;
+ return String(a??'').localeCompare(String(b??''),'de',{numeric:true,sensitivity:'base'});
+}
+function sortStandardRows(rows){
+ let s=standardControlSort;
+ return rows.sort((a,b)=>{
+   let va=s.key==='elementId'?a.elementId:s.key==='material'?a.name:s.key==='level'?a.levelName:s.key==='expected'?a.expectedQty:s.key==='qty'?a.qty:'';
+   let vb=s.key==='elementId'?b.elementId:s.key==='material'?b.name:s.key==='level'?b.levelName:s.key==='expected'?b.expectedQty:s.key==='qty'?b.qty:'';
+   return cmpVal(va,vb)*s.dir;
+ });
+}
+function sortFullRows(rows){
+ let s=fullControlSort;
+ return rows.sort((a,b)=>{
+   let pa=a.p,sna=a.i.snapshot||{},pb=b.p,snb=b.i.snapshot||{};
+   let ra=pa?st.racks.find(x=>x.id===pa.rackId):st.racks.find(x=>x.id===sna.rackId), rb=pb?st.racks.find(x=>x.id===pb.rackId):st.racks.find(x=>x.id===snb.rackId);
+   let la=pa?(ra?.levels?.[pa.levelIndex]?.name||''):(sna.level||''), lb=pb?(rb?.levels?.[pb.levelIndex]?.name||''):(snb.level||'');
+   const get=(p,snap,l,key)=>{
+     if(key==='elementId')return p?.elementId||snap.elementId||'';
+     if(key==='material')return p?.material||snap.material||'';
+     if(key==='level')return l;
+     if(key==='width')return p?.width??'';
+     if(key==='height')return p?.height??'';
+     if(key==='length')return p?.length??'';
+     if(key==='project')return p?.project||snap.project||'';
+     if(key==='qty')return p?.qty??snap.qty??'';
+     return '';
+   };
+   return cmpVal(get(pa,sna,la,s.key),get(pb,snb,lb,s.key))*s.dir;
+ });
+}
+
+
 function packageSnapshot(p){
  return {
-   elementId:p?.elementId||'',material:p?.material||'',width:p?.width||'',height:p?.height||'',length:p?.length||'',qty:p?.qty||'',
+   elementId:p?.elementId||'',material:p?.material||'',quality:p?.quality||'',width:p?.width||'',height:p?.height||'',length:p?.length||'',qty:p?.qty||'',
    project:p?.project||'',packCode:p?.packCode||'',usage:(p?.usage||[]).join(' / '),status:p?.status||'',note:p?.note||'',
    location:packageLocation(p)
  }
 }
 function historyChangeText(before,after){
- const labels={elementId:'Element-ID',material:'Material',width:'Breite',height:'Höhe',length:'Länge',qty:'Menge',project:'Kommission',packCode:'Pack-Code',usage:'Verwendungsort',status:'Status',note:'Notiz',location:'Lagerort'};
+ const labels={elementId:'Element-ID',material:'Material',quality:'Qualität',width:'Breite',height:'Höhe',length:'Länge',qty:'Menge',project:'Kommission',packCode:'Pack-Code',usage:'Verwendungsort',status:'Status',note:'Notiz',location:'Lagerort'};
  let changes=[];
  Object.keys(labels).forEach(k=>{if(String(before[k]??'')!==String(after[k]??''))changes.push(`${labels[k]}: ${before[k]||'–'} → ${after[k]||'–'}`)});
  return changes.join(' · ')
@@ -901,7 +1043,7 @@ function renderReserved(){
  st.packages.filter(p=>hasReservation(p)).forEach(p=>{
    let rack=st.racks.find(x=>x.id===p.rackId),level=rack?.levels[p.levelIndex];
    (p.reservations||[]).forEach(rr=>{
-     let searchable=[p.elementId,p.material,p.project,p.packCode,rack?.name,areaName(rack?.areaId),level?.name,rr.project,rr.who,rr.note,rr.qty].join(' ').toLowerCase();
+     let searchable=[p.elementId,p.material,p.quality,p.project,p.packCode,rack?.name,areaName(rack?.areaId),level?.name,rr.project,rr.who,rr.note,rr.qty].join(' ').toLowerCase();
      if(!q||searchable.includes(q))items.push({p,rr,rack,level})
    })
  });
@@ -1121,33 +1263,102 @@ function ensureV24(){
  if(!Array.isArray(st.internalMaterials))st.internalMaterials=[];
  if(!Array.isArray(st.internalTransfers))st.internalTransfers=[];
  if(!Array.isArray(st.standardStock)||!st.standardStock.length)st.standardStock=[
-  {id:'std_duo_60_80',name:'DUO 60/80',width:0.06,height:0.08,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_duo_60_100',name:'DUO 60/100',width:0.06,height:0.10,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_duo_60_110',name:'DUO 60/110',width:0.06,height:0.11,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_duo_60_120',name:'DUO 60/120',width:0.06,height:0.12,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_duo_60_140',name:'DUO 60/140',width:0.06,height:0.14,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_duo_60_160',name:'DUO 60/160',width:0.06,height:0.16,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_duo_60_180',name:'DUO 60/180',width:0.06,height:0.18,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_duo_60_200',name:'DUO 60/200',width:0.06,height:0.20,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_duo_60_220',name:'DUO 60/220',width:0.06,height:0.22,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_duo_60_240',name:'DUO 60/240',width:0.06,height:0.24,length:13,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_1sp_24_fi',name:'24mm 1-SP, Fichte',thickness:0.024,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
-  {id:'std_1sp_24_la',name:'24mm 1-SP, Lärche',thickness:0.024,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
-  {id:'std_1sp_40_fi',name:'40mm 1-SP, Fichte',thickness:0.040,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
-  {id:'std_1sp_40_la',name:'40mm 1-SP, Lärche',thickness:0.040,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
-  {id:'std_3sp_19_bc',name:'19mm 3-SP B/C, Fichte',thickness:0.019,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
-  {id:'std_3sp_27_bc',name:'27mm 3-SP B/C, Fichte',thickness:0.027,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
-  {id:'std_3sp_19_cc',name:'19mm 3-SP C+/C, Fichte',thickness:0.019,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
-  {id:'std_3sp_27_cc',name:'27mm 3-SP C+/C, Fichte',thickness:0.027,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
-  {id:'std_3sp_42_cc',name:'42mm 3-SP C+/C, Fichte',thickness:0.042,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
-  {id:'std_kvh_27_60',name:'KVH 27/60',width:0.027,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_kvh_27_70',name:'KVH 27/70',width:0.027,height:0.07,length:5,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_kvh_30_60',name:'KVH 30/60',width:0.03,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_kvh_40_40',name:'KVH 40/40',width:0.04,height:0.04,length:5,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_kvh_40_60',name:'KVH 40/60',width:0.04,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_kvh_60_60',name:'KVH 60/60',width:0.06,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null},
-  {id:'std_kvh_60_80',name:'KVH 60/80',width:0.06,height:0.08,length:5,unit:'Stk.',minQty:0,lastQty:null}
+  {id:'std_duo_60_80',name:'DUO 60/80',family:'DUO',width:0.06,height:0.08,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_100',name:'DUO 60/100',family:'DUO',width:0.06,height:0.10,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_110',name:'DUO 60/110',family:'DUO',width:0.06,height:0.11,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_120',name:'DUO 60/120',family:'DUO',width:0.06,height:0.12,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_140',name:'DUO 60/140',family:'DUO',width:0.06,height:0.14,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_160',name:'DUO 60/160',family:'DUO',width:0.06,height:0.16,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_180',name:'DUO 60/180',family:'DUO',width:0.06,height:0.18,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_200',name:'DUO 60/200',family:'DUO',width:0.06,height:0.20,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_220',name:'DUO 60/220',family:'DUO',width:0.06,height:0.22,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_240',name:'DUO 60/240',family:'DUO',width:0.06,height:0.24,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_1sp_24_fi',name:'24mm 1-SP, Fichte',family:'1-SP',species:'Fichte',thickness:0.024,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_1sp_24_la',name:'24mm 1-SP, Lärche',family:'1-SP',species:'Lärche',thickness:0.024,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_1sp_40_fi',name:'40mm 1-SP, Fichte',family:'1-SP',species:'Fichte',thickness:0.040,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_1sp_40_la',name:'40mm 1-SP, Lärche',family:'1-SP',species:'Lärche',thickness:0.040,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_19_bc',name:'19mm 3-SP B/C, Fichte',family:'3-SP',grade:'B/C',species:'Fichte',thickness:0.019,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_27_bc',name:'27mm 3-SP B/C, Fichte',family:'3-SP',grade:'B/C',species:'Fichte',thickness:0.027,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_19_cc',name:'19mm 3-SP C+/C, Fichte',family:'3-SP',grade:'C+/C',species:'Fichte',thickness:0.019,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_27_cc',name:'27mm 3-SP C+/C, Fichte',family:'3-SP',grade:'C+/C',species:'Fichte',thickness:0.027,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_42_cc',name:'42mm 3-SP C+/C, Fichte',family:'3-SP',grade:'C+/C',species:'Fichte',thickness:0.042,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_kvh_27_60',name:'KVH 27/60',family:'KVH',width:0.06,height:0.027,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_27_70',name:'KVH 27/70',family:'KVH',width:0.07,height:0.027,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_30_60',name:'KVH 30/60',family:'KVH',width:0.06,height:0.03,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_40_40',name:'KVH 40/40',family:'KVH',width:0.04,height:0.04,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_40_60',name:'KVH 40/60',family:'KVH',width:0.06,height:0.04,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_60_60',name:'KVH 60/60',family:'KVH',width:0.06,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_60_80',name:'KVH 60/80',family:'KVH',width:0.08,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null}
  ];
+
+ // V93: normalize already existing Standard-Lagerware entries.
+ // Older locally/cloud-stored entries can predate family/quality metadata and the corrected KVH orientation.
+ // Keep user-set minQty/lastQty, but repair matching metadata/dimensions from the canonical material name.
+ const canonicalStandardDefs=[
+  {id:'std_duo_60_80',name:'DUO 60/80',family:'DUO',width:0.06,height:0.08,length:13,unit:'Stk.'},
+  {id:'std_duo_60_100',name:'DUO 60/100',family:'DUO',width:0.06,height:0.10,length:13,unit:'Stk.'},
+  {id:'std_duo_60_110',name:'DUO 60/110',family:'DUO',width:0.06,height:0.11,length:13,unit:'Stk.'},
+  {id:'std_duo_60_120',name:'DUO 60/120',family:'DUO',width:0.06,height:0.12,length:13,unit:'Stk.'},
+  {id:'std_duo_60_140',name:'DUO 60/140',family:'DUO',width:0.06,height:0.14,length:13,unit:'Stk.'},
+  {id:'std_duo_60_160',name:'DUO 60/160',family:'DUO',width:0.06,height:0.16,length:13,unit:'Stk.'},
+  {id:'std_duo_60_180',name:'DUO 60/180',family:'DUO',width:0.06,height:0.18,length:13,unit:'Stk.'},
+  {id:'std_duo_60_200',name:'DUO 60/200',family:'DUO',width:0.06,height:0.20,length:13,unit:'Stk.'},
+  {id:'std_duo_60_220',name:'DUO 60/220',family:'DUO',width:0.06,height:0.22,length:13,unit:'Stk.'},
+  {id:'std_duo_60_240',name:'DUO 60/240',family:'DUO',width:0.06,height:0.24,length:13,unit:'Stk.'},
+  {id:'std_1sp_24_fi',name:'24mm 1-SP, Fichte',family:'1-SP',species:'Fichte',thickness:0.024,width:1.25,length:5,unit:'Platte'},
+  {id:'std_1sp_24_la',name:'24mm 1-SP, Lärche',family:'1-SP',species:'Lärche',thickness:0.024,width:1.25,length:5,unit:'Platte'},
+  {id:'std_1sp_40_fi',name:'40mm 1-SP, Fichte',family:'1-SP',species:'Fichte',thickness:0.040,width:1.25,length:5,unit:'Platte'},
+  {id:'std_1sp_40_la',name:'40mm 1-SP, Lärche',family:'1-SP',species:'Lärche',thickness:0.040,width:1.25,length:5,unit:'Platte'},
+  {id:'std_3sp_19_bc',name:'19mm 3-SP B/C, Fichte',family:'3-SP',grade:'B/C',species:'Fichte',thickness:0.019,width:1.25,length:5,unit:'Platte'},
+  {id:'std_3sp_27_bc',name:'27mm 3-SP B/C, Fichte',family:'3-SP',grade:'B/C',species:'Fichte',thickness:0.027,width:1.25,length:5,unit:'Platte'},
+  {id:'std_3sp_19_cc',name:'19mm 3-SP C+/C, Fichte',family:'3-SP',grade:'C+/C',species:'Fichte',thickness:0.019,width:1.25,length:5,unit:'Platte'},
+  {id:'std_3sp_27_cc',name:'27mm 3-SP C+/C, Fichte',family:'3-SP',grade:'C+/C',species:'Fichte',thickness:0.027,width:1.25,length:5,unit:'Platte'},
+  {id:'std_3sp_42_cc',name:'42mm 3-SP C+/C, Fichte',family:'3-SP',grade:'C+/C',species:'Fichte',thickness:0.042,width:1.25,length:5,unit:'Platte'},
+  {id:'std_kvh_27_60',name:'KVH 27/60',family:'KVH',height:0.027,width:0.06,length:5,unit:'Stk.'},
+  {id:'std_kvh_27_70',name:'KVH 27/70',family:'KVH',height:0.027,width:0.07,length:5,unit:'Stk.'},
+  {id:'std_kvh_30_60',name:'KVH 30/60',family:'KVH',height:0.030,width:0.06,length:5,unit:'Stk.'},
+  {id:'std_kvh_40_40',name:'KVH 40/40',family:'KVH',height:0.040,width:0.04,length:5,unit:'Stk.'},
+  {id:'std_kvh_40_60',name:'KVH 40/60',family:'KVH',height:0.040,width:0.06,length:5,unit:'Stk.'},
+  {id:'std_kvh_60_60',name:'KVH 60/60',family:'KVH',height:0.060,width:0.06,length:5,unit:'Stk.'},
+  {id:'std_kvh_60_80',name:'KVH 60/80',family:'KVH',height:0.060,width:0.08,length:5,unit:'Stk.'}
+ ];
+ canonicalStandardDefs.forEach(def=>{
+   let cur=(st.standardStock||[]).find(x=>x.id===def.id) ||
+           (st.standardStock||[]).find(x=>String(x.name||'').trim().toLowerCase()===def.name.toLowerCase());
+   if(cur){
+     let minQty=cur.minQty,lastQty=cur.lastQty,lastChecked=cur.lastChecked;
+     Object.assign(cur,def);
+     if(minQty!==undefined)cur.minQty=minQty; else cur.minQty=0;
+     if(lastQty!==undefined)cur.lastQty=lastQty;
+     if(lastChecked!==undefined)cur.lastChecked=lastChecked;
+   }
+ });
+
+ if(!Array.isArray(st.materialCatalog))st.materialCatalog=[];
+ if(!Array.isArray(st.deletedMaterialCatalogNames))st.deletedMaterialCatalogNames=[];
+ const materialCatalogWasDeleted=(name)=>st.deletedMaterialCatalogNames.some(n=>String(n||'').toLowerCase()===String(name||'').toLowerCase());
+ const v86Defaults=[
+  ['DUO','A'],['BSH','A'],['KVH','A'],
+  ['Einschichtplatte','B'],['1-SP','B'],['3-Schichtplatte','B'],['3-SP','B'],
+  ['OSB','B'],['MDF','B'],['Spanplatte','B'],
+  ['Fermacell','C'],['Gipsfaserplatte','C'],['Gipskarton','C'],
+  ['Dämmung','E'],['Terrassenbrett','TB'],['Schalung','D'],['Massivholzbrett','D']
+ ];
+ v86Defaults.forEach(([name,category])=>{
+   if(!materialCatalogWasDeleted(name)&&!st.materialCatalog.some(x=>String(x.name||'').toLowerCase()===name.toLowerCase()))
+     st.materialCatalog.push({id:'mc_'+name.toLowerCase().replace(/[^a-z0-9]+/g,'_'),name,category,active:true});
+ });
+ (st.standardStock||[]).forEach(s=>{
+   let category=(s.family==='DUO'||s.family==='KVH')?'A':'B';
+   if(!materialCatalogWasDeleted(s.name)&&!st.materialCatalog.some(x=>String(x.name||'').toLowerCase()===String(s.name||'').toLowerCase()))
+     st.materialCatalog.push({id:'mc_std_'+s.id,name:s.name,category,active:true,height:(s.thickness||s.height||''),width:(s.width||''),length:(s.length||'')});
+ });
+ (st.packages||[]).forEach(p=>{
+   let name=String(p.material||'').trim();if(!name)return;
+   if(!materialCatalogWasDeleted(name)&&!st.materialCatalog.some(x=>String(x.name||'').toLowerCase()===name.toLowerCase()))
+     st.materialCatalog.push({id:'mc_pkg_'+String(p.id||Date.now()),name,category:p.idCategory||'',active:true,height:p.height||'',width:p.width||'',length:p.length||''});
+   if(p.quality===undefined)p.quality='';
+ });
 
  if(!st.settings)st.settings={};
  if(!Array.isArray(st.users)||!st.users.length)st.users=[{id:'u_admin',name:'Administrator',role:'Administrator',active:true},{id:'u_lager',name:'Lager',role:'Lagerverantwortlicher',active:true},{id:'u_mitarbeiter',name:'Mitarbeiter',role:'Mitarbeiter',active:true}];
@@ -1589,17 +1800,17 @@ async function checkCloudForUpdates(force=false){
 
 
 function entityCollections(){
- return ['areas','racks','packages','commissions','controls','users','internalMaterials','internalTransfers','standardStock'];
+ return ['areas','racks','packages','commissions','controls','users','internalMaterials','internalTransfers','standardStock','materialCatalog'];
 }
 function canWriteCloudEntity(type,action='save'){
  let role=currentRole();
  if(role==='Administrator')return true;
  if(role==='Lagerverantwortlicher'){
    if(type==='users')return false;
-   return ['areas','racks','packages','commissions','controls','internalMaterials','internalTransfers','standardStock','__state'].includes(type);
+   return ['areas','racks','packages','commissions','controls','internalMaterials','internalTransfers','standardStock','materialCatalog','__state'].includes(type);
  }
  if(role==='Mitarbeiter'){
-   if(action==='save')return ['packages','controls','standardStock'].includes(type);
+   if(action==='save')return ['packages','controls','standardStock','materialCatalog'].includes(type);
    if(action==='delete')return type==='packages' && !!st.settings?.allowMaterialDelete;
  }
  return false;
@@ -1612,7 +1823,8 @@ function singletonCloudData(){
    productionHotspot:st.productionHotspot||null,
    inventoryColumnOrder:st.inventoryColumnOrder||[],
    activeControlId:st.activeControlId||null,
-   trash:st.trash||[]
+   trash:st.trash||[],
+   deletedMaterialCatalogNames:st.deletedMaterialCatalogNames||[]
  };
 }
 function entityId(type,obj,idx){
@@ -1729,7 +1941,7 @@ function applyRemoteEntities(remote,preserveKeys=new Set()){
    next.usedElementIds=s.usedElementIds||next.usedElementIds||[];
    next.productionHotspot=s.productionHotspot||next.productionHotspot;
    next.inventoryColumnOrder=s.inventoryColumnOrder||next.inventoryColumnOrder||[];
-   next.activeControlId=s.activeControlId||null;next.trash=s.trash||[];
+   next.activeControlId=s.activeControlId||null;next.trash=s.trash||[];next.deletedMaterialCatalogNames=s.deletedMaterialCatalogNames||next.deletedMaterialCatalogNames||[];
  }
  st=next;ensureV24();localStorage.setItem(KEY,JSON.stringify(st));
 }
@@ -1738,7 +1950,7 @@ function syncBaseFromRemote(remote){
  saveSyncBase(b);
 }
 function conflictLabel(c){
- let t={areas:'Lagerfläche',racks:'Gestell',packages:'Material/Paket',commissions:'Kommission',controls:'Lagerkontrolle',users:'Benutzer',internalMaterials:'Umbuchungs-Material',internalTransfers:'Interne Umbuchung',standardStock:'Standard-Lagerware','__state':'Einstellungen'}[c.type]||c.type;
+ let t={areas:'Lagerfläche',racks:'Gestell',packages:'Material/Paket',commissions:'Kommission',controls:'Lagerkontrolle',users:'Benutzer',internalMaterials:'Umbuchungs-Material',internalTransfers:'Interne Umbuchung',standardStock:'Standard-Lagerware',materialCatalog:'Materialstamm','__state':'Einstellungen'}[c.type]||c.type;
  let name=c.local?.name||c.local?.material||c.local?.elementId||c.remote?.name||c.remote?.material||c.remote?.elementId||c.id;
  return t+' · '+name;
 }
@@ -1759,7 +1971,7 @@ async function resolveSyncConflict(index,choice){
      if(c.deletedRemote){
        if(c.type==='__state'){} else st[c.type]=(st[c.type]||[]).filter((o,i)=>entityId(c.type,o,i)!==c.id);
      }else if(c.type==='__state'){
-       let d=c.remote||{};st.settings=d.settings||{};st.idCounters=d.idCounters||{};st.usedElementIds=d.usedElementIds||[];st.productionHotspot=d.productionHotspot||st.productionHotspot;st.inventoryColumnOrder=d.inventoryColumnOrder||[];st.activeControlId=d.activeControlId||null;st.trash=d.trash||[];
+       let d=c.remote||{};st.settings=d.settings||{};st.idCounters=d.idCounters||{};st.usedElementIds=d.usedElementIds||[];st.productionHotspot=d.productionHotspot||st.productionHotspot;st.inventoryColumnOrder=d.inventoryColumnOrder||[];st.activeControlId=d.activeControlId||null;st.trash=d.trash||[];st.deletedMaterialCatalogNames=d.deletedMaterialCatalogNames||st.deletedMaterialCatalogNames||[];
      }else{
        let arr=st[c.type]||[],ix=arr.findIndex((o,i)=>entityId(c.type,o,i)===c.id);
        if(ix>=0)arr[ix]=c.remote;else arr.push(c.remote);st[c.type]=arr;
@@ -2652,6 +2864,138 @@ function saveRack(e){e.preventDefault();let aid=E('rArea').value;if(areaIsLocked
 function openLevel(){if(!requireStructure())return;E('lName').value='Ebene '+((st.racks.find(r=>r.id===E('rackSel').value)?.levels.length||0)+1);E('lLen').value=E('lWid').value=E('lHei').value='';E('levelModal').classList.add('open')}
 function saveLevel(e){e.preventDefault();let r=st.racks.find(x=>x.id===E('rackSel').value);r.levels.push({name:E('lName').value.trim(),length:E('lLen').value,width:E('lWid').value,height:E('lHei').value});closeM('levelModal');persist();renderManageRack()}
 
+
+function materialCatalogOptions(selected=''){
+ ensureV24();
+ let arr=(st.materialCatalog||[]).filter(x=>x.active!==false).slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de',{numeric:true,sensitivity:'base'}));
+ let cur=String(selected||'').trim();
+ if(cur&&!arr.some(x=>x.name===cur))arr.push({id:'__current',name:cur,category:'',active:true});
+ return '<option value="">– Material wählen –</option>'+arr.map(x=>`<option value="${esc(x.name)}" data-category="${esc(x.category||'')}" ${x.name===cur?'selected':''}>${esc(x.name)}</option>`).join('');
+}
+function fillMaterialCatalog(selected=''){
+ let el=E('mMaterial');if(!el)return;el.innerHTML=materialCatalogOptions(selected);if(selected)el.value=selected;
+}
+function materialUsesQuality(name){
+ let t=String(name||'').toLowerCase().replace(/\s+/g,'');
+ return t.includes('1-sp')||t.includes('1sp')||t.includes('einschicht')||t.includes('3-sp')||t.includes('3sp')||t.includes('3-schicht')||t.includes('3schicht');
+}
+function qualityOptions(selected=''){
+ let vals=['B/C','C+/C'];
+ (st.standardStock||[]).forEach(x=>{if(x.grade&&!vals.includes(x.grade))vals.push(x.grade)});
+ (st.packages||[]).forEach(p=>{let q=String(p.quality||'').trim();if(q&&!vals.includes(q))vals.push(q)});
+ return '<option value="">– Qualität wählen –</option>'+vals.sort((a,b)=>a.localeCompare(b,'de')).map(q=>`<option ${q===selected?'selected':''}>${esc(q)}</option>`).join('');
+}
+function updateQualityVisibility(selected=''){
+ let wrap=E('mQualityWrap'),q=E('mQuality');if(!wrap||!q)return;
+ let use=materialUsesQuality(E('mMaterial')?.value||'');
+ wrap.style.display=use?'':'none';
+ q.innerHTML=qualityOptions(selected||q.value);
+ if(!use)q.value='';
+}
+function materialDimensionsFromSelection(name){
+ let n=String(name||'').trim(),t=n.toLowerCase();
+ let s=(st.standardStock||[]).find(x=>String(x.name||'').trim()===n);
+ let c=(st.materialCatalog||[]).find(x=>String(x.name||'').trim()===n);
+
+ // DUO: 60/120 => Breite 60 mm, Höhe 120 mm.
+ let duo=t.match(/\bduo\s+(\d{2,3})\s*[\/x×]\s*(\d{2,3})\b/);
+ if(duo)return {width:Number(duo[1])/1000,height:Number(duo[2])/1000};
+
+ // KVH: 40/60 => Höhe 40 mm, Breite 60 mm.
+ let kvh=t.match(/\bkvh\s+(\d{2,3})\s*[\/x×]\s*(\d{2,3})\b/);
+ if(kvh)return {width:Number(kvh[2])/1000,height:Number(kvh[1])/1000};
+
+ // Platten: mm-Angabe entspricht der Höhe/Dicke.
+ let mm=t.match(/(?:^|\s)(\d{1,3})\s*mm\b/);
+ if(mm)return {width:(s?.width??c?.width??''),height:Number(mm[1])/1000};
+
+ return {width:(s?.width??c?.width??''),height:(s?.thickness??s?.height??c?.height??'')};
+}
+function applySelectedMaterialDimensions(){
+ let d=materialDimensionsFromSelection(E('mMaterial')?.value||'');
+ if(d.width!==''&&d.width!==null&&d.width!==undefined)E('mWid').value=String(d.width);
+ if(d.height!==''&&d.height!==null&&d.height!==undefined)E('mHei').value=String(d.height);
+}
+function materialCatalogChanged(){
+ let el=E('mMaterial'),opt=el?.selectedOptions?.[0];if(!opt)return;
+ let cat=opt.dataset.category||'';
+ if(cat){
+   E('mCat').value=cat;
+   if(!editingPackage || !E('mElementId').value.trim()) E('mElementId').value='';
+   updateElementIdPreview();
+ }
+ applySelectedMaterialDimensions();
+ updateQualityVisibility('');
+}
+
+function openMaterialCatalogManager(){renderMaterialCatalogManager();E('materialCatalogManagerModal').classList.add('open')}
+function renderMaterialCatalogManager(){
+ let box=E('materialCatalogManagerList');if(!box)return;
+ let arr=(st.materialCatalog||[]).slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de',{numeric:true,sensitivity:'base'}));
+ box.innerHTML=arr.map(x=>{
+   let count=(st.packages||[]).filter(p=>String(p.material||'')===String(x.name||'')).length;
+   return `<div class="manageItem"><div><b>${esc(x.name)}</b><div class="muted">Kategorie ${esc(x.category||'–')} · ${count} Paket${count===1?'':'e'}</div></div><div class="toolbar"><button class="btn secondary" onclick="editMaterialCatalogItem('${x.id}')">Bearbeiten</button>${st.settings?.allowMaterialDelete?`<button class="btn danger" onclick="deleteMaterialCatalogItem('${x.id}')">Löschen</button>`:''}</div></div>`;
+ }).join('')||'<div class="help">Noch keine Materialien vorhanden.</div>';
+}
+function editMaterialCatalogItem(id){
+ let x=(st.materialCatalog||[]).find(m=>m.id===id);if(!x)return;
+ E('mceId').value=x.id;E('mceOldName').value=x.name||'';E('mceName').value=x.name||'';E('mceCategory').value=x.category||'';
+ E('materialCatalogEditModal').classList.add('open');
+}
+function saveMaterialCatalogEdit(e){
+ e.preventDefault();
+ let id=E('mceId').value,oldName=E('mceOldName').value,name=E('mceName').value.trim(),category=E('mceCategory').value;
+ let x=(st.materialCatalog||[]).find(m=>m.id===id);if(!x||!name||!category)return;
+ let dup=(st.materialCatalog||[]).find(m=>m.id!==id&&String(m.name||'').toLowerCase()===name.toLowerCase());
+ if(dup){alert('Dieses Material existiert bereits im Dropdown.');return}
+ x.name=name;x.category=category;
+ // Rename existing package material text so catalog and inventory stay consistent.
+ (st.packages||[]).forEach(p=>{if(String(p.material||'')===oldName){p.material=name;p.updatedAt=new Date().toISOString();addHistory(p,'Materialstamm geändert',`Material: ${oldName} → ${name}`)}});
+ closeM('materialCatalogEditModal');persist();renderMaterialCatalogManager();fillMaterialCatalog(E('mMaterial')?.value===oldName?name:E('mMaterial')?.value||'');applySelectedMaterialDimensions();updateQualityVisibility(E('mQuality')?.value||'');
+}
+function deleteMaterialCatalogItem(id,fromDropdown=false){
+ if(!st.settings?.allowMaterialDelete){alert('Zum Löschen zuerst unter Verwalten → Material-Einstellungen den Haken „Materialien löschen erlauben“ setzen.');return}
+ let x=(st.materialCatalog||[]).find(m=>m.id===id);if(!x)return;
+ let affected=(st.packages||[]).filter(p=>String(p.material||'')===String(x.name||''));
+ let msg=`„${x.name}“ aus dem Material-Dropdown löschen?`;
+ if(affected.length)msg+=`\n\nDabei werden auch ${affected.length} Paket${affected.length===1?'':'e'} mit diesem Material gelöscht.`;
+ if(!confirm(msg))return;
+
+ if(!Array.isArray(st.deletedMaterialCatalogNames))st.deletedMaterialCatalogNames=[];
+ if(!st.deletedMaterialCatalogNames.some(n=>String(n||'').toLowerCase()===String(x.name||'').toLowerCase()))
+   st.deletedMaterialCatalogNames.push(x.name);
+
+ let ids=new Set(affected.map(p=>p.id));
+ st.packages=(st.packages||[]).filter(p=>!ids.has(p.id));
+ st.movements=(st.movements||[]).filter(m=>!ids.has(m.packageId));
+ (st.controls||[]).forEach(c=>{if(Array.isArray(c.items))c.items=c.items.filter(i=>!ids.has(i.packageId))});
+ st.materialCatalog=(st.materialCatalog||[]).filter(m=>m.id!==id);
+
+ persist();
+
+ if(E('materialCatalogManagerModal')?.classList.contains('open'))renderMaterialCatalogManager();
+ fillMaterialCatalog('');
+ if(E('mQuality'))E('mQuality').value='';
+ updateQualityVisibility('');
+ if(fromDropdown)alert('Gelöscht.');
+}
+function openNewMaterialCatalog(){
+ E('mcName').value='';E('mcCategory').value=E('mCat')?.value||'';E('materialCatalogModal').classList.add('open');setTimeout(()=>E('mcName')?.focus(),50)
+}
+function saveNewMaterialCatalog(e){
+ e.preventDefault();let name=E('mcName').value.trim(),category=E('mcCategory').value;
+ if(!name||!category)return;
+ ensureV24();
+ st.deletedMaterialCatalogNames=(st.deletedMaterialCatalogNames||[]).filter(n=>String(n||'').toLowerCase()!==name.toLowerCase());
+ let ex=(st.materialCatalog||[]).find(x=>String(x.name||'').toLowerCase()===name.toLowerCase());
+ if(ex){ex.category=category;ex.active=true}
+ else{
+   let s=(st.standardStock||[]).find(x=>String(x.name||'').trim()===name);
+   st.materialCatalog.push({id:'mc'+Date.now(),name,category,active:true,height:s?(s.thickness||s.height||''):'',width:s?(s.width||''):'',length:s?(s.length||''):'',createdAt:new Date().toISOString(),createdBy:currentUserName()});
+ }
+ closeM('materialCatalogModal');fillMaterialCatalog(name);E('mCat').value=category;E('mElementId').value='';updateElementIdPreview();applySelectedMaterialDimensions();updateQualityVisibility('');persist();
+}
+
 function openMaterial(rid=''){
  editingPackage='';
  E('matTitle').textContent='Material / Paket erfassen';
@@ -2664,7 +3008,7 @@ function openMaterial(rid=''){
  E('mRack').innerHTML=materialRackOptions(preferred);
  if(preferred&&E('mRack').querySelector(`option[value="${preferred}"]`))E('mRack').value=preferred;
  if(!E('mRack').options.length){alert('Es gibt aktuell keinen freigegebenen Lagerort. Entsperre zuerst eine Lagerfläche.');return}
- fillLevels();ensureIdSettings();ensureCommissions();E('mProj').innerHTML=commissionOptions('');E('mCat').value='';E('mElementId').value='';E('mBatchCount').disabled=false;E('mBatchCount').value=1;pendingMaterialPhotoDelete=false;renderMaterialPhotoEditor(null);resetV75Editors(null);updateElementIdPreview();E('matModal').classList.add('open')
+ fillLevels();ensureIdSettings();ensureCommissions();fillMaterialCatalog('');E('mQuality').innerHTML=qualityOptions('');E('mQuality').value='';updateQualityVisibility('');E('mProj').innerHTML=commissionOptions('');E('mCat').value='';E('mElementId').value='';E('mBatchCount').disabled=false;E('mBatchCount').value=1;pendingMaterialPhotoDelete=false;renderMaterialPhotoEditor(null);resetV75Editors(null);updateElementIdPreview();E('matModal').classList.add('open')
 }
 function editPackage(id){
  let p=st.packages.find(x=>x.id===id);if(!p)return;
@@ -2672,7 +3016,7 @@ function editPackage(id){
  E('matTitle').textContent='Material / Paket bearbeiten';
  E('mRack').innerHTML=materialRackOptions(p.rackId);
  E('mRack').value=p.rackId;fillLevels();E('mLevel').value=String(p.levelIndex);
- E('mMaterial').value=p.material||'';E('mWid').value=p.width||'';E('mHei').value=p.height||'';E('mLen').value=p.length||'';
+ fillMaterialCatalog(p.material||'');E('mQuality').innerHTML=qualityOptions(p.quality||'');E('mQuality').value=p.quality||'';updateQualityVisibility(p.quality||'');E('mWid').value=p.width||'';E('mHei').value=p.height||'';E('mLen').value=p.length||'';
  E('mQty').value=p.qty||'';E('mBatchCount').value=1;E('mBatchCount').disabled=true;E('mStatus').value=p.status||'Kommission';ensureCommissions();E('mProj').innerHTML=commissionOptions(p.project||'');E('mProj').value=p.project||'';E('mCat').value=p.idCategory||'';E('mElementId').value=p.elementId||'';if(E('mPack'))E('mPack').value=p.packCode||'';
  E('mUseProd').checked=(p.usage||[]).includes('Produktion');E('mUseSite').checked=(p.usage||[]).includes('Baustelle');
  E('mNote').value=p.note||'';E('mPhoto').value='';renderMaterialPhotoEditor(p);resetV75Editors(p);
@@ -2838,7 +3182,10 @@ async function saveMat(e){
  let old=editingPackage?st.packages.find(x=>x.id===editingPackage):null;
  let beforeSnapshot=old?packageSnapshot(old):null;
  let batchCount=old?1:Math.max(1,parseInt(E('mBatchCount').value||'1',10));
- let cat=E('mCat').value,manualId=E('mElementId').value.trim().toUpperCase();
+ let selectedMat=E('mMaterial').value.trim();
+ let catEntry=(st.materialCatalog||[]).find(x=>x.name===selectedMat);
+ let cat=(catEntry?.category||E('mCat').value),manualId=E('mElementId').value.trim().toUpperCase();
+ if(catEntry?.category)E('mCat').value=catEntry.category;
 
  if(batchCount>1){
    if(!st.idSettings.auto){alert('Für die Mehrfach-Erfassung mehrerer Paletten muss die automatische ID-Vergabe aktiviert sein.');return}
@@ -2872,7 +3219,7 @@ async function saveMat(e){
    }else{photo=await fileURL(f);photoPath=''}
  }
  let baseData={
-   rackId:r.id,levelIndex:li,material:E('mMaterial').value.trim(),
+   rackId:r.id,levelIndex:li,material:E('mMaterial').value.trim(),quality:materialUsesQuality(E('mMaterial').value)?E('mQuality').value.trim():'',
    width:E('mWid').value,height:E('mHei').value,length:E('mLen').value,
    qty:E('mQty').value.trim(),project:E('mProj').value.trim(),idCategory:cat,
    packCode:'',
@@ -3002,6 +3349,8 @@ function renderManage(){ensureIdSettings();ensureCommissions();ensureV24();rende
  if(E('idCounters'))E('idCounters').innerHTML=Object.entries(ID_CATS).map(([k,n])=>`<div class="manageItem"><div><b>${esc(n)}</b><div class="muted">Präfix ${k}-xxx</div></div><div><b>Nächste ID: ${esc(formatElementId(k,scanNextId(k)))}</b></div></div>`).join('');
  E('areaManage').innerHTML=st.areas.map(a=>{let n=st.racks.filter(r=>r.areaId===a.id).length,m=areaActiveMaterialCount(a.id);return `<div class="manageItem"><div class="manageHead"><div><b>${esc(a.name)}</b>${a.locked?' <span class="lockBadge">GESPERRT</span>':''}<div class="muted">${areaMapType(a)==='production'?'Produktion':'Aussenlager'} · ${n} Gestell(e) · ${m} aktive Materialeinträge</div></div><div class="toolbar"><button class="btn ${a.locked?'secondary':'danger'}" onclick="toggleAreaLock('${a.id}')">${a.locked?'Entsperren':'Sperren'}</button><button class="btn secondary" onclick="renameArea('${a.id}')">Umbenennen</button><button class="btn secondary" onclick="editAreaGeometry('${a.id}')">Fläche bearbeiten</button><button class="btn danger" onclick="deleteArea('${a.id}')">Löschen</button></div></div></div>`}).join('');
  E('rackSel').innerHTML=st.racks.map(r=>`<option value="${r.id}">${esc(areaName(r.areaId))} – ${esc(r.name)}</option>`).join('');renderManageRack()
+
+ if(E('materialCatalogManagerModal')?.classList.contains('open'))renderMaterialCatalogManager();
 }
 function rackPhotoHtml(r){
  if(!r)return '';
@@ -3122,12 +3471,77 @@ function renderFullControl(){
  ensureV24();let c=activeControl(),box=E('allControlBody');
  if(!c){box.innerHTML='<div class="help">Keine laufende Lagerkontrolle. Starte mit „+ Neue Kontrolle“.</div>'}
  else{
-   let done=c.items.filter(i=>i.result).length,total=c.items.length,pct=total?Math.round(done/total*100):100,next=c.items.find(i=>!i.result),p=next?st.packages.find(x=>x.id===next.packageId):null,content='';
-   if(next&&!p){next.result='Nicht gefunden';next.checkedAt=new Date().toISOString();next.checkedBy=currentUserName();return persist()}
-   let summaries=controlLevelSummary(c),levelHtml=summaries.map(x=>{let cls=x.done===x.total?(x.miss?'miss':(x.changed||x.found?'warn':'done')):'';let status=x.done===x.total?'✓ vollständig':`${x.done}/${x.total}`;return `<div class="controlLevelRow ${cls}"><div><b>${esc(x.area)}</b> · ${esc(x.rack)} · ${esc(x.level)}<div class="muted">Nicht gefunden ${x.miss} · geändert ${x.changed} · neu ${x.found}</div></div><span class="controlBigStatus">${status}</span></div>`}).join('');
-   if(next&&p){let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];content=`<div class="controlCard"><div class="controlAreaBanner"><small>Lagerfläche</small>${esc(areaName(r?.areaId))}</div><div class="controlRackLine">Gestell: ${esc(r?.name||'–')} &nbsp; · &nbsp; Ebene: ${esc(l?.name||'–')}</div><div class="manageHead"><div><b>${esc(p.material)}</b>${p.elementId?` · <b>${esc(p.elementId)}</b>`:''}</div><span class="statusbadge ${stClass(p.status)}">${esc(p.status||'–')}</span></div><p>B ${esc(p.width||'–')} m · H ${esc(p.height||'–')} m · L ${esc(p.length||'–')} m · Menge ${esc(p.qty||'–')}</p><p class="muted">Kommission: ${esc(p.project||'–')}</p><div class="toolbar"><button class="btn" onclick="checkItem('${c.id}','${next.packageId}','Vorhanden')">✓ Vorhanden</button><button class="btn secondary" onclick="controlEdit('${c.id}','${next.packageId}')">Bearbeiten</button><button class="btn danger" onclick="checkItem('${c.id}','${next.packageId}','Nicht gefunden')">Nicht gefunden</button><button class="btn secondary" onclick="jump('${p.rackId}','${p.id}')">Zu Lagerort</button></div></div>`}
-   else if(total)content=`<div class="help"><b>Alle ${total} Positionen wurden kontrolliert.</b><div class="toolbar"><button class="btn" onclick="finishControl('${c.id}')">Kontrolle abschliessen</button><button class="btn secondary" onclick="downloadControlReport('${c.id}')">Kontrollbericht CSV</button></div></div>`;else content='<div class="help">Diese Kontrolle enthält keine Pakete.</div>';
-   let counts={};c.items.forEach(i=>counts[i.result]=(counts[i.result]||0)+1);box.innerHTML=`<h3>${esc(controlLabel(c))}</h3><div class="controlMeta"><span class="controlPill">Gestartet von ${esc(c.checkedBy||'–')}</span><span class="controlPill">Aktiver Benutzer ${esc(currentUserName())}</span></div><div class="progress"><div style="width:${pct}%"></div></div><p class="muted">${done} von ${total} kontrolliert · ${pct}% &nbsp; | &nbsp; ✓ ${counts['Vorhanden']||0} &nbsp; Geändert ${counts['Geändert']||0} &nbsp; Nicht gefunden ${counts['Nicht gefunden']||0} &nbsp; Neu gefunden ${counts['Neu gefunden']||0}</p>${content}<h3>Ebenenfortschritt</h3><div class="controlLevelList">${levelHtml}</div><div class="toolbar"><button class="btn secondary" onclick="openFoundMaterial()">+ Material gefunden</button></div>`
+   let done=c.items.filter(i=>i.result).length,total=c.items.length,pct=total?Math.round(done/total*100):100;
+   let counts={};c.items.forEach(i=>counts[i.result]=(counts[i.result]||0)+1);
+
+   let groups={};
+   c.items.forEach(i=>{
+     let p=st.packages.find(x=>x.id===i.packageId);
+     let snap=i.snapshot||{};
+     let rackId=p?.rackId||snap.rackId||'ohne';
+     let r=st.racks.find(x=>x.id===rackId);
+     let rackName=r?.name||snap.rack||'Ohne Gestell';
+     let area=r?areaName(r.areaId):(snap.area||'–');
+     if(!groups[rackId])groups[rackId]={rackId,rackName,area,items:[]};
+     groups[rackId].items.push({i,p});
+   });
+
+   let ordered=Object.values(groups).sort((a,b)=>String(a.rackName).localeCompare(String(b.rackName),'de',{numeric:true,sensitivity:'base'}));
+
+   let groupHtml=ordered.map(g=>{
+     let rows=sortFullRows(g.items).map(({i,p})=>{
+       let snap=i.snapshot||{};
+       let r=p?st.racks.find(x=>x.id===p.rackId):st.racks.find(x=>x.id===snap.rackId);
+       let level=p?(r?.levels?.[p.levelIndex]?.name||'–'):(snap.level||'–');
+       let material=p?.material||snap.material||'–';
+       let elementId=p?.elementId||snap.elementId||i.packageId;
+       let qty=p?.qty??snap.qty??'–';
+       let project=p?.project||snap.project||'–';
+       let quality=p?.quality||'';
+       let dims=p?`B ${p.width||'–'} · H ${p.height||'–'} · L ${p.length||'–'} m`:'';
+       let cls=i.result==='Vorhanden'?'done':i.result==='Nicht gefunden'?'miss':i.result==='Geändert'||i.result==='Neu gefunden'?'changed':'';
+       let status=i.result?`<b>${esc(i.result)}</b>`:'<span class="muted">offen</span>';
+       let actions=p&&!i.result?`<div class="toolbar">
+          <button class="btn" onclick="checkItem('${c.id}','${i.packageId}','Vorhanden')">✓ Vorhanden</button>
+          <button class="btn secondary" onclick="controlEdit('${c.id}','${i.packageId}')">Bearbeiten</button>
+          <button class="btn danger" onclick="checkItem('${c.id}','${i.packageId}','Nicht gefunden')">Nicht gefunden</button>
+          <button class="btn secondary" onclick="jump('${p.rackId}','${p.id}')">Zu Lagerort</button>
+        </div>`:(p?`<div class="toolbar"><button class="btn secondary" onclick="jump('${p.rackId}','${p.id}')">Zu Lagerort</button></div>`:'');
+       return `<div class="fullPkgRow ${cls}">
+         <div><b>${esc(material)}</b>${quality?`<div class="muted">Qualität: ${esc(quality)}</div>`:''}</div>
+         <div><b>${esc(elementId||'–')}</b></div>
+         <div>${esc(level)}</div>
+         <div>${esc(p?.width??'–')}</div>
+         <div>${esc(p?.height??'–')}</div>
+         <div>${esc(p?.length??'–')}</div>
+         <div>${esc(project)}</div>
+         <div><b>${esc(qty)}</b><br>${status}</div>
+         ${actions||'<div></div>'}
+       </div>`;
+     }).join('');
+     return `<div class="fullRackGroup"><div class="fullRackHead">${esc(g.rackName)} · <span class="muted">${esc(g.area)}</span></div>
+       <div class="controlSortHead full">
+         <button onclick="sortToggle('full','material')">Material${sortArrow('full','material')}</button>
+         <button onclick="sortToggle('full','elementId')">Element-ID${sortArrow('full','elementId')}</button>
+         <button onclick="sortToggle('full','level')">Ebene${sortArrow('full','level')}</button>
+         <button onclick="sortToggle('full','width')">Breite${sortArrow('full','width')}</button>
+         <button onclick="sortToggle('full','height')">Höhe${sortArrow('full','height')}</button>
+         <button onclick="sortToggle('full','length')">Länge${sortArrow('full','length')}</button>
+         <button onclick="sortToggle('full','project')">Kommission${sortArrow('full','project')}</button>
+         <button onclick="sortToggle('full','qty')">Menge${sortArrow('full','qty')}</button>
+         <span>Aktionen</span>
+       </div>${rows}</div>`;
+   }).join('');
+
+   let finishHtml=done===total&&total?`<div class="help"><b>Alle ${total} Positionen wurden kontrolliert.</b><div class="toolbar"><button class="btn" onclick="finishControl('${c.id}')">Kontrolle abschliessen</button><button class="btn secondary" onclick="downloadControlReport('${c.id}')">Kontrollbericht CSV</button></div></div>`:'';
+
+   box.innerHTML=`<h3>${esc(controlLabel(c))}</h3>
+   <div class="controlMeta"><span class="controlPill">Gestartet von ${esc(c.checkedBy||'–')}</span><span class="controlPill">Aktiver Benutzer ${esc(currentUserName())}</span></div>
+   <div class="progress"><div style="width:${pct}%"></div></div>
+   <p class="muted">${done} von ${total} kontrolliert · ${pct}% &nbsp; | &nbsp; ✓ ${counts['Vorhanden']||0} &nbsp; Geändert ${counts['Geändert']||0} &nbsp; Nicht gefunden ${counts['Nicht gefunden']||0} &nbsp; Neu gefunden ${counts['Neu gefunden']||0}</p>
+   ${finishHtml}
+   ${groupHtml}
+   <div class="toolbar"><button class="btn secondary" onclick="openFoundMaterial()">+ Material gefunden</button></div>`;
  }
  E('controlHistory').innerHTML=(st.controls||[]).filter(c=>c.completed&&c.type!=='standard').map(c=>{let diff=c.items.filter(i=>i.result&&i.result!=='Vorhanden').length;return `<div class="manageItem"><div class="manageHead"><div><b>${esc(controlLabel(c))}</b><div class="muted">${formatDateTime(c.completed)} · ${c.items.length} Positionen · ${diff} Abweichung(en) · gestartet ${esc(c.checkedBy||'–')} · abgeschlossen ${esc(c.completedBy||c.checkedBy||'–')}</div></div><div class="toolbar"><button class="btn secondary" onclick="controlDetails('${c.id}')">Details</button><button class="btn" onclick="downloadControlReport('${c.id}')">Bericht CSV</button></div></div></div>`}).join('')||'<p class="muted">Noch keine abgeschlossene Kontrolle.</p>'
 }
@@ -3136,26 +3550,158 @@ function standardLowItems(){return (st.standardStock||[]).filter(x=>Number(x.min
 function updateStandardLowBadge(){let el=E('stdLowBadge');if(!el)return;let n=standardLowItems().length;el.textContent=String(n);el.style.display=n?'inline-flex':'none'}
 function standardSpec(x){if(x.name.startsWith('DUO')||x.name.startsWith('KVH'))return `L ${Number(x.length).toLocaleString('de-CH')} m`;return `${Math.round(Number(x.thickness||0)*1000)} mm · 1.25 × 5.00 m`}
 function saveStandardMin(id,v){let x=(st.standardStock||[]).find(s=>s.id===id);if(!x)return;x.minQty=Math.max(0,Number(String(v).replace(',','.'))||0);x.updatedAt=new Date().toISOString();persist();renderStandardControl()}
+
+function normStdText(s){return String(s||'').toLowerCase().replace(/\s+/g,' ').replace(/schichtplatte/g,'sp').replace(/einschichtplatte/g,'1-sp').replace(/3 schicht/g,'3-sp')}
+function nearly(a,b,t=0.0015){return Math.abs(Number(a||0)-Number(b||0))<=t}
+function packageMatchesStandard(p,s){
+ if(!p||p.status==='aufgebraucht')return false;
+ let material=normStdText(p.material||'');
+ let txt=normStdText(`${p.material||''} ${p.quality||''} ${(p.subMaterials||[]).map(x=>(x.material||'')+' '+(x.quality||'')).join(' ')}`);
+ let exactName=material===normStdText(s.name||'');
+
+ if(s.family==='DUO'){
+   if(!exactName&&!txt.includes('duo'))return false;
+   return nearly(p.width,s.width)&&nearly(p.height,s.height)&&nearly(p.length,s.length,0.03);
+ }
+ if(s.family==='KVH'){
+   if(!exactName&&!txt.includes('kvh'))return false;
+   return nearly(p.width,s.width)&&nearly(p.height,s.height)&&nearly(p.length,s.length,0.03);
+ }
+ if(s.family==='1-SP'){
+   if(!exactName&&!(txt.includes('1-sp')||txt.includes('1 sp')))return false;
+   if(!exactName&&s.species&&!txt.includes(normStdText(s.species)))return false;
+   return nearly(p.height||p.thickness,s.thickness)&&nearly(p.width,s.width,0.01)&&nearly(p.length,s.length,0.03);
+ }
+ if(s.family==='3-SP'){
+   if(!exactName&&!(txt.includes('3-sp')||txt.includes('3 sp')))return false;
+   if(!exactName&&s.species&&!txt.includes(normStdText(s.species)))return false;
+   if(!exactName&&s.grade&&!txt.includes(normStdText(s.grade)))return false;
+   return nearly(p.height||p.thickness,s.thickness)&&nearly(p.width,s.width,0.01)&&nearly(p.length,s.length,0.03);
+ }
+ return false;
+}
+function standardMatchingPackages(s){return (st.packages||[]).filter(p=>packageMatchesStandard(p,s))}
+function standardExpectedQty(s){return standardMatchingPackages(s).reduce((n,p)=>n+Number(p.qty||0),0)}
+
 function startStandardControl(){
- ensureV24();standardControlDraft={id:'sc'+Date.now(),name:'Standard-Lagerkontrolle '+new Date().toLocaleDateString('de-CH'),created:new Date().toISOString(),checkedBy:currentUserName(),items:(st.standardStock||[]).map(x=>({standardId:x.id,name:x.name,unit:x.unit,minQty:Number(x.minQty||0),qty:x.lastQty===null?'':x.lastQty}))};renderStandardControl()
+ ensureV24();
+ let items=[];
+ (st.standardStock||[]).forEach(s=>{
+   let matches=standardMatchingPackages(s);
+   if(matches.length){
+     matches.forEach(p=>{
+       let g=standardRackGroup(p);
+       items.push({
+         rowId:'sr_'+s.id+'_'+p.id,
+         standardId:s.id,name:s.name,unit:s.unit,minQty:Number(s.minQty||0),
+         packageId:p.id,elementId:p.elementId||p.id,
+         rackKey:g.key,rackName:g.name,areaName:g.area,levelName:g.level,
+         expectedQty:Number(p.qty||0),qty:Number(p.qty||0),missing:false
+       });
+     });
+   }else{
+     items.push({
+       rowId:'sr_'+s.id+'_missing',
+       standardId:s.id,name:s.name,unit:s.unit,minQty:Number(s.minQty||0),
+       packageId:'',elementId:'–',rackKey:'missing',rackName:'Nicht eingelagert',areaName:'',levelName:'–',
+       expectedQty:0,qty:0,missing:true
+     });
+   }
+ });
+ standardControlDraft={
+   id:'sc'+Date.now(),
+   name:'Standard-Lagerkontrolle '+new Date().toLocaleDateString('de-CH'),
+   created:new Date().toISOString(),checkedBy:currentUserName(),items
+ };
+ renderStandardControl();
 }
 function cancelStandardControl(){if(confirm('Laufende Standard-Lagerkontrolle verwerfen?')){standardControlDraft=null;renderStandardControl()}}
-function setStandardControlQty(id,v){if(!standardControlDraft)return;let i=standardControlDraft.items.find(x=>x.standardId===id);if(!i)return;i.qty=v===''?'':Math.max(0,Number(String(v).replace(',','.'))||0);renderStandardControl(false)}
+function setStandardControlQty(rowId,v){
+ if(!standardControlDraft)return;
+ let i=standardControlDraft.items.find(x=>x.rowId===rowId);if(!i)return;
+ i.qty=v===''?'':Math.max(0,Number(String(v).replace(',','.'))||0);
+ renderStandardControl();
+}
+function selectStandardMismatchPackage(stdId,pid){
+ if(!standardControlDraft)return;let i=standardControlDraft.items.find(x=>x.standardId===stdId);if(!i)return;i.selectedPackageId=pid;renderStandardControl()
+}
+function correctSelectedStandardPackage(stdId){
+ let i=standardControlDraft?.items.find(x=>x.standardId===stdId);if(!i||!i.selectedPackageId)return;
+ let p=(st.packages||[]).find(x=>x.id===i.selectedPackageId);if(!p)return;
+ let others=standardMatchingPackages(st.standardStock.find(s=>s.id===stdId)).filter(x=>x.id!==p.id).reduce((n,x)=>n+Number(x.qty||0),0);
+ let corrected=Number(i.qty)-others;
+ if(corrected<0){alert('Die korrigierte Gesamtmenge ist kleiner als die Summe der übrigen Pakete. Bitte prüfe zuerst, welches Paket falsch ist.');return}
+ if(!confirm(`Paket ${p.elementId||p.id}\nAktuelle Menge: ${p.qty}\nNeue Menge: ${corrected}\n\nMenge dieses Pakets korrigieren?`))return;
+ p.qty=corrected;p.updatedAt=new Date().toISOString();persist();
+ let s=st.standardStock.find(x=>x.id===stdId),matches=standardMatchingPackages(s),expected=matches.reduce((n,x)=>n+Number(x.qty||0),0);
+ i.expectedQty=expected;i.qty=expected;i.matchIds=matches.map(x=>x.id);i.selectedPackageId='';
+ renderStandardControl();
+}
 function finishStandardControl(){
- if(!standardControlDraft)return;let missing=standardControlDraft.items.filter(i=>i.qty==='');if(missing.length){alert(`Bitte noch ${missing.length} Materialposition(en) kontrollieren.`);return}
+ if(!standardControlDraft)return;
+ let changedRows=standardControlDraft.items.filter(i=>i.packageId&&Number(i.qty)!==Number(i.expectedQty));
+ if(changedRows.length){
+   if(!confirm(`${changedRows.length} Paketposition${changedRows.length===1?'':'en'} weichen von der gespeicherten Menge ab.\n\nDie gezählten Mengen in diesen Paketen übernehmen und Kontrolle abschliessen?`))return;
+ }
+ changedRows.forEach(i=>{
+   let p=(st.packages||[]).find(x=>x.id===i.packageId);if(!p)return;
+   let old=p.qty;p.qty=Number(i.qty);p.updatedAt=new Date().toISOString();
+   addHistory(p,'Lagerkontrolle',`Menge: ${old} → ${p.qty}`);
+ });
  let now=new Date().toISOString(),low=[];
- standardControlDraft.items.forEach(i=>{let x=st.standardStock.find(s=>s.id===i.standardId);if(!x)return;x.lastQty=Number(i.qty);x.lastCheckedAt=now;x.lastCheckedBy=currentUserName();if(Number(x.minQty)>0&&Number(x.lastQty)<Number(x.minQty))low.push(x)});
- let c={id:standardControlDraft.id,name:standardControlDraft.name,type:'standard',checkedBy:standardControlDraft.checkedBy,created:standardControlDraft.created,completed:now,completedBy:currentUserName(),items:standardControlDraft.items.map(i=>({...i,result:Number(i.minQty)>0&&Number(i.qty)<Number(i.minQty)?'Unter Mindestbestand':'OK'}))};
+ let totals=[];
+ (st.standardStock||[]).forEach(s=>{
+   let rows=standardControlDraft.items.filter(i=>i.standardId===s.id);
+   let total=rows.reduce((n,i)=>n+Number(i.qty||0),0);
+   s.lastQty=total;s.lastCheckedAt=now;s.lastCheckedBy=currentUserName();
+   if(Number(s.minQty)>0&&total<Number(s.minQty))low.push(s);
+   totals.push({standardId:s.id,name:s.name,unit:s.unit,minQty:Number(s.minQty||0),qty:total,
+     expectedQty:rows.reduce((n,i)=>n+Number(i.expectedQty||0),0),
+     result:Number(s.minQty)>0&&total<Number(s.minQty)?'Unter Mindestbestand':rows.some(i=>Number(i.qty)!==Number(i.expectedQty))?'Abweichung korrigiert':'OK',
+     positions:rows.map(i=>({packageId:i.packageId,elementId:i.elementId,rackName:i.rackName,levelName:i.levelName,expectedQty:i.expectedQty,qty:i.qty}))
+   });
+ });
+ let c={id:standardControlDraft.id,name:standardControlDraft.name,type:'standard',checkedBy:standardControlDraft.checkedBy,created:standardControlDraft.created,completed:now,completedBy:currentUserName(),items:totals};
  st.controls.unshift(c);standardControlDraft=null;persist();renderStandardControl();
- if(low.length)alert(`ACHTUNG: ${low.length} Standardmaterial(ien) liegen unter der Mindestmenge:\n\n`+low.map(x=>`${x.name}: ${x.lastQty} ${x.unit} vorhanden / Minimum ${x.minQty}`).join('\n'));else alert('Standard-Lagerkontrolle abgeschlossen. Alle Mindestbestände sind eingehalten.')
+ if(low.length)alert(`ACHTUNG: ${low.length} Standardmaterial(ien) liegen unter der Mindestmenge:\n\n`+low.map(x=>`${x.name}: ${x.lastQty} ${x.unit} vorhanden / Minimum ${x.minQty}`).join('\n'));else alert('Standard-Lagerkontrolle abgeschlossen.')
 }
 function renderStandardControl(){
  ensureV24();let alertBox=E('standardStockAlerts'),body=E('standardControlBody'),settings=E('standardStockSettings');if(!body||!settings)return;
- let lows=standardLowItems();alertBox.innerHTML=lows.length?`<div class="stdAlert"><b>⚠ ${lows.length} Material${lows.length===1?'':'ien'} unter Mindestbestand</b><div style="margin-top:6px">${lows.map(x=>`${esc(x.name)}: <b>${esc(x.lastQty)} ${esc(x.unit)}</b> vorhanden · Minimum ${esc(x.minQty)}`).join('<br>')}</div></div>`:`<div class="stdOk"><b>✓ Aktuell keine bekannte Unterschreitung.</b><div class="muted">Nach einer Kontrolle erscheint hier automatisch eine Warnung, sobald eine Ist-Menge unter der Mindestmenge liegt.</div></div>`;
- settings.innerHTML=(st.standardStock||[]).map(x=>`<div class="stdRow ${Number(x.minQty)>0&&x.lastQty!==null&&Number(x.lastQty)<Number(x.minQty)?'low':''}"><div><b>${esc(x.name)}</b><div class="muted">${esc(standardSpec(x))}</div></div><div>${esc(x.unit)}</div><label>Mindestmenge<input type="number" min="0" step="1" inputmode="numeric" value="${esc(x.minQty||0)}" onchange="saveStandardMin('${x.id}',this.value)"></label><div><small>Letzte Menge</small><br><b>${x.lastQty===null?'–':esc(x.lastQty)+' '+esc(x.unit)}</b></div><div class="muted">${x.lastCheckedAt?esc(formatDateTime(x.lastCheckedAt)):'noch nie kontrolliert'}</div></div>`).join('');
- if(!standardControlDraft)body.innerHTML='<div class="help"><b>Bereit für die Standard-Lagerkontrolle.</b><br>Mit „Kontrolle starten“ werden ausschließlich die 26 definierten Standardmaterialien kontrolliert.</div>';
- else{let done=standardControlDraft.items.filter(i=>i.qty!=='').length,total=standardControlDraft.items.length;body.innerHTML=`<div class="manageHead"><div><h3 style="margin:0">${esc(standardControlDraft.name)}</h3><div class="muted">${done} von ${total} Mengen erfasst</div></div><div class="toolbar"><button class="btn secondary" onclick="cancelStandardControl()">Abbrechen</button><button class="btn" onclick="finishStandardControl()">Kontrolle abschliessen</button></div></div>${standardControlDraft.items.map(i=>{let x=st.standardStock.find(s=>s.id===i.standardId)||i,low=i.qty!==''&&Number(i.minQty)>0&&Number(i.qty)<Number(i.minQty);return `<div class="stdRow ${low?'low':''}"><div><b>${esc(i.name)}</b><div class="muted">${esc(standardSpec(x))}</div></div><div>${esc(i.unit)}</div><label>Ist-Menge<input type="number" min="0" step="1" inputmode="numeric" value="${esc(i.qty)}" onchange="setStandardControlQty('${i.standardId}',this.value)"></label><div>Minimum<br><b>${esc(i.minQty)}</b></div><div>${low?'<b style="color:#b31515">⚠ zu wenig</b>':i.qty!==''?'<b>✓ OK</b>':'offen'}</div></div>`}).join('')}`}
- updateStandardLowBadge();renderStandardControlHistory()
+ let lows=standardLowItems();
+ alertBox.innerHTML=lows.length?`<div class="stdAlert"><b>⚠ ${lows.length} Material${lows.length===1?'':'ien'} unter Mindestbestand</b><div style="margin-top:6px">${lows.map(x=>`${esc(x.name)}: <b>${esc(x.lastQty)} ${esc(x.unit)}</b> vorhanden · Minimum ${esc(x.minQty)}`).join('<br>')}</div></div>`:`<div class="stdOk"><b>✓ Aktuell keine bekannte Unterschreitung.</b><div class="muted">Die Standardkontrolle wird positionsweise nach Gestellen durchgeführt.</div></div>`;
+ settings.innerHTML=(st.standardStock||[]).map(x=>`<div class="stdRow ${Number(x.minQty)>0&&x.lastQty!==null&&Number(x.lastQty)<Number(x.minQty)?'low':''}"><div><b>${esc(x.name)}</b><div class="muted">${esc(standardSpec(x))}</div></div><div>${esc(x.unit)}</div><label>Mindestmenge<input type="number" min="0" step="1" inputmode="numeric" value="${esc(x.minQty||0)}" onchange="saveStandardMin('${x.id}',this.value)"></label><div><small>Letzte Kontrolle</small><br><b>${x.lastQty===null?'–':esc(x.lastQty)+' '+esc(x.unit)}</b></div><div class="muted">${x.lastCheckedAt?esc(formatDateTime(x.lastCheckedAt)):'noch nie kontrolliert'}</div></div>`).join('');
+ if(!standardControlDraft){
+   body.innerHTML='<div class="help"><b>Bereit für die Standard-Lagerkontrolle.</b><br>Nach dem Start wird jedes vorhandene Standardmaterial als eigene Position angezeigt und nach Gestell gruppiert.</div>';
+ }else{
+   let groups={};
+   standardControlDraft.items.forEach(i=>{(groups[i.rackKey]??=[]).push(i)});
+   let ordered=Object.entries(groups).sort((a,b)=>{
+     if(a[0]==='missing')return 1;if(b[0]==='missing')return -1;
+     return String(a[1][0]?.rackName||'').localeCompare(String(b[1][0]?.rackName||''),'de',{numeric:true});
+   });
+   let changed=standardControlDraft.items.filter(i=>Number(i.qty)!==Number(i.expectedQty)).length;
+   body.innerHTML=`<div class="manageHead"><div><h3 style="margin:0">${esc(standardControlDraft.name)}</h3><div class="muted">${standardControlDraft.items.length} Positionen · ${changed} Abweichung${changed===1?'':'en'}</div></div><div class="toolbar"><button class="btn secondary" onclick="cancelStandardControl()">Abbrechen</button><button class="btn" onclick="finishStandardControl()">Kontrolle abschliessen</button></div></div>
+   ${ordered.map(([key,rows])=>`<div class="stdRackGroup"><div class="stdRackHead">${esc(rows[0].rackName)}${rows[0].areaName?` · <span class="muted">${esc(rows[0].areaName)}</span>`:''}</div>
+     <div class="controlSortHead std">
+       <button onclick="sortToggle('standard','material')">Material${sortArrow('standard','material')}</button>
+       <button onclick="sortToggle('standard','elementId')">Element-ID${sortArrow('standard','elementId')}</button>
+       <button onclick="sortToggle('standard','level')">Ebene${sortArrow('standard','level')}</button>
+       <button onclick="sortToggle('standard','expected')">Gemäss Lager${sortArrow('standard','expected')}</button>
+       <button onclick="sortToggle('standard','qty')">Gezählt / Ist${sortArrow('standard','qty')}</button>
+     </div>
+     ${sortStandardRows(rows).map(i=>{
+       let diff=Number(i.qty)-Number(i.expectedQty),isChanged=diff!==0;
+       return `<div class="stdPkgRow ${isChanged?'changed':''}">
+         <div><b>${esc(i.name)}</b></div>
+         <div><b>${esc(i.elementId||'–')}</b></div>
+         <div>${esc(i.levelName||'–')}</div>
+         <div><b>${esc(i.expectedQty)} ${esc(i.unit)}</b>${isChanged?`<br><span class="stdDiff">${diff>0?'+':''}${esc(diff)}</span>`:'<br><span class="stdCorrect">✓</span>'}</div>
+         <label><input type="number" min="0" step="1" inputmode="numeric" value="${esc(i.qty)}" onchange="setStandardControlQty('${i.rowId}',this.value)"></label>
+       </div>`;
+     }).join('')}
+   </div>`).join('')}`;
+ }
+ updateStandardLowBadge();renderStandardControlHistory();
 }
 function renderStandardControlHistory(){let el=E('controlHistory');if(!el)return;let cs=(st.controls||[]).filter(c=>c.type==='standard'&&c.completed);el.innerHTML=cs.map(c=>{let low=(c.items||[]).filter(i=>i.result==='Unter Mindestbestand').length;return `<div class="manageItem"><div class="manageHead"><div><b>${esc(controlLabel(c))}</b><div class="muted">${esc(formatDateTime(c.completed))} · ${(c.items||[]).length} Standardmaterialien · ${low} unter Mindestbestand</div></div><button class="btn secondary" onclick="standardControlDetails('${c.id}')">Details</button></div></div>`}).join('')||'<p class="muted">Noch keine abgeschlossene Standard-Lagerkontrolle.</p>'}
 function standardControlDetails(cid){let c=(st.controls||[]).find(x=>x.id===cid);if(!c)return;alert(`${controlLabel(c)}\n\n`+(c.items||[]).map(i=>`${i.name}: ${i.qty} ${i.unit} · Minimum ${i.minQty} · ${i.result}`).join('\n'))}
