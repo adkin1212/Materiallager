@@ -2,7 +2,9 @@
 <html lang="de">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Holzlager V80</title>
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
+<title>Holzlager V81</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -997,6 +999,17 @@ function toggleAutoId(v){ensureIdSettings();st.idSettings.auto=!!v;persist();ren
 function updateElementIdPreview(){ensureIdSettings();if(editingPackage)return;let cat=E('mCat')?.value;if(st.idSettings.auto&&cat)E('mElementId').value=formatElementId(cat,scanNextId(cat))}
 
 const E=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function safeImageSrc(v){
+ let s=String(v||'').trim();
+ if(/^data:image\/(jpeg|jpg|png|webp|heic|heif);base64,[a-z0-9+/=\r\n]+$/i.test(s))return s;
+ if(/^blob:/i.test(s))return s;
+ try{
+   let u=new URL(s,location.href);
+   let ownSupabase=new URL(defaultCloudConfig().url).hostname;
+   if(u.protocol==='https:' && u.hostname===ownSupabase)return u.href;
+ }catch(e){}
+ return '';
+}
 function stClass(s){return s==='Kommission'?'st-kommission':s==='Lagerware'?'st-lagerware':s==='aufgebraucht'?'st-aufgebraucht':''}
 function ensureV24(){
  if(!Array.isArray(st.trash))st.trash=[];
@@ -1445,6 +1458,19 @@ async function checkCloudForUpdates(force=false){
 function entityCollections(){
  return ['areas','racks','packages','commissions','controls','users'];
 }
+function canWriteCloudEntity(type,action='save'){
+ let role=currentRole();
+ if(role==='Administrator')return true;
+ if(role==='Lagerverantwortlicher'){
+   if(type==='users')return false;
+   return ['areas','racks','packages','commissions','controls','__state'].includes(type);
+ }
+ if(role==='Mitarbeiter'){
+   if(action==='save')return ['packages','controls'].includes(type);
+   if(action==='delete')return type==='packages' && !!st.settings?.allowMaterialDelete;
+ }
+ return false;
+}
 function singletonCloudData(){
  return {
    settings:st.settings||{},
@@ -1586,12 +1612,13 @@ function conflictLabel(c){
 function renderSyncConflicts(){
  let box=E('syncConflictBox'),list=E('syncConflictList');if(!box||!list)return;
  let cs=loadSyncConflicts();box.style.display=cs.length?'':'none';
- list.innerHTML=cs.map((c,i)=>`<div class="conflictRow"><div><b>${esc(conflictLabel(c))}</b><div class="syncDetail">Cloud geändert von ${esc(c.remoteBy||'anderem Gerät')} · lokale und Cloud-Version unterscheiden sich.</div></div><div class="toolbar"><button class="btn secondary" onclick="resolveSyncConflict(${i},'remote')">Cloud übernehmen</button><button class="btn" onclick="resolveSyncConflict(${i},'local')">Lokale Änderung behalten</button></div></div>`).join('');
+ list.innerHTML=cs.map((c,i)=>{let localAllowed=canWriteCloudEntity(c.type,c.deletedLocal?'delete':'save');return `<div class="conflictRow"><div><b>${esc(conflictLabel(c))}</b><div class="syncDetail">Cloud geändert von ${esc(c.remoteBy||'anderem Gerät')} · lokale und Cloud-Version unterscheiden sich.</div></div><div class="toolbar"><button class="btn secondary" onclick="resolveSyncConflict(${i},'remote')">Cloud übernehmen</button>${localAllowed?`<button class="btn" onclick="resolveSyncConflict(${i},'local')">Lokale Änderung behalten</button>`:''}</div></div>`}).join('');
 }
 async function resolveSyncConflict(index,choice){
  let cs=loadSyncConflicts(),c=cs[index];if(!c)return;
  try{
    if(choice==='local'){
+     if(!canWriteCloudEntity(c.type,c.deletedLocal?'delete':'save'))throw new Error('Für diese Änderung fehlt die vorgesehene Cloud-Rolle.');
      if(c.deletedLocal)await rpcEntityDelete(c.type,c.id,c.remoteVersion,true);
      else await rpcEntitySave(c.type,c.id,c.local,c.remoteVersion,true);
    }else{
@@ -1618,6 +1645,8 @@ async function pushEntitySync(manual=false){
    for(let k of keys){
      let l=local[k],b=base[k],r=remote[k],localHash=l?stableJson(l.data):null,baseHash=b?.hash??null,remoteHash=r?stableJson(r.data):null,localChanged=(localHash!==baseHash),remoteChanged=(remoteHash!==baseHash);
      if(!localChanged)continue;let [type,id]=k.split('|');
+     let action=l?'save':'delete';
+     if(!canWriteCloudEntity(type,action))continue;
      if(remoteChanged){conflicts.push({type,id,local:l?.data||null,remote:r?.data||null,remoteVersion:r?.version||0,remoteBy:r?.updated_by||'',deletedLocal:!l,deletedRemote:!r});continue}
      try{
        if(l)await rpcEntitySave(type,id,l.data,r?.version||b?.version||0,false);else if(r)await rpcEntityDelete(type,id,r.version||b?.version||0,false);changed++;
@@ -1880,10 +1909,10 @@ function updateDefectDescription(i,v){if(v75Defects[i])v75Defects[i].description
 
 function updateDefectPhotoDescription(di,pi,v){let p=v75Defects[di]?.photos?.[pi];if(p)p.description=v}
 function removeDefectPhoto(di,pi){v75Defects[di]?.photos?.splice(pi,1);renderDefectsEditor()}
-function renderDefectsEditor(){let el=E('defectsEditor');if(!el)return;el.innerHTML=v75Defects.length?v75Defects.map((d,di)=>`<div class="defectEditor"><div class="manageHead"><div><b>Mangel ${di+1}</b><div class="muted">Erfasst: ${d.createdAt?esc(formatDateTime(d.createdAt)):'bei älterem Mangel nicht vorhanden'}</div></div><button class="btn danger" type="button" onclick="removeDefectEditor(${di})">Mangel löschen</button></div><label>Beschreibung<textarea oninput="updateDefectDescription(${di},this.value)">${esc(d.description||'')}</textarea></label><div class="toolbar"><button class="btn secondary" type="button" onclick="openDefectPhotoPicker(${di})">📷 Foto aufnehmen / Fotomediathek</button></div><input id="defectPhotoInput_${di}" type="file" accept="image/*" style="display:none" onchange="startDefectPhotoEditor(${di},this)"><div class="muted">Danach öffnet sich das Foto sofort zum freihändigen Markieren.</div><div class="defectPhotos">${(d.photos||[]).map((p,pi)=>`<div class="defectPhotoCard"><img src="${p.data}" onclick="openPhotoViewer(this.src)"><textarea placeholder="Foto beschreiben…" oninput="updateDefectPhotoDescription(${di},${pi},this.value)">${esc(p.description||'')}</textarea><button class="btn danger" type="button" onclick="removeDefectPhoto(${di},${pi})">Foto löschen</button></div>`).join('')}</div></div>`).join(''):'<p class="muted">Keine Materialmängel erfasst.</p>'}
+function renderDefectsEditor(){let el=E('defectsEditor');if(!el)return;el.innerHTML=v75Defects.length?v75Defects.map((d,di)=>`<div class="defectEditor"><div class="manageHead"><div><b>Mangel ${di+1}</b><div class="muted">Erfasst: ${d.createdAt?esc(formatDateTime(d.createdAt)):'bei älterem Mangel nicht vorhanden'}</div></div><button class="btn danger" type="button" onclick="removeDefectEditor(${di})">Mangel löschen</button></div><label>Beschreibung<textarea oninput="updateDefectDescription(${di},this.value)">${esc(d.description||'')}</textarea></label><div class="toolbar"><button class="btn secondary" type="button" onclick="openDefectPhotoPicker(${di})">📷 Foto aufnehmen / Fotomediathek</button></div><input id="defectPhotoInput_${di}" type="file" accept="image/*" style="display:none" onchange="startDefectPhotoEditor(${di},this)"><div class="muted">Danach öffnet sich das Foto sofort zum freihändigen Markieren.</div><div class="defectPhotos">${(d.photos||[]).map((p,pi)=>`<div class="defectPhotoCard"><img src="${esc(safeImageSrc(p.data))}" onclick="openPhotoViewer(this.src)"><textarea placeholder="Foto beschreiben…" oninput="updateDefectPhotoDescription(${di},${pi},this.value)">${esc(p.description||'')}</textarea><button class="btn danger" type="button" onclick="removeDefectPhoto(${di},${pi})">Foto löschen</button></div>`).join('')}</div></div>`).join(''):'<p class="muted">Keine Materialmängel erfasst.</p>'}
 function openCameraCounter(){
  E('cameraCounterInput').value='';
- E('cameraCounterPreview').innerHTML=v75CounterPhoto?`<img src="${v75CounterPhoto}" onclick="openPhotoViewer(this.src)">`:'';
+ E('cameraCounterPreview').innerHTML=v75CounterPhoto?`<img src="${esc(safeImageSrc(v75CounterPhoto))}" onclick="openPhotoViewer(this.src)">`:'';
  E('cameraCounterQty').value=E('mQty').value||'';
  E('cameraCounterStatus').textContent=v75CounterPhoto?'Zählfoto vorhanden. Neu fotografieren oder erneut zählen.':'Kamera oder Fotomediathek wählen.';
  E('matModal')?.classList.add('v78BehindChild');
@@ -1891,10 +1920,10 @@ function openCameraCounter(){
  setTimeout(()=>E('cameraCounterInput').click(),80);
 }
 function closeCameraCounter(){closeM('cameraCounterModal');E('matModal')?.classList.remove('v78BehindChild')}
-async function prepareCounterPhoto(input){let f=input?.files?.[0];if(!f)return;if(!/^image\//.test(f.type||'')){alert('Bitte ein Foto auswählen.');return}v75CounterPhoto=await fileURL(f);v75CounterPhotoName=f.name||'Zählfoto';E('cameraCounterPreview').innerHTML=`<img src="${v75CounterPhoto}" onclick="openPhotoViewer(this.src)">`;E('cameraCounterStatus').textContent='Foto bereit. Automatisch zählen oder Menge manuell eintragen.'}
+async function prepareCounterPhoto(input){let f=input?.files?.[0];if(!f)return;if(!/^image\//.test(f.type||'')){alert('Bitte ein Foto auswählen.');return}v75CounterPhoto=await fileURL(f);v75CounterPhotoName=f.name||'Zählfoto';E('cameraCounterPreview').innerHTML=`<img src="${esc(safeImageSrc(v75CounterPhoto))}" onclick="openPhotoViewer(this.src)">`;E('cameraCounterStatus').textContent='Foto bereit. Automatisch zählen oder Menge manuell eintragen.'}
 function analyseCounterPhoto(){if(!v75CounterPhoto){alert('Bitte zuerst ein Foto aufnehmen.');return}E('cameraCounterStatus').textContent='Bild wird ausgewertet…';let img=new Image();img.onload=()=>{try{let max=800,sc=Math.min(1,max/img.width,max/img.height),w=Math.round(img.width*sc),hh=Math.round(img.height*sc),c=document.createElement('canvas');c.width=w;c.height=hh;let x=c.getContext('2d');x.drawImage(img,0,0,w,hh);let d=x.getImageData(0,0,w,hh).data,g=new Float32Array(w*hh);for(let i=0,j=0;i<d.length;i+=4,j++)g[j]=.299*d[i]+.587*d[i+1]+.114*d[i+2];let vals=[];for(let y=2;y<hh-2;y+=3)for(let xx=2;xx<w-2;xx+=3){let k=y*w+xx;vals.push(Math.abs(g[k+1]-g[k-1])+Math.abs(g[k+w]-g[k-w]))}let mean=vals.reduce((a,b)=>a+b,0)/Math.max(1,vals.length),sd=Math.sqrt(vals.reduce((a,b)=>a+(b-mean)*(b-mean),0)/Math.max(1,vals.length)),thr=mean+1.35*sd,cnt=vals.filter(v=>v>thr).length,estimate=Math.max(1,Math.round(cnt/55));E('cameraCounterQty').value=estimate;E('cameraCounterStatus').textContent='Test-Schätzung: '+estimate+' Stück. Bitte unbedingt prüfen und korrigieren.'}catch(e){E('cameraCounterStatus').textContent='Schätzung nicht möglich. Menge bitte manuell eintragen.'}};img.src=v75CounterPhoto}
 function acceptCameraCount(){let q=+E('cameraCounterQty').value;if(!Number.isFinite(q)||q<0){alert('Bitte gültige Menge eingeben.');return}E('mQty').value=String(Math.round(q));closeCameraCounter();renderCounterSavedPhoto()}
-function renderCounterSavedPhoto(){let el=E('counterSavedPhotoHost');if(!el)return;el.innerHTML=v75CounterPhoto?`<span class="counterSavedPhoto"><br><b>Zählfoto</b><br><img src="${v75CounterPhoto}" onclick="openPhotoViewer(this.src)"><br><button class="btn danger" type="button" onclick="v75CounterPhoto='';v75CounterPhotoName='';renderCounterSavedPhoto()">Zählfoto löschen</button></span>`:''}
+function renderCounterSavedPhoto(){let el=E('counterSavedPhotoHost');if(!el)return;el.innerHTML=v75CounterPhoto?`<span class="counterSavedPhoto"><br><b>Zählfoto</b><br><img src="${esc(safeImageSrc(v75CounterPhoto))}" onclick="openPhotoViewer(this.src)"><br><button class="btn danger" type="button" onclick="v75CounterPhoto='';v75CounterPhotoName='';renderCounterSavedPhoto()">Zählfoto löschen</button></span>`:''}
 
 let defectEditIndex=-1,defectEditImage=null,defectEditStrokes=[],defectCurrentStroke=null,defectEditFileName='';
 function startDefectPhotoEditor(di,input){
@@ -2015,7 +2044,7 @@ function renderDefectsPage(){
            ${d.reportedAt?` <span class="muted">${esc(formatDateTime(d.reportedAt))}${d.reportedBy?' · '+esc(d.reportedBy):''}</span>`:''}</div>
            <button class="btn ${d.reported?'secondary':''}" onclick="setDefectReported('${p.id}',${di},${d.reported?'false':'true'})">${d.reported?'Wieder öffnen':'Als gemeldet markieren'}</button>
          </div>
-         <div class="defectOverviewPhotos">${(d.photos||[]).map(ph=>`<div><img src="${ph.data}" alt="Mängelfoto" onclick="openPhotoViewer(this.src)">${ph.description?`<div class="defectOverviewPhotoCaption">${esc(ph.description)}</div>`:''}</div>`).join('')}</div>
+         <div class="defectOverviewPhotos">${(d.photos||[]).map(ph=>`<div><img src="${esc(safeImageSrc(ph.data))}" alt="Mängelfoto" onclick="openPhotoViewer(this.src)">${ph.description?`<div class="defectOverviewPhotoCaption">${esc(ph.description)}</div>`:''}</div>`).join('')}</div>
        </div>`).join('');
      if(!defects)return '';
      return `<div class="defectOverviewItem"><div class="manageHead"><div><b>${esc(p.elementId||'–')} · ${esc(p.material||'–')}</b><div class="muted">${esc(packageLocation(p))}</div></div><div class="toolbar"><button class="btn secondary" onclick="jump('${p.rackId}','${p.id}')">Zu Lagerort</button><button class="btn" onclick="editPackage('${p.id}')">Material bearbeiten</button></div></div>${defects}</div>`;
@@ -2035,7 +2064,7 @@ function renderDefectsOverview(){
    return `<div class="defectCommissionGroup"><div class="defectCommissionHead"><span>${esc(name)}</span><span>${cnt} Mangel${cnt===1?'':'/Mängel'}</span></div>
    ${arr.map(p=>{
      let defects=(p.defects||[]).map((d,di)=>`<div style="margin-top:8px"><b>Mangel ${di+1}</b>${d.description?` – ${esc(d.description)}`:''}
-       <div class="defectOverviewPhotos">${(d.photos||[]).map(ph=>`<div><img src="${ph.data}" alt="Mängelfoto" onclick="openPhotoViewer(this.src)">${ph.description?`<div class="defectOverviewPhotoCaption">${esc(ph.description)}</div>`:''}</div>`).join('')}</div></div>`).join('');
+       <div class="defectOverviewPhotos">${(d.photos||[]).map(ph=>`<div><img src="${esc(safeImageSrc(ph.data))}" alt="Mängelfoto" onclick="openPhotoViewer(this.src)">${ph.description?`<div class="defectOverviewPhotoCaption">${esc(ph.description)}</div>`:''}</div>`).join('')}</div></div>`).join('');
      return `<div class="defectOverviewItem"><div class="manageHead"><div><b>${esc(p.elementId||'–')} · ${esc(p.material||'–')}</b><div class="muted">${esc(packageLocation(p))}</div></div><div class="toolbar"><button class="btn secondary" onclick="closeM('defectsOverviewModal');jump('${p.rackId}','${p.id}')">Zu Lagerort</button><button class="btn" onclick="closeM('defectsOverviewModal');editPackage('${p.id}')">Material bearbeiten</button></div></div>${defects}</div>`;
    }).join('')}</div>`;
  }).join('');
@@ -2469,13 +2498,13 @@ function packagePhotoHtml(p){
    setTimeout(()=>loadPackagePhoto(p.id,id),0);
    return `<div id="${id}" class="photoPlaceholder">☁ Foto wird geladen…</div><span class="photoCloudBadge">Cloud-Foto</span>`;
  }
- return p?.photo?`<img class="photo clickablePhoto" src="${p.photo}" alt="Materialfoto" onclick="openPhotoViewer(this.src)">`:'';
+ return p?.photo?`<img class="photo clickablePhoto" src="${esc(safeImageSrc(p.photo))}" alt="Materialfoto" onclick="openPhotoViewer(this.src)">`:'';
 }
 async function loadPackagePhoto(packageId,containerId){
  let p=st.packages.find(x=>x.id===packageId),el=E(containerId);if(!p||!el||!p.photoPath)return;
  try{
    let url=await getSignedPhotoUrl(p.photoPath);
-   if(el&&url)el.outerHTML=`<img class="photo clickablePhoto" src="${url}" alt="Materialfoto" onclick="openPhotoViewer(this.src)">`;
+   if(el&&url)el.outerHTML=`<img class="photo clickablePhoto" src="${esc(safeImageSrc(url))}" alt="Materialfoto" onclick="openPhotoViewer(this.src)">`;
  }catch(e){if(el){el.textContent='Foto konnte nicht geladen werden';el.title=String(e.message||e)}}
 }
 async function migrateLocalPhotosToCloud(){
@@ -2686,7 +2715,7 @@ function rackPhotoHtml(r){
    setTimeout(()=>loadRackPhotoInto(r,id),0);
    return `<div id="${id}" class="photoPlaceholder">☁ Gestellfoto wird geladen…</div><span class="photoCloudBadge">Cloud-Foto</span>`;
  }
- if(r.photoData)return `<img class="photo clickablePhoto" src="${r.photoData}" alt="Gestellfoto" onclick="openPhotoViewer(this.src)">`;
+ if(r.photoData)return `<img class="photo clickablePhoto" src="${esc(safeImageSrc(r.photoData))}" alt="Gestellfoto" onclick="openPhotoViewer(this.src)">`;
  if(r.photo&&IMAGES[r.photo])return `<img class="photo clickablePhoto" src="${IMAGES[r.photo]}" alt="Gestellfoto" onclick="openPhotoViewer(this.src)">`;
  return '<div class="photoPlaceholder">Kein Gestellfoto hinterlegt.</div>';
 }
@@ -2694,7 +2723,7 @@ async function loadRackPhotoInto(r,id){
  let el=E(id);if(!el||!r?.photoPath)return;
  try{
    let url=await getSignedPhotoUrl(r.photoPath);
-   if(el&&url)el.outerHTML=`<img class="photo clickablePhoto" src="${url}" alt="Gestellfoto" onclick="openPhotoViewer(this.src)">`;
+   if(el&&url)el.outerHTML=`<img class="photo clickablePhoto" src="${esc(safeImageSrc(url))}" alt="Gestellfoto" onclick="openPhotoViewer(this.src)">`;
    else if(el)el.textContent='Gestellfoto nicht verfügbar';
  }catch(e){if(el)el.textContent='Gestellfoto konnte nicht geladen werden'}
 }
@@ -2959,7 +2988,13 @@ function exportDateStamp(){
  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
 function loadExternalScript(src,testFn){
+ const ALLOWED=new Set([
+   'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+   'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js',
+   'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'
+ ]);
  return new Promise((resolve,reject)=>{
+   if(!ALLOWED.has(String(src||'')))return reject(new Error('Nicht freigegebene externe Bibliothek blockiert.'));
    if(testFn())return resolve();
    let existing=[...document.scripts].find(s=>s.src===src);
    if(existing){
@@ -2968,7 +3003,7 @@ function loadExternalScript(src,testFn){
      return;
    }
    let s=document.createElement('script');
-   s.src=src;s.async=true;
+   s.src=src;s.async=true;s.referrerPolicy='no-referrer';s.crossOrigin='anonymous';
    s.onload=()=>resolve();
    s.onerror=()=>reject(new Error('Bibliothek konnte nicht geladen werden'));
    document.head.appendChild(s);
