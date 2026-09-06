@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Holzlager V83</title>
+<title>Holzlager V84</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -415,13 +415,19 @@ body.accessLocked #authModal .btn{
 <section class="page" id="page-control">
 <div class="grid">
  <div class="card">
-  <div class="manageHead">
-   <div><h2 style="margin:0">Standard-Lagerkontrolle</h2><p class="muted">Nur definierte Standard-Lagerware. Ist-Menge kontrollieren und Mindestbestand überwachen.</p></div>
-   <button class="btn" onclick="startStandardControl()">Kontrolle starten</button>
-  </div>
-  <div id="standardStockAlerts"></div>
-  <div id="standardControlBody"></div>
+ <div class="manageHead">
+  <div><h2 style="margin:0">Lagerkontrolle</h2><p class="muted">Beide Kontrollen bleiben getrennt erhalten.</p></div>
+  <div class="toolbar"><button class="btn" id="ctrlAllBtn" onclick="showControlMode('all')">Alle Materialien</button><button class="btn secondary" id="ctrlStdBtn" onclick="showControlMode('standard')">Standard-Lagerware</button></div>
  </div>
+ <div id="allControlPanel">
+  <div class="manageHead"><div><h3 style="margin:0">Alle Materialien</h3><p class="muted">Die ursprüngliche vollständige Lagerkontrolle über alle erfassten Materialien.</p></div><button class="btn" onclick="newFullControl()">+ Neue Kontrolle</button></div>
+  <div id="allControlBody"></div>
+ </div>
+ <div id="standardControlPanel" style="display:none">
+  <div class="manageHead"><div><h3 style="margin:0">Standard-Lagerware</h3><p class="muted">Nur die 26 definierten Standardmaterialien mit Mindestbeständen.</p></div><button class="btn" onclick="startStandardControl()">Kontrolle starten</button></div>
+  <div id="standardStockAlerts"></div><div id="standardControlBody"></div>
+ </div>
+</div>
  <div class="card">
   <div class="manageHead"><div><h2 style="margin:0">Standardmaterial & Mindestmengen</h2><p class="muted">Die Mindestmenge kannst du für jedes Material separat festlegen.</p></div></div>
   <div id="standardStockSettings"></div>
@@ -3093,6 +3099,38 @@ function deleteLevel(rid,index){if(!requireStructure())return;
 }
 
 
+
+let controlMode='all';
+function showControlMode(mode){
+ controlMode=mode==='standard'?'standard':'all';
+ let a=E('allControlPanel'),s=E('standardControlPanel'),ba=E('ctrlAllBtn'),bs=E('ctrlStdBtn');
+ if(a)a.style.display=controlMode==='all'?'':'none';
+ if(s)s.style.display=controlMode==='standard'?'':'none';
+ if(ba)ba.className=controlMode==='all'?'btn':'btn secondary';
+ if(bs)bs.className=controlMode==='standard'?'btn':'btn secondary';
+ if(controlMode==='all')renderFullControl();else renderStandardControl();
+}
+
+function newFullControl(){
+ if(activeControl()){alert('Es läuft bereits eine Lagerkontrolle. Bitte diese zuerst abschliessen.');return}
+ let active=st.packages.filter(p=>p.status!=='aufgebraucht');if(!active.length){alert('Es sind keine aktiven Materialien erfasst.');return}
+ let name=prompt('Name der Kontrolle:','Lagerkontrolle '+new Date().toLocaleDateString('de-CH'));if(name===null)return;
+ let by=currentUserName(),items=active.map(p=>{let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];return {packageId:p.id,result:'',checkedAt:'',checkedBy:'',note:'',snapshot:{elementId:p.elementId||'',material:p.material||'',qty:p.qty||'',project:p.project||'',packCode:p.packCode||'',areaId:r?.areaId||'',area:areaName(r?.areaId),rack:r?.name||'',level:l?.name||'',rackId:r?.id||'',levelIndex:p.levelIndex}}});
+ st.controls.unshift({id:'c'+Date.now(),name:name.trim()||'Lagerkontrolle',checkedBy:by,created:new Date().toISOString(),completed:'',items});persist();showPage('control')
+}
+function renderFullControl(){
+ ensureV24();let c=activeControl(),box=E('allControlBody');
+ if(!c){box.innerHTML='<div class="help">Keine laufende Lagerkontrolle. Starte mit „+ Neue Kontrolle“.</div>'}
+ else{
+   let done=c.items.filter(i=>i.result).length,total=c.items.length,pct=total?Math.round(done/total*100):100,next=c.items.find(i=>!i.result),p=next?st.packages.find(x=>x.id===next.packageId):null,content='';
+   if(next&&!p){next.result='Nicht gefunden';next.checkedAt=new Date().toISOString();next.checkedBy=currentUserName();return persist()}
+   let summaries=controlLevelSummary(c),levelHtml=summaries.map(x=>{let cls=x.done===x.total?(x.miss?'miss':(x.changed||x.found?'warn':'done')):'';let status=x.done===x.total?'✓ vollständig':`${x.done}/${x.total}`;return `<div class="controlLevelRow ${cls}"><div><b>${esc(x.area)}</b> · ${esc(x.rack)} · ${esc(x.level)}<div class="muted">Nicht gefunden ${x.miss} · geändert ${x.changed} · neu ${x.found}</div></div><span class="controlBigStatus">${status}</span></div>`}).join('');
+   if(next&&p){let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];content=`<div class="controlCard"><div class="controlAreaBanner"><small>Lagerfläche</small>${esc(areaName(r?.areaId))}</div><div class="controlRackLine">Gestell: ${esc(r?.name||'–')} &nbsp; · &nbsp; Ebene: ${esc(l?.name||'–')}</div><div class="manageHead"><div><b>${esc(p.material)}</b>${p.elementId?` · <b>${esc(p.elementId)}</b>`:''}</div><span class="statusbadge ${stClass(p.status)}">${esc(p.status||'–')}</span></div><p>B ${esc(p.width||'–')} m · H ${esc(p.height||'–')} m · L ${esc(p.length||'–')} m · Menge ${esc(p.qty||'–')}</p><p class="muted">Kommission: ${esc(p.project||'–')}</p><div class="toolbar"><button class="btn" onclick="checkItem('${c.id}','${next.packageId}','Vorhanden')">✓ Vorhanden</button><button class="btn secondary" onclick="controlEdit('${c.id}','${next.packageId}')">Bearbeiten</button><button class="btn danger" onclick="checkItem('${c.id}','${next.packageId}','Nicht gefunden')">Nicht gefunden</button><button class="btn secondary" onclick="jump('${p.rackId}','${p.id}')">Zu Lagerort</button></div></div>`}
+   else if(total)content=`<div class="help"><b>Alle ${total} Positionen wurden kontrolliert.</b><div class="toolbar"><button class="btn" onclick="finishControl('${c.id}')">Kontrolle abschliessen</button><button class="btn secondary" onclick="downloadControlReport('${c.id}')">Kontrollbericht CSV</button></div></div>`;else content='<div class="help">Diese Kontrolle enthält keine Pakete.</div>';
+   let counts={};c.items.forEach(i=>counts[i.result]=(counts[i.result]||0)+1);box.innerHTML=`<h3>${esc(controlLabel(c))}</h3><div class="controlMeta"><span class="controlPill">Gestartet von ${esc(c.checkedBy||'–')}</span><span class="controlPill">Aktiver Benutzer ${esc(currentUserName())}</span></div><div class="progress"><div style="width:${pct}%"></div></div><p class="muted">${done} von ${total} kontrolliert · ${pct}% &nbsp; | &nbsp; ✓ ${counts['Vorhanden']||0} &nbsp; Geändert ${counts['Geändert']||0} &nbsp; Nicht gefunden ${counts['Nicht gefunden']||0} &nbsp; Neu gefunden ${counts['Neu gefunden']||0}</p>${content}<h3>Ebenenfortschritt</h3><div class="controlLevelList">${levelHtml}</div><div class="toolbar"><button class="btn secondary" onclick="openFoundMaterial()">+ Material gefunden</button></div>`
+ }
+ E('controlHistory').innerHTML=(st.controls||[]).filter(c=>c.completed&&c.type!=='standard').map(c=>{let diff=c.items.filter(i=>i.result&&i.result!=='Vorhanden').length;return `<div class="manageItem"><div class="manageHead"><div><b>${esc(controlLabel(c))}</b><div class="muted">${formatDateTime(c.completed)} · ${c.items.length} Positionen · ${diff} Abweichung(en) · gestartet ${esc(c.checkedBy||'–')} · abgeschlossen ${esc(c.completedBy||c.checkedBy||'–')}</div></div><div class="toolbar"><button class="btn secondary" onclick="controlDetails('${c.id}')">Details</button><button class="btn" onclick="downloadControlReport('${c.id}')">Bericht CSV</button></div></div></div>`}).join('')||'<p class="muted">Noch keine abgeschlossene Kontrolle.</p>'
+}
 let standardControlDraft=null;
 function standardLowItems(){return (st.standardStock||[]).filter(x=>Number(x.minQty)>0&&x.lastQty!==null&&Number(x.lastQty)<Number(x.minQty))}
 function updateStandardLowBadge(){let el=E('stdLowBadge');if(!el)return;let n=standardLowItems().length;el.textContent=String(n);el.style.display=n?'inline-flex':'none'}
@@ -3153,7 +3191,7 @@ function downloadControlReport(cid){
  let txt=rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(';')).join('\n'),b=new Blob(['\ufeff'+txt],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lagerkontrolle_'+(c.name||c.id).replace(/[^a-z0-9_-]+/gi,'_')+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
 }
 
-function renderControl(){renderStandardControl()}
+function renderControl(){showControlMode(controlMode)}
 
 function checkItem(cid,pid,result){
  let c=st.controls.find(x=>x.id===cid),i=c?.items.find(x=>x.packageId===pid),p=st.packages.find(x=>x.id===pid);if(!i)return;let now=new Date().toISOString(),by=currentUserName();i.result=result;i.checkedAt=now;i.checkedBy=by;
