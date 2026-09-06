@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Holzlager V82</title>
+<title>Holzlager V83</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -276,13 +276,22 @@ body.accessLocked #authModal .btn{
  .transferLineGrid{grid-template-columns:1fr 1fr}
  .transferMaterialRow{grid-template-columns:1fr 1fr}
 }
+
+/* V83 Standard-Lagerkontrolle */
+.stdAlert{border:2px solid #d52121;background:#fff0f0;border-radius:14px;padding:12px 14px;margin:10px 0}
+.stdOk{border:1px solid #cfd8d1;background:#f6faf6;border-radius:14px;padding:12px 14px;margin:10px 0}
+.stdRow{display:grid;grid-template-columns:minmax(210px,2fr) 105px 115px 115px 120px;gap:9px;align-items:center;padding:10px 0;border-bottom:1px solid #e3e7e4}
+.stdRow.low{background:#fff1f1;border-left:5px solid #d52121;padding-left:8px}
+.stdRow input{width:100%}
+.stdBadge{display:inline-flex;align-items:center;justify-content:center;min-width:21px;height:21px;padding:0 6px;margin-left:5px;border-radius:999px;background:#d52121;color:#fff;font-size:12px;font-weight:900}
+@media(max-width:760px){.stdRow{grid-template-columns:1fr 1fr}.stdRow>div:first-child{grid-column:1/-1}}
 </style></head>
 <body class="accessLocked">
 <div class="app">
 <nav><div class="brand">HOLZ<br>LAGER</div>
 <button class="nav active" data-page="map">⌖ Karte</button>
 <button class="nav" data-page="inventory">▦ Material</button>
-<button class="nav" data-page="control">✓ Kontrolle</button><button class="nav" data-page="reserved">◆ Reserviert</button><button class="nav" data-page="archive">▣ Archiv</button><button class="nav defectNavBtn" data-page="defects">⚠ Mängel <span id="defectOpenBadge" class="defectBadge" style="display:none">0</span></button><button class="nav" data-page="transfers">↔ Umbuchungen</button><button class="nav" data-page="manage">⚙ Verwalten</button></nav>
+<button class="nav" data-page="control">✓ Kontrolle <span id="stdLowBadge" class="stdBadge" style="display:none">0</span></button><button class="nav" data-page="reserved">◆ Reserviert</button><button class="nav" data-page="archive">▣ Archiv</button><button class="nav defectNavBtn" data-page="defects">⚠ Mängel <span id="defectOpenBadge" class="defectBadge" style="display:none">0</span></button><button class="nav" data-page="transfers">↔ Umbuchungen</button><button class="nav" data-page="manage">⚙ Verwalten</button></nav>
 <main>
 <header><div class="actions"><button class="btn secondary" id="backBtn" onclick="goBack()" style="display:none">← Zurück</button><h1 id="title">Aussenlager</h1></div><div class="actions"><span id="syncStatusBadge" class="syncBadge" title="Speicherstatus">Lokal</span><button id="authHeaderBtn" class="btn secondary authBtn" onclick="openAuthModal()">Anmelden</button><select id="activeUserSelect" onchange="switchActiveUser(this.value)" title="Aktiver Benutzer"></select><span id="activeRoleBadge" class="statusbadge"></span><button class="btn secondary" id="drawBtn" onclick="startDraw()">+ Fläche erstellen</button><button class="btn" onclick="openMaterial()">+ Material erfassen</button></div></header>
 
@@ -402,17 +411,24 @@ body.accessLocked #authModal .btn{
 </div>
 </section>
 
+
 <section class="page" id="page-control">
 <div class="grid">
-<div class="card">
-<div class="manageHead"><div><h2 style="margin:0">Lagerkontrolle</h2><p class="muted">Kontrolle starten, fortsetzen und Abweichungen erfassen.</p></div><button class="btn" onclick="newControl()">+ Neue Kontrolle</button></div>
-<div id="controlActive" style="margin-top:12px"></div>
-</div>
-<div class="card"><h2>Kontrollhistorie</h2><div id="controlHistory" class="manageList"></div></div>
+ <div class="card">
+  <div class="manageHead">
+   <div><h2 style="margin:0">Standard-Lagerkontrolle</h2><p class="muted">Nur definierte Standard-Lagerware. Ist-Menge kontrollieren und Mindestbestand überwachen.</p></div>
+   <button class="btn" onclick="startStandardControl()">Kontrolle starten</button>
+  </div>
+  <div id="standardStockAlerts"></div>
+  <div id="standardControlBody"></div>
+ </div>
+ <div class="card">
+  <div class="manageHead"><div><h2 style="margin:0">Standardmaterial & Mindestmengen</h2><p class="muted">Die Mindestmenge kannst du für jedes Material separat festlegen.</p></div></div>
+  <div id="standardStockSettings"></div>
+ </div>
+ <div class="card"><h2>Kontrollhistorie</h2><div id="controlHistory" class="manageList"></div></div>
 </div>
 </section>
-
-
 
 <section class="page" id="page-defects">
 <header><div><h1>Mängel</h1><p id="defectsPageSubtitle">Nicht gemeldete Materialmängel, gruppiert nach Kommission.</p></div></header>
@@ -1098,6 +1114,35 @@ function ensureV24(){
  if(!st.movements)st.movements=[];
  if(!Array.isArray(st.internalMaterials))st.internalMaterials=[];
  if(!Array.isArray(st.internalTransfers))st.internalTransfers=[];
+ if(!Array.isArray(st.standardStock)||!st.standardStock.length)st.standardStock=[
+  {id:'std_duo_60_80',name:'DUO 60/80',width:0.06,height:0.08,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_100',name:'DUO 60/100',width:0.06,height:0.10,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_110',name:'DUO 60/110',width:0.06,height:0.11,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_120',name:'DUO 60/120',width:0.06,height:0.12,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_140',name:'DUO 60/140',width:0.06,height:0.14,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_160',name:'DUO 60/160',width:0.06,height:0.16,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_180',name:'DUO 60/180',width:0.06,height:0.18,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_200',name:'DUO 60/200',width:0.06,height:0.20,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_220',name:'DUO 60/220',width:0.06,height:0.22,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_duo_60_240',name:'DUO 60/240',width:0.06,height:0.24,length:13,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_1sp_24_fi',name:'24mm 1-SP, Fichte',thickness:0.024,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_1sp_24_la',name:'24mm 1-SP, Lärche',thickness:0.024,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_1sp_40_fi',name:'40mm 1-SP, Fichte',thickness:0.040,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_1sp_40_la',name:'40mm 1-SP, Lärche',thickness:0.040,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_19_bc',name:'19mm 3-SP B/C, Fichte',thickness:0.019,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_27_bc',name:'27mm 3-SP B/C, Fichte',thickness:0.027,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_19_cc',name:'19mm 3-SP C+/C, Fichte',thickness:0.019,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_27_cc',name:'27mm 3-SP C+/C, Fichte',thickness:0.027,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_3sp_42_cc',name:'42mm 3-SP C+/C, Fichte',thickness:0.042,width:1.25,length:5,unit:'Platte',minQty:0,lastQty:null},
+  {id:'std_kvh_27_60',name:'KVH 27/60',width:0.027,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_27_70',name:'KVH 27/70',width:0.027,height:0.07,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_30_60',name:'KVH 30/60',width:0.03,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_40_40',name:'KVH 40/40',width:0.04,height:0.04,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_40_60',name:'KVH 40/60',width:0.04,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_60_60',name:'KVH 60/60',width:0.06,height:0.06,length:5,unit:'Stk.',minQty:0,lastQty:null},
+  {id:'std_kvh_60_80',name:'KVH 60/80',width:0.06,height:0.08,length:5,unit:'Stk.',minQty:0,lastQty:null}
+ ];
+
  if(!st.settings)st.settings={};
  if(!Array.isArray(st.users)||!st.users.length)st.users=[{id:'u_admin',name:'Administrator',role:'Administrator',active:true},{id:'u_lager',name:'Lager',role:'Lagerverantwortlicher',active:true},{id:'u_mitarbeiter',name:'Mitarbeiter',role:'Mitarbeiter',active:true}];
  st.users.forEach(u=>{if(typeof u.active!=='boolean')u.active=true;if(!u.role)u.role='Mitarbeiter'});
@@ -1538,17 +1583,17 @@ async function checkCloudForUpdates(force=false){
 
 
 function entityCollections(){
- return ['areas','racks','packages','commissions','controls','users','internalMaterials','internalTransfers'];
+ return ['areas','racks','packages','commissions','controls','users','internalMaterials','internalTransfers','standardStock'];
 }
 function canWriteCloudEntity(type,action='save'){
  let role=currentRole();
  if(role==='Administrator')return true;
  if(role==='Lagerverantwortlicher'){
    if(type==='users')return false;
-   return ['areas','racks','packages','commissions','controls','internalMaterials','internalTransfers','__state'].includes(type);
+   return ['areas','racks','packages','commissions','controls','internalMaterials','internalTransfers','standardStock','__state'].includes(type);
  }
  if(role==='Mitarbeiter'){
-   if(action==='save')return ['packages','controls'].includes(type);
+   if(action==='save')return ['packages','controls','standardStock'].includes(type);
    if(action==='delete')return type==='packages' && !!st.settings?.allowMaterialDelete;
  }
  return false;
@@ -1687,7 +1732,7 @@ function syncBaseFromRemote(remote){
  saveSyncBase(b);
 }
 function conflictLabel(c){
- let t={areas:'Lagerfläche',racks:'Gestell',packages:'Material/Paket',commissions:'Kommission',controls:'Lagerkontrolle',users:'Benutzer',internalMaterials:'Umbuchungs-Material',internalTransfers:'Interne Umbuchung','__state':'Einstellungen'}[c.type]||c.type;
+ let t={areas:'Lagerfläche',racks:'Gestell',packages:'Material/Paket',commissions:'Kommission',controls:'Lagerkontrolle',users:'Benutzer',internalMaterials:'Umbuchungs-Material',internalTransfers:'Interne Umbuchung',standardStock:'Standard-Lagerware','__state':'Einstellungen'}[c.type]||c.type;
  let name=c.local?.name||c.local?.material||c.local?.elementId||c.remote?.name||c.remote?.material||c.remote?.elementId||c.id;
  return t+' · '+name;
 }
@@ -2482,7 +2527,7 @@ function updateProductionMoveButton(){
  if(locked)b.textContent='Produktion verschieben 🔒';
  else if(!productionMoveMode)b.textContent='Produktion verschieben';
 }
-function renderAreas(){updateDefectBadge();
+function renderAreas(){updateDefectBadge();updateStandardLowBadge();
  renderOneAreaMap('outside');renderOneAreaMap('production');renderProductionHotspot();
 }
 
@@ -3047,6 +3092,37 @@ function deleteLevel(rid,index){if(!requireStructure())return;
  persist();E('rackSel').value=rid;renderManageRack();if(currentRack===rid)openRack(rid)
 }
 
+
+let standardControlDraft=null;
+function standardLowItems(){return (st.standardStock||[]).filter(x=>Number(x.minQty)>0&&x.lastQty!==null&&Number(x.lastQty)<Number(x.minQty))}
+function updateStandardLowBadge(){let el=E('stdLowBadge');if(!el)return;let n=standardLowItems().length;el.textContent=String(n);el.style.display=n?'inline-flex':'none'}
+function standardSpec(x){if(x.name.startsWith('DUO')||x.name.startsWith('KVH'))return `L ${Number(x.length).toLocaleString('de-CH')} m`;return `${Math.round(Number(x.thickness||0)*1000)} mm · 1.25 × 5.00 m`}
+function saveStandardMin(id,v){let x=(st.standardStock||[]).find(s=>s.id===id);if(!x)return;x.minQty=Math.max(0,Number(String(v).replace(',','.'))||0);x.updatedAt=new Date().toISOString();persist();renderStandardControl()}
+function startStandardControl(){
+ ensureV24();standardControlDraft={id:'sc'+Date.now(),name:'Standard-Lagerkontrolle '+new Date().toLocaleDateString('de-CH'),created:new Date().toISOString(),checkedBy:currentUserName(),items:(st.standardStock||[]).map(x=>({standardId:x.id,name:x.name,unit:x.unit,minQty:Number(x.minQty||0),qty:x.lastQty===null?'':x.lastQty}))};renderStandardControl()
+}
+function cancelStandardControl(){if(confirm('Laufende Standard-Lagerkontrolle verwerfen?')){standardControlDraft=null;renderStandardControl()}}
+function setStandardControlQty(id,v){if(!standardControlDraft)return;let i=standardControlDraft.items.find(x=>x.standardId===id);if(!i)return;i.qty=v===''?'':Math.max(0,Number(String(v).replace(',','.'))||0);renderStandardControl(false)}
+function finishStandardControl(){
+ if(!standardControlDraft)return;let missing=standardControlDraft.items.filter(i=>i.qty==='');if(missing.length){alert(`Bitte noch ${missing.length} Materialposition(en) kontrollieren.`);return}
+ let now=new Date().toISOString(),low=[];
+ standardControlDraft.items.forEach(i=>{let x=st.standardStock.find(s=>s.id===i.standardId);if(!x)return;x.lastQty=Number(i.qty);x.lastCheckedAt=now;x.lastCheckedBy=currentUserName();if(Number(x.minQty)>0&&Number(x.lastQty)<Number(x.minQty))low.push(x)});
+ let c={id:standardControlDraft.id,name:standardControlDraft.name,type:'standard',checkedBy:standardControlDraft.checkedBy,created:standardControlDraft.created,completed:now,completedBy:currentUserName(),items:standardControlDraft.items.map(i=>({...i,result:Number(i.minQty)>0&&Number(i.qty)<Number(i.minQty)?'Unter Mindestbestand':'OK'}))};
+ st.controls.unshift(c);standardControlDraft=null;persist();renderStandardControl();
+ if(low.length)alert(`ACHTUNG: ${low.length} Standardmaterial(ien) liegen unter der Mindestmenge:\n\n`+low.map(x=>`${x.name}: ${x.lastQty} ${x.unit} vorhanden / Minimum ${x.minQty}`).join('\n'));else alert('Standard-Lagerkontrolle abgeschlossen. Alle Mindestbestände sind eingehalten.')
+}
+function renderStandardControl(){
+ ensureV24();let alertBox=E('standardStockAlerts'),body=E('standardControlBody'),settings=E('standardStockSettings');if(!body||!settings)return;
+ let lows=standardLowItems();alertBox.innerHTML=lows.length?`<div class="stdAlert"><b>⚠ ${lows.length} Material${lows.length===1?'':'ien'} unter Mindestbestand</b><div style="margin-top:6px">${lows.map(x=>`${esc(x.name)}: <b>${esc(x.lastQty)} ${esc(x.unit)}</b> vorhanden · Minimum ${esc(x.minQty)}`).join('<br>')}</div></div>`:`<div class="stdOk"><b>✓ Aktuell keine bekannte Unterschreitung.</b><div class="muted">Nach einer Kontrolle erscheint hier automatisch eine Warnung, sobald eine Ist-Menge unter der Mindestmenge liegt.</div></div>`;
+ settings.innerHTML=(st.standardStock||[]).map(x=>`<div class="stdRow ${Number(x.minQty)>0&&x.lastQty!==null&&Number(x.lastQty)<Number(x.minQty)?'low':''}"><div><b>${esc(x.name)}</b><div class="muted">${esc(standardSpec(x))}</div></div><div>${esc(x.unit)}</div><label>Mindestmenge<input type="number" min="0" step="1" inputmode="numeric" value="${esc(x.minQty||0)}" onchange="saveStandardMin('${x.id}',this.value)"></label><div><small>Letzte Menge</small><br><b>${x.lastQty===null?'–':esc(x.lastQty)+' '+esc(x.unit)}</b></div><div class="muted">${x.lastCheckedAt?esc(formatDateTime(x.lastCheckedAt)):'noch nie kontrolliert'}</div></div>`).join('');
+ if(!standardControlDraft)body.innerHTML='<div class="help"><b>Bereit für die Standard-Lagerkontrolle.</b><br>Mit „Kontrolle starten“ werden ausschließlich die 26 definierten Standardmaterialien kontrolliert.</div>';
+ else{let done=standardControlDraft.items.filter(i=>i.qty!=='').length,total=standardControlDraft.items.length;body.innerHTML=`<div class="manageHead"><div><h3 style="margin:0">${esc(standardControlDraft.name)}</h3><div class="muted">${done} von ${total} Mengen erfasst</div></div><div class="toolbar"><button class="btn secondary" onclick="cancelStandardControl()">Abbrechen</button><button class="btn" onclick="finishStandardControl()">Kontrolle abschliessen</button></div></div>${standardControlDraft.items.map(i=>{let x=st.standardStock.find(s=>s.id===i.standardId)||i,low=i.qty!==''&&Number(i.minQty)>0&&Number(i.qty)<Number(i.minQty);return `<div class="stdRow ${low?'low':''}"><div><b>${esc(i.name)}</b><div class="muted">${esc(standardSpec(x))}</div></div><div>${esc(i.unit)}</div><label>Ist-Menge<input type="number" min="0" step="1" inputmode="numeric" value="${esc(i.qty)}" onchange="setStandardControlQty('${i.standardId}',this.value)"></label><div>Minimum<br><b>${esc(i.minQty)}</b></div><div>${low?'<b style="color:#b31515">⚠ zu wenig</b>':i.qty!==''?'<b>✓ OK</b>':'offen'}</div></div>`}).join('')}`}
+ updateStandardLowBadge();renderStandardControlHistory()
+}
+function renderStandardControlHistory(){let el=E('controlHistory');if(!el)return;let cs=(st.controls||[]).filter(c=>c.type==='standard'&&c.completed);el.innerHTML=cs.map(c=>{let low=(c.items||[]).filter(i=>i.result==='Unter Mindestbestand').length;return `<div class="manageItem"><div class="manageHead"><div><b>${esc(controlLabel(c))}</b><div class="muted">${esc(formatDateTime(c.completed))} · ${(c.items||[]).length} Standardmaterialien · ${low} unter Mindestbestand</div></div><button class="btn secondary" onclick="standardControlDetails('${c.id}')">Details</button></div></div>`}).join('')||'<p class="muted">Noch keine abgeschlossene Standard-Lagerkontrolle.</p>'}
+function standardControlDetails(cid){let c=(st.controls||[]).find(x=>x.id===cid);if(!c)return;alert(`${controlLabel(c)}\n\n`+(c.items||[]).map(i=>`${i.name}: ${i.qty} ${i.unit} · Minimum ${i.minQty} · ${i.result}`).join('\n'))}
+function newControl(){startStandardControl()}
+
 function controlLabel(c){return c.name||('Lagerkontrolle '+new Date(c.created).toLocaleDateString('de-CH'))}
 function newControl(){
  if(activeControl()){alert('Es läuft bereits eine Lagerkontrolle. Bitte diese zuerst abschliessen.');return}
@@ -3077,19 +3153,8 @@ function downloadControlReport(cid){
  let txt=rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(';')).join('\n'),b=new Blob(['\ufeff'+txt],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lagerkontrolle_'+(c.name||c.id).replace(/[^a-z0-9_-]+/gi,'_')+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
 }
 
-function renderControl(){
- ensureV24();let c=activeControl(),box=E('controlActive');
- if(!c){box.innerHTML='<div class="help">Keine laufende Lagerkontrolle. Starte mit „+ Neue Kontrolle“.</div>'}
- else{
-   let done=c.items.filter(i=>i.result).length,total=c.items.length,pct=total?Math.round(done/total*100):100,next=c.items.find(i=>!i.result),p=next?st.packages.find(x=>x.id===next.packageId):null,content='';
-   if(next&&!p){next.result='Nicht gefunden';next.checkedAt=new Date().toISOString();next.checkedBy=currentUserName();return persist()}
-   let summaries=controlLevelSummary(c),levelHtml=summaries.map(x=>{let cls=x.done===x.total?(x.miss?'miss':(x.changed||x.found?'warn':'done')):'';let status=x.done===x.total?'✓ vollständig':`${x.done}/${x.total}`;return `<div class="controlLevelRow ${cls}"><div><b>${esc(x.area)}</b> · ${esc(x.rack)} · ${esc(x.level)}<div class="muted">Nicht gefunden ${x.miss} · geändert ${x.changed} · neu ${x.found}</div></div><span class="controlBigStatus">${status}</span></div>`}).join('');
-   if(next&&p){let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];content=`<div class="controlCard"><div class="controlAreaBanner"><small>Lagerfläche</small>${esc(areaName(r?.areaId))}</div><div class="controlRackLine">Gestell: ${esc(r?.name||'–')} &nbsp; · &nbsp; Ebene: ${esc(l?.name||'–')}</div><div class="manageHead"><div><b>${esc(p.material)}</b>${p.elementId?` · <b>${esc(p.elementId)}</b>`:''}</div><span class="statusbadge ${stClass(p.status)}">${esc(p.status||'–')}</span></div><p>B ${esc(p.width||'–')} m · H ${esc(p.height||'–')} m · L ${esc(p.length||'–')} m · Menge ${esc(p.qty||'–')}</p><p class="muted">Kommission: ${esc(p.project||'–')}</p><div class="toolbar"><button class="btn" onclick="checkItem('${c.id}','${next.packageId}','Vorhanden')">✓ Vorhanden</button><button class="btn secondary" onclick="controlEdit('${c.id}','${next.packageId}')">Bearbeiten</button><button class="btn danger" onclick="checkItem('${c.id}','${next.packageId}','Nicht gefunden')">Nicht gefunden</button><button class="btn secondary" onclick="jump('${p.rackId}','${p.id}')">Zu Lagerort</button></div></div>`}
-   else if(total)content=`<div class="help"><b>Alle ${total} Positionen wurden kontrolliert.</b><div class="toolbar"><button class="btn" onclick="finishControl('${c.id}')">Kontrolle abschliessen</button><button class="btn secondary" onclick="downloadControlReport('${c.id}')">Kontrollbericht CSV</button></div></div>`;else content='<div class="help">Diese Kontrolle enthält keine Pakete.</div>';
-   let counts={};c.items.forEach(i=>counts[i.result]=(counts[i.result]||0)+1);box.innerHTML=`<h3>${esc(controlLabel(c))}</h3><div class="controlMeta"><span class="controlPill">Gestartet von ${esc(c.checkedBy||'–')}</span><span class="controlPill">Aktiver Benutzer ${esc(currentUserName())}</span></div><div class="progress"><div style="width:${pct}%"></div></div><p class="muted">${done} von ${total} kontrolliert · ${pct}% &nbsp; | &nbsp; ✓ ${counts['Vorhanden']||0} &nbsp; Geändert ${counts['Geändert']||0} &nbsp; Nicht gefunden ${counts['Nicht gefunden']||0} &nbsp; Neu gefunden ${counts['Neu gefunden']||0}</p>${content}<h3>Ebenenfortschritt</h3><div class="controlLevelList">${levelHtml}</div><div class="toolbar"><button class="btn secondary" onclick="openFoundMaterial()">+ Material gefunden</button></div>`
- }
- E('controlHistory').innerHTML=(st.controls||[]).filter(c=>c.completed).map(c=>{let diff=c.items.filter(i=>i.result&&i.result!=='Vorhanden').length;return `<div class="manageItem"><div class="manageHead"><div><b>${esc(controlLabel(c))}</b><div class="muted">${formatDateTime(c.completed)} · ${c.items.length} Positionen · ${diff} Abweichung(en) · gestartet ${esc(c.checkedBy||'–')} · abgeschlossen ${esc(c.completedBy||c.checkedBy||'–')}</div></div><div class="toolbar"><button class="btn secondary" onclick="controlDetails('${c.id}')">Details</button><button class="btn" onclick="downloadControlReport('${c.id}')">Bericht CSV</button></div></div></div>`}).join('')||'<p class="muted">Noch keine abgeschlossene Kontrolle.</p>'
-}
+function renderControl(){renderStandardControl()}
+
 function checkItem(cid,pid,result){
  let c=st.controls.find(x=>x.id===cid),i=c?.items.find(x=>x.packageId===pid),p=st.packages.find(x=>x.id===pid);if(!i)return;let now=new Date().toISOString(),by=currentUserName();i.result=result;i.checkedAt=now;i.checkedBy=by;
  if(p){p.lastCheckedAt=now;p.lastCheckedBy=by;addHistory(p,'Lagerkontrolle',result+' · kontrolliert von '+by)}persist()
