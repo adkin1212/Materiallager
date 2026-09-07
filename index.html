@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Holzlager V156</title>
+<title>Holzlager V157</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -1060,6 +1060,43 @@ body.fullscreenLogoActive .modal.open .manageHead{
  .smallOrderLaborHead{display:none}
  .smallOrderLaborRow{grid-template-columns:1fr 1fr}
  .smallOrderLaborRow .laborPosition{grid-column:1/-1}
+}
+
+
+/* V157: Bereichsauswahl auf Handy vollständig scrollbar */
+@media(max-width:700px){
+  #moduleHome,
+  .moduleHome{
+    position:fixed!important;
+    inset:0!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    height:100dvh!important;
+    min-height:0!important;
+    align-items:flex-start!important;
+    justify-content:flex-start!important;
+    padding:24px 16px 42px!important;
+    box-sizing:border-box!important;
+  }
+  #moduleHome .moduleTiles,
+  .moduleHome .moduleTiles{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    max-width:520px!important;
+    margin:0 auto!important;
+    gap:18px!important;
+    flex:0 0 auto!important;
+  }
+  #moduleHome .moduleTile,
+  .moduleHome .moduleTile{
+    width:100%!important;
+    min-height:190px!important;
+    height:auto!important;
+    flex:0 0 190px!important;
+    box-sizing:border-box!important;
+  }
 }
 
 </style><link rel="apple-touch-icon" sizes="180x180" href="./kuenzli-app-icon.png">
