@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Holzlager V157</title>
+<title>Holzlager V159</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -1099,6 +1099,154 @@ body.fullscreenLogoActive .modal.open .manageHead{
   }
 }
 
+
+/* V158: Smartphone-Bedienung */
+@media(max-width:700px){
+
+  html,body{max-width:100%;overflow-x:hidden}
+  body{font-size:16px}
+
+  /* allgemeine Touch-Ziele */
+  button,.btn,.nav,.cardActionBtn,.smallOrderStatusBtn,.smallOrderMiniStatus{
+    min-height:46px!important;
+    font-size:15px!important;
+  }
+  input,select,textarea,.searchSelectInput{
+    font-size:16px!important; /* verhindert iPhone Auto-Zoom */
+    min-height:46px!important;
+  }
+
+  /* Lagerverwaltung: Seitenleiste wird zur unteren, horizontal scrollbaren Navigation */
+  .app{display:block!important;min-height:100dvh}
+  .app nav{
+    position:fixed!important;
+    left:0!important;right:0!important;bottom:0!important;top:auto!important;
+    width:100%!important;height:68px!important;
+    display:flex!important;flex-direction:row!important;align-items:stretch!important;
+    gap:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    z-index:8200!important;
+    background:#124c3b!important;
+    border-top:1px solid rgba(255,255,255,.18);
+  }
+  .app nav .brand{display:none!important}
+  .app nav .nav{
+    flex:0 0 auto!important;
+    width:auto!important;min-width:102px!important;
+    padding:8px 12px!important;margin:0!important;
+    border-radius:0!important;
+    display:flex!important;align-items:center!important;justify-content:center!important;
+    white-space:nowrap!important;
+  }
+  .app main{
+    margin-left:0!important;
+    width:100%!important;
+    padding-bottom:82px!important;
+    box-sizing:border-box!important;
+  }
+  #moduleBackBtn{
+    position:fixed!important;
+    left:10px!important;
+    bottom:76px!important;
+    z-index:8300!important;
+    min-height:42px!important;
+    padding:8px 11px!important;
+  }
+
+  /* Kopfbereich der Lagerverwaltung */
+  .app header,.topbar{
+    position:sticky!important;top:0!important;z-index:2000!important;
+    height:auto!important;min-height:0!important;
+    padding:8px 10px!important;
+    background:#fff!important;
+  }
+  .app header .actions,.topbar .actions{
+    display:flex!important;flex-wrap:wrap!important;gap:7px!important;
+  }
+
+  /* allgemeine Karten / Raster */
+  main{padding-left:8px!important;padding-right:8px!important}
+  .grid{grid-template-columns:1fr!important;gap:10px!important}
+  .card{padding:11px!important;border-radius:11px!important}
+  .manageHead{align-items:flex-start!important;flex-wrap:wrap!important;gap:8px!important}
+  .manageHead>.toolbar{width:100%!important}
+  .toolbar{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    gap:7px!important;
+  }
+  .toolbar>.btn,.toolbar>button{
+    flex:1 1 auto!important;
+  }
+
+  /* Vollbild-/Modalfenster */
+  .modal{padding:0!important;align-items:stretch!important}
+  .modal .box,.modal .modalbox{
+    width:100vw!important;max-width:none!important;
+    height:100dvh!important;max-height:none!important;
+    margin:0!important;border-radius:0!important;
+    overflow:auto!important;padding:12px!important;
+    box-sizing:border-box!important;
+  }
+  .modal .mh,.modal .modalHead{
+    position:sticky!important;top:0!important;z-index:20!important;
+    background:#fff!important;padding:8px 0!important;
+    flex-wrap:wrap!important;
+  }
+
+  /* Projekt-/Kleinauftrag-Seiten */
+  .projectsShell{padding:10px!important}
+  .projectsTopbar{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+    padding:11px!important;
+    margin-bottom:10px!important;
+  }
+  .projectsTopbar>.btn,.projectsTopbar>.toolbar{width:100%!important}
+  .projectsTopbar>.toolbar{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important}
+  .projectsTopbar>.toolbar .btn{width:100%!important}
+  .projectCards{grid-template-columns:1fr!important;gap:10px!important}
+  .projectCard{min-height:0!important;padding:14px!important}
+  .cardActionRow{display:grid!important;grid-template-columns:1fr 1fr 1fr!important;gap:6px!important}
+  .mobileInfoCard{margin:0!important}
+
+  /* Tabellen bleiben bedienbar statt die Seite auseinanderzuziehen */
+  .tablewrap,.projectPlanScroll,.smallOrderTableWrap{
+    overflow-x:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    max-width:100%!important;
+  }
+  table{font-size:14px}
+
+  /* Kleinaufträge */
+  .smallOrderReportCard{padding:10px!important}
+  .smallOrderReportActions{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    width:100%!important;
+  }
+  .smallOrderReportActions>*{width:100%!important}
+  .smallOrderMaterialRow,.smallOrderLaborRow{
+    padding:10px!important;
+    gap:8px!important;
+  }
+  .smallOrderMaterialRow .searchSelectMenu,
+  .smallOrderLaborRow .searchSelectMenu{
+    max-width:calc(100vw - 36px)!important;
+  }
+
+  /* Mitarbeiterkalender / Kennzahlen */
+  .hoursPlanMetrics,.scheduleDates{grid-template-columns:1fr 1fr!important}
+  .staffingMonthGrid{min-width:760px}
+}
+@media(max-width:430px){
+  .projectsTopbar>.toolbar{grid-template-columns:1fr!important}
+  .hoursPlanMetrics,.scheduleDates{grid-template-columns:1fr!important}
+  .cardActionRow{grid-template-columns:1fr!important}
+  .smallOrderReportActions{grid-template-columns:1fr!important}
+}
+
 </style><link rel="apple-touch-icon" sizes="180x180" href="./kuenzli-app-icon.png">
 <link rel="icon" type="image/png" href="./kuenzli-app-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1144,7 +1292,7 @@ body.fullscreenLogoActive .modal.open .manageHead{
 <div id="projectsHome" class="projectsShell" aria-label="Projekte">
  <div class="projectsTopbar">
    <button class="btn secondary" type="button" onclick="showModuleHome()">← Bereichsauswahl</button>
-   <div><h1 style="margin:0">Projekte</h1><div class="muted">Projekte erfassen und Produktionsstunden planen.</div></div>
+   <div><h1 style="margin:0">Projekte</h1><div class="muted">Projekte erfassen und Produktionsstunden planen · Cloud-synchronisiert.</div></div>
    <button class="btn" type="button" onclick="openProjectEditor()">+ Neues Projekt</button>
  </div>
  <div id="projectCards" class="projectCards"></div>
@@ -3000,7 +3148,7 @@ function loadProjects(){
    if(x&&Array.isArray(x.projects))projectStore=x;
  }catch(_){}
 }
-function saveProjects(){localStorage.setItem(PROJECTS_KEY,JSON.stringify(projectStore))}
+function saveProjects(){localStorage.setItem(PROJECTS_KEY,JSON.stringify(projectStore));queueCloudSync?.()}
 function projectById(id){return (projectStore.projects||[]).find(p=>p.id===id)}
 function renameProject(id){
  let p=projectById(id);if(!p)return;
@@ -3562,9 +3710,21 @@ async function buildSmallOrderPDF(r){
 }
 
 function renderProjectCards(){
+ loadProjects();
  let el=E('projectCards');if(!el)return;
- let arr=(projectStore.projects||[]).filter(p=>hasProjectAccess(p.id)).slice().sort((a,b)=>String(b.updatedAt||b.createdAt).localeCompare(String(a.updatedAt||a.createdAt)));
- el.innerHTML=arr.length?arr.map(p=>`<div class="projectCard" onclick="openProjectDetail('${p.id}')">
+ let all=(projectStore.projects||[]);
+ let arr=all.filter(p=>hasProjectAccess(p.id)).slice().sort((a,b)=>String(b.updatedAt||b.createdAt).localeCompare(String(a.updatedAt||a.createdAt)));
+ if(!all.length){
+   el.innerHTML=`<div class="card mobileInfoCard"><h2>Noch keine Projekte auf diesem Gerät</h2>
+   <p class="muted">Die Projektplanung wird in dieser Entwicklungsstufe noch lokal pro Gerät gespeichert. Darum erscheinen Projekte vom PC auf dem Handy noch nicht automatisch.</p>
+   <button class="btn" type="button" onclick="openProjectEditor()">+ Neues Projekt</button></div>`;
+   return;
+ }
+ if(!arr.length){
+   el.innerHTML=`<div class="card mobileInfoCard"><h2>Keine freigegebenen Projekte</h2><p class="muted">Auf diesem Gerät sind Projekte vorhanden, aber für diese Person ist aktuell keines freigegeben.</p></div>`;
+   return;
+ }
+ el.innerHTML=arr.map(p=>`<div class="projectCard" onclick="openProjectDetail('${p.id}')">
   <div><h3>${esc(p.name||'Projekt')}</h3><div class="projectCardMeta">
    <span>${esc(p.number||'Keine Projektnummer')}</span>
    <span>${esc(p.customer||'Kein Kunde erfasst')}</span>
@@ -3574,10 +3734,10 @@ function renderProjectCards(){
     <div class="cardActionRow">
       <button class="cardActionBtn" type="button" onclick="event.stopPropagation();renameProject('${p.id}')">Umbenennen</button>
       <button class="cardActionBtn" type="button" onclick="event.stopPropagation();openProjectEditor('${p.id}')">Bearbeiten</button>
-      <button class="cardActionBtn danger" type="button" onclick="event.stopPropagation();deleteProject('${p.id}')">Löschen</button>
+      ${canManageStructure()?`<button class="cardActionBtn danger" type="button" onclick="event.stopPropagation();deleteProject('${p.id}')">Löschen</button>`:''}
     </div>
   </div>
- </div>`).join(''):`<div class="card"><h2>Keine freigegebenen Projekte</h2><p class="muted">Für diese Person ist aktuell kein Projekt freigegeben.</p></div>`;
+ </div>`).join('');
 }
 function openProjectEditor(id=''){
  let p=projectById(id);
@@ -4895,10 +5055,10 @@ function canWriteCloudEntity(type,action='save'){
  if(role==='Administrator')return true;
  if(role==='Lagerverantwortlicher'){
    if(type==='users')return false;
-   return ['areas','racks','packages','commissions','controls','internalMaterials','internalTransfers','standardStock','materialCatalog','__state'].includes(type);
+   return ['areas','racks','packages','commissions','controls','internalMaterials','internalTransfers','standardStock','materialCatalog','projects','__state'].includes(type);
  }
  if(role==='Mitarbeiter'){
-   if(action==='save')return ['packages','controls','standardStock','materialCatalog'].includes(type);
+   if(action==='save')return ['packages','controls','standardStock','materialCatalog','projects'].includes(type);
    if(action==='delete')return type==='packages' && !!st.settings?.allowMaterialDelete;
  }
  return false;
@@ -4935,6 +5095,11 @@ function localEntityMap(){
      let id=entityId(type,obj,idx);
      map[type+'|'+id]={type,id,data:obj};
    });
+ });
+ loadProjects();
+ (projectStore.projects||[]).forEach((obj,idx)=>{
+   let id=obj.id||('project:'+idx);
+   map['projects|'+id]={type:'projects',id,data:obj};
  });
  map['__state|main']={type:'__state',id:'main',data:singletonCloudData()};
  return map;
@@ -5023,6 +5188,25 @@ function applyRemoteEntities(remote,preserveKeys=new Set()){
    if(protectUnexpectedEmpty && arr.length===0 && (st[type]||[]).length)next[type]=JSON.parse(JSON.stringify(st[type]));
    else next[type]=arr;
  });
+ loadProjects();
+ let remoteProjects=Object.values(remote||{}).filter(x=>x.type==='projects');
+ let projectArr=[];
+ remoteProjects.forEach(x=>{
+   let k=cloudKey('projects',x.id);
+   if(preserveKeys.has(k)){
+     let local=(projectStore.projects||[]).find(p=>String(p.id)===String(x.id));
+     if(local)projectArr.push(local);
+   }else projectArr.push(x.data);
+ });
+ (projectStore.projects||[]).forEach(p=>{
+   let id=String(p.id||''),k=cloudKey('projects',id);
+   if(preserveKeys.has(k)&&!remote[k]&&!projectArr.some(x=>String(x.id)===id))projectArr.push(p);
+ });
+ if(!(protectUnexpectedEmpty && remoteProjects.length===0 && (projectStore.projects||[]).length)){
+   projectStore.projects=projectArr;
+   localStorage.setItem(PROJECTS_KEY,JSON.stringify(projectStore));
+ }
+
  let s=remote['__state|main']?.data;
  if(s){
    next.settings=s.settings||next.settings||{};
@@ -5040,7 +5224,7 @@ function syncBaseFromRemote(remote){
  saveSyncBase(b);
 }
 function conflictLabel(c){
- let t={areas:'Lagerfläche',racks:'Gestell',packages:'Material/Paket',commissions:'Kommission',controls:'Lagerkontrolle',users:'Benutzer',internalMaterials:'Umbuchungs-Material',internalTransfers:'Interne Umbuchung',standardStock:'Standard-Lagerware',materialCatalog:'Materialstamm','__state':'Einstellungen'}[c.type]||c.type;
+ let t={areas:'Lagerfläche',racks:'Gestell',packages:'Material/Paket',commissions:'Kommission',controls:'Lagerkontrolle',users:'Benutzer',internalMaterials:'Umbuchungs-Material',internalTransfers:'Interne Umbuchung',standardStock:'Standard-Lagerware',materialCatalog:'Materialstamm',projects:'Projekt','__state':'Einstellungen'}[c.type]||c.type;
  let name=c.local?.name||c.local?.material||c.local?.elementId||c.remote?.name||c.remote?.material||c.remote?.elementId||c.id;
  return t+' · '+name;
 }
@@ -5058,7 +5242,15 @@ async function resolveSyncConflict(index,choice){
      else await rpcEntitySave(c.type,c.id,c.local,c.remoteVersion,true);
    }else{
      let map=localEntityMap(),k=cloudKey(c.type,c.id);
-     if(c.deletedRemote){
+     if(c.type==='projects'){
+       loadProjects();
+       if(c.deletedRemote)projectStore.projects=(projectStore.projects||[]).filter(p=>String(p.id)!==String(c.id));
+       else{
+         let arr=projectStore.projects||[],ix=arr.findIndex(p=>String(p.id)===String(c.id));
+         if(ix>=0)arr[ix]=c.remote;else arr.push(c.remote);projectStore.projects=arr;
+       }
+       localStorage.setItem(PROJECTS_KEY,JSON.stringify(projectStore));
+     }else if(c.deletedRemote){
        if(c.type==='__state'){} else st[c.type]=(st[c.type]||[]).filter((o,i)=>entityId(c.type,o,i)!==c.id);
      }else if(c.type==='__state'){
        let d=c.remote||{};st.settings=d.settings||{};st.idCounters=d.idCounters||{};st.usedElementIds=d.usedElementIds||[];st.productionHotspot=d.productionHotspot||st.productionHotspot;st.inventoryColumnOrder=d.inventoryColumnOrder||[];st.activeControlId=d.activeControlId||null;st.trash=d.trash||[];st.deletedMaterialCatalogNames=d.deletedMaterialCatalogNames||st.deletedMaterialCatalogNames||[];
