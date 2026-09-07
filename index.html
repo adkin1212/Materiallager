@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Holzlager V160</title>
+<title>Holzlager V161</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -1298,6 +1298,48 @@ body.fullscreenLogoActive .modal.open .manageHead{
     width:100%!important;
     display:flex!important;
     flex-wrap:wrap!important;
+  }
+}
+
+
+/* V161: robuste Touch-Steuerung für iPhone/Android */
+@media(max-width:700px){
+  #mapwrap,
+  #productionPlanWrap{
+    overflow:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:none!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:calc(100dvh - 175px)!important;
+    min-height:430px!important;
+    position:relative!important;
+  }
+
+  #mapin,
+  #productionMapIn{
+    width:200%!important;
+    min-width:1000px!important;
+    max-width:none!important;
+    height:auto!important;
+  }
+
+  #mapimg,
+  #productionMapIn > img{
+    width:100%!important;
+    max-width:none!important;
+    height:auto!important;
+    display:block!important;
+  }
+
+  #areaSvg,
+  #productionAreaSvg{
+    touch-action:none!important;
+  }
+
+  #mapwrap.mobileMapDragging,
+  #productionPlanWrap.mobileMapDragging{
+    cursor:grabbing!important;
   }
 }
 
@@ -5561,37 +5603,71 @@ function resetOutsideZoom(){
 }
 function openProduction(){showPage('production');setTimeout(resetProductionZoom,0)}
 function initMobileMapPan(scrollerId){
- let el=E(scrollerId);if(!el||el.dataset.panReady)return;
- el.dataset.panReady='1';
- let active=false,startX=0,startY=0,startLeft=0,startTop=0,pointerId=null;
+ let el=E(scrollerId);if(!el||el.dataset.panReady==='v161')return;
+ el.dataset.panReady='v161';
 
- el.addEventListener('pointerdown',e=>{
-   if(window.innerWidth>700)return;
-   if(drawMode||editAreaId)return;
-   if(e.target.closest?.('button,input,select,textarea,.searchSelectWrap'))return;
-   active=true;pointerId=e.pointerId;
-   startX=e.clientX;startY=e.clientY;
+ let touching=false,startX=0,startY=0,startLeft=0,startTop=0,moved=false;
+ let suppressClickUntil=0;
+
+ const canPan=()=>window.innerWidth<=700 && !drawMode && !editAreaId;
+
+ el.addEventListener('touchstart',e=>{
+   if(!canPan()||e.touches.length!==1)return;
+   let t=e.touches[0];
+   touching=true;moved=false;
+   startX=t.clientX;startY=t.clientY;
    startLeft=el.scrollLeft;startTop=el.scrollTop;
-   el.setPointerCapture?.(e.pointerId);
-   el.style.cursor='grabbing';
- });
+   el.classList.add('mobileMapDragging');
+ },{passive:true});
 
- el.addEventListener('pointermove',e=>{
-   if(!active||e.pointerId!==pointerId)return;
-   let dx=e.clientX-startX,dy=e.clientY-startY;
+ el.addEventListener('touchmove',e=>{
+   if(!touching||!canPan()||e.touches.length!==1)return;
+   let t=e.touches[0],dx=t.clientX-startX,dy=t.clientY-startY;
+   if(Math.abs(dx)>4||Math.abs(dy)>4)moved=true;
    el.scrollLeft=startLeft-dx;
    el.scrollTop=startTop-dy;
+   if(e.cancelable)e.preventDefault();
+ },{passive:false});
+
+ const endTouch=()=>{
+   if(!touching)return;
+   if(moved)suppressClickUntil=Date.now()+350;
+   touching=false;
+   el.classList.remove('mobileMapDragging');
+ };
+ el.addEventListener('touchend',endTouch,{passive:true});
+ el.addEventListener('touchcancel',endTouch,{passive:true});
+
+ /* Verhindert, dass nach einem Wisch versehentlich eine Lagerfläche geöffnet wird. */
+ el.addEventListener('click',e=>{
+   if(Date.now()<suppressClickUntil){
+     e.preventDefault();
+     e.stopPropagation();
+     e.stopImmediatePropagation?.();
+   }
+ },true);
+
+ /* Maus/Trackpad als Fallback, z.B. Android-Tablet mit Eingabegerät. */
+ let active=false,pid=null,px=0,py=0,pl=0,pt=0;
+ el.addEventListener('pointerdown',e=>{
+   if(e.pointerType==='touch'||!canPan())return;
+   if(e.target.closest?.('button,input,select,textarea,.searchSelectWrap'))return;
+   active=true;pid=e.pointerId;px=e.clientX;py=e.clientY;pl=el.scrollLeft;pt=el.scrollTop;
+   el.setPointerCapture?.(pid);el.classList.add('mobileMapDragging');
+ });
+ el.addEventListener('pointermove',e=>{
+   if(!active||e.pointerId!==pid)return;
+   el.scrollLeft=pl-(e.clientX-px);
+   el.scrollTop=pt-(e.clientY-py);
    e.preventDefault();
  });
-
- const stop=e=>{
+ const endPointer=e=>{
    if(!active)return;
-   active=false;pointerId=null;
-   el.style.cursor='grab';
+   active=false;pid=null;el.classList.remove('mobileMapDragging');
  };
- el.addEventListener('pointerup',stop);
- el.addEventListener('pointercancel',stop);
- el.addEventListener('lostpointercapture',stop);
+ el.addEventListener('pointerup',endPointer);
+ el.addEventListener('pointercancel',endPointer);
+ el.addEventListener('lostpointercapture',endPointer);
 }
 function initMobileMaps(){
  initMobileMapPan('mapwrap');
