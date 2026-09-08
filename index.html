@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Holzlager V162</title>
+<title>Künzli Lagerverwaltung 1.0</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -1345,12 +1345,410 @@ body.fullscreenLogoActive .modal.open .manageHead{
 
 
 .smallOrderCloudBadge{font-size:11px;font-weight:800;padding:3px 7px;border-radius:999px;background:#eef3f0;color:#466052;border:1px solid #d6e0da}
+
+/* V163: Mobile Karte – natives 2D-Schieben, ohne Touch-Blockierung */
+@media(max-width:700px){
+  #mapwrap,
+  #productionPlanWrap{
+    overflow:scroll!important;
+    overflow-x:scroll!important;
+    overflow-y:scroll!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x pan-y pinch-zoom!important;
+    overscroll-behavior:contain!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:calc(100dvh - 175px)!important;
+    min-height:430px!important;
+    position:relative!important;
+  }
+
+  #mapin,
+  #productionMapIn{
+    width:220%!important;
+    min-width:1100px!important;
+    max-width:none!important;
+    transform:none!important;
+    transform-origin:top left!important;
+  }
+
+  #areaSvg,
+  #productionAreaSvg{
+    touch-action:pan-x pan-y!important;
+  }
+
+  #mapimg,
+  #productionPlanImg{
+    pointer-events:none!important;
+    -webkit-user-drag:none!important;
+  }
+}
+
+
+/* V164: Desktop-Karte mit Maus verschiebbar */
+@media(min-width:701px){
+  #mapwrap,
+  #productionPlanWrap{
+    overflow:auto!important;
+    cursor:grab!important;
+    user-select:none!important;
+  }
+  #mapwrap.desktopMapDragging,
+  #productionPlanWrap.desktopMapDragging{
+    cursor:grabbing!important;
+  }
+}
+
+
+/* V165: Lagerkontrolle – Kopf und Daten exakt auf demselben Spaltenraster */
+@media(min-width:901px){
+  .controlSortHead.full,
+  .fullPkgRow{
+    grid-template-columns:
+      minmax(190px,1.55fr)
+      140px
+      110px
+      110px
+      110px
+      120px
+      minmax(150px,1fr)
+      110px
+      500px!important;
+    column-gap:10px!important;
+  }
+
+  .controlSortHead.std,
+  .stdPkgRow{
+    grid-template-columns:
+      minmax(240px,2fr)
+      150px
+      130px
+      150px
+      170px!important;
+    column-gap:10px!important;
+  }
+
+  .fullPkgRow > div,
+  .stdPkgRow > div,
+  .controlSortHead.full > *,
+  .controlSortHead.std > *{
+    min-width:0;
+    box-sizing:border-box;
+  }
+
+  .fullPkgRow .toolbar{
+    width:100%;
+    min-width:0;
+    justify-content:flex-start;
+    flex-wrap:wrap;
+  }
+}
+
+
+/* V169: Suchfeld Materialübersicht vollständig lesbar */
+#page-inventory #search{
+  width:420px!important;
+  min-width:420px!important;
+  flex:0 0 420px!important;
+}
+@media(max-width:900px){
+  #page-inventory #search{
+    width:100%!important;
+    min-width:100%!important;
+    flex:1 1 100%!important;
+  }
+}
+
+
+/* V173: vier Kennzahlen pro Kommission inkl. Ist-Zeit/m² */
+.commissionCardMetrics{grid-template-columns:repeat(4,minmax(120px,1fr))!important}
+@media(max-width:900px){.commissionCardMetrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:520px){.commissionCardMetrics{grid-template-columns:1fr!important}}
+
+
+/* V174: Kennzahlen innerhalb der Kommissionskarten dürfen sich nie überschneiden */
+.commissionCard{
+  min-width:0!important;
+}
+.commissionCardMetrics{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+.commissionCardMetric{
+  min-width:0!important;
+  width:auto!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+.commissionCardMetric span,
+.commissionCardMetric b{
+  display:block!important;
+  max-width:100%!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+}
+.commissionCardMetric span{
+  line-height:1.2!important;
+}
+.commissionCardMetric b{
+  margin-top:4px!important;
+  line-height:1.15!important;
+}
+@media(min-width:1450px){
+  .commissionCardMetrics{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:520px){
+  .commissionCardMetrics{
+    grid-template-columns:1fr!important;
+  }
+}
+
+
+/* V175: Kommissionskarten und vier Kennzahlen deutlich grösser */
+.projectsCommissionGrid{
+  grid-template-columns:repeat(auto-fit,minmax(520px,1fr))!important;
+  gap:20px!important;
+}
+.commissionCard{
+  padding:24px!important;
+  min-width:0!important;
+}
+.commissionCardMetrics{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(105px,1fr))!important;
+  gap:12px!important;
+  width:100%!important;
+}
+.commissionCardMetric{
+  min-height:105px!important;
+  padding:14px 12px!important;
+  overflow:visible!important;
+}
+.commissionCardMetric span{
+  font-size:14px!important;
+  line-height:1.25!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+}
+.commissionCardMetric b{
+  font-size:22px!important;
+  line-height:1.2!important;
+  margin-top:8px!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+@media(max-width:1100px){
+  .projectsCommissionGrid{
+    grid-template-columns:1fr!important;
+  }
+  .commissionCardMetrics{
+    grid-template-columns:repeat(4,minmax(110px,1fr))!important;
+  }
+}
+@media(max-width:650px){
+  .projectsCommissionGrid{grid-template-columns:1fr!important}
+  .commissionCard{padding:18px!important}
+  .commissionCardMetrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:390px){
+  .commissionCardMetrics{grid-template-columns:1fr!important}
+}
+
+
+/* V176: Äussere Kommissionskarten passend zu den grossen Kennzahlen */
+.projectsCommissionGrid{
+  grid-template-columns:repeat(auto-fit,minmax(650px,1fr))!important;
+  gap:24px!important;
+  align-items:stretch!important;
+}
+.commissionCard{
+  width:100%!important;
+  min-width:650px!important;
+  min-height:390px!important;
+  padding:30px!important;
+  box-sizing:border-box!important;
+}
+.commissionCardMetrics{
+  width:100%!important;
+}
+@media(max-width:1400px){
+  .projectsCommissionGrid{
+    grid-template-columns:1fr!important;
+  }
+  .commissionCard{
+    min-width:0!important;
+    min-height:360px!important;
+  }
+}
+@media(max-width:650px){
+  .commissionCard{
+    min-width:0!important;
+    min-height:0!important;
+    padding:18px!important;
+  }
+}
+
+
+/* V177: Kommissionskarten dürfen sich nicht gegenseitig überdecken */
+.projectsCommissionGrid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:20px!important;
+  width:100%!important;
+  align-items:stretch!important;
+}
+.commissionCard{
+  min-width:0!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:390px!important;
+  padding:30px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+.commissionCardMetrics{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:12px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+.commissionCardMetric{
+  min-width:0!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:1250px){
+  .projectsCommissionGrid{grid-template-columns:1fr!important}
+}
+@media(max-width:700px){
+  .commissionCard{padding:18px!important;min-height:0!important}
+  .commissionCardMetrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:390px){
+  .commissionCardMetrics{grid-template-columns:1fr!important}
+}
+
+
+/* V178: Kommissionskarten breit genug für vier gut lesbare Kennzahlen */
+.projectsCommissionGrid{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:20px!important;
+  width:100%!important;
+}
+.commissionCard{
+  width:100%!important;
+  max-width:900px!important;
+  min-width:0!important;
+  min-height:330px!important;
+  padding:30px 36px!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+.commissionCardMetrics{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(150px,1fr))!important;
+  gap:14px!important;
+  width:100%!important;
+}
+.commissionCardMetric{
+  min-width:0!important;
+  min-height:120px!important;
+  padding:16px!important;
+}
+.commissionCardMetric span{
+  font-size:15px!important;
+  line-height:1.25!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.commissionCardMetric b{
+  font-size:24px!important;
+  white-space:normal!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+@media(max-width:800px){
+  .commissionCard{max-width:none!important;padding:20px!important}
+  .commissionCardMetrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:420px){
+  .commissionCardMetrics{grid-template-columns:1fr!important}
+}
+
+
+/* V179: tatsächliches Kommissionsraster korrigiert */
+.commissionCards{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(620px,1fr))!important;
+  gap:20px!important;
+  width:100%!important;
+  overflow-x:auto!important;
+  box-sizing:border-box!important;
+}
+.commissionCards .commissionCard{
+  min-width:620px!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:360px!important;
+  padding:30px!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+}
+.commissionCards .commissionCardMetrics{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(125px,1fr))!important;
+  gap:14px!important;
+  width:100%!important;
+}
+.commissionCards .commissionCardMetric{
+  min-width:0!important;
+  min-height:120px!important;
+  padding:16px!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:1350px){
+  .commissionCards{
+    grid-template-columns:1fr!important;
+    overflow-x:visible!important;
+  }
+  .commissionCards .commissionCard{
+    min-width:0!important;
+    max-width:900px!important;
+  }
+}
+@media(max-width:760px){
+  .commissionCards .commissionCard{padding:18px!important}
+  .commissionCards .commissionCardMetrics{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
 </style><link rel="apple-touch-icon" sizes="180x180" href="./kuenzli-app-icon.png">
 <link rel="icon" type="image/png" href="./kuenzli-app-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Künzli">
 <meta name="application-name" content="Künzli">
+
+<script>
+window.APP_RELEASE = {
+  name: 'Künzli Lagerverwaltung',
+  version: '1.0',
+  basis: 'V182',
+  releasedAt: '2026-09-08'
+};
+</script>
+
 </head>
 <body class="accessLocked">
 <div id="moduleHome" aria-label="Bereich auswählen">
@@ -1378,7 +1776,7 @@ body.fullscreenLogoActive .modal.open .manageHead{
    <button class="btn" type="button" onclick="openSmallOrderReport()">+ Neuer Rapport</button>
  </div>
  <div class="smallOrderToolbar">
-   <input id="smallOrderSearch" type="search" placeholder="Kunde, Rapport-, Auftrags- oder Kommissionsnummer suchen …" oninput="renderSmallOrders()">
+   <input id="smallOrderSearch" type="search" placeholder="Suchen" oninput="renderSmallOrders()">
    <select id="smallOrderSort" onchange="renderSmallOrders()">
      <option value="customer">Kunden A–Z</option>
      <option value="newest">Neueste Rapporte</option>
@@ -1394,6 +1792,7 @@ body.fullscreenLogoActive .modal.open .manageHead{
    <button class="btn" type="button" onclick="openProjectEditor()">+ Neues Projekt</button>
  </div>
  <div id="projectCards" class="projectCards"></div>
+ <div id="projectArchiveWrap" style="margin-top:28px;display:none"><h2>Archiv</h2><div id="projectArchiveCards" class="projectCards"></div></div>
 </div>
 
 <div id="projectDetail" class="projectsShell" aria-label="Projekt">
@@ -1418,7 +1817,7 @@ body.fullscreenLogoActive .modal.open .manageHead{
 <button class="nav" data-page="inventory">▦ Material</button>
 <button class="nav" data-page="control">✓ Kontrolle <span id="stdLowBadge" class="stdBadge" style="display:none">0</span></button><button class="nav" data-page="reserved">◆ Reserviert</button><button class="nav" data-page="archive">▣ Archiv</button><button class="nav defectNavBtn" data-page="defects">⚠ Mängel <span id="defectOpenBadge" class="defectBadge" style="display:none">0</span></button><button class="nav" data-page="transfers">↔ Umbuchungen</button><button class="nav" data-page="manage">⚙ Verwalten</button></nav>
 <main>
-<header><div class="actions"><button class="btn secondary" id="backBtn" onclick="goBack()" style="display:none">← Zurück</button><h1 id="title">Aussenlager</h1></div><div class="actions"><span id="syncStatusBadge" class="syncBadge" title="Speicherstatus">Lokal</span><button id="authHeaderBtn" class="btn secondary authBtn" onclick="openAuthModal()">Anmelden</button><select id="activeUserSelect" onchange="switchActiveUser(this.value)" title="Aktiver Benutzer"></select><span id="activeRoleBadge" class="statusbadge"></span><button class="btn secondary" id="drawBtn" onclick="startDraw()">+ Fläche erstellen</button><button class="btn" onclick="openMaterial()">+ Material erfassen</button></div></header>
+<header><div class="actions"><button class="btn secondary" id="backBtn" onclick="goBack()" style="display:none">← Zurück</button><h1 id="title">Aussenlager</h1></div><div class="actions"><span id="syncStatusBadge" class="syncBadge" title="Speicherstatus">Lokal</span><button id="authHeaderBtn" class="btn secondary authBtn" onclick="openAuthModal()">Anmelden</button><span id="activeRoleBadge" class="statusbadge"></span><button class="btn secondary" id="drawBtn" onclick="startDraw()">+ Fläche erstellen</button><button class="btn" onclick="openMaterial()">+ Material erfassen</button></div></header>
 
 <section class="page active" id="page-map">
 <div class="grid">
@@ -1458,7 +1857,7 @@ body.fullscreenLogoActive .modal.open .manageHead{
 
 <section class="page" id="page-inventory">
 <div class="stats"><div class="stat"><b id="sPkg">0</b><span>Pakete</span></div><div class="stat"><b id="sRack">0</b><span>Gestelle</span></div><div class="stat"><b id="sLvl">0</b><span>Ebenen</span></div><div class="stat"><b id="sMat">0</b><span>Materialarten</span></div></div>
-<div class="card"><div class="toolbar"><input id="search" placeholder="Element-ID, Material, Breite, Höhe, Länge, Menge, Projekt, Verwendungsort, Paketstatus..." oninput="renderInv()"><select id="areaFilter" onchange="renderInv()"></select><select id="archiveFilter" onchange="renderInv()"><option value="active">Aktives Lager</option><option value="archive">Aufgebraucht / Archiv</option><option value="all">Alle Materialien</option></select><button class="btn secondary" onclick="csv()">CSV exportieren</button>
+<div class="card"><div class="toolbar"><input id="search" placeholder="Suchen" oninput="renderInv()"><select id="areaFilter" onchange="renderInv()"></select><select id="archiveFilter" onchange="renderInv()"><option value="active">Aktives Lager</option><option value="archive">Aufgebraucht / Archiv</option><option value="all">Alle Materialien</option></select><button class="btn secondary" onclick="csv()">CSV exportieren</button>
 <button class="btn secondary" onclick="exportInventoryExcel()">Excel exportieren</button>
 <button class="btn secondary" onclick="exportInventoryPDF()">PDF exportieren</button>
 <button class="btn secondary" onclick="resetInventoryColumns()">Spalten zurücksetzen</button></div><div class="dragHint">Spalten mit ◀ / ▶ verschieben. Die Reihenfolge wird gespeichert.</div>
@@ -1517,7 +1916,7 @@ body.fullscreenLogoActive .modal.open .manageHead{
 <section class="page" id="page-reserved">
 <div class="card">
 <div class="manageHead"><div><h2 style="margin:0">Reservierte Materialien</h2><p class="muted">Alle aktuell reservierten Materialien.</p></div></div>
-<div class="toolbar"><input id="reservedSearch" placeholder="Reservierte Materialien suchen…" oninput="renderReserved()"></div>
+<div class="toolbar"><input id="reservedSearch" placeholder="Suchen" oninput="renderReserved()"></div>
 <div id="reservedList" class="manageList"></div>
 </div>
 </section>
@@ -1529,7 +1928,7 @@ body.fullscreenLogoActive .modal.open .manageHead{
       <div><h2 style="margin:0">Materialarchiv</h2><p class="muted">Hier werden aufgebrauchte oder bewusst archivierte Materialien aufbewahrt. Sie bleiben vollständig nachvollziehbar und können wieder aktiviert werden.</p></div>
     </div>
     <div class="toolbar" style="margin-top:12px">
-      <input id="archiveSearch" placeholder="Element-ID, Material, Kommission..." oninput="renderArchive()">
+      <input id="archiveSearch" placeholder="Suchen" oninput="renderArchive()">
     </div>
     <div id="archiveList" class="manageList" style="margin-top:12px"></div>
   </div>
@@ -1666,6 +2065,11 @@ body.fullscreenLogoActive .modal.open .manageHead{
   </div>
  </details>
 
+ <div class="help" style="margin:14px 0">
+   <b>Betriebsversion 1.0</b>
+   <div class="muted">Freigegebene Basis: V182 · Betriebsstart 08.09.2026</div>
+ </div>
+
  <details class="manageGroup">
   <summary><span>🏗 Lagerstruktur</span><span class="manageGroupHint">Flächen, Gestelle, Ebenen, Karte</span></summary>
   <div class="manageGroupBody">
@@ -1705,6 +2109,11 @@ body.fullscreenLogoActive .modal.open .manageHead{
     <h3 style="margin-top:0">Material-Einstellungen</h3>
     <label class="compactCheck"><input type="checkbox" id="allowDeleteMaterials" onchange="toggleMaterialDelete(this.checked)"> Materialien endgültig löschen erlauben</label>
     <p class="muted">Archivieren bleibt unabhängig davon möglich.</p>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid #dfe5e1">
+      <h4 style="margin:0 0 6px">Betriebsstart</h4>
+      <p class="muted" style="margin:0 0 10px">Leert den aktuellen Materialbestand vollständig. Kategorien, Materialstamm und Preisstamm bleiben erhalten.</p>
+      <button class="btn danger" type="button" onclick="resetOperationalMaterialForGoLive()">Aktuellen Materialbestand vollständig löschen</button>
+    </div>
    </div>
 
    <div class="manageSubsection spanAll">
@@ -2312,7 +2721,6 @@ const INVENTORY_COLS={
  areaHorizontal:{label:'Fläche m²',sort:'areaHorizontal'},
  qty:{label:'Menge',sort:'qty'},
  project:{label:'Kommission',sort:'project'},
- packCode:{label:'Pack-Code',sort:'packCode'},
  usage:{label:'Verwendungsort',sort:'usage'},
  status:{label:'Paketstatus',sort:'status'},
  reservation:{label:'Reservierung',sort:'reservation'},
@@ -2320,9 +2728,9 @@ const INVENTORY_COLS={
  createdAt:{label:'Erfasst am',sort:'createdAt'},
  action:{label:'Aktion',sort:''}
 };
-const DEFAULT_INVENTORY_ORDER=['elementId','material','width','height','length','linearMeters','areaHorizontal','qty','project','packCode','usage','status','reservation','location','createdAt','action'];
+const DEFAULT_INVENTORY_ORDER=['elementId','material','width','height','length','linearMeters','areaHorizontal','qty','project','usage','status','reservation','location','createdAt','action'];
 function ensureInventoryOrder(){
- let o=Array.isArray(st.inventoryColumnOrder)?st.inventoryColumnOrder.filter(k=>INVENTORY_COLS[k]):[];
+ let o=Array.isArray(st.inventoryColumnOrder)?st.inventoryColumnOrder.filter(k=>k!=='packCode'&&INVENTORY_COLS[k]):[];
  DEFAULT_INVENTORY_ORDER.forEach(k=>{if(!o.includes(k))o.push(k)});
  st.inventoryColumnOrder=o;
 }
@@ -2986,10 +3394,9 @@ function requireCloudSetupAdmin(){
  return false;
 }
 function renderUserHeader(){
- let sel=E('activeUserSelect'),badge=E('activeRoleBadge');if(!sel)return;
- let users=st.users.filter(u=>u.active);sel.innerHTML=users.map(u=>`<option value="${u.id}" ${u.id===st.activeUserId?'selected':''}>${esc(u.name)}</option>`).join('');
- sel.style.display=cloudAuthEnabled()?'none':'';
- let u=cloudAuthEnabled()?(cloudMember||{role:'Mitarbeiter'}):activeUser();if(badge){badge.textContent=cloudSetupMode()&&!cloudMember?'Einrichtung':(u.role||'Mitarbeiter');badge.className='statusbadge '+roleClass(u.role||'Mitarbeiter')}renderAuthUI();
+ let badge=E('activeRoleBadge');
+ let u=cloudAuthEnabled()?(cloudMember||{role:'Mitarbeiter'}):activeUser();
+ if(badge){badge.textContent=cloudSetupMode()&&!cloudMember?'Einrichtung':(u.role||'Mitarbeiter');badge.className='statusbadge '+roleClass(u.role||'Mitarbeiter')}renderAuthUI();
  let nav=document.querySelector('.nav[data-page="manage"]');if(nav)nav.style.display=canManagePageNow()?'':'none';
  let tnav=document.querySelector('.nav[data-page="transfers"]');if(tnav)tnav.style.display=canManagePageNow()?'':'none';
  if((currentPage==='manage'||currentPage==='transfers')&&!canManagePageNow())showPage('map',true);
@@ -3268,6 +3675,25 @@ function deleteProject(id){
    E('projectsHome')?.classList.add('open');
  }
  saveProjects();renderProjectCards();
+}
+
+
+function archiveProject(id){
+ let p=projectById(id);if(!p)return;
+ if(!confirm(`Projekt „${p.name||'Projekt'}“ archivieren?`))return;
+ p.archived=true;
+ p.archivedAt=new Date().toISOString();
+ p.updatedAt=p.archivedAt;
+ saveProjects();
+ renderProjectCards();
+}
+function restoreArchivedProject(id){
+ let p=projectById(id);if(!p)return;
+ p.archived=false;
+ p.archivedAt='';
+ p.updatedAt=new Date().toISOString();
+ saveProjects();
+ renderProjectCards();
 }
 
 function closeProjectShells(){E('projectsHome')?.classList.remove('open');E('projectDetail')?.classList.remove('open');E('smallOrdersHome')?.classList.remove('open')}
@@ -3819,33 +4245,46 @@ async function buildSmallOrderPDF(r){
 
 function renderProjectCards(){
  loadProjects();
- let el=E('projectCards');if(!el)return;
+ let el=E('projectCards'),archiveEl=E('projectArchiveCards'),archiveWrap=E('projectArchiveWrap');if(!el)return;
  let all=(projectStore.projects||[]);
- let arr=all.filter(p=>hasProjectAccess(p.id)).slice().sort((a,b)=>String(b.updatedAt||b.createdAt).localeCompare(String(a.updatedAt||a.createdAt)));
- if(!all.length){
-   el.innerHTML=`<div class="card mobileInfoCard"><h2>Noch keine Projekte auf diesem Gerät</h2>
-   <p class="muted">Die Projektplanung wird in dieser Entwicklungsstufe noch lokal pro Gerät gespeichert. Darum erscheinen Projekte vom PC auf dem Handy noch nicht automatisch.</p>
-   <button class="btn" type="button" onclick="openProjectEditor()">+ Neues Projekt</button></div>`;
-   return;
- }
- if(!arr.length){
-   el.innerHTML=`<div class="card mobileInfoCard"><h2>Keine freigegebenen Projekte</h2><p class="muted">Auf diesem Gerät sind Projekte vorhanden, aber für diese Person ist aktuell keines freigegeben.</p></div>`;
-   return;
- }
- el.innerHTML=arr.map(p=>`<div class="projectCard" onclick="openProjectDetail('${p.id}')">
+ let accessible=all.filter(p=>hasProjectAccess(p.id));
+ let arr=accessible.filter(p=>!p.archived).slice().sort((a,b)=>String(b.updatedAt||b.createdAt).localeCompare(String(a.updatedAt||a.createdAt)));
+ let archived=accessible.filter(p=>p.archived).slice().sort((a,b)=>String(b.archivedAt||b.updatedAt||'').localeCompare(String(a.archivedAt||a.updatedAt||'')));
+
+ const cardHtml=(p,isArchived=false)=>`<div class="projectCard" onclick="openProjectDetail('${p.id}')">
   <div><h3>${esc(p.name||'Projekt')}</h3><div class="projectCardMeta">
    <span>${esc(p.number||'Keine Projektnummer')}</span>
    <span>${esc(p.customer||'Kein Kunde erfasst')}</span>
   </div></div>
   <div>
-    <div class="muted">${p.startDate?'Start: '+esc(p.startDate):'Startdatum offen'}${p.hoursPlan?.updatedAt?' · Stundenplanung vorhanden':''}</div>
+    <div class="muted">${isArchived?'Archiviert'+(p.archivedAt?' · '+esc(localDateLabel(String(p.archivedAt).slice(0,10))):''):(p.startDate?'Start: '+esc(p.startDate):'Startdatum offen')}${!isArchived&&p.hoursPlan?.updatedAt?' · Stundenplanung vorhanden':''}</div>
     <div class="cardActionRow">
       <button class="cardActionBtn" type="button" onclick="event.stopPropagation();renameProject('${p.id}')">Umbenennen</button>
       <button class="cardActionBtn" type="button" onclick="event.stopPropagation();openProjectEditor('${p.id}')">Bearbeiten</button>
+      ${isArchived
+        ?`<button class="cardActionBtn" type="button" onclick="event.stopPropagation();restoreArchivedProject('${p.id}')">Wiederherstellen</button>`
+        :`<button class="cardActionBtn" type="button" onclick="event.stopPropagation();archiveProject('${p.id}')">Archiv</button>`}
       ${canManageStructure()?`<button class="cardActionBtn danger" type="button" onclick="event.stopPropagation();deleteProject('${p.id}')">Löschen</button>`:''}
     </div>
   </div>
- </div>`).join('');
+ </div>`;
+
+ if(!all.length){
+   el.innerHTML=`<div class="card mobileInfoCard"><h2>Noch keine Projekte</h2>
+   <p class="muted">Noch kein Projekt erfasst.</p>
+   <button class="btn" type="button" onclick="openProjectEditor()">+ Neues Projekt</button></div>`;
+ }else if(!accessible.length){
+   el.innerHTML=`<div class="card mobileInfoCard"><h2>Keine freigegebenen Projekte</h2><p class="muted">Für diese Person ist aktuell kein Projekt freigegeben.</p></div>`;
+ }else if(!arr.length){
+   el.innerHTML=`<div class="card mobileInfoCard"><h2>Keine aktiven Projekte</h2><p class="muted">Alle freigegebenen Projekte befinden sich im Archiv.</p></div>`;
+ }else{
+   el.innerHTML=arr.map(p=>cardHtml(p,false)).join('');
+ }
+
+ if(archiveWrap&&archiveEl){
+   archiveWrap.style.display=archived.length?'':'none';
+   archiveEl.innerHTML=archived.map(p=>cardHtml(p,true)).join('');
+ }
 }
 function openProjectEditor(id=''){
  let p=projectById(id);
@@ -3885,6 +4324,7 @@ function backFromProjectArea(){
  else backToProjects();
 }
 function projectCommissionCardsHtml(p){
+ ensureElementCounts(p);
  let cs=ensureProjectCommissions(p);
  return `<div class="commissionCards">${cs.map(c=>{
    let els=commissionElements(p,c.id),groups=commissionGroups(p,c.id);
@@ -3901,6 +4341,7 @@ function projectCommissionCardsHtml(p){
       </div>
       <div class="commissionCardMetrics">
         <div class="commissionCardMetric"><span>Sollstunden</span><b>${fmtNum(soll)} h</b></div>
+        <div class="commissionCardMetric"><span>Ist-Zeit / m²</span><b>${prog.producedArea>0?fmtNum(prog.actualFactor,3)+' h/m²':'–'}</b></div>
         <div class="commissionCardMetric"><span>Fortschritt</span><b>${fmtNum(prog.percent,1)}%</b></div>
         <div class="commissionCardMetric"><span>Prognose fertig</span><b>${sch.forecastProjectFinish?localDateLabel(sch.forecastProjectFinish):'–'}</b></div>
       </div>
@@ -3931,12 +4372,13 @@ function openProjectDetail(id){
       ${projectCommissionCardsHtml(p)}
      </div>`;
  E('projectDetailBody').innerHTML=`<div class="projectSummaryCard"><h2>Projektangaben</h2>
-   <p><b>Projektnummer:</b> ${esc(p.number||'–')}<br><b>Kunde PL:</b> ${esc(p.customer||'–')}<br><b>Start:</b> ${esc(p.startDate||'–')}</p>
+   <p><b>Projektnummer:</b> ${esc(p.number||'–')}<br><b>PL:</b> ${esc(p.customer||'–')}<br><b>Start:</b> ${esc(p.startDate||'–')}</p>
    ${p.note?`<p><b>Bemerkung:</b><br>${esc(p.note)}</p>`:''}
  </div>${planInfo}`;
 }
 function openCommissionArea(commissionId){
  let p=projectById(currentProjectId);if(!p)return;
+ ensureElementCounts(p);
  ensureProjectCommissions(p);
  let c=p.planningCommissions.find(x=>x.id===commissionId);if(!c)return;
  p.activePlanningCommissionId=commissionId;saveProjects();
@@ -3958,6 +4400,7 @@ function openCommissionArea(commissionId){
       <div class="hoursMetric"><span>Elemente</span><b>${els.length}</b></div>
       <div class="hoursMetric"><span>Elementfläche total</span><b>${totalArea.toLocaleString('de-CH',{maximumFractionDigits:1})} m²</b></div>
       <div class="hoursMetric"><span>Sollstunden total</span><b>${totalSoll.toLocaleString('de-CH',{maximumFractionDigits:1})} h</b></div>
+      <div class="hoursMetric"><span>Ist-Zeit / m²</span><b>${prog.producedArea>0?fmtNum(prog.actualFactor,3)+' h/m²':'–'}</b><small>Iststunden ÷ produzierte Fläche</small></div>
       <div class="hoursMetric"><span>Fortschritt</span><b>${prog.percent.toLocaleString('de-CH',{maximumFractionDigits:1})}%</b></div>
     </div>
     ${staffingAndForecastHtml(p)}
@@ -4042,6 +4485,7 @@ async function importProjectExcel(file){
      let iName=headerIndex(row,['Name','Element','Elementname','Bezeichnung']);
      let iSeq=headerIndex(row,['Produktionsreihenfolge','Produktions Reihenfolge','Reihenfolge','Produktionsfolge']);
      let iStatus=headerIndex(row,['Prod. Status','Prod Status','Produktionsstatus','Status']);
+     let iCount=headerIndex(row,['Anz.','Anz','Anzahl','Stückzahl','Stueckzahl']);
      let iArea=headerIndex(row,['El-Fläche real','El Fläche real','Elementfläche','Elementfläche real','Fläche','Fläche m2','m2'],['flaechereal']);
      let iFactor=headerIndex(row,['Faktor','Faktor (SOLL h/m2)','Produktionsfaktor','h/m2','Std/m2'],['faktorsollhm2']);
      let iSoll=headerIndex(row,['Sollstunden','Soll Stunden','Sollzeit','Soll Zeit','Stunden Soll']);
@@ -4051,7 +4495,9 @@ async function importProjectExcel(file){
        if(isHeaderRow(dr)||looksGroupTitle(dr,matrix[rr+1]||[])){r=rr-1;break}
        let name=iName>=0?String(dr[iName]??'').trim():'';
        let seq=iSeq>=0?numCell(dr[iSeq]):0;
-       let area=iArea>=0?numCell(dr[iArea]):0;
+       let unitArea=iArea>=0?numCell(dr[iArea]):0;
+       let count=iCount>=0?Math.max(1,Math.round(numCell(dr[iCount])||1)):1;
+       let area=unitArea*count;
        let factor=iFactor>=0?numCell(dr[iFactor]):0;
        let status=iStatus>=0?String(dr[iStatus]??'').trim():'';
        let uploadedSoll=iSoll>=0?numCell(dr[iSoll]):0;
@@ -4069,7 +4515,8 @@ async function importProjectExcel(file){
        currentGroup.elements.push({
          id:'pe_'+Date.now()+'_'+rr+'_'+currentGroup.elements.length,
          groupId:currentGroup.id,groupTitle:currentGroup.title,
-         name,sequence:seq,status,area,factor,
+         name,sequence:seq,status,
+         count,unitArea,area,factor,
          targetHours:area*factor,
          uploadedSollHours:uploadedSoll,
          sourceRow:rr+1
@@ -4568,6 +5015,22 @@ function saveCommissionManager(){
  if(!p.planningCommissions.some(c=>c.id===p.activePlanningCommissionId))p.activePlanningCommissionId=fallback;
  p.updatedAt=new Date().toISOString();saveProjects();closeM('commissionManagerModal');openProjectDetail(p.id);
 }
+function ensureElementCounts(p){
+ let changed=false;
+ (p?.productionPlan?.elements||[]).forEach(el=>{
+   if(!Number.isFinite(Number(el.count))||Number(el.count)<1){el.count=1;changed=true}
+   if(!Number.isFinite(Number(el.unitArea))||Number(el.unitArea)<=0){
+     el.unitArea=(Number(el.area)||0)/Math.max(1,Number(el.count)||1);changed=true;
+   }
+ });
+ (p?.productionPlan?.groups||[]).forEach(g=>(g.elements||[]).forEach(el=>{
+   if(!Number.isFinite(Number(el.count))||Number(el.count)<1){el.count=1;changed=true}
+   if(!Number.isFinite(Number(el.unitArea))||Number(el.unitArea)<=0){
+     el.unitArea=(Number(el.area)||0)/Math.max(1,Number(el.count)||1);changed=true;
+   }
+ }));
+ return changed;
+}
 function projectProductionStats(p,commissionId=''){
  let c=commissionId||activeProjectCommission(p)?.id||'';
  let els=c?commissionElements(p,c):(p.productionPlan?.elements||[]);
@@ -4618,13 +5081,15 @@ function productionGroupsTableHtml(p){
  return groups.map(g=>`<div class="productionGroupBlock">
    <div class="productionGroupTitle">${esc(g.title||'Produktionsgruppe')}</div>
    <table class="projectPlanTable"><thead><tr>
-    <th>Reihenfolge</th><th>Element</th><th>Status</th><th>El-Fläche real</th>
+    <th>Reihenfolge</th><th>Element</th><th>Anz.</th><th>Status</th><th>El-Fläche real</th>
     <th>Faktor (SOLL h/m²)</th><th>Sollstunden</th><th>Produziert</th>
     <th>Soll Start</th><th>Soll fertig</th>
     <th>Prognose h nach Ist</th><th>Ist-Prognose fertig</th>
    </tr></thead><tbody>
    ${(g.elements||[]).map(x=>{
-     let done=elementProducedArea(p,x.id),calc=(Number(x.area)||0)*(Number(x.factor)||0),actualDone=actualElementFinishDate(p,x.id);
+     let done=elementProducedArea(p,x.id),calc=(Number(x.targetHours)||((Number(x.area)||0)*(Number(x.factor)||0))),actualDone=actualElementFinishDate(p,x.id);
+     let anz=Math.max(1,Number(x.count)||1),unitArea=Number(x.unitArea);
+     if(!Number.isFinite(unitArea)||unitArea<=0)unitArea=(Number(x.area)||0)/anz;
      let forecast=sch.forecastTimeline[x.id]||{start:'',finish:''},planned=sch.plannedTimeline[x.id]||{start:'',finish:''};
      let entry=(p.dailyProduction||[]).flatMap(d=>d.entries||[]).find(e=>e.elementId===x.id);
      let actualAllocated=Number(entry?.allocatedActualHours)||0;
@@ -4632,11 +5097,12 @@ function productionGroupsTableHtml(p){
      return `<tr>
       <td>${x.sequence?esc(x.sequence):'–'}</td>
       <td><b>${esc(x.name||'–')}</b></td>
+      <td>${esc(anz)}</td>
       <td>${actualDone?'Produziert':esc(x.status||'–')}</td>
-      <td>${fmtNum(x.area)} m²</td>
+      <td>${fmtNum(unitArea)} m²</td>
       <td>${fmtNum(x.factor,3)}</td>
       <td><b>${fmtNum(calc)} h</b></td>
-      <td>${fmtNum(done)} / ${fmtNum(x.area)} m²</td>
+      <td>${fmtNum(done)} / ${fmtNum(x.area)} m²${anz>1?` <span class="muted">(${anz} × ${fmtNum(unitArea)})</span>`:''}</td>
       <td>${hasStaff&&planned.start?localDateLabel(planned.start):'–'}</td>
       <td class="forecastSollDate">${hasStaff&&planned.finish?localDateLabel(planned.finish):'–'}</td>
       <td>${hasStaff?fmtNum(forecastHours)+' h':'–'}</td>
@@ -4811,8 +5277,10 @@ function renderProductionDraftRows(){
      let i=flat.findIndex(x=>x.id===el.id),draft=productionDraft[i]||{},date=draft.productionDate||E('ppDate')?.value||new Date().toISOString().slice(0,10);
      let soll=Number(el.targetHours)||((Number(el.area)||0)*(Number(el.factor)||0));
      let alreadyDone=elementProducedArea(p,el.id)>=Number(el.area||0)-.0001;
+     let anz=Math.max(1,Number(el.count)||1),unitArea=Number(el.unitArea);
+     if(!Number.isFinite(unitArea)||unitArea<=0)unitArea=(Number(el.area)||0)/anz;
      return `<div class="ppElementRow ${draft.produced?'ppProducedRow':''}">
-      <div><b>${el.sequence?esc(el.sequence)+' · ':''}${esc(el.name)}</b><div class="muted">${fmtNum(el.area)} m² · Faktor ${fmtNum(el.factor,3)} h/m²</div></div>
+      <div><b>${el.sequence?esc(el.sequence)+' · ':''}${esc(el.name)}</b><div class="muted">Anz. ${anz} · ${fmtNum(unitArea)} m²/Stk · total ${fmtNum(el.area)} m² · Faktor ${fmtNum(el.factor,3)} h/m²</div></div>
       <div><b>${fmtNum(soll)} h</b></div>
       <label class="ppProducedToggle"><input type="checkbox" ${draft.produced?'checked':''} onchange="setProductionDraftProduced(${i},this.checked)"> ${alreadyDone?'Produziert ✓':'Produziert'}</label>
       <label class="f ppProductionDate" style="margin:0"><span class="muted">Datum</span><input type="date" value="${esc(date)}" ${draft.produced?'':'disabled'} onchange="setProductionDraftDate(${i},this.value)"></label>
@@ -5034,7 +5502,7 @@ async function claimCloudMembership(username,silent=false){
 function inviteBase(){return String(cloudCfg.url||'').replace(/\/+$/,'')+'/rest/v1/warehouse_user_invites'}
 async function renderCloudUsers(){
  let box=E('cloudUsersList');if(!box||!cloudMember||currentRole()!=='Administrator')return;
- try{let r=await fetch(inviteBase()+'?warehouse_id=eq.'+encodeURIComponent(cloudCfg.warehouseId)+'&select=username,name,role,active,claimed_by&order=name.asc',{headers:cloudHeaders()});if(!r.ok)throw new Error((await r.text())||('HTTP '+r.status));let rows=await r.json();box.innerHTML=rows.length?rows.map(x=>`<div class="manageRow"><div><b>${esc(x.name)}</b><div class="muted">@${esc(x.username)} · ${esc(x.role)} · ${x.claimed_by?'aktiviert':'noch nicht aktiviert'}${x.active?'':' · deaktiviert'}</div></div><div class="toolbar"><button class="btn" onclick="openCloudPermissionEditor('${esc(x.username)}','${esc(x.name)}','${esc(x.role)}')">Berechtigungen</button><button class="btn secondary" onclick="editCloudUser('${esc(x.username)}')">Bearbeiten</button>${x.claimed_by?`<button class="btn secondary" onclick="openAdminPasswordReset('${esc(x.username)}','${esc(x.name)}')">Passwort zurücksetzen</button>`:''}<button class="btn secondary" onclick="toggleCloudInvite('${esc(x.username)}',${x.active?'false':'true'},'${esc(x.claimed_by||'')}')">${x.active?'Deaktivieren':'Aktivieren'}</button></div></div>`).join(''):'<div class="muted">Noch keine Cloud-Benutzer vorbereitet.</div>'}catch(e){box.innerHTML='<div class="muted">Cloud-Benutzer konnten nicht geladen werden.</div>'}
+ try{let r=await fetch(inviteBase()+'?warehouse_id=eq.'+encodeURIComponent(cloudCfg.warehouseId)+'&select=username,name,role,active,claimed_by&order=name.asc',{headers:cloudHeaders()});if(!r.ok)throw new Error((await r.text())||('HTTP '+r.status));let rows=await r.json();rows=sortedUserList(rows);box.innerHTML=rows.length?rows.map(x=>`<div class="manageRow"><div><b>${esc(x.name)}</b><div class="muted">@${esc(x.username)} · ${esc(x.role)} · ${x.claimed_by?'aktiviert':'noch nicht aktiviert'}${x.active?'':' · deaktiviert'}</div></div><div class="toolbar"><button class="btn" onclick="openCloudPermissionEditor('${esc(x.username)}','${esc(x.name)}','${esc(x.role)}')">Berechtigungen</button><button class="btn secondary" onclick="editCloudUser('${esc(x.username)}')">Bearbeiten</button>${x.claimed_by?`<button class="btn secondary" onclick="openAdminPasswordReset('${esc(x.username)}','${esc(x.name)}')">Passwort zurücksetzen</button>`:''}<button class="btn secondary" onclick="toggleCloudInvite('${esc(x.username)}',${x.active?'false':'true'},'${esc(x.claimed_by||'')}')">${x.active?'Deaktivieren':'Aktivieren'}</button></div></div>`).join(''):'<div class="muted">Noch keine Cloud-Benutzer vorbereitet.</div>'}catch(e){box.innerHTML='<div class="muted">Cloud-Benutzer konnten nicht geladen werden.</div>'}
 }
 
 async function prepareLocalUserForCloud(){
@@ -5648,42 +6116,54 @@ function resetOutsideZoom(){
 }
 function openProduction(){showPage('production');setTimeout(resetProductionZoom,0)}
 function initMobileMapPan(scrollerId){
- let el=E(scrollerId);if(!el||el.dataset.panReady==='v161')return;
- el.dataset.panReady='v161';
+ let el=E(scrollerId);if(!el)return;
+ el.dataset.panReady='v164';
+ /* Mobil: natives 2D-Scrolling bleibt aktiv. */
+}
 
- let touching=false,startX=0,startY=0,startLeft=0,startTop=0,moved=false;
+function initDesktopMapPan(scrollerId){
+ let el=E(scrollerId);if(!el||el.dataset.desktopPanReady==='v164')return;
+ el.dataset.desktopPanReady='v164';
+
+ let active=false,moved=false,startX=0,startY=0,startLeft=0,startTop=0,pid=null;
  let suppressClickUntil=0;
 
- const canPan=()=>window.innerWidth<=700 && !drawMode && !editAreaId;
+ el.addEventListener('pointerdown',e=>{
+   if(window.innerWidth<=700)return;
+   if(e.pointerType==='touch')return;
+   if(e.button!==0)return;
+   if(drawMode||editAreaId)return;
+   if(e.target.closest?.('button,input,select,textarea,.searchSelectWrap'))return;
 
- el.addEventListener('touchstart',e=>{
-   if(!canPan()||e.touches.length!==1)return;
-   let t=e.touches[0];
-   touching=true;moved=false;
-   startX=t.clientX;startY=t.clientY;
+   active=true;moved=false;pid=e.pointerId;
+   startX=e.clientX;startY=e.clientY;
    startLeft=el.scrollLeft;startTop=el.scrollTop;
-   el.classList.add('mobileMapDragging');
- },{passive:true});
+   el.setPointerCapture?.(pid);
+   el.classList.add('desktopMapDragging');
+ });
 
- el.addEventListener('touchmove',e=>{
-   if(!touching||!canPan()||e.touches.length!==1)return;
-   let t=e.touches[0],dx=t.clientX-startX,dy=t.clientY-startY;
+ el.addEventListener('pointermove',e=>{
+   if(!active||e.pointerId!==pid)return;
+   let dx=e.clientX-startX,dy=e.clientY-startY;
    if(Math.abs(dx)>4||Math.abs(dy)>4)moved=true;
-   el.scrollLeft=startLeft-dx;
-   el.scrollTop=startTop-dy;
-   if(e.cancelable)e.preventDefault();
- },{passive:false});
+   if(moved){
+     el.scrollLeft=startLeft-dx;
+     el.scrollTop=startTop-dy;
+     e.preventDefault();
+   }
+ });
 
- const endTouch=()=>{
-   if(!touching)return;
+ const end=e=>{
+   if(!active)return;
    if(moved)suppressClickUntil=Date.now()+350;
-   touching=false;
-   el.classList.remove('mobileMapDragging');
+   active=false;pid=null;
+   el.classList.remove('desktopMapDragging');
  };
- el.addEventListener('touchend',endTouch,{passive:true});
- el.addEventListener('touchcancel',endTouch,{passive:true});
+ el.addEventListener('pointerup',end);
+ el.addEventListener('pointercancel',end);
+ el.addEventListener('lostpointercapture',end);
 
- /* Verhindert, dass nach einem Wisch versehentlich eine Lagerfläche geöffnet wird. */
+ /* Nach einem echten Ziehen keinen Gestell-/Flächen-Klick auslösen. */
  el.addEventListener('click',e=>{
    if(Date.now()<suppressClickUntil){
      e.preventDefault();
@@ -5691,32 +6171,13 @@ function initMobileMapPan(scrollerId){
      e.stopImmediatePropagation?.();
    }
  },true);
-
- /* Maus/Trackpad als Fallback, z.B. Android-Tablet mit Eingabegerät. */
- let active=false,pid=null,px=0,py=0,pl=0,pt=0;
- el.addEventListener('pointerdown',e=>{
-   if(e.pointerType==='touch'||!canPan())return;
-   if(e.target.closest?.('button,input,select,textarea,.searchSelectWrap'))return;
-   active=true;pid=e.pointerId;px=e.clientX;py=e.clientY;pl=el.scrollLeft;pt=el.scrollTop;
-   el.setPointerCapture?.(pid);el.classList.add('mobileMapDragging');
- });
- el.addEventListener('pointermove',e=>{
-   if(!active||e.pointerId!==pid)return;
-   el.scrollLeft=pl-(e.clientX-px);
-   el.scrollTop=pt-(e.clientY-py);
-   e.preventDefault();
- });
- const endPointer=e=>{
-   if(!active)return;
-   active=false;pid=null;el.classList.remove('mobileMapDragging');
- };
- el.addEventListener('pointerup',endPointer);
- el.addEventListener('pointercancel',endPointer);
- el.addEventListener('lostpointercapture',endPointer);
 }
+
 function initMobileMaps(){
  initMobileMapPan('mapwrap');
  initMobileMapPan('productionPlanWrap');
+ initDesktopMapPan('mapwrap');
+ initDesktopMapPan('productionPlanWrap');
 }
 
 
@@ -6326,7 +6787,7 @@ function setMapCommission(v){
 }
 function renderMapCommissionFilters(){
  ensureCommissions();
- let opts='<option value="">– Keine Kommission hervorgehoben –</option>'+st.commissions.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}${c.status==='Abgeschlossen'?' (abgeschlossen)':''}</option>`).join('');
+ let opts='<option value="">Suchen</option>'+st.commissions.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}${c.status==='Abgeschlossen'?' (abgeschlossen)':''}</option>`).join('');
  ['mapCommissionFilter','productionCommissionFilter'].forEach(id=>{let el=E(id);if(el){el.innerHTML=opts;el.value=mapCommission}});
  renderMapIdPrefix();
 }
@@ -7100,9 +7561,77 @@ function toggleProductionMoveLock(v){if(!requireAdmin())return;
  persist();renderManage()
 }
 function toggleMaterialDelete(v){if(!requireAdmin())return;ensureV24();st.settings.allowMaterialDelete=!!v;persist();renderManage()}
+
+function resetOperationalMaterialForGoLive(){
+ if(!requireAdmin())return;
+ ensureV24();
+ let pkgCount=(st.packages||[]).length;
+ let controlCount=(st.controls||[]).length;
+ let trashCount=(st.trash||[]).length;
+
+ let msg=`Betriebsstart vorbereiten?
+
+Gelöscht werden:
+• alle ${pkgCount} aktuell erfassten Material-/Paketpositionen
+• alle Reservierungen dieser Materialien
+• Lagerkontrollen (${controlCount})
+• Papierkorb-/Material-Löschhistorie (${trashCount})
+• belegte Element-IDs / laufende ID-Zähler werden für den Neustart zurückgesetzt
+
+Beibehalten werden:
+• Material-Kategorien / ID-Kategorien
+• Materialstamm
+• Standard-Lagerware
+• Material- & Preisstamm / Umbuchungspreise
+• Lagerflächen, Gestelle und Ebenen
+• Benutzer & Berechtigungen
+• Projekte und Kleinaufträge
+
+Dieser Schritt wird mit der Cloud synchronisiert.
+
+Wirklich fortfahren?`;
+ if(!confirm(msg))return;
+ let word=prompt('Zur Bestätigung bitte exakt BETRIEBSSTART eingeben:','');
+ if(word!=='BETRIEBSSTART'){alert('Abgebrochen. Es wurde nichts gelöscht.');return}
+
+ createBackup?.('Vor Betriebsstart-Reset');
+
+ st.packages=[];
+ st.controls=[];
+ st.trash=[];
+ st.activeControlId=null;
+ st.usedElementIds=[];
+ st.idCounters={};
+ if(st.idSettings&&typeof st.idSettings==='object')st.idSettings.counters={};
+
+ // Material-bezogene Auswahl-/UI-Zustände bereinigen.
+ selectedPackage='';
+ currentRack='';
+ editingPackage='';
+
+ localStorage.setItem(KEY,JSON.stringify(st));
+ refresh();
+ queueCloudSync();
+ alert('Betriebsstart-Reset vorbereitet. Materialbestand ist leer; Kategorien und Preisstamm bleiben erhalten. Die Änderung wird mit der Cloud synchronisiert.');
+}
+
+function sortedUserList(users){
+ const baseOrder=['administrator','lager','mitarbeiter'];
+ const arr=[...(users||[])];
+ return arr.sort((a,b)=>{
+   let ai=baseOrder.indexOf(String(a.name||'').trim().toLowerCase());
+   let bi=baseOrder.indexOf(String(b.name||'').trim().toLowerCase());
+   if(ai>=0||bi>=0){
+     if(ai<0)return 1;
+     if(bi<0)return -1;
+     return ai-bi;
+   }
+   return String(a.name||'').localeCompare(String(b.name||''),'de',{sensitivity:'base',numeric:true});
+ });
+}
 function renderManage(){ensureIdSettings();ensureCommissions();ensureV24();renderCloudSettings();
  if(E('userManageCard'))E('userManageCard').style.display=canAdmin()?'':'none';
- if(E('userManage'))E('userManage').innerHTML=st.users.map(u=>`<div class="manageItem"><div class="manageHead"><div><b>${esc(u.name)}</b> <span class="statusbadge ${roleClass(u.role)}">${esc(u.role)}</span><div class="muted">${u.active?'Aktiv':'Deaktiviert'}${u.id===st.activeUserId?' · aktuell angemeldet':''}</div></div><div class="toolbar"><select onchange="updateUserRole('${u.id}',this.value)"><option ${u.role==='Mitarbeiter'?'selected':''}>Mitarbeiter</option><option ${u.role==='Lagerverantwortlicher'?'selected':''}>Lagerverantwortlicher</option><option ${u.role==='Administrator'?'selected':''}>Administrator</option></select><button class="btn" onclick="openLocalPermissionEditor('${u.id}')">Berechtigungen</button><button class="btn secondary" onclick="renameUser('${u.id}')">Umbenennen</button><button class="btn ${u.active?'danger':'secondary'}" onclick="toggleUserActive('${u.id}')">${u.active?'Deaktivieren':'Aktivieren'}</button></div></div></div>`).join('');
+ if(E('userManage'))E('userManage').innerHTML=sortedUserList(st.users).map(u=>`<div class="manageItem"><div class="manageHead"><div><b>${esc(u.name)}</b> <span class="statusbadge ${roleClass(u.role)}">${esc(u.role)}</span><div class="muted">${u.active?'Aktiv':'Deaktiviert'}${u.id===st.activeUserId?' · aktuell angemeldet':''}</div></div><div class="toolbar"><select onchange="updateUserRole('${u.id}',this.value)"><option ${u.role==='Mitarbeiter'?'selected':''}>Mitarbeiter</option><option ${u.role==='Lagerverantwortlicher'?'selected':''}>Lagerverantwortlicher</option><option ${u.role==='Administrator'?'selected':''}>Administrator</option></select><button class="btn" onclick="openLocalPermissionEditor('${u.id}')">Berechtigungen</button><button class="btn secondary" onclick="renameUser('${u.id}')">Umbenennen</button><button class="btn ${u.active?'danger':'secondary'}" onclick="toggleUserActive('${u.id}')">${u.active?'Deaktivieren':'Aktivieren'}</button></div></div></div>`).join('');
  if(E('lockProductionMove')){E('lockProductionMove').checked=!!st.settings.lockProductionMove;E('lockProductionMove').disabled=!canAdmin()}
  if(E('allowDeleteMaterials'))E('allowDeleteMaterials').disabled=!canAdmin();
  if(E('allowDeleteMaterials'))E('allowDeleteMaterials').checked=!!st.settings.allowMaterialDelete;
@@ -7295,7 +7824,7 @@ function renderFullControl(){
        </div>${rows}</div>`;
    }).join('');
 
-   let finishHtml=done===total&&total?`<div class="help"><b>Alle ${total} Positionen wurden kontrolliert.</b><div class="toolbar"><button class="btn" onclick="finishControl('${c.id}')">Kontrolle abschliessen</button><button class="btn secondary" onclick="downloadControlReport('${c.id}')">Kontrollbericht CSV</button></div></div>`:'';
+   let finishHtml=done===total&&total?`<div class="help"><b>Alle ${total} Positionen wurden kontrolliert.</b><div class="toolbar"><button class="btn" onclick="finishControl('${c.id}')">Kontrolle abschliessen</button><button class="btn secondary" onclick="exportControlPDF('${c.id}')">Kontrollbericht PDF</button><button class="btn secondary" onclick="exportControlExcel('${c.id}')">Kontrollbericht Excel</button></div></div>`:'';
 
    box.innerHTML=`<h3>${esc(controlLabel(c))}</h3>
    <div class="controlMeta"><span class="controlPill">Gestartet von ${esc(c.checkedBy||'–')}</span><span class="controlPill">Aktiver Benutzer ${esc(currentUserName())}</span></div>
@@ -7305,7 +7834,7 @@ function renderFullControl(){
    ${groupHtml}
    <div class="toolbar"><button class="btn secondary" onclick="openFoundMaterial()">+ Material gefunden</button></div>`;
  }
- E('controlHistory').innerHTML=(st.controls||[]).filter(c=>c.completed&&c.type!=='standard').map(c=>{let diff=c.items.filter(i=>i.result&&i.result!=='Vorhanden').length;return `<div class="manageItem"><div class="manageHead"><div><b>${esc(controlLabel(c))}</b><div class="muted">${formatDateTime(c.completed)} · ${c.items.length} Positionen · ${diff} Abweichung(en) · gestartet ${esc(c.checkedBy||'–')} · abgeschlossen ${esc(c.completedBy||c.checkedBy||'–')}</div></div><div class="toolbar"><button class="btn secondary" onclick="controlDetails('${c.id}')">Details</button><button class="btn" onclick="downloadControlReport('${c.id}')">Bericht CSV</button></div></div></div>`}).join('')||'<p class="muted">Noch keine abgeschlossene Kontrolle.</p>'
+ E('controlHistory').innerHTML=(st.controls||[]).filter(c=>c.completed&&c.type!=='standard').map(c=>{let diff=c.items.filter(i=>i.result&&i.result!=='Vorhanden').length;return `<div class="manageItem"><div class="manageHead"><div><b>${esc(controlLabel(c))}</b><div class="muted">${formatDateTime(c.completed)} · ${c.items.length} Positionen · ${diff} Abweichung(en) · gestartet ${esc(c.checkedBy||'–')} · abgeschlossen ${esc(c.completedBy||c.checkedBy||'–')}</div></div><div class="toolbar"><button class="btn secondary" onclick="controlDetails('${c.id}')">Details</button><button class="btn" onclick="exportControlPDF('${c.id}')">PDF</button><button class="btn secondary" onclick="exportControlExcel('${c.id}')">Excel</button></div></div></div>`}).join('')||'<p class="muted">Noch keine abgeschlossene Kontrolle.</p>'
 }
 let standardControlDraft=null;
 function standardLowItems(){return (st.standardStock||[]).filter(x=>Number(x.minQty)>0&&x.lastQty!==null&&Number(x.lastQty)<Number(x.minQty))}
@@ -7493,10 +8022,76 @@ function controlDetails(cid){
 function controlItemLocation(i,p){let s=i.snapshot||{},r=p?st.racks.find(x=>x.id===p.rackId):null,l=r?.levels[p?.levelIndex];return {area:s.area||areaName(r?.areaId)||'–',rack:s.rack||r?.name||'–',level:s.level||l?.name||'–'}}
 function controlLevelSummary(c){
  let map={};c.items.forEach(i=>{let p=st.packages.find(x=>x.id===i.packageId),loc=controlItemLocation(i,p),k=[loc.area,loc.rack,loc.level].join('|||');if(!map[k])map[k]={...loc,total:0,done:0,miss:0,changed:0,found:0};let x=map[k];x.total++;if(i.result)x.done++;if(i.result==='Nicht gefunden')x.miss++;if(i.result==='Geändert')x.changed++;if(i.result==='Neu gefunden')x.found++});return Object.values(map).sort((a,b)=>(a.area+a.rack+a.level).localeCompare(b.area+b.rack+b.level,'de',{numeric:true}))}
-function downloadControlReport(cid){
- let c=st.controls.find(x=>x.id===cid);if(!c)return;let rows=[['Kontrolle','Erstellt','Abgeschlossen','Gestartet von','Abgeschlossen von','Element-ID','Material','Menge','Kommission','Pack-Code','Lagerfläche','Gestell','Ebene','Ergebnis','Kontrolliert am','Kontrolliert von']];
- c.items.forEach(i=>{let p=st.packages.find(x=>x.id===i.packageId),s=i.snapshot||{},loc=controlItemLocation(i,p);rows.push([controlLabel(c),formatDateTime(c.created),formatDateTime(c.completed),c.checkedBy||'',c.completedBy||'',s.elementId||p?.elementId||'',s.material||p?.material||'',s.qty||p?.qty||'',s.project||p?.project||'',s.packCode||p?.packCode||'',loc.area,loc.rack,loc.level,i.result||'offen',formatDateTime(i.checkedAt),i.checkedBy||''])});
- let txt=rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(';')).join('\n'),b=new Blob(['\ufeff'+txt],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='lagerkontrolle_'+(c.name||c.id).replace(/[^a-z0-9_-]+/gi,'_')+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
+function controlReportRows(cid){
+ let c=st.controls.find(x=>x.id===cid);if(!c)return null;
+ let rows=[['Kontrolle','Erstellt','Abgeschlossen','Gestartet von','Abgeschlossen von','Element-ID','Material','Menge','Kommission','Lagerfläche','Gestell','Ebene','Ergebnis','Kontrolliert am','Kontrolliert von']];
+ c.items.forEach(i=>{
+   let p=st.packages.find(x=>x.id===i.packageId),s=i.snapshot||{},loc=controlItemLocation(i,p);
+   rows.push([
+     controlLabel(c),
+     formatDateTime(c.created),
+     formatDateTime(c.completed),
+     c.checkedBy||'',
+     c.completedBy||'',
+     s.elementId||p?.elementId||'',
+     s.material||p?.material||'',
+     s.qty??p?.qty??'',
+     s.project||p?.project||'',
+     loc.area,loc.rack,loc.level,
+     i.result||'offen',
+     formatDateTime(i.checkedAt),
+     i.checkedBy||''
+   ]);
+ });
+ return {c,rows};
+}
+
+async function exportControlExcel(cid){
+ let data=controlReportRows(cid);if(!data)return;
+ let {c,rows}=data;
+ try{
+   await loadExternalScript('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',()=>!!window.XLSX);
+   let ws=XLSX.utils.aoa_to_sheet(rows);
+   ws['!cols']=[24,18,18,18,18,16,28,10,22,20,18,14,18,18,18].map(w=>({wch:w}));
+   let wb=XLSX.utils.book_new();
+   XLSX.utils.book_append_sheet(wb,ws,'Lagerkontrolle');
+   XLSX.writeFile(wb,'Lagerkontrolle_'+safePdfName(c.name||c.id)+'_'+exportDateStamp()+'.xlsx');
+ }catch(err){
+   alert('Excel-Export fehlgeschlagen:\n'+String(err.message||err));
+ }
+}
+
+async function exportControlPDF(cid){
+ let data=controlReportRows(cid);if(!data)return;
+ let {c,rows}=data,head=[rows[0]],body=rows.slice(1);
+ try{
+   await loadExternalScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',()=>!!window.jspdf?.jsPDF);
+   await loadExternalScript('https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js',()=>!!window.jspdf?.jsPDF?.API?.autoTable);
+   const {jsPDF}=window.jspdf;
+   let doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a3'});
+   doc.setFontSize(15);
+   doc.text(controlLabel(c),14,13);
+   doc.setFontSize(8);
+   doc.text(
+     `Erstellt: ${formatDateTime(c.created)} · Abgeschlossen: ${formatDateTime(c.completed)} · Positionen: ${body.length} · Gestartet von: ${c.checkedBy||'–'} · Abgeschlossen von: ${c.completedBy||'–'}`,
+     14,19
+   );
+   doc.autoTable({
+     head,body,startY:24,
+     styles:{fontSize:6.3,cellPadding:1.2,overflow:'linebreak',valign:'middle'},
+     headStyles:{fontStyle:'bold'},
+     margin:{left:8,right:8,bottom:10},
+     theme:'grid',
+     didDrawPage:()=>{
+       let page=doc.internal.getNumberOfPages();
+       doc.setFontSize(7);
+       doc.text(`Seite ${page}`,doc.internal.pageSize.getWidth()-22,doc.internal.pageSize.getHeight()-5);
+     }
+   });
+   doc.save('Lagerkontrolle_'+safePdfName(c.name||c.id)+'_'+exportDateStamp()+'.pdf');
+ }catch(err){
+   alert('PDF-Export fehlgeschlagen:\n'+String(err.message||err));
+ }
 }
 
 function renderControl(){showControlMode(controlMode)}
