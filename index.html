@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Künzli Lagerverwaltung 1.1</title>
+<title>Künzli Lagerverwaltung V198 Test</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -13,7 +13,7 @@ header{background:#fff;border-bottom:1px solid var(--line);padding:11px 16px;dis
 .page{display:none;padding:14px}.page.active{display:block}.grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:14px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px}.muted{color:var(--mut);font-size:13px}
 .btn{border:0;border-radius:9px;padding:9px 11px;background:var(--g);color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#edf2ef;color:#23372d;border:1px solid var(--line)}.btn.danger{background:#fff0ee;color:#a33427;border:1px solid #efc3be}.btn.red{background:var(--red)}
 .mapwrap{overflow:hidden;border-radius:12px;background:#dfe4df}.mapin{position:relative;min-width:0;line-height:0;user-select:none;transform-origin:center center}.mapin img{width:100%;display:block;-webkit-user-drag:none;user-drag:none}.areasvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.areaPoly{fill:rgba(112,184,66,.28);stroke:white;stroke-width:.42;vector-effect:non-scaling-stroke;cursor:pointer}.areaPoly:hover{fill:rgba(112,184,66,.42)}.areaPoly.reserved{fill:rgba(242,165,22,.34);stroke:#f2a516;stroke-width:1.05}.areaPoly.selected{fill:rgba(223,52,40,.45);stroke:#df3428;stroke-width:1.05}.areaPoly.commissionMatch{fill:rgba(133,70,180,.52);stroke:#7a38ad;stroke-width:1.15}.areaPoly.commissionMatch.selected{fill:rgba(223,52,40,.55);stroke:#df3428;stroke-width:1.2}
+.areaPoly{fill:var(--area-fill,rgba(112,184,66,.28));stroke:white;stroke-width:.42;vector-effect:non-scaling-stroke;cursor:pointer}.areaPoly:hover{fill:rgba(112,184,66,.42)}.areaPoly.reserved{fill:rgba(242,165,22,.34);stroke:#f2a516;stroke-width:1.05}.areaPoly.selected{fill:rgba(223,52,40,.45);stroke:#df3428;stroke-width:1.05}.areaPoly.commissionMatch{fill:rgba(133,70,180,.52);stroke:#7a38ad;stroke-width:1.15}.areaPoly.commissionMatch.selected{fill:rgba(223,52,40,.55);stroke:#df3428;stroke-width:1.2}
 .productionHotspot.commissionMatch{fill:rgba(133,70,180,.58);stroke:#7a38ad;stroke-width:.55}
 .areaPoly.editing{fill:rgba(74,119,212,.25);stroke:#4a77d4}.areaLabel{font-size:1.4px;font-weight:800;fill:white;paint-order:stroke;stroke:#173f32;stroke-width:.65px;stroke-linejoin:round;pointer-events:none}
 .drawDot{fill:#fff;stroke:#4a77d4;stroke-width:.5;cursor:grab}.drawLine{fill:rgba(74,119,212,.16);stroke:#4a77d4;stroke-width:.45;stroke-dasharray:1 1}.editDot{fill:#fff;stroke:#df3428;stroke-width:.55;cursor:grab}.controlCard{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:9px}.ok{background:#e7f3e2}.miss{background:#f4e3e1}.changed{background:#fff1d7}.progress{height:12px;background:#e7ebe8;border-radius:999px;overflow:hidden}.progress>div{height:100%;background:var(--g)}.idbox{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:12px}.controlAreaBanner{background:#1f5f38;color:white;border-radius:12px;padding:14px 16px;margin:10px 0 12px;font-size:22px;font-weight:900;letter-spacing:.2px}.controlAreaBanner small{display:block;font-size:11px;opacity:.82;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}.controlRackLine{font-size:16px;font-weight:800;margin-bottom:12px;padding:9px 11px;background:#f1f4f2;border-radius:9px}.sumBox{margin-top:14px;padding:14px;border:2px solid var(--g);border-radius:12px;background:#f5faf6}.sumGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;align-items:start}.sumVal{font-size:22px;font-weight:900}.moveCols{display:flex;align-items:center;gap:4px;white-space:nowrap}.moveBtn{border:0;background:transparent;padding:3px 5px;font-size:14px;cursor:pointer;border-radius:5px}.moveBtn:hover{background:#eef2ef}.invHeadCell{user-select:none}.dragHint{font-size:12px;color:var(--muted);margin-top:6px}@media(max-width:720px){.sumGrid{grid-template-columns:1fr}}
@@ -1736,7 +1736,145 @@ body.fullscreenLogoActive .modal.open .manageHead{
 
 /* V183: Flächen auf Karten zuverlässig anklickbar */
 .areaLabel,.areaLockedText,.areaReserveText,.areaReserveBox{pointer-events:none!important}
+.areaLabel.movable{pointer-events:auto!important;cursor:grab!important;touch-action:none}
+.areaLabel.movable:active{cursor:grabbing!important}
 .areaPoly{pointer-events:auto!important;cursor:pointer}
+
+
+/* V184: Gestelle innerhalb einer Lagerfläche frei ordnen */
+.rackOrderToolbar{margin:10px 0 12px}
+.rackOrderList{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.rackOrderItem{
+  display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:8px;
+  border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 8px;
+}
+.rackOrderItem.dragging{opacity:.55}
+.rackOrderHandle{
+  display:flex;align-items:center;justify-content:center;min-height:38px;
+  border:1px solid var(--line);border-radius:8px;background:#f6f8f7;
+  font-size:20px;cursor:grab;touch-action:none;user-select:none
+}
+.rackOrderHandle:active{cursor:grabbing}
+.rackOrderName{font-weight:700;min-width:0}
+.rackOrderActions{display:flex;gap:5px}
+.rackOrderActions .btn{padding:7px 10px;min-width:38px}
+@media(max-width:600px){
+ .rackOrderItem{grid-template-columns:40px minmax(0,1fr) auto}
+ .rackOrderActions .btn{padding:7px 8px}
+}
+
+
+/* V185: Sperrstatus für Fläche, Gestell und Ebene */
+.lockedName{color:#c62828!important}
+.lockStateBadge{
+ display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;
+ background:#fde7e7;color:#b71c1c;font-size:11px;font-weight:800;vertical-align:middle
+}
+.levelLocked{
+ border-color:#e0a0a0!important;
+ background:#fff7f7!important;
+}
+.levelLocked .levelTitle,.levelLocked .levelName,.levelLocked h3,.levelLocked h4{
+ color:#c62828!important
+}
+
+
+/* V187 – erweiterte Flächenbearbeitung */
+.areaEditPanel{display:flex;flex-direction:column;gap:14px}
+.areaEditPanel h2{margin:0}
+.areaEditSection{padding-top:12px;border-top:1px solid var(--line)}
+.areaEditSection:first-of-type{border-top:0;padding-top:0}
+.areaEditSection label{display:block;font-weight:800;margin-bottom:6px}
+.areaEditCoords{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.areaEditAppearance{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.areaEditAppearance input[type="color"]{width:100%;height:42px;padding:3px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.areaEditHint{padding:10px 12px;border:1px solid #bcd7e8;background:#f3f9fc;border-radius:9px;line-height:1.35}
+.areaEditHint b{display:block;margin-bottom:4px;color:#164d45}
+.areaEditActions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.areaEditActions .btn{width:100%}
+@media(max-width:700px){
+ .areaEditAppearance{grid-template-columns:1fr 1fr}
+ .areaEditAppearance>div:last-child{grid-column:1/-1}
+}
+
+/* V189: heutiger Tag in der Mitarbeiterplanung */
+.staffingToday,
+.staffingCalendar td.staffingToday,
+.staffingCalendarCell.staffingToday{
+  background:#dff3df!important;
+  box-shadow:inset 0 0 0 2px #8fc98f!important;
+}
+.staffingToday .staffingDayNum,
+.staffingToday .dayNum,
+.staffingToday strong{
+  font-weight:900!important;
+}
+
+/* V196: breitere Navigation im Holzlager */
+@media(min-width:761px){
+  .sidebar{
+    width:150px!important;
+    min-width:150px!important;
+  }
+  .sidebar .navbtn,
+  .sidebar button{
+    padding-left:12px!important;
+    padding-right:12px!important;
+    box-sizing:border-box!important;
+  }
+  .sidebar .navbtn{
+    white-space:normal!important;
+    overflow:visible!important;
+    word-break:normal!important;
+  }
+}
+
+
+/* V197: Navigation breit genug für „Umbuchungen“ inkl. Randabstand */
+@media(min-width:761px){
+  .sidebar{
+    width:180px!important;
+    min-width:180px!important;
+    flex:0 0 180px!important;
+  }
+  .sidebar .navbtn,
+  .sidebar button{
+    width:calc(100% - 16px)!important;
+    margin-left:8px!important;
+    margin-right:8px!important;
+    padding-left:10px!important;
+    padding-right:10px!important;
+    box-sizing:border-box!important;
+  }
+  .sidebar .navbtn{
+    white-space:nowrap!important;
+    overflow:visible!important;
+    font-size:18px!important;
+  }
+}
+
+
+/* V198: tatsächliche Holzlager-Navigation verbreitern */
+@media(min-width:901px){
+  .app{
+    grid-template-columns:170px minmax(0,1fr)!important;
+  }
+  .app > nav{
+    width:170px!important;
+    min-width:170px!important;
+    box-sizing:border-box!important;
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+  .app > nav .nav{
+    width:100%!important;
+    padding-left:10px!important;
+    padding-right:10px!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+}
 
 </style><link rel="apple-touch-icon" sizes="180x180" href="./kuenzli-app-icon.png">
 <link rel="icon" type="image/png" href="./kuenzli-app-icon.png">
@@ -1748,8 +1886,8 @@ body.fullscreenLogoActive .modal.open .manageHead{
 <script>
 window.APP_RELEASE = {
   name: 'Künzli Lagerverwaltung',
-  version: '1.1',
-  basis: 'V183',
+  version: '1.0',
+  basis: 'V182',
   releasedAt: '2026-09-08'
 };
 </script>
@@ -1999,6 +2137,16 @@ window.APP_RELEASE = {
    <button class="btn" onclick="openTransferMaterial()">+ Material</button>
   </div>
   <div id="transferMaterialList"></div>
+<div class="manageSubsection" style="margin-top:18px">
+  <div class="manageHead">
+    <div>
+      <h3 style="margin:0">IMMER AG – Preisstamm</h3>
+      <p class="muted" style="margin:4px 0 0">Separater Materialstamm für Kleinaufträge.</p>
+    </div>
+    <button class="btn" type="button" onclick="openImmerMaterialEditor()">+ IMMER AG Material</button>
+  </div>
+  <div id="immerPriceMasterList"></div>
+</div>
  </div>
 </div>
 </section>
@@ -2071,8 +2219,8 @@ window.APP_RELEASE = {
  </details>
 
  <div class="help" style="margin:14px 0">
-   <b>Betriebsversion 1.1</b>
-   <div class="muted">Freigegebene Basis: V183 · Betriebsstart 08.09.2026</div>
+   <b>Betriebsversion 1.0</b>
+   <div class="muted">Freigegebene Basis: V182 · Betriebsstart 08.09.2026</div>
  </div>
 
  <details class="manageGroup">
@@ -2306,7 +2454,12 @@ window.APP_RELEASE = {
 <label class="f">Menge<input id="mQty" inputmode="numeric">
 <button class="btn secondary" type="button" style="margin-top:7px" onclick="openCameraCounter()">📷 Kamerazählung</button>
 <span id="counterSavedPhotoHost"></span></label><label class="f">Anzahl gleiche Paletten<input id="mBatchCount" type="number" min="1" step="1" value="1" placeholder="z. B. 20"><small class="muted">Nur bei Neuerfassung: erstellt jede Palette als eigenen Eintrag mit eigener Element-ID.</small></label><label class="f">Paketstatus<select id="mStatus"><option>Kommission</option><option>Lagerware</option><option>aufgebraucht</option></select></label><div class="f span2">Verwendungsort<div class="toolbar" style="margin-top:4px"><label><input type="checkbox" id="mUseProd"> Produktion</label><label><input type="checkbox" id="mUseSite"> Baustelle</label></div></div>
-<label class="f span2">Kommission<select id="mProj"><option value="">– Keine Kommission –</option></select></label>
+<label class="f span2">Kommission
+<select id="mProj"><option value="">– Keine Kommission –</option></select>
+<div class="toolbar" style="margin-top:8px">
+  <button class="btn secondary" type="button" onclick="quickAddCommissionFromMaterial()">+ Neue Kommission</button>
+</div>
+</label>
 <label class="f">ID-Kategorie<select id="mCat" onchange="updateElementIdPreview()">
 <option value="">– Kategorie wählen –</option><option value="A">DUO / BSH / KVH</option><option value="B">Werkstoffplatten Holz</option><option value="C">Werkstoffplatten NICHT Holz</option><option value="E">Dämmung</option><option value="TB">Terrassenbretter</option><option value="D">Schalung / Massivholzbretter aller Arten</option>
 </select></label>
@@ -2494,7 +2647,7 @@ window.APP_RELEASE = {
     <button class="btn secondary" type="button" onclick="openSmallOrderMaterialMaster()">+ Neues Material im Stamm</button>
     <button class="btn secondary" type="button" onclick="addSmallOrderMaterial()">+ Materialzeile</button>
    </div>
-  </div><p class="muted" style="margin:5px 0 4px">Artikel aus dem Material- & Preisstamm auswählen. Der Rapportpreis wird automatisch eingesetzt.</p>
+  </div><p class="muted" style="margin:5px 0 4px">Material über Künzli oder IMMER AG auswählen. Der Rapportpreis wird automatisch eingesetzt.</p>
   <div id="sorMaterialMasterState" class="muted" style="margin-bottom:8px"></div>
   <div class="smallOrderMaterialHead">
    <span>Pos.</span><span>Artikel</span><span>Einheit</span><span>Menge</span><span>Stk.-Preis</span><span>Total</span><span></span>
@@ -3021,6 +3174,32 @@ function commissionOptions(selected=''){
 function toggleCommissionStatus(id){if(!requireStructure())return;
  let c=st.commissions.find(x=>x.id===id);if(!c)return;
  c.status=c.status==='Abgeschlossen'?'Aktiv':'Abgeschlossen';persist();renderManage()
+}
+
+
+function quickAddCommissionFromMaterial(){
+ if(!requireStructure())return;
+ ensureCommissions();
+ let n=prompt('Name / Nummer der neuen Kommission:');
+ if(n===null)return;
+ n=n.trim();if(!n)return;
+ if(st.commissions.some(c=>(c.name||'').toLowerCase()===n.toLowerCase())){
+   alert('Diese Kommission existiert bereits.');
+   let existing=st.commissions.find(c=>(c.name||'').toLowerCase()===n.toLowerCase());
+   if(existing){
+     E('mProj').innerHTML=commissionOptions(existing.name);
+     E('mProj').value=existing.name;
+     E('mProj').dispatchEvent(new Event('change',{bubbles:true}));
+   }
+   return;
+ }
+ let c={id:'k'+Date.now(),name:n,status:'Aktiv',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+ st.commissions.push(c);
+ persist();
+ E('mProj').innerHTML=commissionOptions(c.name);
+ E('mProj').value=c.name;
+ E('mProj').dispatchEvent(new Event('change',{bubbles:true}));
+ queueCloudSync?.();
 }
 
 function addCommission(){if(!requireStructure())return;
@@ -3869,6 +4048,126 @@ function smallOrderPriceMaterials(){
    .slice()
    .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de-CH'));
 }
+
+
+function openImmerMaterialEditor(id=''){
+ if(!requireStructure())return;
+ ensureV24();
+ st.smallOrderImmerMaterials=Array.isArray(st.smallOrderImmerMaterials)?st.smallOrderImmerMaterials:[];
+ let m=id?st.smallOrderImmerMaterials.find(x=>String(x.id)===String(id)):null;
+ let name=prompt('IMMER AG – Materialname:',m?.name||'');
+ if(name===null)return;name=name.trim();if(!name)return;
+ let unit=prompt('Einheit:',m?.unit||'Stk');
+ if(unit===null)return;unit=unit.trim()||'Stk';
+ let priceTxt=prompt('Preis exkl. MwSt.:',m?.price??'');
+ if(priceTxt===null)return;
+ let price=Number(String(priceTxt).replace(',','.'));
+ if(!Number.isFinite(price)||price<0){alert('Bitte einen gültigen Preis eingeben.');return}
+ if(m){
+   m.name=name;m.unit=unit;m.price=price;m.updatedAt=new Date().toISOString();
+ }else{
+   m={id:'immer'+Date.now(),name,unit,price,active:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+   st.smallOrderImmerMaterials.push(m);
+ }
+ persist();queueCloudSync?.();
+ renderImmerPriceMaster?.();
+}
+function deleteImmerMaterial(id){
+ if(!requireStructure())return;
+ ensureV24();
+ let m=(st.smallOrderImmerMaterials||[]).find(x=>String(x.id)===String(id));if(!m)return;
+ if(!confirm(`IMMER AG Material „${m.name}“ wirklich löschen?`))return;
+ st.smallOrderImmerMaterials=st.smallOrderImmerMaterials.filter(x=>String(x.id)!==String(id));
+ persist();queueCloudSync?.();renderImmerPriceMaster?.();
+}
+function renderImmerPriceMaster(){
+ let box=E('immerPriceMasterList');if(!box)return;
+ let mats=smallOrderImmerMaterials();
+ box.innerHTML=mats.length?mats.map(m=>`<div class="manageRow">
+   <div><b>${esc(m.name)}</b><div class="muted">${esc(m.unit||'Stk')} · CHF ${numSO(m.price).toFixed(2)}</div></div>
+   <div class="toolbar">
+     <button class="btn secondary" type="button" onclick="openImmerMaterialEditor('${m.id}')">Bearbeiten</button>
+     <button class="btn danger" type="button" onclick="deleteImmerMaterial('${m.id}')">Löschen</button>
+   </div>
+ </div>`).join(''):'<p class="muted">Noch keine IMMER AG Materialien erfasst.</p>';
+}
+
+function smallOrderImmerMaterials(){
+ ensureV24();
+ st.smallOrderImmerMaterials=Array.isArray(st.smallOrderImmerMaterials)?st.smallOrderImmerMaterials:[];
+ return st.smallOrderImmerMaterials
+   .filter(x=>x&&x.active!==false&&String(x.name||'').trim())
+   .slice().sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de-CH'));
+}
+
+
+
+function toggleSmallOrderNoMarkup(i,checked){
+ let row=smallOrderMaterialDraft[i];if(!row)return;
+ row.noMarkup=!!checked;
+ if(row.materialSource==='IMMER AG'){
+   row.noMarkup=false;
+ }else if(row.materialId){
+   let mat=(st.internalMaterials||[]).find(x=>String(x.id)===String(row.materialId));
+   if(mat)row.unitPrice=(numSO(mat.price)*(row.noMarkup?1:1.5)).toFixed(2);
+ }
+ renderSmallOrderMaterialRows();
+ recalcSmallOrderTotals();
+}
+
+function quickAddKuenzliMaterialForSmallOrder(i){
+ if(!requireStructure())return;
+ ensureV24();
+ st.internalMaterials=Array.isArray(st.internalMaterials)?st.internalMaterials:[];
+ let name=prompt('Künzli – Materialname:');
+ if(name===null)return;name=name.trim();if(!name)return;
+ let existing=st.internalMaterials.find(x=>(x.name||'').trim().toLowerCase()===name.toLowerCase());
+ if(existing){
+   selectSmallOrderMaterial(i,existing.id);return;
+ }
+ let unit=prompt('Einheit:','Stk');if(unit===null)return;unit=unit.trim()||'Stk';
+ let priceTxt=prompt('EK-Preis exkl. MwSt.:','');if(priceTxt===null)return;
+ let price=Number(String(priceTxt).replace(',','.'));
+ if(!Number.isFinite(price)||price<0){alert('Bitte einen gültigen EK-Preis eingeben.');return}
+ let m={id:'im'+Date.now(),name,unit,price,active:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+ st.internalMaterials.push(m);
+ persist();queueCloudSync?.();
+ selectSmallOrderMaterial(i,m.id);
+}
+
+function quickAddImmerMaterialForSmallOrder(i){
+ if(!requireStructure())return;
+ ensureV24();
+ st.smallOrderImmerMaterials=Array.isArray(st.smallOrderImmerMaterials)?st.smallOrderImmerMaterials:[];
+ let name=prompt('IMMER AG – Materialname:');
+ if(name===null)return;name=name.trim();if(!name)return;
+ let existing=st.smallOrderImmerMaterials.find(x=>(x.name||'').trim().toLowerCase()===name.toLowerCase());
+ if(existing){
+   selectSmallOrderImmerMaterial(i,existing.id);return;
+ }
+ let unit=prompt('Einheit:','Stk');if(unit===null)return;unit=unit.trim()||'Stk';
+ let priceTxt=prompt('Preis exkl. MwSt.:','');if(priceTxt===null)return;
+ let price=Number(String(priceTxt).replace(',','.'));
+ if(!Number.isFinite(price)||price<0){alert('Bitte einen gültigen Preis eingeben.');return}
+ let m={id:'immer'+Date.now(),name,unit,price,active:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+ st.smallOrderImmerMaterials.push(m);
+ persist();queueCloudSync?.();
+ selectSmallOrderImmerMaterial(i,m.id);
+}
+
+function selectSmallOrderImmerMaterial(i,id){
+ let row=smallOrderMaterialDraft[i];if(!row)return;
+ let mat=smallOrderImmerMaterials().find(x=>String(x.id)===String(id));
+ if(!mat)return;
+ row.materialId=mat.id;
+ row.materialSource='IMMER AG';
+ row.noMarkup=false;
+ row.article=mat.name||'';
+ row.unit=mat.unit||'Stk';
+ row.unitPrice=numSO(mat.price).toFixed(2);
+ renderSmallOrderMaterialRows();recalcSmallOrderTotals();
+}
+
 function selectSmallOrderMaterial(i,id){
  ensureV24();
  let row=smallOrderMaterialDraft[i];if(!row)return;
@@ -3877,10 +4176,11 @@ function selectSmallOrderMaterial(i,id){
    row.materialId='';row.article='';row.unit='Stk';row.unitPrice='';
  }else{
    row.materialId=mat.id;
+   row.materialSource='Künzli';
    row.article=mat.name||'';
    row.unit=mat.unit||'Stk';
    // Verkaufspreis Kleinauftrag = Stammpreis + 50 %. Der Zuschlag wird in der Oberfläche nicht separat ausgewiesen.
-   row.unitPrice=(numSO(mat.price)*1.5).toFixed(2);
+   row.unitPrice=(numSO(mat.price)*(row.noMarkup?1:1.5)).toFixed(2);
  }
  renderSmallOrderMaterialRows();recalcSmallOrderTotals();
 }
@@ -3891,10 +4191,26 @@ function renderSmallOrderMaterialRows(){
  if(state)state.textContent=mats.length?`${mats.length} Artikel aus dem Material- & Preisstamm verfügbar.`:'Keine Artikel im Material- & Preisstamm gefunden.';
  b.innerHTML=smallOrderMaterialDraft.map((x,i)=>`<div class="smallOrderMaterialRow">
   <div><input aria-label="Position" value="${esc(x.pos||'')}" oninput="updateSmallOrderMaterial(${i},'pos',this.value)"></div>
-  <div class="matArticle"><select onchange="selectSmallOrderMaterial(${i},this.value)">
-    <option value="">Material auswählen …</option>
-    ${mats.map(mat=>`<option value="${esc(mat.id)}" ${(x.materialId===mat.id||(!x.materialId&&x.article===mat.name))?'selected':''}>${esc(mat.name||'')}</option>`).join('')}
-  </select></div>
+  <div class="matArticle">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px">
+      <label style="display:block;font-size:12px;font-weight:900;margin:0">Künzli</label>
+      <label class="compactCheck" style="margin:0;font-size:12px;white-space:nowrap">
+        <input type="checkbox" ${x.materialSource!=='IMMER AG'&&x.noMarkup?'checked':''} onchange="toggleSmallOrderNoMarkup(${i},this.checked)">
+        ohne Zuschlag
+      </label>
+    </div>
+    <select onchange="selectSmallOrderMaterial(${i},this.value)">
+      <option value="">Suchen</option>
+      ${mats.map(mat=>`<option value="${esc(mat.id)}" ${(x.materialSource!=='IMMER AG'&&(x.materialId===mat.id||(!x.materialId&&x.article===mat.name)))?'selected':''}>${esc(mat.name||'')}</option>`).join('')}
+    </select>
+    <button class="btn secondary" style="margin-top:6px" type="button" onclick="quickAddKuenzliMaterialForSmallOrder(${i})">+ Neues Künzli Material</button>
+    <label style="display:block;font-size:12px;font-weight:900;margin:8px 0 4px">IMMER AG</label>
+    <select onchange="selectSmallOrderImmerMaterial(${i},this.value)">
+      <option value="">Suchen</option>
+      ${smallOrderImmerMaterials().map(mat=>`<option value="${esc(mat.id)}" ${(x.materialSource==='IMMER AG'&&x.materialId===mat.id)?'selected':''}>${esc(mat.name||'')}</option>`).join('')}
+    </select>
+    <button class="btn secondary" style="margin-top:6px" type="button" onclick="quickAddImmerMaterialForSmallOrder(${i})">+ Neues IMMER AG Material</button>
+  </div>
   <div><input aria-label="Einheit" value="${esc(x.unit||'')}" readonly></div>
   <div><input aria-label="Menge" inputmode="decimal" value="${esc(x.qty||'')}" oninput="updateSmallOrderMaterial(${i},'qty',this.value)"></div>
   <div><input aria-label="Stückpreis" inputmode="decimal" value="${esc(x.unitPrice||'')}" readonly></div>
@@ -4362,6 +4678,7 @@ function projectCommissionCardsHtml(p){
  }).join('')}</div>`;
 }
 function openProjectDetail(id){
+ setTimeout(markStaffingToday,0);
  if(!hasProjectAccess(id)){alert('Für dieses Projekt besteht keine Freigabe.');return}
  let p=projectById(id);if(!p)return;
  currentProjectId=id;
@@ -4608,6 +4925,17 @@ function defaultHoursForDate(dateStr){
  if(day===5)return 8;
  return 0;
 }
+function localTodayKey(){
+ let d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+ return `${y}-${m}-${day}`;
+}
+
+function markStaffingToday(){
+ let key=localTodayKey();
+ document.querySelectorAll(`[data-date="${key}"]`).forEach(el=>{
+   if(el.closest('.staffingCalendar,.staffingCalendarWrap,#staffingCalendar,.staffingMonths'))el.classList.add('staffingToday');
+ });
+}
 function staffingCapacityDay(d){return Math.max(0,Number(d.employees)||0)*Math.max(0,Number(d.hoursPerEmployee)||0)}
 function sortedStaffingDays(p,commissionId=''){
  let c=commissionId?(ensureProjectCommissions(p).find(x=>x.id===commissionId)):activeProjectCommission(p);
@@ -4722,7 +5050,7 @@ function renderStaffingCalendar(){
    let blanks='<div class="staffDay empty"></div>'.repeat(offset);
    let cells=days.map(d=>{
      let dt=dateAtNoon(d.date),dow=dt.getDay(),weekend=dow===0||dow===6,off=offPeriodForDate(d.date);
-     let cls='staffDay'+(weekend?' weekend':'')+(off?' off':'');
+     let cls='staffDay'+(weekend?' weekend':'')+(off?' off':'')+(d.date===localTodayKey()?' staffingToday':'');
      let label=off?(off.type||'Frei'):(weekend?'Wochenende':'');
      return `<div class="${cls}">
        <div class="staffDayHead"><span class="staffDayNum">${dt.getDate()}</span><span class="staffDayLabel">${esc(label)}</span></div>
@@ -6821,8 +7149,14 @@ function renderOneAreaMap(mapType){
    let commissionMatch=areaHasCommission(a,mapCommission);
    let cls='areaPoly'+(reservedPackages.length?' reserved':'')+(commissionMatch?' commissionMatch':'')+(isSelected?' selected':'')+(a.locked?' locked':'');
    let displayPoints=mapDisplayPoints(mapType,a.points);
-   parts+=`<polygon class="${cls}" points="${displayPoints.map(p=>p.join(',')).join(' ')}" onclick="openArea('${a.id}')"></polygon>`;
-   let c=centroid(displayPoints);parts+=`<text class="areaLabel" x="${c[0]}" y="${c[1]}" text-anchor="middle">${esc(a.name)}</text>`;
+   let areaFill=(a.areaColor&&/^#[0-9a-f]{6}$/i.test(a.areaColor))?`${a.areaColor}73`:'rgba(112,184,66,.28)';
+   parts+=`<polygon class="${cls}" style="--area-fill:${areaFill}" points="${displayPoints.map(p=>p.join(',')).join(' ')}" onclick="openArea('${a.id}')"></polygon>`;
+   let c=(Number.isFinite(Number(a.labelX))&&Number.isFinite(Number(a.labelY)))
+     ? mapDisplayPoints(mapType,[[Number(a.labelX),Number(a.labelY)]])[0]
+     : centroid(displayPoints);
+   let labelColor=a.locked?'#c62828':(a.labelColor||'#ffffff');
+   let labelPx=Math.max(10,Math.min(24,Number(a.labelFontSize)||14));
+   parts+=`<text class="areaLabel ${editAreaId===a.id?'movable':''} ${a.locked?'lockedName':''}" style="fill:${labelColor};font-size:${(labelPx/10).toFixed(2)}px" data-area-label="${a.id}" x="${c[0]}" y="${c[1]}" text-anchor="middle">${esc(a.name)}</text>`;
    if(a.locked)parts+=`<text class="areaLockedText" x="${c[0]}" y="${c[1]+1.65}" text-anchor="middle">GESPERRT</text>`;
    if(reservedPackages.length){
      let total=reservedPackages.reduce((s,p)=>s+reservedQty(p),0),txt=`RESERVIERT ${Number.isInteger(total)?total:total.toFixed(2)}`;
@@ -6864,19 +7198,29 @@ function renderAreas(){updateDefectBadge();updateStandardLowBadge();
 
 function bindAreaSvg(id,mapType){
  let svg=E(id);if(!svg)return;
+ let draggingLabel=false;
  svg.addEventListener('pointerdown',e=>{
+   if(editAreaId && e.target.classList.contains('areaLabel') && e.target.dataset.areaLabel===editAreaId){
+     draggingLabel=true;e.target.setPointerCapture?.(e.pointerId);e.preventDefault();e.stopPropagation();return;
+   }
    if(!editAreaId || !e.target.classList.contains('editDot'))return;
    let a=st.areas.find(x=>x.id===editAreaId);if(!a||areaMapType(a)!==mapType)return;
    dragPoint=+e.target.dataset.p;e.target.setPointerCapture?.(e.pointerId);e.preventDefault();e.stopPropagation();
  });
  svg.addEventListener('pointermove',e=>{
-   if(!editAreaId||dragPoint<0)return;
+   if(!editAreaId)return;
    let a=st.areas.find(x=>x.id===editAreaId);if(!a||areaMapType(a)!==mapType)return;
    let r=svg.getBoundingClientRect(),x=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100)),y=Math.max(0,Math.min(100,(e.clientY-r.top)/r.height*100));
    let p=mapType==='production'?productionStoredPoint([x,y]):[x,y];
+   if(draggingLabel){
+     a.labelX=+p[0].toFixed(2);a.labelY=+p[1].toFixed(2);
+     renderAreas();syncAreaEditCoordinateFields(a);e.preventDefault();return;
+   }
+   if(dragPoint<0)return;
    a.points[dragPoint]=[+p[0].toFixed(2),+p[1].toFixed(2)];renderAreas();e.preventDefault();
  });
- svg.addEventListener('pointerup',()=>{dragPoint=-1});
+ svg.addEventListener('pointerup',()=>{dragPoint=-1;draggingLabel=false});
+ svg.addEventListener('pointercancel',()=>{dragPoint=-1;draggingLabel=false});
  svg.addEventListener('click',e=>{
    if(!drawMode||drawingMap!==mapType)return;
    let r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;
@@ -6887,16 +7231,116 @@ function bindAreaSvg(id,mapType){
 bindAreaSvg('areaSvg','outside');
 bindAreaSvg('productionAreaSvg','production');
 
+let areaEditBackup=null;
+
+function areaCurrentLabelStoredPoint(a){
+ if(Number.isFinite(Number(a.labelX))&&Number.isFinite(Number(a.labelY)))return [Number(a.labelX),Number(a.labelY)];
+ let pts=a.points||[];
+ if(!pts.length)return [50,50];
+ return [+(pts.reduce((s,p)=>s+Number(p[0]||0),0)/pts.length).toFixed(2),
+         +(pts.reduce((s,p)=>s+Number(p[1]||0),0)/pts.length).toFixed(2)];
+}
+function syncAreaEditCoordinateFields(a){
+ let p=areaCurrentLabelStoredPoint(a),x=E('areaEditLabelX'),y=E('areaEditLabelY');
+ if(x&&document.activeElement!==x)x.value=p[0];
+ if(y&&document.activeElement!==y)y.value=p[1];
+}
+function updateAreaEditPreview(){
+ let a=st.areas.find(x=>x.id===editAreaId);if(!a)return;
+ let name=E('areaEditName')?.value.trim();
+ if(name)a.name=name;
+ let x=Number(E('areaEditLabelX')?.value),y=Number(E('areaEditLabelY')?.value);
+ if(Number.isFinite(x))a.labelX=Math.max(0,Math.min(100,x));
+ if(Number.isFinite(y))a.labelY=Math.max(0,Math.min(100,y));
+ let col=E('areaEditColor')?.value;if(col)a.areaColor=col;
+ let txt=E('areaEditTextColor')?.value;if(txt)a.labelColor=txt;
+ let fs=Number(E('areaEditFontSize')?.value);if(Number.isFinite(fs))a.labelFontSize=fs;
+ renderAreas();
+}
+function resetAreaEditLabelPosition(){
+ let a=st.areas.find(x=>x.id===editAreaId);if(!a)return;
+ delete a.labelX;delete a.labelY;
+ syncAreaEditCoordinateFields(a);renderAreas();
+}
+function renderAreaEditPanel(a,mt){
+ let p=areaCurrentLabelStoredPoint(a),side=sideForMap(mt);if(!side)return;
+ side.innerHTML=`<div class="areaEditPanel">
+   <h2>Fläche bearbeiten</h2>
+
+   <div class="areaEditSection">
+     <label for="areaEditName">Name</label>
+     <input id="areaEditName" value="${esc(a.name)}" oninput="updateAreaEditPreview()">
+   </div>
+
+   <div class="areaEditSection">
+     <label>Position der Beschriftung</label>
+     <div class="areaEditCoords">
+       <div><span class="muted">X</span><input id="areaEditLabelX" type="number" step="0.1" min="0" max="100" value="${p[0]}" oninput="updateAreaEditPreview()"></div>
+       <div><span class="muted">Y</span><input id="areaEditLabelY" type="number" step="0.1" min="0" max="100" value="${p[1]}" oninput="updateAreaEditPreview()"></div>
+     </div>
+   </div>
+
+   <div class="areaEditHint">
+     <b>↔ Beschriftung verschieben</b>
+     Ziehe den Namen direkt auf der Karte an die gewünschte Position.
+     <div style="margin-top:8px"><button class="btn secondary" type="button" onclick="resetAreaEditLabelPosition()">Auf Flächenmitte zurücksetzen</button></div>
+   </div>
+
+   <div class="areaEditSection">
+     <label>Darstellung</label>
+     <div class="areaEditAppearance">
+       <div><span class="muted">Flächenfarbe</span><input id="areaEditColor" type="color" value="${a.areaColor||'#70b842'}" oninput="updateAreaEditPreview()"></div>
+       <div><span class="muted">Textfarbe</span><input id="areaEditTextColor" type="color" value="${a.labelColor||'#ffffff'}" oninput="updateAreaEditPreview()"></div>
+       <div><span class="muted">Schriftgrösse</span>
+         <select id="areaEditFontSize" onchange="updateAreaEditPreview()">
+           ${[10,12,14,16,18,20,22,24].map(n=>`<option value="${n}" ${(Number(a.labelFontSize)||14)===n?'selected':''}>${n} px</option>`).join('')}
+         </select>
+       </div>
+     </div>
+   </div>
+
+   <div class="areaEditSection">
+     <label>Flächenform</label>
+     <div class="toolbar">
+       <button class="btn secondary" type="button" onclick="addAreaPoint()">+ Eckpunkt</button>
+       <button class="btn secondary" type="button" onclick="removeAreaPoint()">Letzten Eckpunkt entfernen</button>
+     </div>
+     <p class="muted">Die roten Eckpunkte kannst du direkt auf der Karte verschieben.</p>
+   </div>
+
+   <div class="areaEditActions">
+     <button class="btn" type="button" onclick="saveAreaGeometry()">✓ Übernehmen</button>
+     <button class="btn danger" type="button" onclick="deleteEditingArea()">🗑 Löschen</button>
+   </div>
+   <button class="btn secondary" type="button" onclick="cancelAreaGeometry()">Abbrechen</button>
+ </div>`;
+}
 function editAreaGeometry(id){if(!requireStructure())return;
  let a=st.areas.find(x=>x.id===id);if(!a)return;
- editAreaId=id;selectedPackage='';let mt=areaMapType(a);showPage(mt==='production'?'production':'map');renderAreas();
- let side=sideForMap(mt);if(side)side.innerHTML=`<h2>Fläche bearbeiten</h2><p class="muted">Ziehe die roten Eckpunkte an die gewünschte Position.</p><div class="toolbar"><button class="btn" onclick="saveAreaGeometry()">Änderung speichern</button><button class="btn secondary" onclick="addAreaPoint()">+ Eckpunkt</button><button class="btn danger" onclick="removeAreaPoint()">Letzten Eckpunkt entfernen</button><button class="btn secondary" onclick="cancelAreaGeometry()">Abbrechen</button></div>`;
+ areaEditBackup=JSON.parse(JSON.stringify(a));
+ editAreaId=id;selectedPackage='';let mt=areaMapType(a);
+ showPage(mt==='production'?'production':'map');renderAreas();renderAreaEditPanel(a,mt);
 }
 function saveAreaGeometry(){
- let a=st.areas.find(x=>x.id===editAreaId),mt=areaMapType(a);editAreaId='';persist();renderAreas();
+ let a=st.areas.find(x=>x.id===editAreaId);if(!a)return;
+ updateAreaEditPreview();
+ let mt=areaMapType(a);editAreaId='';areaEditBackup=null;persist();renderAreas();
  let side=sideForMap(mt);if(side)side.innerHTML=`<h2>Lagerfläche wählen</h2><p class="muted">Tippe auf eine markierte Fläche ${mt==='production'?'im Produktionsgrundriss':'im Luftbild'}.</p>`
 }
-function cancelAreaGeometry(){location.reload()}
+function cancelAreaGeometry(){
+ let a=st.areas.findIndex(x=>x.id===editAreaId);
+ let mt=a>=0?areaMapType(st.areas[a]):'outside';
+ if(a>=0&&areaEditBackup)st.areas[a]=areaEditBackup;
+ editAreaId='';areaEditBackup=null;renderAreas();
+ let side=sideForMap(mt);if(side)side.innerHTML=`<h2>Lagerfläche wählen</h2><p class="muted">Tippe auf eine markierte Fläche ${mt==='production'?'im Produktionsgrundriss':'im Luftbild'}.</p>`
+}
+function deleteEditingArea(){
+ if(!editAreaId)return;
+ let id=editAreaId;
+ if(!confirm('Diese Lagerfläche wirklich löschen? Gestelle und vorhandenes Material können davon betroffen sein.'))return;
+ editAreaId='';areaEditBackup=null;
+ deleteArea(id);
+}
 function addAreaPoint(){let a=st.areas.find(x=>x.id===editAreaId);if(!a||a.points.length<2)return;let p1=a.points[a.points.length-1],p2=a.points[0];a.points.push([+((p1[0]+p2[0])/2).toFixed(2),+((p1[1]+p2[1])/2).toFixed(2)]);renderAreas()}
 function removeAreaPoint(){let a=st.areas.find(x=>x.id===editAreaId);if(a&&a.points.length>3){a.points.pop();renderAreas()}else alert('Eine Fläche benötigt mindestens 3 Eckpunkte.')}
 let drawingMap='outside';
@@ -6937,18 +7381,154 @@ function toggleProductionMove(){
  svg.addEventListener('pointerup',()=>{productionDrag=null;productionMoveStart=null});
 })()
 
+
+let rackOrderEditAreaId='';
+let rackOrderDragId='';
+
+function orderedAreaRacks(areaId){
+ let rs=st.racks.filter(r=>r.areaId===areaId);
+ rs.forEach((r,i)=>{if(!Number.isFinite(Number(r.displayOrder)))r.displayOrder=i});
+ return rs.slice().sort((a,b)=>(Number(a.displayOrder)||0)-(Number(b.displayOrder)||0));
+}
+function normalizeRackOrder(areaId){
+ orderedAreaRacks(areaId).forEach((r,i)=>r.displayOrder=i);
+}
+function toggleRackOrderEdit(areaId){
+ if(!requireStructure())return;
+ rackOrderEditAreaId=rackOrderEditAreaId===areaId?'':areaId;
+ openArea(areaId);
+}
+function moveRackOrder(areaId,rackId,delta){
+ if(!requireStructure())return;
+ let rs=orderedAreaRacks(areaId),i=rs.findIndex(r=>r.id===rackId),j=i+delta;
+ if(i<0||j<0||j>=rs.length)return;
+ [rs[i],rs[j]]=[rs[j],rs[i]];
+ rs.forEach((r,n)=>r.displayOrder=n);
+ persist();
+ openArea(areaId);
+}
+function rackOrderPointerDown(e,areaId,rackId){
+ if(!requireStructure())return;
+ rackOrderDragId=rackId;
+ let handle=e.currentTarget,item=handle.closest('.rackOrderItem');
+ item?.classList.add('dragging');
+ handle.setPointerCapture?.(e.pointerId);
+ e.preventDefault();
+}
+function rackOrderPointerMove(e,areaId){
+ if(!rackOrderDragId)return;
+ let list=e.currentTarget.closest('.rackOrderList'); if(!list)return;
+ let target=document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.rackOrderItem');
+ if(!target||target.parentElement!==list)return;
+ let targetId=target.dataset.rackId;
+ if(!targetId||targetId===rackOrderDragId)return;
+ let rs=orderedAreaRacks(areaId),from=rs.findIndex(r=>r.id===rackOrderDragId),to=rs.findIndex(r=>r.id===targetId);
+ if(from<0||to<0)return;
+ let moved=rs.splice(from,1)[0];rs.splice(to,0,moved);
+ rs.forEach((r,n)=>r.displayOrder=n);
+ openArea(areaId);
+ let fresh=document.querySelector(`.rackOrderItem[data-rack-id="${rackOrderDragId}"]`);
+ fresh?.classList.add('dragging');
+}
+function rackOrderPointerUp(e,areaId){
+ if(!rackOrderDragId)return;
+ rackOrderDragId='';
+ normalizeRackOrder(areaId);
+ persist();
+ openArea(areaId);
+}
+function rackOrderEditorHtml(areaId,rs){
+ return `<div class="rackOrderToolbar">
+   <div class="help"><b>Gestelle ordnen</b><br>Mit ↕ ziehen oder mit ▲ / ▼ verschieben. Die Reihenfolge wird gespeichert und auf allen Geräten synchronisiert.</div>
+ </div>
+ <div class="rackOrderList">
+ ${rs.map((r,i)=>`<div class="rackOrderItem" data-rack-id="${r.id}">
+   <div class="rackOrderHandle" title="Gestell verschieben"
+     onpointerdown="rackOrderPointerDown(event,'${areaId}','${r.id}')"
+     onpointermove="rackOrderPointerMove(event,'${areaId}')"
+     onpointerup="rackOrderPointerUp(event,'${areaId}')"
+     onpointercancel="rackOrderPointerUp(event,'${areaId}')">↕</div>
+   <div class="rackOrderName">${esc(r.name)}</div>
+   <div class="rackOrderActions">
+     <button class="btn secondary" type="button" onclick="moveRackOrder('${areaId}','${r.id}',-1)" ${i===0?'disabled':''}>▲</button>
+     <button class="btn secondary" type="button" onclick="moveRackOrder('${areaId}','${r.id}',1)" ${i===rs.length-1?'disabled':''}>▼</button>
+   </div>
+ </div>`).join('')}
+ </div>`;
+}
+
+
+function rackIsLocked(rid){
+ let r=st.racks.find(x=>x.id===rid);
+ if(!r)return false;
+ let a=st.areas.find(x=>x.id===r.areaId);
+ return !!(r.locked||a?.locked);
+}
+function levelIsLocked(rid,levelId){
+ let r=st.racks.find(x=>x.id===rid);if(!r)return false;
+ let a=st.areas.find(x=>x.id===r.areaId);
+ let lv=(r.levels||[]).find(x=>(x.id||x.name)===levelId || x.id===levelId);
+ return !!(a?.locked||r.locked||lv?.locked);
+}
+function toggleAreaLocked(id){
+ if(!requireStructure())return;
+ let a=st.areas.find(x=>x.id===id);if(!a)return;
+ a.locked=!a.locked;a.updatedAt=new Date().toISOString();
+ persist();openArea(id);
+}
+function toggleRackLocked(id){
+ if(!requireStructure())return;
+ let r=st.racks.find(x=>x.id===id);if(!r)return;
+ r.locked=!r.locked;r.updatedAt=new Date().toISOString();
+ persist();openRack(id);
+}
+function toggleLevelLocked(rid,levelId){
+ if(!requireStructure())return;
+ let r=st.racks.find(x=>x.id===rid);if(!r)return;
+ let lv=(r.levels||[]).find(x=>(x.id||x.name)===levelId || x.id===levelId);if(!lv)return;
+ lv.locked=!lv.locked;lv.updatedAt=new Date().toISOString();
+ persist();openRack(rid);
+}
+
 function openArea(id){
  if(drawMode||editAreaId)return;
  let a=st.areas.find(x=>x.id===id);if(!a)return;
  let mt=areaMapType(a);if((mt==='production'&&currentPage!=='production')||(mt==='outside'&&currentPage!=='map'))showPage(mt==='production'?'production':'map');
  selectedPackage='';renderAreas();
- let rs=st.racks.filter(r=>r.areaId===id),side=sideForMap(mt);
- side.innerHTML=`<div class="manageHead"><div><h2 style="margin:0">${esc(a.name)}${a.locked?' <span class="lockBadge">GESPERRT</span>':''}</h2><p class="muted">${rs.length} Gestell(e)${a.locked?' · keine Einlagerung möglich':''}</p></div><div class="toolbar">${canManageStructure()?`<button class="btn secondary" onclick="renameArea('${id}')">Umbenennen</button><button class="btn secondary" onclick="editAreaGeometry('${id}')">Fläche bearbeiten</button>`:''}</div></div><div class="racks">${rs.map(r=>`<button class="rackbtn" onclick="openRack('${r.id}')">${esc(r.name)}</button>`).join('')||'<p class="muted">Noch kein Gestell in dieser Fläche.</p>'}</div>${canManageStructure()&&!a.locked?`<div class="toolbar"><button class="btn" onclick="openRackNew('${id}')">+ Gestell</button></div>`:''}`
+ let rs=orderedAreaRacks(id),side=sideForMap(mt),ordering=rackOrderEditAreaId===id;
+ side.innerHTML=`<div class="manageHead"><div><h2 style="margin:0" class="${a.locked?'lockedName':''}">${esc(a.name)}${a.locked?' <span class="lockStateBadge">GESPERRT</span>':''}</h2><p class="muted">${rs.length} Gestell(e)${a.locked?' · keine Einlagerung möglich':''}</p></div><div class="toolbar">${canManageStructure()?`<button class="btn secondary" onclick="renameArea('${id}')">Umbenennen</button><button class="btn secondary" onclick="editAreaGeometry('${id}')">Fläche bearbeiten</button><button class="btn ${a.locked?'secondary':'danger'}" onclick="toggleAreaLocked('${id}')">${a.locked?'🔓 Fläche entsperren':'🔒 Fläche sperren'}</button>`:''}</div></div>
+ ${ordering?rackOrderEditorHtml(id,rs):`<div class="racks">${rs.map(r=>`<button class="rackbtn ${r.locked?'lockedName':''}" onclick="openRack('${r.id}')">${esc(r.name)}${r.locked?' 🔒':''}</button>`).join('')||'<p class="muted">Noch kein Gestell in dieser Fläche.</p>'}</div>`}
+ ${canManageStructure()&&rs.length?`<div class="toolbar"><button class="btn secondary" onclick="toggleRackOrderEdit('${id}')">${ordering?'✓ Reihenfolge fertig':'↕ Gestelle ordnen'}</button></div>`:''}
+ ${canManageStructure()&&!a.locked&&!ordering?`<div class="toolbar"><button class="btn" onclick="openRackNew('${id}')">+ Gestell</button></div>`:''}`
 }
+
+function renameRackLevel(rid,idx){
+ if(!requireStructure())return;
+ let r=st.racks.find(x=>x.id===rid),l=r?.levels?.[idx];if(!l)return;
+ let n=prompt('Name der Ebene:',l.name||'');if(n===null)return;
+ n=n.trim();if(!n)return;l.name=n;l.updatedAt=new Date().toISOString();persist();openRack(rid);
+}
+function editRackLevel(rid,idx){
+ if(!requireStructure())return;
+ let r=st.racks.find(x=>x.id===rid),l=r?.levels?.[idx];if(!l)return;
+ let len=prompt('Länge der Ebene in m:',l.length??'');if(len===null)return;
+ let wid=prompt('Breite der Ebene in m:',l.width??'');if(wid===null)return;
+ let hei=prompt('Höhe der Ebene in m:',l.height??'');if(hei===null)return;
+ let num=v=>Number(String(v).replace(',','.'));
+ let a=num(len),b=num(wid),c=num(hei);
+ if(!Number.isFinite(a)||!Number.isFinite(b)||!Number.isFinite(c)){alert('Bitte gültige Zahlen eingeben.');return}
+ l.length=a;l.width=b;l.height=c;l.updatedAt=new Date().toISOString();persist();openRack(rid);
+}
+function toggleRackLevelLocked(rid,idx){
+ if(!requireStructure())return;
+ let r=st.racks.find(x=>x.id===rid),l=r?.levels?.[idx];if(!l)return;
+ l.locked=!l.locked;l.updatedAt=new Date().toISOString();persist();openRack(rid);
+}
+
 function openRack(id){
  currentRack=id;let r=st.racks.find(x=>x.id===id);if(!r)return;
  let ph=rackPhotoHtml(r);
- let lv=r.levels.map((l,i)=>{let ps=st.packages.filter(p=>p.rackId===id&&p.levelIndex===i),t=ps.some(p=>p.id===selectedPackage);return `<div class="level ${t?'target':''}"><div class="lh"><span>${esc(l.name)}${t?' · LAGERORT':''}</span><span class="dims">${l.length||'–'} m × ${l.width||'–'} m · H ${l.height||'–'} m</span></div><div class="pkgs">${ps.length?ps.map(p=>`<div class="pkg ${p.id===selectedPackage?'target':''} ${hasReservation(p)?'reserved':''}" onclick="showPkg('${p.id}')"><b>${esc(p.material)}</b><br><span class="statusbadge ${stClass(p.status)}">${esc(p.status||'–')}</span>${hasReservation(p)?`<br><span class="reserveBadge">RESERVIERT ${esc(reservedQty(p))}</span>`:''}<br>B ${esc(p.width||'–')} · H ${esc(p.height||'–')}<br>${esc(p.qty||'')}</div>`).join(''):'<span class="muted">Noch kein Paket</span>'}</div></div>`}).join('');
+ let lv=r.levels.map((l,i)=>{let ps=st.packages.filter(p=>p.rackId===id&&p.levelIndex===i),t=ps.some(p=>p.id===selectedPackage);return `<div class="level ${t?'target':''} ${l.locked?'levelLocked':''}"><div class="lh"><span class="${l.locked?'lockedName':''}">${esc(l.name)}${l.locked?' 🔒':''}${t?' · LAGERORT':''}</span><span class="dims">${l.length||'–'} m × ${l.width||'–'} m · H ${l.height||'–'} m</span></div>${canManageStructure()?`<div class="toolbar" style="margin:6px 0 10px"><button class="btn secondary" type="button" onclick="renameRackLevel('${id}',${i})">Umbenennen</button><button class="btn secondary" type="button" onclick="editRackLevel('${id}',${i})">Bearbeiten</button><button class="btn ${l.locked?'secondary':'danger'}" type="button" onclick="toggleRackLevelLocked('${id}',${i})">${l.locked?'🔓 Entsperren':'🔒 Sperren'}</button></div>`:''}<div class="pkgs">${ps.length?ps.map(p=>`<div class="pkg ${p.id===selectedPackage?'target':''} ${hasReservation(p)?'reserved':''}" onclick="showPkg('${p.id}')"><b>${esc(p.material)}</b><br><span class="statusbadge ${stClass(p.status)}">${esc(p.status||'–')}</span>${hasReservation(p)?`<br><span class="reserveBadge">RESERVIERT ${esc(reservedQty(p))}</span>`:''}<br>B ${esc(p.width||'–')} · H ${esc(p.height||'–')}<br>${esc(p.qty||'')}</div>`).join(''):'<span class="muted">Noch kein Paket</span>'}</div></div>`}).join('');
  let rackArea=st.areas.find(a=>a.id===r.areaId),rackSide=sideForMap(areaMapType(rackArea));
  let hasPhoto=!!(r.photo||r.photoPath||r.photoData);
  let photoActions=canManageStructure()?`<div class="rackDetailPhotoActions">
@@ -6956,9 +7536,9 @@ function openRack(id){
    <button class="btn" type="button" onclick="E('rackDetailPhotoFile_${r.id}').click()">${hasPhoto?'Bild ersetzen':'Bild hinzufügen'}</button>
    ${hasPhoto?`<button class="btn danger" type="button" onclick="deleteRackPhoto('${r.id}')">Bild löschen</button>`:''}
  </div>`:'';
- rackSide.innerHTML=`<div class="manageHead"><div><h2 style="margin:0">${esc(r.name)}</h2><p class="muted">${esc(areaName(r.areaId))}</p></div>${canManageStructure()?`<button class="btn secondary" onclick="renameRack('${id}')">Umbenennen</button>`:''}</div>
+ rackSide.innerHTML=`<div class="manageHead"><div><h2 style="margin:0" class="${r.locked?'lockedName':''}">${esc(r.name)}${r.locked?' <span class="lockStateBadge">GESPERRT</span>':''}</h2><p class="muted">${esc(areaName(r.areaId))}</p></div>${canManageStructure()?`<button class="btn secondary" onclick="renameRack('${id}')">Umbenennen</button><button class="btn ${r.locked?'secondary':'danger'}" onclick="toggleRackLocked('${id}')">${r.locked?'🔓 Gestell entsperren':'🔒 Gestell sperren'}</button>`:''}</div>
  <div class="rackDetailPhotoBlock">${ph}${photoActions}</div>
- <div class="toolbar"><button class="btn secondary" onclick="openArea('${r.areaId}')">← Zurück zur Fläche</button><button class="btn" onclick="openMaterial('${id}')">+ Paket</button></div><div class="muted">Oben ↑</div><div class="levels">${lv}</div><div class="muted">↓ Ebene 1 / unten</div>`
+ <div class="toolbar"><button class="btn secondary" onclick="openArea('${r.areaId}')">← Zurück zur Fläche</button>${r.locked?'':`<button class="btn" onclick="openMaterial('${id}')">+ Paket</button>`}</div><div class="muted">Oben ↑</div><div class="levels">${lv}</div><div class="muted">↓ Ebene 1 / unten</div>`
 }
 function showPkg(id){
  let p=st.packages.find(x=>x.id===id),r=st.racks.find(x=>x.id===p.rackId),l=r.levels[p.levelIndex];
@@ -6984,7 +7564,7 @@ function deleteArea(id){if(!requireStructure())return;let n=st.racks.filter(r=>r
 function deleteRack(id){if(!requireStructure())return;let n=st.packages.filter(p=>p.rackId===id).length;if(n){alert('Dieses Gestell enthält noch Material. Bitte Material zuerst verschieben oder löschen.');return}if(confirm('Gestell wirklich löschen?')){st.racks=st.racks.filter(r=>r.id!==id);persist()}}
 
 function openRackNew(areaId=''){if(!requireStructure())return;let areas=st.areas.filter(a=>!a.locked);if(!areas.length){alert('Alle Lagerflächen sind gesperrt.');return}E('rArea').innerHTML=areas.map(a=>`<option value="${a.id}" ${a.id===areaId?'selected':''}>${esc(a.name)}</option>`).join('');E('rName').value='';E('rackNewModal').classList.add('open')}
-function saveRack(e){e.preventDefault();let aid=E('rArea').value;if(areaIsLocked(aid)){alert('Diese Lagerfläche ist gesperrt.');return}st.racks.push({id:'r'+Date.now(),areaId:aid,name:E('rName').value.trim(),photo:'',levels:[]});closeM('rackNewModal');persist();showPage('manage')}
+function saveRack(e){e.preventDefault();let aid=E('rArea').value;if(areaIsLocked(aid)){alert('Diese Lagerfläche ist gesperrt.');return}let order=orderedAreaRacks(aid).length;st.racks.push({id:'r'+Date.now(),areaId:aid,name:E('rName').value.trim(),photo:'',levels:[],displayOrder:order});closeM('rackNewModal');persist();showPage('manage')}
 function openLevel(){if(!requireStructure())return;E('lName').value='Ebene '+((st.racks.find(r=>r.id===E('rackSel').value)?.levels.length||0)+1);E('lLen').value=E('lWid').value=E('lHei').value='';E('levelModal').classList.add('open')}
 function saveLevel(e){e.preventDefault();let r=st.racks.find(x=>x.id===E('rackSel').value);r.levels.push({name:E('lName').value.trim(),length:E('lLen').value,width:E('lWid').value,height:E('lHei').value});closeM('levelModal');persist();renderManageRack()}
 
@@ -7639,7 +8219,8 @@ function sortedUserList(users){
    return String(a.name||'').localeCompare(String(b.name||''),'de',{sensitivity:'base',numeric:true});
  });
 }
-function renderManage(){ensureIdSettings();ensureCommissions();ensureV24();renderCloudSettings();
+function renderManage(){
+ setTimeout(()=>{renderImmerPriceMaster();},0);ensureIdSettings();ensureCommissions();ensureV24();renderCloudSettings();
  if(E('userManageCard'))E('userManageCard').style.display=canAdmin()?'':'none';
  if(E('userManage'))E('userManage').innerHTML=sortedUserList(st.users).map(u=>`<div class="manageItem"><div class="manageHead"><div><b>${esc(u.name)}</b> <span class="statusbadge ${roleClass(u.role)}">${esc(u.role)}</span><div class="muted">${u.active?'Aktiv':'Deaktiviert'}${u.id===st.activeUserId?' · aktuell angemeldet':''}</div></div><div class="toolbar"><select onchange="updateUserRole('${u.id}',this.value)"><option ${u.role==='Mitarbeiter'?'selected':''}>Mitarbeiter</option><option ${u.role==='Lagerverantwortlicher'?'selected':''}>Lagerverantwortlicher</option><option ${u.role==='Administrator'?'selected':''}>Administrator</option></select><button class="btn" onclick="openLocalPermissionEditor('${u.id}')">Berechtigungen</button><button class="btn secondary" onclick="renameUser('${u.id}')">Umbenennen</button><button class="btn ${u.active?'danger':'secondary'}" onclick="toggleUserActive('${u.id}')">${u.active?'Deaktivieren':'Aktivieren'}</button></div></div></div>`).join('');
  if(E('lockProductionMove')){E('lockProductionMove').checked=!!st.settings.lockProductionMove;E('lockProductionMove').disabled=!canAdmin()}
