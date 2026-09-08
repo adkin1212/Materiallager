@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Künzli Lagerverwaltung 1.0</title>
+<title>Künzli Lagerverwaltung 1.1</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -1733,6 +1733,11 @@ body.fullscreenLogoActive .modal.open .manageHead{
   }
 }
 
+
+/* V183: Flächen auf Karten zuverlässig anklickbar */
+.areaLabel,.areaLockedText,.areaReserveText,.areaReserveBox{pointer-events:none!important}
+.areaPoly{pointer-events:auto!important;cursor:pointer}
+
 </style><link rel="apple-touch-icon" sizes="180x180" href="./kuenzli-app-icon.png">
 <link rel="icon" type="image/png" href="./kuenzli-app-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1743,8 +1748,8 @@ body.fullscreenLogoActive .modal.open .manageHead{
 <script>
 window.APP_RELEASE = {
   name: 'Künzli Lagerverwaltung',
-  version: '1.0',
-  basis: 'V182',
+  version: '1.1',
+  basis: 'V183',
   releasedAt: '2026-09-08'
 };
 </script>
@@ -2066,8 +2071,8 @@ window.APP_RELEASE = {
  </details>
 
  <div class="help" style="margin:14px 0">
-   <b>Betriebsversion 1.0</b>
-   <div class="muted">Freigegebene Basis: V182 · Betriebsstart 08.09.2026</div>
+   <b>Betriebsversion 1.1</b>
+   <div class="muted">Freigegebene Basis: V183 · Betriebsstart 08.09.2026</div>
  </div>
 
  <details class="manageGroup">
@@ -6138,14 +6143,19 @@ function initDesktopMapPan(scrollerId){
    active=true;moved=false;pid=e.pointerId;
    startX=e.clientX;startY=e.clientY;
    startLeft=el.scrollLeft;startTop=el.scrollTop;
-   el.setPointerCapture?.(pid);
-   el.classList.add('desktopMapDragging');
+   /* Pointer erst nach einer echten Ziehbewegung übernehmen.
+      Sonst wird ein normaler Klick auf eine Lagerfläche vom Scroll-Container
+      abgefangen und das Polygon erhält seinen onclick nicht zuverlässig. */
  });
 
  el.addEventListener('pointermove',e=>{
    if(!active||e.pointerId!==pid)return;
    let dx=e.clientX-startX,dy=e.clientY-startY;
-   if(Math.abs(dx)>4||Math.abs(dy)>4)moved=true;
+   if((Math.abs(dx)>4||Math.abs(dy)>4)&&!moved){
+     moved=true;
+     el.setPointerCapture?.(pid);
+     el.classList.add('desktopMapDragging');
+   }
    if(moved){
      el.scrollLeft=startLeft-dx;
      el.scrollTop=startTop-dy;
