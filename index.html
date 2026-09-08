@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Holzlager V161</title>
+<title>Holzlager V162</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -1343,6 +1343,8 @@ body.fullscreenLogoActive .modal.open .manageHead{
   }
 }
 
+
+.smallOrderCloudBadge{font-size:11px;font-weight:800;padding:3px 7px;border-radius:999px;background:#eef3f0;color:#466052;border:1px solid #d6e0da}
 </style><link rel="apple-touch-icon" sizes="180x180" href="./kuenzli-app-icon.png">
 <link rel="icon" type="image/png" href="./kuenzli-app-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -3293,6 +3295,7 @@ function openSmallOrdersModule(){
 
 
 const SMALL_ORDERS_KEY='holzlager_small_orders_v1';
+const SMALL_ORDERS_CLOUD_MIGRATION_KEY='holzlager_small_orders_cloud_v162';
 const SMALL_ORDER_VAT=.081;
 const SMALL_ORDER_RATES=[
  ['Holzbaumeister',155],
@@ -3317,10 +3320,19 @@ function loadSmallOrders(){
    let x=JSON.parse(localStorage.getItem(SMALL_ORDERS_KEY)||'null');
    smallOrderStore=x&&Array.isArray(x.reports)?x:{reports:[]};
  }catch(e){smallOrderStore={reports:[]}}
+
+ // V162: Bestehende lokale Rapporte werden beim ersten Start bewusst NICHT in die Cloud übernommen.
+ // Nur ab V162 neu angelegte Rapporte erhalten cloudSync=true.
+ if(!localStorage.getItem(SMALL_ORDERS_CLOUD_MIGRATION_KEY)){
+   smallOrderStore.reports=(smallOrderStore.reports||[]).map(r=>Object.assign({},r,{cloudSync:false}));
+   localStorage.setItem(SMALL_ORDERS_KEY,JSON.stringify(smallOrderStore));
+   localStorage.setItem(SMALL_ORDERS_CLOUD_MIGRATION_KEY,new Date().toISOString());
+ }
  return smallOrderStore;
 }
 function saveSmallOrders(){
  localStorage.setItem(SMALL_ORDERS_KEY,JSON.stringify(smallOrderStore));
+ queueCloudSync?.();
 }
 function smallOrderById(id){return (smallOrderStore.reports||[]).find(r=>r.id===id)}
 function numSO(v){let n=parseFloat(String(v??'').replace(',','.'));return Number.isFinite(n)?n:0}
@@ -3515,8 +3527,8 @@ function saveSmallOrderReport(){
  let d=currentSmallOrderDraft(),now=new Date().toISOString(),old=smallOrderById(E('sorId').value);
  d.materials=d.materials.filter(x=>x.article||numSO(x.qty)||numSO(x.unitPrice));
  d.labor=d.labor.filter(x=>x.name&&numSO(x.qty)>0);
- if(old){Object.assign(old,d,{updatedAt:now,createdAt:old.createdAt||now})}
- else smallOrderStore.reports.push({...d,createdAt:now,updatedAt:now});
+ if(old){Object.assign(old,d,{updatedAt:now,createdAt:old.createdAt||now,cloudSync:old.cloudSync===true})}
+ else smallOrderStore.reports.push({...d,createdAt:now,updatedAt:now,cloudSync:true});
  saveSmallOrders();
  closeM('smallOrderReportModal');
  renderSmallOrders();
@@ -3659,7 +3671,7 @@ function renderSmallOrders(){
     <div class="smallOrderReportList">
      ${reports.map(r=>`<div class="smallOrderReportCard ${smallOrderStatusClass(r.status||'Rüsten')}">
       <div class="smallOrderReportMain" onclick="openSmallOrderReport('${r.id}')">
-       <div class="smallOrderReportTitleRow"><b>Rapport ${esc(r.reportNo||'–')}</b><span class="smallOrderStatusBadge">${esc(r.status||'Rüsten')}</span></div>
+       <div class="smallOrderReportTitleRow"><b>Rapport ${esc(r.reportNo||'–')}</b><span class="smallOrderStatusBadge">${esc(r.status||'Rüsten')}</span><span class="smallOrderCloudBadge">${r.cloudSync===true?'☁ Cloud':'Nur lokal'}</span></div>
        <div class="smallOrderReportMeta">
         ${r.orderNo?`<span>Auftrag ${esc(r.orderNo)}</span>`:''}
         ${r.commission?`<span>${esc(r.commission)}</span>`:''}
@@ -5151,10 +5163,10 @@ function canWriteCloudEntity(type,action='save'){
  if(role==='Administrator')return true;
  if(role==='Lagerverantwortlicher'){
    if(type==='users')return false;
-   return ['areas','racks','packages','commissions','controls','internalMaterials','internalTransfers','standardStock','materialCatalog','projects','__state'].includes(type);
+   return ['areas','racks','packages','commissions','controls','internalMaterials','internalTransfers','standardStock','materialCatalog','projects','smallOrders','__state'].includes(type);
  }
  if(role==='Mitarbeiter'){
-   if(action==='save')return ['packages','controls','standardStock','materialCatalog','projects'].includes(type);
+   if(action==='save')return ['packages','controls','standardStock','materialCatalog','projects','smallOrders'].includes(type);
    if(action==='delete')return type==='packages' && !!st.settings?.allowMaterialDelete;
  }
  return false;
@@ -5196,6 +5208,11 @@ function localEntityMap(){
  (projectStore.projects||[]).forEach((obj,idx)=>{
    let id=obj.id||('project:'+idx);
    map['projects|'+id]={type:'projects',id,data:obj};
+ });
+ loadSmallOrders();
+ (smallOrderStore.reports||[]).filter(r=>r.cloudSync===true).forEach((obj,idx)=>{
+   let id=obj.id||('smallOrder:'+idx);
+   map['smallOrders|'+id]={type:'smallOrders',id,data:obj};
  });
  map['__state|main']={type:'__state',id:'main',data:singletonCloudData()};
  return map;
@@ -5303,6 +5320,26 @@ function applyRemoteEntities(remote,preserveKeys=new Set()){
    localStorage.setItem(PROJECTS_KEY,JSON.stringify(projectStore));
  }
 
+ // V162: Cloud-Kleinaufträge mit lokalen Alt-Rapporten zusammenführen.
+ loadSmallOrders();
+ let legacyLocal=(smallOrderStore.reports||[]).filter(r=>r.cloudSync!==true);
+ let remoteSmallOrders=Object.values(remote||{}).filter(x=>x.type==='smallOrders');
+ let cloudReports=[];
+ remoteSmallOrders.forEach(x=>{
+   let k=cloudKey('smallOrders',x.id);
+   if(preserveKeys.has(k)){
+     let local=(smallOrderStore.reports||[]).find(r=>String(r.id)===String(x.id));
+     if(local)cloudReports.push(local);
+   }else cloudReports.push(Object.assign({},x.data,{cloudSync:true}));
+ });
+ (smallOrderStore.reports||[]).filter(r=>r.cloudSync===true).forEach(r=>{
+   let id=String(r.id||''),k=cloudKey('smallOrders',id);
+   if(preserveKeys.has(k)&&!remote[k]&&!cloudReports.some(x=>String(x.id)===id))cloudReports.push(r);
+ });
+ // Alte lokale Rapporte bleiben nur auf diesem Gerät; Cloud-Rapporte werden geräteübergreifend ersetzt/ergänzt.
+ smallOrderStore.reports=[...legacyLocal,...cloudReports];
+ localStorage.setItem(SMALL_ORDERS_KEY,JSON.stringify(smallOrderStore));
+
  let s=remote['__state|main']?.data;
  if(s){
    next.settings=s.settings||next.settings||{};
@@ -5320,7 +5357,7 @@ function syncBaseFromRemote(remote){
  saveSyncBase(b);
 }
 function conflictLabel(c){
- let t={areas:'Lagerfläche',racks:'Gestell',packages:'Material/Paket',commissions:'Kommission',controls:'Lagerkontrolle',users:'Benutzer',internalMaterials:'Umbuchungs-Material',internalTransfers:'Interne Umbuchung',standardStock:'Standard-Lagerware',materialCatalog:'Materialstamm',projects:'Projekt','__state':'Einstellungen'}[c.type]||c.type;
+ let t={areas:'Lagerfläche',racks:'Gestell',packages:'Material/Paket',commissions:'Kommission',controls:'Lagerkontrolle',users:'Benutzer',internalMaterials:'Umbuchungs-Material',internalTransfers:'Interne Umbuchung',standardStock:'Standard-Lagerware',materialCatalog:'Materialstamm',projects:'Projekt',smallOrders:'Kleinauftrag','__state':'Einstellungen'}[c.type]||c.type;
  let name=c.local?.name||c.local?.material||c.local?.elementId||c.remote?.name||c.remote?.material||c.remote?.elementId||c.id;
  return t+' · '+name;
 }
@@ -5346,6 +5383,14 @@ async function resolveSyncConflict(index,choice){
          if(ix>=0)arr[ix]=c.remote;else arr.push(c.remote);projectStore.projects=arr;
        }
        localStorage.setItem(PROJECTS_KEY,JSON.stringify(projectStore));
+     }else if(c.type==='smallOrders'){
+       loadSmallOrders();
+       if(c.deletedRemote)smallOrderStore.reports=(smallOrderStore.reports||[]).filter(r=>String(r.id)!==String(c.id));
+       else{
+         let rr=Object.assign({},c.remote,{cloudSync:true}),arr=smallOrderStore.reports||[],ix=arr.findIndex(r=>String(r.id)===String(c.id));
+         if(ix>=0)arr[ix]=rr;else arr.push(rr);smallOrderStore.reports=arr;
+       }
+       localStorage.setItem(SMALL_ORDERS_KEY,JSON.stringify(smallOrderStore));
      }else if(c.deletedRemote){
        if(c.type==='__state'){} else st[c.type]=(st[c.type]||[]).filter((o,i)=>entityId(c.type,o,i)!==c.id);
      }else if(c.type==='__state'){
