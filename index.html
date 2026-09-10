@@ -2724,6 +2724,32 @@ select,input,textarea{min-height:40px}
   background:#f7faf8;color:#294b3d;line-height:1.45;
 }
 
+
+
+/* V308 – Bereichsauswahl auf Tablet/iPad vertikal scrollbar */
+#moduleHome{
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:contain;
+}
+@media (max-width:1180px), (max-height:820px){
+  #moduleHome{
+    align-items:flex-start!important;
+    justify-content:center!important;
+    min-height:100dvh!important;
+    height:100dvh!important;
+    padding-top:24px!important;
+    padding-bottom:48px!important;
+    box-sizing:border-box!important;
+    touch-action:pan-y!important;
+  }
+  #moduleHome .moduleHomeInner{
+    flex:0 0 auto!important;
+    margin:0 auto!important;
+    padding-bottom:24px!important;
+  }
+}
 </style><link rel="apple-touch-icon" sizes="180x180" href="./kuenzli-app-icon.png">
 <link rel="icon" type="image/png" href="./kuenzli-app-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2734,8 +2760,8 @@ select,input,textarea{min-height:40px}
 <script>
 window.APP_RELEASE = {
   name: 'Künzli Lagerverwaltung',
-  version: '1.1',
-  basis: 'V306',
+  version: '1.1.1',
+  basis: 'V308',
   releasedAt: '2026-09-10'
 };
 </script>
