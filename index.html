@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Künzli Lagerverwaltung V286</title>
+<title>Künzli Lagerverwaltung V287</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -3374,7 +3374,7 @@ window.APP_RELEASE = {
  <div class="productionProgressSplit">
    <section class="productionProgressPane">
      <h3 style="margin-bottom:6px">Offene Elemente</h3>
-     <div class="muted">Hier stehen nur Elemente, die noch nicht abgeschlossen sind. Setze ein Element auf „Produziert“. Nach dem Speichern erscheint es rechts im Produktionsverlauf.</div>
+     <div class="muted">Hier stehen nur Elemente, die noch nicht abgeschlossen sind. Du kannst jedes tatsächlich fertiggestellte Element unabhängig von der Produktionsreihenfolge auf „Produziert“ setzen. Nach dem Speichern erscheint es rechts im Produktionsverlauf.</div>
      <div id="ppElementRows"></div>
    </section>
    <section class="productionProgressPane productionHistoryPane">
@@ -7008,9 +7008,9 @@ function saveDailyProduction(){
    };
  }).filter(e=>e.area>0||e.units>0);
 
- let seqCheck=validateSequentialDailyProgress(p,entries);
- if(!seqCheck.ok){alert(seqCheck.message);return}
-
+ // V287: Fertiggestellte Elemente dürfen unabhängig von der geplanten
+ // Produktionsreihenfolge gemeldet werden. Die Reihenfolge bleibt weiterhin
+ // Grundlage für Soll-/Ist-Prognosen, blockiert aber die Ist-Erfassung nicht.
  p.dailyProduction=p.dailyProduction||[];
 
  // Store completion on its editable production date.
