@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
-<title>Künzli Lagerverwaltung V287</title>
+<title>Künzli Lagerverwaltung V291</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -2464,6 +2464,10 @@ input[type="date"][data-kw-date-picker="1"]{cursor:pointer}
 
 .platformRecoveryNotice{margin:0 auto 12px;max-width:1280px;padding:10px 14px;border:1px solid #a9c7b6;background:#eef7f1;border-radius:10px;color:#214c38;font-size:13px}
 
+
+#productionProgressModal .productionProgressSplit{display:block!important}
+#productionProgressModal .productionProgressPane{width:100%!important;max-width:none!important;border-right:0!important;padding-right:0!important}
+
 </style><link rel="apple-touch-icon" sizes="180x180" href="./kuenzli-app-icon.png">
 <link rel="icon" type="image/png" href="./kuenzli-app-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -3368,20 +3372,22 @@ window.APP_RELEASE = {
  <div class="mh"><div><h2>Tagesfortschritt Produktion</h2><div id="prodProgressProject" class="muted"></div></div><div class="toolbar" style="margin-left:auto;margin-right:10px"><button class="btn" type="button" onclick="saveDailyProduction()">Tagesstand speichern</button></div><button class="x" onclick="closeM('productionProgressModal')">✕</button></div>
  <div class="form">
   <label class="f">Datum<input id="ppDate" type="date"></label>
-  <label class="f">Ist-Stunden heute [Personenstunden]<input id="ppActualHours" type="number" min="0" step="0.25" inputmode="decimal" oninput="calculateDailyProduction()" oninput="calculateDailyProduction()"></label>
+  <label class="f">Ist-Stunden heute [Personenstunden]<input id="ppActualHours" type="number" min="0" step="0.25" inputmode="decimal" oninput="calculateDailyProduction()"></label>
+  <label class="f">Produktionsart
+   <select id="ppProductionType">
+    <option value="">Bitte wählen</option>
+    <option>AW</option><option>IW</option><option>DA</option><option>DE</option><option>Fassade</option>
+   </select>
+  </label>
   <label class="f span2">Bemerkung<input id="ppNote" placeholder="optional"></label>
  </div>
  <div class="productionProgressSplit">
    <section class="productionProgressPane">
      <h3 style="margin-bottom:6px">Offene Elemente</h3>
-     <div class="muted">Hier stehen nur Elemente, die noch nicht abgeschlossen sind. Du kannst jedes tatsächlich fertiggestellte Element unabhängig von der Produktionsreihenfolge auf „Produziert“ setzen. Nach dem Speichern erscheint es rechts im Produktionsverlauf.</div>
+     <div class="muted">Hier stehen nur Elemente, die noch nicht abgeschlossen sind. Du kannst jedes tatsächlich fertiggestellte Element unabhängig von der Produktionsreihenfolge auf „Produziert“ setzen. Nach dem Speichern wird es aus dieser Liste entfernt.</div>
      <div id="ppElementRows"></div>
    </section>
-   <section class="productionProgressPane productionHistoryPane">
-     <h3 style="margin-bottom:6px">Abgeschlossen / Produktionsverlauf</h3>
-     <div class="muted">Alle erfassten Produktionstage in zeitlicher Reihenfolge. Auch ein Tag mit 0 fertiggestellten Elementen bleibt mit seinen Personenstunden sichtbar.</div>
-     <div id="ppProgressHistory"></div>
-   </section>
+
  </div>
  <div id="ppDailyResult" class="hoursPlanResult"></div>
  
@@ -5232,7 +5238,6 @@ function productionAnalysisDayAllocations(p,c,d,els){
    ?Math.max(0,Number(d.actualHoursByCommission[c.id]||0))
    :entries.reduce((s,e)=>s+Math.max(0,Number(e.allocatedActualHours||0)),0);
  let allocations={};
-
  const add=(cat,hours,units,area)=>{
    if(!cat)return;
    if(!allocations[cat])allocations[cat]={hours:0,units:0,area:0};
@@ -5241,39 +5246,33 @@ function productionAnalysisDayAllocations(p,c,d,els){
    allocations[cat].area+=Math.max(0,Number(area)||0);
  };
 
- if(!entries.length){
-   // Anlauf-/Arbeitstag ohne Fertigstellung:
-   // 100% der Stunden gehen an das nächste offene Element in der Reihenfolge.
-   let next=nextOpenProductionElementAtDate(p,c,els,d.date);
-   add(productionTypeForElement(p,c,next),totalHours,0,0);
+ // V288: Die Stunden-Zuordnung wird beim Tagesfortschritt ausdrücklich gewählt.
+ // Kein Ableiten mehr aus dem nächsten Element der Produktionsreihenfolge.
+ let explicit=String(d.productionTypeByCommission?.[c.id]||'').trim();
+ if(explicit){
+   let area=entries.reduce((s,e)=>s+Math.max(0,Number(e.area)||0),0);
+   let units=entries.reduce((s,e)=>{
+     let el=els.find(x=>x.id===e.elementId);
+     return s+(Number(e.units||0)||(el?.countOnly?(e.produced?Math.max(1,Number(el.count)||1):0):(e.produced?Math.max(1,Number(el?.count)||1):0)));
+   },0);
+   add(explicit,totalHours,units,area);
    return allocations;
  }
 
+ // Altbestand: Nur wenn tatsächlich Elemente fertiggestellt wurden, kann deren
+ // Bezeichnung als historische Zuordnung dienen. 0-Element-Tage bleiben unzugeordnet.
+ if(!entries.length)return allocations;
  let typed=entries.map(e=>{
-   let el=els.find(x=>x.id===e.elementId);
-   let cat=productionTypeForElement(p,c,el);
+   let el=els.find(x=>x.id===e.elementId),cat=productionTypeForElement(p,c,el);
    let units=Number(e.units||0)||(el?.countOnly?(e.produced?Math.max(1,Number(el.count)||1):0):(e.produced?Math.max(1,Number(el?.count)||1):0));
-   let area=Number(e.area||0);
-   let allocated=Math.max(0,Number(e.allocatedActualHours||0));
-   return {e,el,cat,units,area,allocated};
+   return {cat,units,area:Number(e.area||0),allocated:Math.max(0,Number(e.allocatedActualHours||0))};
  }).filter(x=>x.cat);
-
- if(!typed.length)return allocations;
-
  let allocatedSum=typed.reduce((s,x)=>s+x.allocated,0);
  if(allocatedSum>0){
-   // Beim Wechsel AW -> IW am selben Tag verwenden wir die bereits bei der
-   // Tageserfassung auf die fertigen Elemente verteilten Ist-Stunden.
    typed.forEach(x=>add(x.cat,x.allocated,x.units,x.area));
-
-   // Nur falls wegen Rundung/Altbestand Stunden übrig sind, proportional ergänzen.
    let rest=Math.max(0,totalHours-allocatedSum);
-   if(rest>.0001){
-     typed.forEach(x=>add(x.cat,rest*(x.allocated/allocatedSum),0,0));
-   }
+   if(rest>.0001)typed.forEach(x=>add(x.cat,rest*(x.allocated/allocatedSum),0,0));
  }else{
-   // Alte Datensätze ohne Stundenverteilung: Tagesstunden gleichmässig über
-   // die tatsächlich fertiggestellten Positionen verteilen.
    let share=typed.length?totalHours/typed.length:0;
    typed.forEach(x=>add(x.cat,share,x.units,x.area));
  }
@@ -5511,13 +5510,20 @@ function openProductionAnalysisDetail(cat){
 
  E('productionAnalysisDetailModal')?.classList.add('open');
 }
+function toggleProductionAnalysisOverview(){
+ let body=E('productionAnalysisOverviewBody'),btn=E('productionAnalysisOverviewToggle');if(!body)return;
+ let collapsed=body.style.display==='none';
+ body.style.display=collapsed?'grid':'none';
+ if(btn)btn.textContent=collapsed?'Einklappen':'Aufklappen';
+}
 function renderProductionAnalysisOverview(){
  let box=E('productionAnalysisOverview');if(!box)return;
  let all=productionAnalysisAll(),cats=['AW','IW','DA','DE','Fassade'];
  box.innerHTML=`<div class="productionAnalysisHead">
-   <div><h2>Produktionsanalyse</h2><div class="muted">Lernkurve über alle erfassten Produktionen – gruppiert nach AW, IW, DA, DE und Fassade. Bei einem Wechsel innerhalb eines Produktionstags werden die Ist-Stunden anhand der fertiggestellten Elemente aufgeteilt.</div></div>
+   <div><h2>Produktionsanalyse</h2><div class="muted">Lernkurve über alle erfassten Produktionen – gruppiert nach AW, IW, DA, DE und Fassade. Die Produktionsart wird beim Tagesfortschritt direkt gewählt.</div></div>
+   <button class="btn secondary" type="button" onclick="toggleProductionAnalysisOverview()" id="productionAnalysisOverviewToggle">Einklappen</button>
  </div>
- <div class="productionAnalysisGrid">${cats.map(cat=>{
+ <div id="productionAnalysisOverviewBody" class="productionAnalysisGrid">${cats.map(cat=>{
    let rows=all[cat],s=productionLearningSummary(rows),curve=productionAnalysisSeries(rows);
    let first=curve.series.find(x=>x.avg>0),later=curve.series.filter(x=>x.day>=3&&x.avg>0);
    let settled=later.length?later.reduce((n,x)=>n+x.avg,0)/later.length:0;
@@ -6613,6 +6619,7 @@ function productionCommissionSplitHtml(p){
        <td>0 m²</td>
        <td><b>${fmtNum(dayHours)} h</b></td>
        <td>–</td>
+       <td></td>
      </tr>`);
      return;
    }
@@ -6626,12 +6633,13 @@ function productionCommissionSplitHtml(p){
        <td>${fmtNum(area)} m²</td>
        <td><b>${fmtNum(allocated)} h</b></td>
        <td>${area>0?fmtNum(allocated/area,3)+' h/m²':'–'}</td>
+       <td><button class="btn secondary small" type="button" onclick="editCompletedProductionElement('${e.elementId}','${d.date}')">Bearbeiten</button></td>
      </tr>`);
    });
  });
 
  let historyHtml=historyRows.length?`<div class="projectPlanScroll"><table class="projectPlanTable">
-   <thead><tr><th>Datum</th><th>Abgeschlossen</th><th>m²</th><th>Ist h</th><th>Ist h/m²</th></tr></thead>
+   <thead><tr><th>Datum</th><th>Abgeschlossen</th><th>m²</th><th>Ist h</th><th>Ist h/m²</th><th></th></tr></thead>
    <tbody>${historyRows.join('')}</tbody>
  </table></div>`:'<div class="ppHistoryEmpty">Noch kein Produktionstag erfasst.</div>';
 
@@ -6647,6 +6655,69 @@ function productionCommissionSplitHtml(p){
  </div>`;
 }
 
+
+function editCompletedProductionElement(elementId,dayDate){
+ let p=projectById(currentProjectId);if(!p)return;
+ let c=activeProjectCommission(p),cid=c?.id||'';
+ let el=commissionElements(p,cid).find(x=>x.id===elementId);
+ let oldDay=(p.dailyProduction||[]).find(d=>d.date===dayDate);
+ let entry=(oldDay?.entries||[]).find(e=>e.elementId===elementId);
+ if(!el||!oldDay||!entry)return;
+
+ let newDate=prompt(`Produktionsdatum für „${el.name||'Element'}“ (JJJJ-MM-TT):`,dayDate);
+ if(newDate===null)return;
+ newDate=String(newDate).trim();
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){alert('Bitte Datum im Format JJJJ-MM-TT eingeben.');return}
+
+ let hoursText=prompt('Dem Element zugeteilte Ist-Stunden:',String(Number(entry.allocatedActualHours||0)));
+ if(hoursText===null)return;
+ let newHours=Number(String(hoursText).replace(',','.'));
+ if(!Number.isFinite(newHours)||newHours<0){alert('Bitte gültige Ist-Stunden eingeben.');return}
+
+ let currentType=String(oldDay.productionTypeByCommission?.[cid]||productionTypeForElement(p,c,el)||'');
+ let newType=prompt('Produktionsart (AW, IW, DA, DE oder Fassade):',currentType);
+ if(newType===null)return;
+ newType=String(newType).trim();
+ if(!['AW','IW','DA','DE','Fassade'].includes(newType)){alert('Bitte AW, IW, DA, DE oder Fassade eingeben.');return}
+
+ let action=prompt('Status: „produziert“ lassen oder „offen“ eingeben, um das Element wieder zu öffnen:','produziert');
+ if(action===null)return;
+ action=String(action).trim().toLowerCase();
+
+ if(action==='offen'){
+   oldDay.entries=(oldDay.entries||[]).filter(e=>e.elementId!==elementId);
+ }else{
+   entry.allocatedActualHours=newHours;
+   entry.productionDate=newDate;
+   oldDay.productionTypeByCommission=oldDay.productionTypeByCommission||{};
+   if(newDate===dayDate)oldDay.productionTypeByCommission[cid]=newType;
+   if(newDate!==dayDate){
+     oldDay.entries=(oldDay.entries||[]).filter(e=>e.elementId!==elementId);
+     let target=(p.dailyProduction||[]).find(d=>d.date===newDate);
+     if(!target){
+       target={date:newDate,actualHours:0,note:'',entries:[],actualHoursByCommission:{},productionTypeByCommission:{},updatedAt:new Date().toISOString()};
+       p.dailyProduction.push(target);
+     }
+     target.entries=Array.isArray(target.entries)?target.entries:[];
+     target.entries=target.entries.filter(e=>e.elementId!==elementId);
+     target.entries.push(entry);
+     target.productionTypeByCommission=target.productionTypeByCommission||{};
+     target.productionTypeByCommission[cid]=newType;
+     target.updatedAt=new Date().toISOString();
+   }
+ }
+
+ // Remove completely empty day shells only when they contain neither entries nor recorded hours.
+ p.dailyProduction=(p.dailyProduction||[]).filter(d=>{
+   let hasEntries=(d.entries||[]).length>0;
+   let hasHours=Object.values(d.actualHoursByCommission||{}).some(v=>Number(v)>0);
+   return hasEntries||hasHours||String(d.note||'').trim();
+ });
+ p.dailyProduction.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+ p.updatedAt=new Date().toISOString();
+ saveProjects();
+ openCommissionArea(cid);
+}
 function productionGroupsTableHtml(p){
  let cid=activeProjectCommission(p)?.id||'';
  let groups=commissionGroups(p,cid);
@@ -6797,22 +6868,15 @@ function openProductionProgress(){
  E('prodProgressProject').textContent=(p.name||'')+' · '+(c?.name||'Kommission');
  E('ppDate').value=new Date().toISOString().slice(0,10);
  E('ppActualHours').value='';
+ E('ppProductionType').value='';
  E('ppNote').value='';
- productionDraft=els.map(x=>{
-   let doneDate=actualElementFinishDate(p,x.id);
-   let entry=null;
-   if(doneDate){
-     let day=(p.dailyProduction||[]).find(d=>(d.entries||[]).some(e=>e.elementId===x.id));
-     entry=day?.entries?.find(e=>e.elementId===x.id)||null;
-   }
-   return {
-     elementId:x.id,
-     produced:!!doneDate,
-     wasProduced:!!doneDate,
-     productionDate:doneDate||E('ppDate').value,
-     allocatedActualHours:Number(entry?.allocatedActualHours||0)
-   };
- });
+ productionDraft=els.filter(x=>!actualElementFinishDate(p,x.id)).map(x=>({
+   elementId:x.id,
+   produced:false,
+   wasProduced:false,
+   productionDate:E('ppDate').value,
+   allocatedActualHours:0
+ }));
  renderProductionDraftRows();
  renderProductionProgressHistory();
  calculateDailyProduction();
@@ -6869,7 +6933,7 @@ function renderProductionDraftRows(){
  }
  box.innerHTML=groups.map(g=>{
    let visible=(g.elements||[]).filter(el=>{
-     let i=flat.findIndex(x=>x.id===el.id),draft=productionDraft[i]||{};
+     let i=productionDraft.findIndex(x=>x.elementId===el.id),draft=productionDraft[i]||{};
      return !draft.wasProduced;
    });
    if(!visible.length)return '';
@@ -6877,7 +6941,7 @@ function renderProductionDraftRows(){
     <div class="productionGroupTitle">${esc(g.title||'Produktionsgruppe')}</div>
     <div class="ppElementRow ppElementRowHead"><div>Element</div><div>Soll h</div><div>Status</div><div>Produktionsdatum</div><div>Ist h Anteil</div></div>
     ${visible.map(el=>{
-      let i=flat.findIndex(x=>x.id===el.id),draft=productionDraft[i]||{},date=draft.productionDate||E('ppDate')?.value||new Date().toISOString().slice(0,10);
+      let i=productionDraft.findIndex(x=>x.elementId===el.id),draft=productionDraft[i]||{},date=draft.productionDate||E('ppDate')?.value||new Date().toISOString().slice(0,10);
       let soll=Number(el.targetHours)||((Number(el.area)||0)*(Number(el.factor)||0));
       let anz=Math.max(1,Number(el.count)||1),unitArea=Number(el.unitArea);
       if(!Number.isFinite(unitArea)||unitArea<=0)unitArea=(Number(el.area)||0)/anz;
@@ -6909,7 +6973,7 @@ function renderProductionProgressHistory(){
  }
 
  box.innerHTML=`<div class="ppHistoryWrap"><table class="ppHistoryTable">
-   <thead><tr><th>Datum</th><th>Ist h</th><th>Fertig</th><th>Elemente</th><th>m²</th><th>Ist h/m²</th></tr></thead>
+   <thead><tr><th>Datum</th><th>Art</th><th>Ist h</th><th>Fertig</th><th>Elemente</th><th>m²</th><th>Ist h/m²</th></tr></thead>
    <tbody>${rows.map(d=>{
      let dayEntries=(d.entries||[]).filter(e=>ids.has(e.elementId));
      let hours=d.actualHoursByCommission&&Object.prototype.hasOwnProperty.call(d.actualHoursByCommission,cid)
@@ -6924,6 +6988,7 @@ function renderProductionProgressHistory(){
      let factor=area>0?hours/area:null;
      return `<tr class="${dayEntries.length?'':'ppHistoryDayZero'}">
        <td><b>${localDateLabel(d.date)||esc(d.date||'–')}</b></td>
+       <td><b>${esc(d.productionTypeByCommission?.[cid]||'–')}</b></td>
        <td><b>${fmtNum(hours)} h</b></td>
        <td>${units>0?`${units} Stk.`:`${dayEntries.length} Element${dayEntries.length===1?'':'e'}`}</td>
        <td class="ppHistoryElements">${names.length?names.join('<br>'):'0 Elemente<span class="ppHistoryElementSub">Anlauf-/Produktionstag ohne fertiges Element</span>'}</td>
@@ -6977,7 +7042,9 @@ function saveDailyProduction(){
  let p=projectById(currentProjectId);if(!p)return;
  let date=E('ppDate').value;if(!date){alert('Bitte Datum wählen.');return}
  let actualHours=Math.max(0,numCell(E('ppActualHours').value));
+ let productionType=String(E('ppProductionType')?.value||'').trim();
  let c=activeProjectCommission(p),cid=c?.id||'',els=commissionElements(p,cid);
+ if(actualHours>0&&!productionType){alert('Bitte die Produktionsart AW, IW, DA, DE oder Fassade auswählen.');return}
  let undone=productionDraft.filter(d=>d.wasProduced&&!d.produced);
  if(undone.length){
    let names=undone.map(d=>els.find(x=>x.id===d.elementId)?.name||d.elementId);
@@ -7037,6 +7104,9 @@ function saveDailyProduction(){
    }
    hoursDay.actualHoursByCommission=hoursDay.actualHoursByCommission||{};
    hoursDay.actualHoursByCommission[cid]=actualHours;
+   hoursDay.productionTypeByCommission=hoursDay.productionTypeByCommission||{};
+   if(productionType)hoursDay.productionTypeByCommission[cid]=productionType;
+   else delete hoursDay.productionTypeByCommission[cid];
    hoursDay.actualHours=actualHours;
    hoursDay.note=E('ppNote').value.trim();
    hoursDay.updatedAt=new Date().toISOString();
