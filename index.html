@@ -16479,7 +16479,8 @@ function loadExternalScript(src,testFn){
  const ALLOWED=new Set([
    'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
    'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js',
-   'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'
+   'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+   'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js'
  ]);
  return new Promise((resolve,reject)=>{
    if(!ALLOWED.has(String(src||'')))return reject(new Error('Nicht freigegebene externe Bibliothek blockiert.'));
@@ -17448,14 +17449,30 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(materialBarcodeScannerRunningV429)return;
   if(box)box.style.display='block';
   try{
-   if(typeof loadExternalScript==='function')await loadExternalScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js',()=>!!window.Html5Qrcode);
+   if(!window.isSecureContext)throw new Error('Die Kamera benötigt eine sichere HTTPS-Verbindung.');
+   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Dieser Browser unterstützt den Kamerazugriff nicht.');
+
+   if(status){status.textContent='Kameraberechtigung wird geprüft …';status.style.color='';}
+
+   // Berechtigung ausdrücklich über den Browser anfordern.
+   let testStream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+   testStream.getTracks().forEach(t=>t.stop());
+
+   if(typeof loadExternalScript==='function')await loadExternalScript('https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js',()=>!!window.Html5Qrcode);
    if(!window.Html5Qrcode)throw new Error('Barcode-Scanner konnte nicht geladen werden.');
+
+   let cameras=[];
+   try{cameras=await Html5Qrcode.getCameras();}catch(_){}
+   let preferred=(cameras||[]).find(c=>/back|rear|environment|rück|hinten/i.test(c.label||''))||(cameras||[])[(cameras||[]).length-1];
+
    materialBarcodeScannerV429=materialBarcodeScannerV429||new Html5Qrcode('wcMaterialBarcodeReaderV429');
    materialBarcodeScannerRunningV429=true;
    if(status){status.textContent='Kamera wird gestartet …';status.style.color='';}
+
+   let cameraConfig=(preferred&&preferred.id)?preferred.id:{facingMode:'environment'};
    await materialBarcodeScannerV429.start(
-    {facingMode:'environment'},
-    {fps:12,qrbox:{width:300,height:180},aspectRatio:1.5},
+    cameraConfig,
+    {fps:10,qrbox:{width:280,height:160}},
     async decoded=>{
      let code=normalizeMaterialBarcodeV429(decoded),now=Date.now();
      if(!code||(lastMaterialBarcodeV429.code===code&&now-lastMaterialBarcodeV429.at<1500))return;
@@ -17472,9 +17489,18 @@ document.addEventListener('DOMContentLoaded',()=>{
    if(status){status.textContent='Kamera aktiv – Barcode vor die Kamera halten.';status.style.color='#226b35';}
   }catch(err){
    materialBarcodeScannerRunningV429=false;
+   try{if(materialBarcodeScannerV429)await materialBarcodeScannerV429.clear();}catch(_){}
+   materialBarcodeScannerV429=null;
    if(reader)reader.innerHTML='';
-   if(status){status.textContent='Kamera konnte nicht gestartet werden. Barcode kann weiterhin manuell eingegeben werden.';status.style.color='#9c2d20';}
-   console.error(err);
+   let name=err?.name||'',msg=String(err?.message||err||'');
+   let text='Kamera konnte nicht gestartet werden.';
+   if(name==='NotAllowedError'||/permission|denied|not allowed/i.test(msg)) text='Kamerazugriff wurde nicht erlaubt. Bitte in den Browser-/Website-Einstellungen Kamera erlauben und erneut versuchen.';
+   else if(name==='NotFoundError'||/not found|no camera/i.test(msg)) text='Keine Kamera gefunden.';
+   else if(name==='NotReadableError'||/could not start video|notreadable/i.test(msg)) text='Die Kamera wird bereits von einer anderen App oder einem anderen Browserfenster verwendet.';
+   else if(msg) text+=' '+msg;
+   text+=' Barcode kann weiterhin manuell eingegeben werden.';
+   if(status){status.textContent=text;status.style.color='#9c2d20';}
+   console.error('Material barcode camera:',err);
   }
  };
  window.stopMaterialBarcodeScannerV429=async function(hide=true){
@@ -17490,7 +17516,38 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(box&&hide===false)setTimeout(()=>{box.style.display='none';},450);
  };
 
- window.startInventoryScannerV415=async function(){let status=el('wcScannerStatus'),reader=el('wcScannerReader');if(inventoryScannerRunningV415)return;let st=load(),c=current(st);if(c)ensureInventoryDraftV416(c);try{if(typeof loadExternalScript==='function')await loadExternalScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js',()=>!!window.Html5Qrcode);if(!window.Html5Qrcode)throw new Error('Barcode-Scanner konnte nicht geladen werden.');reader.style.display='block';inventoryScannerV415=inventoryScannerV415||new Html5Qrcode('wcScannerReader');inventoryScannerRunningV415=true;if(status){status.textContent='Kamera wird gestartet …';status.style.color=''}await inventoryScannerV415.start({facingMode:'environment'},{fps:12,qrbox:{width:300,height:180},aspectRatio:1.5},decoded=>processInventoryBarcodeV415(decoded),()=>{});if(status){status.textContent='Kamera aktiv – Barcodes nacheinander scannen. Bereits gescannte Positionen bleiben gespeichert.';status.style.color='#226b35'}}catch(err){inventoryScannerRunningV415=false;reader.style.display='none';if(status){status.textContent='Kamera konnte nicht gestartet werden. Suche oder Barcode-Eingabe verwenden.';status.style.color='#9c2d20'}console.error(err);}}
+ window.startInventoryScannerV415=async function(){
+  let status=el('wcScannerStatus'),reader=el('wcScannerReader');
+  if(inventoryScannerRunningV415)return;
+  let st=load(),c=current(st);if(c)ensureInventoryDraftV416(c);
+  try{
+   if(!window.isSecureContext)throw new Error('Die Kamera benötigt HTTPS.');
+   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Kamerazugriff wird von diesem Browser nicht unterstützt.');
+   if(status){status.textContent='Kameraberechtigung wird geprüft …';status.style.color='';}
+   let testStream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+   testStream.getTracks().forEach(t=>t.stop());
+   if(typeof loadExternalScript==='function')await loadExternalScript('https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js',()=>!!window.Html5Qrcode);
+   if(!window.Html5Qrcode)throw new Error('Barcode-Scanner konnte nicht geladen werden.');
+   let cameras=[];try{cameras=await Html5Qrcode.getCameras();}catch(_){}
+   let preferred=(cameras||[]).find(c=>/back|rear|environment|rück|hinten/i.test(c.label||''))||(cameras||[])[(cameras||[]).length-1];
+   reader.style.display='block';
+   inventoryScannerV415=inventoryScannerV415||new Html5Qrcode('wcScannerReader');
+   inventoryScannerRunningV415=true;
+   let inventoryCameraConfigV433=(preferred&&preferred.id)?preferred.id:{facingMode:'environment'};
+   await inventoryScannerV415.start(inventoryCameraConfigV433,{fps:10,qrbox:{width:280,height:160}},decoded=>processInventoryBarcodeV415(decoded),()=>{});
+   if(status){status.textContent='Kamera aktiv – Barcodes nacheinander scannen. Bereits gescannte Positionen bleiben gespeichert.';status.style.color='#226b35';}
+  }catch(err){
+   inventoryScannerRunningV415=false;
+   reader.style.display='none';
+   let name=err?.name||'',msg=String(err?.message||err||'');
+   let text='Kamera konnte nicht gestartet werden.';
+   if(name==='NotAllowedError'||/permission|denied|not allowed/i.test(msg))text='Kamerazugriff wurde nicht erlaubt. Bitte Kamera für diese Website erlauben.';
+   else if(name==='NotReadableError')text='Die Kamera wird bereits von einer anderen App verwendet.';
+   else if(msg)text+=' '+msg;
+   if(status){status.textContent=text+' Suche oder Barcode-Eingabe bleiben verfügbar.';status.style.color='#9c2d20';}
+   console.error('Inventory barcode camera:',err);
+  }
+ }
  window.stopInventoryScannerV415=async function(){let reader=el('wcScannerReader');if(inventoryScannerV415&&inventoryScannerRunningV415){try{await inventoryScannerV415.stop();}catch(e){} }inventoryScannerRunningV415=false;if(reader)reader.style.display='none';let status=el('wcScannerStatus');if(status){status.textContent='Scanner beendet – du kannst manuell weitermachen. Alle bisherigen Scans bleiben erhalten.';status.style.color='#226b35'};let search=el('wcInventorySearch');if(search)search.focus();}
  window.finishInventoryV413=function(){let st=load(),c=current(st);if(!c)return;ensureInventoryDraftV416(c);let missing=(c.items||[]).filter(i=>!(inventoryDraftV416[i.id]||{}).status);if(missing.length){alert('Bitte für alle Materialpositionen einen Status wählen. Noch offen: '+missing.length);return}let rows=c.items.map(i=>{let d=inventoryDraftV416[i.id]||{actual:0,status:''};let actual=Number(d.actual||0);return {itemId:i.id,name:i.name,toolNumber:i.toolNumber||'',barcode:i.barcode||'',expected:i.qty,actual,diff:actual-i.qty,unit:i.unit,status:d.status}});c.inventories=c.inventories||[];c.inventories.unshift({id:'inv_'+Date.now(),date:new Date().toISOString(),rows});save(st);stopInventoryScannerV415();el('wcInventoryArea').style.display='none';inventoryDraftV416={};inventorySessionContainerIdV416='';render();}
  function render(){let st=load();let allItems=st.containers.reduce((n,c)=>n+(c.items||[]).length,0);let diffs=st.containers.reduce((n,c)=>{let inv=(c.inventories||[])[0];return n+(inv?inv.rows.filter(r=>r.diff!==0||(r.status&&r.status!=='vorhanden')).length:0)},0);el('wcStatContainers').textContent=st.containers.length;el('wcStatItems').textContent=allItems;el('wcStatDiff').textContent=diffs;el('wcContainerList').innerHTML=st.containers.length?st.containers.map(c=>'<div class="toolsContainerRowV413"><div><b>'+esc(c.name)+'</b><span class="muted">'+esc(c.location||'')+' · '+(c.items||[]).length+' Materialpositionen'+((c.inventories||[])[0]?' · letzte Inventur '+new Date(c.inventories[0].date).toLocaleDateString('de-CH'):'')+'</span></div><button class="btn '+(selected===c.id?'primary':'secondary')+'" type="button" onclick="selectWhiteContainerV413(\''+c.id+'\')">'+(selected===c.id?'Ausgewählt':'Öffnen')+'</button><button class="btn secondary" type="button" onclick="deleteWhiteContainerV413(\''+c.id+'\')">Löschen</button></div>').join(''):'<div class="muted">Noch keine Container erfasst.</div>';let c=current(st);if(!c){applyToolsContainerTabV419();return;}applyToolsContainerTabV419();el('wcMaterialTitle').textContent='Inventarliste · '+c.name;let items=c.items||[];let imp=c.materialImportedAt?'<div class="muted" style="margin-bottom:8px">Letzter Excel-Import: '+new Date(c.materialImportedAt).toLocaleString('de-CH')+(c.materialImportFile?' · '+esc(c.materialImportFile):'')+'</div>':'';el('wcItemsTable').innerHTML=imp+(items.length?'<table class="toolsTableV413"><thead><tr><th>Bild</th><th>Material</th><th>Werkzeugnummer</th><th>Kategorie</th><th>Barcode</th><th>Sollbestand</th><th></th></tr></thead><tbody>'+items.map(i=>'<tr><td>'+photoHtmlV417(i,true)+'</td><td><b>'+esc(i.name)+'</b></td><td>'+esc(i.toolNumber||'—')+'</td><td>'+esc(i.category||'—')+'</td><td>'+(i.barcode?esc(i.barcode):'—')+'</td><td>'+i.qty+' '+esc(i.unit)+'</td><td><button class="btn secondary" type="button" onclick="deleteContainerItemV413(\''+i.id+'\')">Entfernen</button></td></tr>').join('')+'</tbody></table>':'<div class="muted">Noch kein Material erfasst oder importiert.</div>');}
