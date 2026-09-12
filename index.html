@@ -3574,9 +3574,22 @@ window.APP_RELEASE = {
      <label>Kategorie<input id="wcItemCategory" placeholder="z. B. Elektro"></label>
      <label>Sollmenge<input id="wcItemQty" type="number" min="0" step="1" value="1"></label>
      <label>Einheit<input id="wcItemUnit" value="Stk."></label>
-     <label>Barcode<input id="wcItemBarcode" inputmode="numeric" placeholder="EAN / Code"></label>
+     <label>Barcode
+      <div class="toolsBarcodeCaptureV429">
+       <input id="wcItemBarcode" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="Barcode / Code">
+       <button class="btn secondary" type="button" onclick="startMaterialBarcodeScannerV429()">📷 Barcode scannen</button>
+      </div>
+     </label>
     </div>
     <button class="btn secondary" type="button" onclick="addContainerItemV413()">+ Material hinzufügen</button>
+    <div id="wcMaterialBarcodeScannerV429" class="toolsMaterialScannerV429" style="display:none">
+     <div class="toolsMaterialScannerHeadV429">
+      <div><b>Barcode erfassen</b><div class="muted">Barcode der Maschine mit der Kamera scannen. Zahlen und Grossbuchstaben werden übernommen.</div></div>
+      <button class="btn secondary" type="button" onclick="stopMaterialBarcodeScannerV429()">Scanner schliessen</button>
+     </div>
+     <div id="wcMaterialBarcodeReaderV429"></div>
+     <div id="wcMaterialBarcodeStatusV429" class="muted" style="margin-top:8px"></div>
+    </div>
    </div>
    <div class="card" style="background:#f4f7f5;border:1px solid #d9e2dd;margin:0 0 14px;padding:14px">
     <div style="font-weight:800;margin-bottom:6px">Excel-Import</div>
@@ -16535,6 +16548,14 @@ async function exportInventoryPDF(){
      @page{size:A3 landscape;margin:10mm}body{font-family:Arial,sans-serif;color:#111}h1{font-size:18px;margin:0 0 5px}p{font-size:9px}
      table{border-collapse:collapse;width:100%;font-size:6.5px}th,td{border:1px solid #777;padding:2px;vertical-align:top}th{background:#eee}
    
+
+.toolsBarcodeCaptureV429{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.toolsBarcodeCaptureV429 .btn{white-space:nowrap}
+.toolsMaterialScannerV429{margin-top:12px;padding:14px;border:1px solid #d9e2dd;border-radius:14px;background:#f4f7f5}
+.toolsMaterialScannerHeadV429{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+#wcMaterialBarcodeReaderV429{width:100%;max-width:560px;margin:auto;overflow:hidden;border-radius:12px;background:#111}
+@media(max-width:700px){.toolsBarcodeCaptureV429{grid-template-columns:1fr}.toolsMaterialScannerHeadV429{flex-direction:column}}
+
 </style></head><body><h1>Holzlager – Gesamtinventar</h1><p>Export: ${escHtml(formatDateTime(new Date().toISOString()))} · Positionen: ${body.length}</p>${table}</body></html>`);
    win.document.close();
    win.onload=()=>setTimeout(()=>win.print(),300);
@@ -17344,7 +17365,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  function compressPhotoV417(file){return new Promise((resolve,reject)=>{let rd=new FileReader();rd.onerror=()=>reject(new Error('Bild konnte nicht gelesen werden.'));rd.onload=()=>{let img=new Image();img.onerror=()=>reject(new Error('Bild konnte nicht verarbeitet werden.'));img.onload=()=>{let max=800,scale=Math.min(1,max/img.width,max/img.height),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale)),c=document.createElement('canvas');c.width=w;c.height=h;let ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);let webp='';try{webp=c.toDataURL('image/webp',.58)}catch(e){}let jpg=c.toDataURL('image/jpeg',.62);resolve(webp&&webp.startsWith('data:image/webp')&&webp.length<jpg.length?webp:jpg);};img.src=rd.result;};rd.readAsDataURL(file);});}
  window.handleItemPhotoV417=async function(input){let file=input?.files?.[0];if(!file||!photoTargetItemIdV417)return;try{let data=await compressPhotoV417(file),st=load(),target=null;for(let c of st.containers||[]){let i=(c.items||[]).find(x=>x.id===photoTargetItemIdV417);if(i){target=i;break;}}if(!target)return;let key=itemPhotoMatchKeyV417(target);if(key){for(let c of st.containers||[])for(let i of c.items||[])if(itemPhotoMatchKeyV417(i)===key)i.photo=data;}else target.photo=data;save(st);render();let c=current(st);if(c&&el('wcInventoryArea')?.style.display!=='none')renderInventory(c);}catch(err){console.error(err);alert(err.message||err);}finally{input.value='';photoTargetItemIdV417='';}}
  window.removeItemPhotoV417=function(itemId){let st=load(),target=null;for(let c of st.containers||[]){let i=(c.items||[]).find(x=>x.id===itemId);if(i){target=i;break;}}if(!target)return;if(!confirm('Bild bei diesem Material entfernen?'))return;let key=itemPhotoMatchKeyV417(target);if(key){for(let c of st.containers||[])for(let i of c.items||[])if(itemPhotoMatchKeyV417(i)===key)i.photo='';}else target.photo='';save(st);render();let c=current(st);if(c&&el('wcInventoryArea')?.style.display!=='none')renderInventory(c);}
- window.addContainerItemV413=function(){let st=load(),c=current(st);if(!c)return;let name=el('wcItemName').value.trim();let qty=Number(el('wcItemQty').value);if(!name||!Number.isFinite(qty)||qty<0){alert('Bitte Material und gültige Sollmenge eingeben.');return}c.items=c.items||[];let barcode=(el('wcItemBarcode')?.value||'').trim();let toolNumber=(el('wcItemToolNumber')?.value||'').trim();if(barcode&&(c.items||[]).some(i=>String(i.barcode||'').trim()===barcode)){alert('Dieser Barcode ist in diesem Container bereits einem Material zugeordnet.');return}let newItem={id:'i_'+Date.now(),name,toolNumber,category:el('wcItemCategory').value.trim(),qty,unit:el('wcItemUnit').value.trim()||'Stk.',barcode,photo:''};newItem.photo=findReusablePhotoV417(st,newItem);c.items.push(newItem);save(st);el('wcItemName').value='';if(el('wcItemToolNumber'))el('wcItemToolNumber').value='';el('wcItemCategory').value='';el('wcItemQty').value='1';if(el('wcItemBarcode'))el('wcItemBarcode').value='';render();}
+ window.addContainerItemV413=function(){let st=load(),c=current(st);if(!c)return;let name=el('wcItemName').value.trim();let qty=Number(el('wcItemQty').value);if(!name||!Number.isFinite(qty)||qty<0){alert('Bitte Material und gültige Sollmenge eingeben.');return}c.items=c.items||[];let barcode=(el('wcItemBarcode')?.value||'').trim().toUpperCase();let toolNumber=(el('wcItemToolNumber')?.value||'').trim();if(barcode&&(c.items||[]).some(i=>String(i.barcode||'').trim()===barcode)){alert('Dieser Barcode ist in diesem Container bereits einem Material zugeordnet.');return}let newItem={id:'i_'+Date.now(),name,toolNumber,category:el('wcItemCategory').value.trim(),qty,unit:el('wcItemUnit').value.trim()||'Stk.',barcode,photo:''};newItem.photo=findReusablePhotoV417(st,newItem);c.items.push(newItem);save(st);el('wcItemName').value='';if(el('wcItemToolNumber'))el('wcItemToolNumber').value='';el('wcItemCategory').value='';el('wcItemQty').value='1';if(el('wcItemBarcode'))el('wcItemBarcode').value='';render();}
  window.deleteContainerItemV413=function(id){let st=load(),c=current(st);if(!c)return;c.items=(c.items||[]).filter(i=>i.id!==id);save(st);render();}
  function normHeaderV414(v){return String(v??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');}
  function headerIndexV414(headers,names){let hs=headers.map(normHeaderV414);for(let n of names){let i=hs.indexOf(normHeaderV414(n));if(i>=0)return i;}return -1;}
@@ -17419,6 +17440,56 @@ document.addEventListener('DOMContentLoaded',()=>{
  window.renderInventorySearchV415=function(){let box=el('wcInventorySearchResults');if(!box)return;let st=load(),c=current(st);if(!c){box.innerHTML='';return}ensureInventoryDraftV416(c);let q=(el('wcInventorySearch')?.value||'').trim().toLowerCase();let rows=(c.items||[]).filter(i=>!q||[i.name,i.toolNumber,i.category,i.barcode].some(v=>String(v||'').toLowerCase().includes(q))).slice(0,100);box.innerHTML=rows.length?rows.map(i=>{let d=inventoryDraftV416[i.id]||{actual:0,status:''};return '<div class="toolsSearchRowV415"><div class="toolsSearchMainV417">'+(i.photo?'<img class="toolsSearchPhotoV417" src="'+esc(i.photo)+'" alt="" title="Bild vergrössern" onclick="openPhotoViewer(this.src)">':'')+'<div><b>'+esc(i.name)+'</b><div class="muted">'+(i.toolNumber?'Werkzeugnr. '+esc(i.toolNumber)+' · ':'')+(i.barcode?esc(i.barcode)+' · ':'')+'Status: '+esc(statusLabelV416(d.status))+'</div></div></div><button class="btn secondary" type="button" onclick="inventoryMarkPresentV416(\''+i.id+'\')">✓ Vorhanden</button></div>'}).join(''):'<div class="muted">Keine Treffer.</div>';}
  window.inventoryAddOneV415=function(itemId){incrementInventoryItemV415(itemId,1);}
  window.inventoryMarkPresentV416=function(itemId){let st=load(),c=current(st);if(!c)return;let item=(c.items||[]).find(i=>i.id===itemId);if(!item)return;ensureInventoryDraftV416(c);setInventoryItemV416(itemId,{actual:Math.max(Number(inventoryDraftV416[itemId]?.actual||0),Number(item.qty||1),1),status:'vorhanden'});}
+
+ let materialBarcodeScannerV429=null,materialBarcodeScannerRunningV429=false,lastMaterialBarcodeV429={code:'',at:0};
+ function normalizeMaterialBarcodeV429(raw){return String(raw||'').trim().toUpperCase();}
+ window.startMaterialBarcodeScannerV429=async function(){
+  let box=el('wcMaterialBarcodeScannerV429'),reader=el('wcMaterialBarcodeReaderV429'),status=el('wcMaterialBarcodeStatusV429');
+  if(materialBarcodeScannerRunningV429)return;
+  if(box)box.style.display='block';
+  try{
+   if(typeof loadExternalScript==='function')await loadExternalScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js',()=>!!window.Html5Qrcode);
+   if(!window.Html5Qrcode)throw new Error('Barcode-Scanner konnte nicht geladen werden.');
+   materialBarcodeScannerV429=materialBarcodeScannerV429||new Html5Qrcode('wcMaterialBarcodeReaderV429');
+   materialBarcodeScannerRunningV429=true;
+   if(status){status.textContent='Kamera wird gestartet …';status.style.color='';}
+   await materialBarcodeScannerV429.start(
+    {facingMode:'environment'},
+    {fps:12,qrbox:{width:300,height:180},aspectRatio:1.5},
+    async decoded=>{
+     let code=normalizeMaterialBarcodeV429(decoded),now=Date.now();
+     if(!code||(lastMaterialBarcodeV429.code===code&&now-lastMaterialBarcodeV429.at<1500))return;
+     lastMaterialBarcodeV429={code,at:now};
+     let input=el('wcItemBarcode');
+     if(input)input.value=code;
+     if(status){status.textContent='✓ Barcode übernommen: '+code;status.style.color='#226b35';}
+     navigator.vibrate?.(45);
+     await stopMaterialBarcodeScannerV429(false);
+     if(input)input.focus();
+    },
+    ()=>{}
+   );
+   if(status){status.textContent='Kamera aktiv – Barcode vor die Kamera halten.';status.style.color='#226b35';}
+  }catch(err){
+   materialBarcodeScannerRunningV429=false;
+   if(reader)reader.innerHTML='';
+   if(status){status.textContent='Kamera konnte nicht gestartet werden. Barcode kann weiterhin manuell eingegeben werden.';status.style.color='#9c2d20';}
+   console.error(err);
+  }
+ };
+ window.stopMaterialBarcodeScannerV429=async function(hide=true){
+  let box=el('wcMaterialBarcodeScannerV429'),reader=el('wcMaterialBarcodeReaderV429');
+  try{
+   if(materialBarcodeScannerV429&&materialBarcodeScannerRunningV429)await materialBarcodeScannerV429.stop();
+  }catch(err){console.warn(err);}
+  materialBarcodeScannerRunningV429=false;
+  try{if(materialBarcodeScannerV429)await materialBarcodeScannerV429.clear();}catch(_){}
+  materialBarcodeScannerV429=null;
+  if(reader)reader.innerHTML='';
+  if(box&&hide!==false)box.style.display='none';
+  if(box&&hide===false)setTimeout(()=>{box.style.display='none';},450);
+ };
+
  window.startInventoryScannerV415=async function(){let status=el('wcScannerStatus'),reader=el('wcScannerReader');if(inventoryScannerRunningV415)return;let st=load(),c=current(st);if(c)ensureInventoryDraftV416(c);try{if(typeof loadExternalScript==='function')await loadExternalScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js',()=>!!window.Html5Qrcode);if(!window.Html5Qrcode)throw new Error('Barcode-Scanner konnte nicht geladen werden.');reader.style.display='block';inventoryScannerV415=inventoryScannerV415||new Html5Qrcode('wcScannerReader');inventoryScannerRunningV415=true;if(status){status.textContent='Kamera wird gestartet …';status.style.color=''}await inventoryScannerV415.start({facingMode:'environment'},{fps:12,qrbox:{width:300,height:180},aspectRatio:1.5},decoded=>processInventoryBarcodeV415(decoded),()=>{});if(status){status.textContent='Kamera aktiv – Barcodes nacheinander scannen. Bereits gescannte Positionen bleiben gespeichert.';status.style.color='#226b35'}}catch(err){inventoryScannerRunningV415=false;reader.style.display='none';if(status){status.textContent='Kamera konnte nicht gestartet werden. Suche oder Barcode-Eingabe verwenden.';status.style.color='#9c2d20'}console.error(err);}}
  window.stopInventoryScannerV415=async function(){let reader=el('wcScannerReader');if(inventoryScannerV415&&inventoryScannerRunningV415){try{await inventoryScannerV415.stop();}catch(e){} }inventoryScannerRunningV415=false;if(reader)reader.style.display='none';let status=el('wcScannerStatus');if(status){status.textContent='Scanner beendet – du kannst manuell weitermachen. Alle bisherigen Scans bleiben erhalten.';status.style.color='#226b35'};let search=el('wcInventorySearch');if(search)search.focus();}
  window.finishInventoryV413=function(){let st=load(),c=current(st);if(!c)return;ensureInventoryDraftV416(c);let missing=(c.items||[]).filter(i=>!(inventoryDraftV416[i.id]||{}).status);if(missing.length){alert('Bitte für alle Materialpositionen einen Status wählen. Noch offen: '+missing.length);return}let rows=c.items.map(i=>{let d=inventoryDraftV416[i.id]||{actual:0,status:''};let actual=Number(d.actual||0);return {itemId:i.id,name:i.name,toolNumber:i.toolNumber||'',barcode:i.barcode||'',expected:i.qty,actual,diff:actual-i.qty,unit:i.unit,status:d.status}});c.inventories=c.inventories||[];c.inventories.unshift({id:'inv_'+Date.now(),date:new Date().toISOString(),rows});save(st);stopInventoryScannerV415();el('wcInventoryArea').style.display='none';inventoryDraftV416={};inventorySessionContainerIdV416='';render();}
