@@ -3490,6 +3490,464 @@ window.APP_RELEASE = {
 #moduleToolsTile.moduleToolsTextOnlyV422 .moduleVisualBody b{font-size:2rem;line-height:1.12}
 #moduleToolsTile.moduleToolsTextOnlyV422 .moduleVisualBody small{font-size:1.08rem;line-height:1.45;margin-top:12px}
 #moduleToolsTile.moduleToolsTextOnlyV422 .moduleVisualBody i{top:50%;transform:translateY(-50%)}
+
+/* V436 MAIN CSS FIX */
+/* V434: Pritschenbedarf nur Lieferant + Menge, Mietpritschen konkret im Mietbereich */
+.platformReservationViewOnlyV434{cursor:default!important}
+.platformReservationViewOnlyV434:hover{transform:none!important}
+.platformSupplierNeedGridV434{display:grid;grid-template-columns:repeat(4,minmax(190px,1fr));gap:10px}
+.platformSupplierNeedV434{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:10px;align-items:center;padding:12px;border:1px solid #d7dfdb;border-radius:12px;background:#f7f9f8}
+.platformSupplierNeedV434 span{display:flex;flex-direction:column;gap:3px;min-width:0}
+.platformSupplierNeedV434 small{font-weight:500;color:#67736e;line-height:1.25}
+.platformSupplierNeedV434 input{text-align:center;font-weight:800}
+#platformProjectRentalFields.platformRentalGrid{display:block!important}
+.platformOwnPoolInfoV434{display:flex;gap:14px;align-items:center;padding:12px 14px;margin-bottom:12px;border-radius:12px;background:#edf5f0;border:1px solid #cfe0d6}
+.platformOwnPoolInfoV434 span{color:#52615b}
+.platformRentalSupplierV434{padding:14px;border:1px solid #d7dfdb;border-radius:14px;margin-top:12px;background:#fff}
+.platformRentalSupplierHeadV434{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.platformRentalLegacyV434{padding:9px 11px;margin-bottom:10px;border-radius:10px;background:#fff4d8;color:#745500}
+.platformRentalAssetGridV434{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:8px}
+.platformRentalAssetV434{display:flex!important;flex-direction:row!important;gap:9px;align-items:flex-start;padding:10px;border:1px solid #d7dfdb;border-radius:10px;background:#f7f9f8;cursor:pointer}
+.platformRentalAssetV434.selected{border-color:#245b45;background:#e9f4ee}
+.platformRentalAssetV434.blocked{opacity:.55;cursor:not-allowed}
+.platformRentalAssetV434 input{width:auto!important;margin-top:3px}
+.platformRentalAssetV434 span{display:flex;flex-direction:column;gap:2px}
+.platformRentalAssetV434 small{font-weight:500;color:#67736e}
+@media(max-width:1100px){.platformSupplierNeedGridV434{grid-template-columns:repeat(2,minmax(190px,1fr))}.platformRentalAssetGridV434{grid-template-columns:repeat(2,minmax(180px,1fr))}}
+@media(max-width:650px){.platformSupplierNeedGridV434,.platformRentalAssetGridV434{grid-template-columns:1fr}}
+
+
+/* V435 – geordnete Darstellung der Mietpritschen */
+.platformOwnPoolInfoV435{
+  display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:center;
+  padding:14px 16px;margin-bottom:16px;border:1px solid #cfe0d6;border-radius:14px;background:#f3f8f5
+}
+.platformOwnPoolInfoV435>div{display:flex;flex-direction:column;gap:2px}
+.platformOwnPoolInfoV435>div b{font-size:1.08rem}
+.platformOwnPoolInfoV435>div span{font-size:.9rem;font-weight:700;color:#2f6b50}
+.platformOwnPoolInfoV435 p{margin:0;color:#5c6963}
+
+.platformRentalSupplierV435{
+  border:1px solid #d8e0dc;border-radius:14px;background:#fff;margin:14px 0;overflow:hidden
+}
+.platformRentalSupplierHeadV435{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  padding:14px 16px;background:#f5f7f6;border-bottom:1px solid #dde4e0
+}
+.platformRentalSupplierNameV435{font-size:1.1rem;font-weight:800}
+.platformRentalCountV435{
+  min-width:108px;text-align:center;padding:7px 11px;border-radius:999px;
+  background:#e7f1ec;color:#184f3a;font-weight:800
+}
+.platformRentalTableV435{width:100%}
+.platformRentalTableHeadV435,.platformRentalRowV435{
+  display:grid;grid-template-columns:52px minmax(220px,1.5fr) 110px 90px 140px;
+  align-items:center;gap:10px
+}
+.platformRentalTableHeadV435{
+  padding:9px 14px;background:#fafbfa;border-bottom:1px solid #e4e9e6;
+  color:#6a756f;font-size:.86rem;font-weight:800
+}
+.platformRentalRowV435{
+  padding:11px 14px;border-bottom:1px solid #edf0ee;cursor:pointer
+}
+.platformRentalRowV435:last-child{border-bottom:0}
+.platformRentalRowV435:hover{background:#f8faf9}
+.platformRentalRowV435.selected{background:#edf7f1}
+.platformRentalRowV435.blocked{opacity:.55;cursor:not-allowed;background:#f3f3f3}
+.platformRentalCheckV435{display:flex;justify-content:center}
+.platformRentalCheckV435 input{width:20px!important;height:20px!important;margin:0}
+.platformRentalNameV435{font-weight:800}
+.platformRentalStatusV435{
+  display:inline-block;padding:5px 9px;border-radius:999px;font-size:.82rem;font-weight:800
+}
+.platformRentalStatusV435.free{background:#e9f5ed;color:#22643e}
+.platformRentalStatusV435.supplier{background:#ececec;color:#666}
+.platformRentalStatusV435.locked{background:#fbe8e8;color:#8a2727}
+.platformRentalEmptyV435{padding:16px;color:#6d7772}
+@media(max-width:900px){
+  .platformRentalTableHeadV435,.platformRentalRowV435{
+    grid-template-columns:44px minmax(170px,1fr) 88px 70px 120px
+  }
+  .platformOwnPoolInfoV435{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  .platformRentalTableHeadV435{display:none}
+  .platformRentalRowV435{
+    grid-template-columns:40px minmax(0,1fr);gap:6px 10px
+  }
+  .platformRentalRowV435>span:nth-child(3),
+  .platformRentalRowV435>span:nth-child(4),
+  .platformRentalRowV435>span:nth-child(5){grid-column:2}
+}
+
+
+/* V436 – Lieferantenblöcke zuverlässig untereinander und volle Breite */
+#platformProjectRentalFields{
+  display:block!important;
+  width:100%!important;
+}
+#platformProjectRentalFields > .platformOwnPoolInfoV435,
+#platformProjectRentalFields > .platformRentalSupplierV435{
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+}
+.platformRentalTableV435{
+  overflow-x:auto;
+}
+
+
+
+/* V437 – klarer Projektprozess: Bedarf → Zuweisung → Beladung → Transport */
+.platformProcessV437{margin-top:16px;padding:16px}
+.platformProcessHeadV437{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:14px}
+.platformProcessStepsV437{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.platformProcessStepV437{
+  display:flex;gap:11px;align-items:center;text-align:left;width:100%;
+  border:1px solid #d7dfdb;border-radius:14px;background:#f7f9f8;padding:13px;
+  color:#143c2e;cursor:pointer;min-height:86px
+}
+.platformProcessStepV437:hover{background:#eef5f1;border-color:#b9cec3}
+.platformProcessStepV437.active{background:#174f3b;color:#fff;border-color:#174f3b}
+.platformProcessStepV437.active small{color:#d9ece3}
+.platformProcessNrV437{
+  flex:0 0 34px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:#dfeae4;font-weight:900;color:#174f3b
+}
+.platformProcessStepV437.active .platformProcessNrV437{background:#fff;color:#174f3b}
+.platformProcessStepV437>span:last-child{display:flex;flex-direction:column;gap:4px;min-width:0}
+.platformProcessStepV437 b{font-size:1rem}
+.platformProcessStepV437 small{color:#66756e;line-height:1.25}
+.platformProcessHintV437{
+  margin-top:12px;padding:10px 12px;border-radius:10px;background:#fff7db;color:#6c5510;font-weight:700
+}
+@media(max-width:1000px){.platformProcessStepsV437{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.platformProcessStepsV437{grid-template-columns:1fr}.platformProcessHeadV437{align-items:flex-start;flex-direction:column}}
+
+
+
+/* V438 – Prozessnavigation ohne automatisches Scrollen */
+.platformV438ProcessHidden{display:none!important}
+.platformProcessStepV437{scroll-margin-top:0}
+
+
+
+/* V439 – Beladung nur mit konkret zugewiesenen Pritschen */
+.platformAssignmentIntroV439{
+  display:flex;flex-direction:column;gap:4px;padding:13px 15px;margin-bottom:14px;
+  border-radius:12px;background:#eef5f1;border:1px solid #cbded4
+}
+.platformAssignmentIntroV439 span{color:#607068}
+.platformPoolBadgeV439{
+  display:inline-block;margin-left:7px;padding:3px 8px;border-radius:999px;
+  font-size:.72rem;vertical-align:middle
+}
+.platformPoolBadgeV439.own{background:#e4efe9;color:#245b45}
+.platformPoolBadgeV439.rent{background:#fff0cf;color:#725300}
+.platformActualAssignedHintV439{display:block;margin-top:5px;color:#66756e;line-height:1.25}
+
+
+
+/* V440 – konkrete Zuweisung auf reservierte Anzahl begrenzen */
+.platformAssignmentInfoV440{
+  margin-top:4px;font-size:.86rem;font-weight:700;color:#63716a
+}
+.platformRentalCountV435.complete{
+  background:#dff1e6;color:#17623c
+}
+.platformRentalCountV435.over{
+  background:#fde5e5;color:#9b2222
+}
+.platformRentalRowV435.platformAssignmentLimitBlockedV440{
+  background:#eeeeee!important;
+  color:#8a8a8a!important;
+  opacity:.58;
+  cursor:not-allowed!important
+}
+.platformRentalRowV435.platformAssignmentLimitBlockedV440 .platformRentalStatusV435{
+  filter:grayscale(1);
+  opacity:.75
+}
+
+
+
+/* V441 – Verfügbarkeitsansicht nach Lieferanten gruppieren */
+#platformReservationPlatforms{
+  display:block!important;
+}
+.platformSupplierGroupV441{
+  margin:0 0 18px;
+  padding:0;
+  border:1px solid #d8e0dc;
+  border-radius:15px;
+  overflow:hidden;
+  background:#fff;
+}
+.platformSupplierGroupHeadV441{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:12px 14px;
+  background:#f4f7f5;
+  border-bottom:1px solid #dde4e0;
+}
+.platformSupplierGroupHeadV441>div:first-child{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.platformSupplierGroupHeadV441 h4{
+  margin:0;
+  font-size:1.08rem;
+}
+.platformSupplierPoolBadgeV441{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:.76rem;
+  font-weight:800;
+}
+.platformSupplierPoolBadgeV441.own{
+  background:#e3f0e8;
+  color:#21583f;
+}
+.platformSupplierPoolBadgeV441.rent{
+  background:#fff0cf;
+  color:#745400;
+}
+.platformSupplierGroupCountV441{
+  font-weight:800;
+  color:#5d6963;
+  white-space:nowrap;
+}
+.platformSupplierCardsV441{
+  padding:12px;
+}
+@media(max-width:650px){
+  .platformSupplierGroupHeadV441{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+
+
+
+/* V444 – Gantt mit Monat + Kalenderwoche */
+.platformGanttRow:first-child{min-height:68px}
+.platformGanttDayV444{
+ font-size:10px;text-align:center;min-width:26px;
+ border-right:1px solid rgba(25,65,53,.08);white-space:nowrap;
+ display:grid;grid-template-rows:20px 20px 26px;align-items:center
+}
+.platformGanttDayV444.weekend{background:#f3f3f3}
+.platformGanttMonthV444{
+ font-weight:900;color:#173f32;font-size:10px;overflow:visible;z-index:1
+}
+.platformGanttWeekV444{
+ font-weight:800;color:#5f6e67;font-size:9px;overflow:visible;z-index:1
+}
+.platformGanttDateV444{padding-top:3px}
+
+
+
+/* V445 – Hauptnavigation bleibt an ihrer normalen Position und scrollt nicht mit */
+.platformMainTabs{
+  position:static!important;
+  top:auto!important;
+  z-index:auto!important;
+}
+@media(max-width:760px){
+  .platformMainTabs{top:auto!important}
+}
+
+/* V445 – Container wird als eigene Detailansicht geöffnet */
+#wcContainerDetailHeadV445{
+  display:none;
+  margin:0 0 14px;
+  padding:14px 16px;
+  border:1px solid #d7e0db;
+  border-radius:14px;
+  background:#f5f8f6;
+}
+#wcContainerDetailHeadV445 .toolsContainerDetailTopV445{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  align-items:center;
+}
+#wcContainerDetailHeadV445 h3{margin:0}
+#wcContainerDetailHeadV445 .muted{margin-top:3px}
+@media(max-width:700px){
+  #wcContainerDetailHeadV445 .toolsContainerDetailTopV445{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+
+
+
+/* V447 – gescanntes Material als separates Statusfenster */
+.toolsScanPopupBackdropV447{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:rgba(12,25,20,.42);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.toolsScanPopupV447{
+  width:min(720px,96vw);
+  max-height:92vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 24px 70px rgba(0,0,0,.24);
+  padding:18px;
+  border:1px solid #d8e0dc;
+}
+.toolsScanPopupTopV447{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:14px;
+}
+.toolsScanPopupTopV447 h3{
+  margin:3px 0 0;
+  font-size:1.35rem;
+}
+.toolsScanPopupBodyV447{
+  display:grid;
+  grid-template-columns:180px minmax(0,1fr);
+  gap:18px;
+  align-items:start;
+}
+.toolsScanPopupImageV447{
+  min-height:140px;
+  display:grid;
+  place-items:center;
+  border:1px solid #e0e6e2;
+  border-radius:14px;
+  background:#f7f9f8;
+  overflow:hidden;
+}
+.toolsScanPopupImageV447 img{
+  width:100%;
+  max-height:190px;
+  object-fit:contain;
+  cursor:pointer;
+}
+.toolsScanPopupInfoV447{
+  display:grid;
+  gap:8px;
+}
+.toolsScanPopupInfoV447>div{
+  display:grid;
+  grid-template-columns:140px minmax(0,1fr);
+  gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid #edf0ee;
+}
+.toolsScanPopupInfoV447 span{
+  color:#6a756f;
+}
+.toolsScanPopupStatusV447{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:18px;
+}
+.toolsScanStatusBtnV447{
+  border:0;
+  border-radius:13px;
+  padding:14px 12px;
+  font-weight:900;
+  cursor:pointer;
+  font-size:.98rem;
+}
+.toolsScanStatusBtnV447.vorhanden{background:#dff2e6;color:#175f39}
+.toolsScanStatusBtnV447.dirty{background:#fff0c9;color:#735400}
+.toolsScanStatusBtnV447.missing{background:#fde2e2;color:#922323}
+.toolsScanStatusBtnV447.replace{background:#ececec;color:#4f4f4f}
+.toolsScanStatusBtnV447:hover{filter:brightness(.97)}
+@media(max-width:650px){
+  .toolsScanPopupBodyV447{grid-template-columns:1fr}
+  .toolsScanPopupImageV447{min-height:110px}
+  .toolsScanPopupStatusV447{grid-template-columns:1fr}
+  .toolsScanPopupInfoV447>div{grid-template-columns:1fr}
+}
+
+
+/* V448 – Containererfassung erst nach Klick anzeigen */
+.toolsContainerCreateCollapsedV448{padding:16px!important}
+.toolsContainerCreateClosedV448{display:flex;align-items:center;justify-content:flex-start}
+.toolsContainerCreateActionsV448{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+/* V449 – manuelle Materialerfassung erst nach Klick */
+#wcManualMaterialStartV449{display:block}
+
+/* V450 – Inventarpositionen bearbeitbar */
+.toolsItemActionsV450{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.toolsItemActionsV450 .btn{white-space:nowrap}
+#wcManualMaterialFormV449{scroll-margin-top:18px}
+
+/* V451 – kompakte Aktionsmenüs */
+.actionMenuV451{position:relative;display:inline-block}
+.actionMenuV451>summary{list-style:none;cursor:pointer;width:42px;height:38px;display:grid;place-items:center;border:1px solid #d3ddd8;border-radius:11px;background:#eef3f0;color:#173f32;font-size:22px;font-weight:900;line-height:1;user-select:none}
+.actionMenuV451>summary::-webkit-details-marker{display:none}
+.actionMenuV451[open]>summary{background:#dfe9e4}
+.actionMenuPanelV451{position:absolute;right:0;top:44px;z-index:1200;min-width:205px;padding:7px;background:#fff;border:1px solid #d5ded9;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.16);display:grid;gap:5px}
+.actionMenuPanelV451 .btn{width:100%;justify-content:flex-start;text-align:left;white-space:nowrap;margin:0}
+.actionMenuPanelV451 .danger{color:#a43125}
+@media(max-width:700px){.actionMenuPanelV451{min-width:190px}}
+
+
+/* V454 – Bereichauswahl immer direkt links neben dem Bereichstitel */
+.moduleTitleGroupV454{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+.moduleTitleGroupV454 > div{
+  min-width:0;
+}
+.moduleChooserBtnV454{
+  width:44px;
+  min-width:44px;
+  height:44px;
+  flex:0 0 44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:1px solid #d4ddd8;
+  border-radius:12px;
+  background:#eef3f0;
+  color:#163e30;
+  font-size:24px;
+  font-weight:900;
+  line-height:1;
+  cursor:pointer;
+}
+.moduleChooserBtnV454:hover{
+  background:#e2ece6;
+}
+.projectsTopbar .moduleTitleGroupV454{
+  margin-right:auto;
+}
+.platformHead .moduleTitleGroupV454{
+  width:100%;
+}
+@media(max-width:700px){
+  .moduleTitleGroupV454{align-items:flex-start}
+  .moduleChooserBtnV454{width:42px;min-width:42px;height:42px;flex-basis:42px}
+}
+
 </style>
 </head>
 <body class="accessLocked">
@@ -3506,7 +3964,7 @@ window.APP_RELEASE = {
    </button>
    <button class="moduleTile moduleVisualTile" id="moduleProjectsTile" type="button" onclick="openProjectsModule()">
     <span class="moduleVisualImage" style="background-image:url('data:image/jpeg;base64,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')"></span>
-    <span class="moduleVisualBody"><b>Projekte</b><small>Projekte planen, steuern und auswerten</small><i>→</i></span>
+    <span class="moduleVisualBody"><b>Produktion</b><small>Produktion planen, steuern und auswerten</small><i>→</i></span>
    </button>
    <button class="moduleTile moduleVisualTile" id="moduleSmallOrdersTile" type="button" onclick="openSmallOrdersModule()">
     <span class="moduleVisualImage" style="background-image:url('data:image/jpeg;base64,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')"></span>
@@ -3542,8 +4000,10 @@ window.APP_RELEASE = {
 
 <div id="toolsHome" class="projectsShell" aria-label="Werkzeug und Geräte" style="display:none">
  <div class="projectsShellHead">
-  <button class="btn secondary" type="button" onclick="showModuleHome()">← Bereiche</button>
-  <div><h1 style="margin:0">Werkzeug &amp; Geräte</h1><div class="muted">Maschinen, Werkzeug, Geräte und Materialcontainer verwalten.</div></div>
+  <div class="moduleTitleGroupV454">
+   <button class="moduleChooserBtnV454" type="button" onclick="showModuleHome()" title="Bereichauswahl" aria-label="Bereichauswahl"><span aria-hidden="true">☰</span></button>
+   <div><h1 style="margin:0">Werkzeug &amp; Geräte</h1><div class="muted">Maschinen, Werkzeug, Geräte und Materialcontainer verwalten.</div></div>
+  </div>
  </div>
  <div id="toolsOverviewV413" class="toolsOverviewV413">
   <button class="toolsModuleCardV413" type="button" onclick="openWhiteContainerV413()">
@@ -3553,20 +4013,44 @@ window.APP_RELEASE = {
  </div>
  <div id="whiteContainerV413" style="display:none">
   <div class="toolsSubHeadV413"><button class="btn secondary" type="button" onclick="closeWhiteContainerV413()">← Werkzeug &amp; Geräte</button><div><h2>Container</h2><div class="muted">Material manuell oder per Excel (C Name, J Werkzeugnummer, U Barcode) erfassen und Inventur mit Kamera oder Suche durchführen.</div></div></div>
-  <div class="toolsStatsV413"><div><strong id="wcStatContainers">0</strong><span>Container</span></div><div><strong id="wcStatItems">0</strong><span>Materialpositionen</span></div><div><strong id="wcStatDiff">0</strong><span>Abweichungen letzte Inventur</span></div></div>
-  <div class="card toolsCardV413">
-   <div class="toolsCardHeadV413"><div><h3>Container erfassen</h3><div class="muted">Materialcontainer als eigenen Bestand anlegen.</div></div></div>
-   <div class="toolsFormGridV413"><label>Bezeichnung<input id="wcName" placeholder="z. B. Materialcontainer"></label><label>Standort<input id="wcLocation" value="Davos"></label><label class="toolsSpan2V413">Bemerkung<input id="wcNote" placeholder="optional"></label></div>
-   <button class="btn primary" type="button" onclick="saveWhiteContainerV413()">Container erfassen</button>
+  <div id="wcContainerOverviewStatsV445" class="toolsStatsV413"><div><strong id="wcStatContainers">0</strong><span>Container</span></div><div><strong id="wcStatItems">0</strong><span>Materialpositionen</span></div><div><strong id="wcStatDiff">0</strong><span>Abweichungen letzte Inventur</span></div></div>
+  <div id="wcContainerCreateCardV445" class="card toolsCardV413 toolsContainerCreateCollapsedV448">
+   <div id="wcContainerCreateClosedV448" class="toolsContainerCreateClosedV448">
+    <button class="btn primary" type="button" onclick="openContainerCreateV448()">+ Container erfassen</button>
+   </div>
+   <div id="wcContainerCreateFormV448" style="display:none">
+    <div class="toolsCardHeadV413"><div><h3>Neuen Container erfassen</h3><div class="muted">Angaben ausfüllen und anschliessend mit „Container speichern“ erstellen.</div></div></div>
+    <div class="toolsFormGridV413">
+     <label>Bezeichnung<input id="wcName" placeholder="z. B. Materialcontainer"></label>
+     <label>Standort<input id="wcLocation" value="Davos"></label>
+     <label class="toolsSpan2V413">Bemerkung<input id="wcNote" placeholder="optional"></label>
+    </div>
+    <div class="toolsContainerCreateActionsV448">
+     <button class="btn primary" type="button" onclick="saveWhiteContainerV413()">Container speichern</button>
+     <button class="btn secondary" type="button" onclick="closeContainerCreateV448()">Abbrechen</button>
+    </div>
+   </div>
   </div>
-  <div class="card toolsCardV413"><div class="toolsCardHeadV413"><div><h3>Container &amp; Material</h3><div class="muted">Container wählen und den vollständigen Sollbestand hinterlegen.</div></div></div><div id="wcContainerList"></div></div>
+  <div id="wcContainerListCardV445" class="card toolsCardV413"><div class="toolsCardHeadV413"><div><h3>Container &amp; Material</h3><div class="muted">Container wählen und den vollständigen Sollbestand hinterlegen.</div></div></div><div id="wcContainerList"></div></div>
+  <div id="wcContainerDetailHeadV445">
+   <div class="toolsContainerDetailTopV445">
+    <div>
+     <h3 id="wcContainerDetailTitleV445">Container</h3>
+     <div id="wcContainerDetailMetaV445" class="muted"></div>
+    </div>
+    <button class="btn secondary" type="button" onclick="closeSelectedContainerV445()">← Zur Containerübersicht</button>
+   </div>
+  </div>
   <div id="wcContainerTabsV419" class="toolsContainerTabsV419" style="display:none">
    <button id="wcTabListV419" class="toolsContainerTabV419 active" type="button" onclick="setToolsContainerTabV419('list')">Inventarliste</button>
    <button id="wcTabInventoryV419" class="toolsContainerTabV419" type="button" onclick="setToolsContainerTabV419('inventory')">Inventur Kontrolle</button>
   </div>
   <div id="wcMaterialArea" class="card toolsCardV413" style="display:none">
    <div class="toolsCardHeadV413"><div><h3 id="wcMaterialTitle">Inventarliste</h3><div class="muted">Material kann manuell erfasst oder per Excel importiert werden. Bilder können direkt mit Kamera aufgenommen oder hochgeladen werden.</div></div></div>
-   <div class="toolsManualMaterialV415">
+   <div id="wcManualMaterialStartV449" style="margin:0 0 14px">
+    <button class="btn secondary" type="button" onclick="openManualMaterialFormV449()">+ Material manuell erfassen</button>
+   </div>
+   <div id="wcManualMaterialFormV449" class="toolsManualMaterialV415" style="display:none">
     <div style="font-weight:800;margin-bottom:10px">Material manuell erfassen</div>
     <div class="toolsFormGridV413">
      <label>Material<input id="wcItemName" placeholder="Bezeichnung"></label>
@@ -3581,7 +4065,10 @@ window.APP_RELEASE = {
       </div>
      </label>
     </div>
-    <button class="btn secondary" type="button" onclick="addContainerItemV413()">+ Material hinzufügen</button>
+    <div class="toolbar" style="gap:10px;flex-wrap:wrap">
+     <button id="wcManualMaterialSaveV450" class="btn primary" type="button" onclick="addContainerItemV413()">Material speichern</button>
+     <button class="btn secondary" type="button" onclick="closeManualMaterialFormV449()">Abbrechen</button>
+    </div>
     <div id="wcMaterialBarcodeScannerV429" class="toolsMaterialScannerV429" style="display:none">
      <div class="toolsMaterialScannerHeadV429">
       <div><b>Barcode erfassen</b><div class="muted">Barcode der Maschine mit der Kamera scannen. Zahlen und Grossbuchstaben werden übernommen.</div></div>
@@ -3611,11 +4098,11 @@ window.APP_RELEASE = {
    <div class="toolsInventoryPanelV415">
     <div class="toolsScanBoxV415">
      <b>Barcode scannen</b>
-     <div class="muted">Kamera starten und Barcodes direkt an den Maschinen nacheinander scannen – ohne vorher ein Material auszuwählen.</div>
+     <div class="muted">Kamera starten und Barcodes direkt nacheinander scannen. Nach jedem Treffer öffnet sich das gescannte Material in einem separaten Fenster. Dort wählst du den Status manuell; danach schliesst sich das Fenster automatisch und du kannst direkt weiter scannen.</div>
      <div class="toolbar" style="margin-top:10px;gap:8px;flex-wrap:wrap"><button class="btn primary" type="button" onclick="startInventoryScannerV415()">📷 Kamera starten</button><button class="btn secondary" type="button" onclick="stopInventoryScannerV415()">Scanner beenden &amp; manuell weiter</button></div>
      <div id="wcScannerStatus" class="toolsScanStatusV415 muted">Kamera nicht gestartet.</div>
      <div id="wcScannerReader" class="toolsScanReaderV415"></div>
-     <label style="display:block;margin-top:12px;font-weight:700">Barcode manuell eingeben<input id="wcInventoryBarcode" inputmode="numeric" placeholder="Barcode" onkeydown="if(event.key==='Enter'){event.preventDefault();inventoryBarcodeEnterV415()}"></label>
+     <label style="display:block;margin-top:12px;font-weight:700">Barcode manuell eingeben<input id="wcInventoryBarcode" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="Barcode" onkeydown="if(event.key==='Enter'){event.preventDefault();inventoryBarcodeEnterV415()}"></label>
     </div>
     <div class="toolsSearchBoxV415">
      <b>Material suchen</b>
@@ -3627,15 +4114,21 @@ window.APP_RELEASE = {
    <div class="toolsInventoryHintV416"><b>Status je Material:</b> Vorhanden · Verunreinigt · Fehlt → nachbestellen · Wird nicht ersetzt</div>
    <div id="wcInventoryTable" class="toolsTableWrapV413"></div>
    <div id="wcInventoryStatusGroupsV421" class="toolsInventoryStatusGroupsV421"></div>
-   <div class="toolsInventoryActionsV413"><button class="btn primary" type="button" onclick="finishInventoryV413()">Inventur abschliessen</button><button class="btn secondary" type="button" onclick="cancelInventoryV413()">Abbrechen</button></div>
+   <div class="toolsInventoryActionsV413">
+    <button class="btn primary" type="button" onclick="finishInventoryV413()">Inventur abschliessen</button>
+    <button class="btn secondary" type="button" onclick="exportInventoryStatusGroupsPdfV446()">PDF Statusgruppen</button>
+    <button class="btn secondary" type="button" onclick="cancelInventoryV413()">Abbrechen</button>
+   </div>
   </div>
   </div>
  </div>
 </div>
 <div id="globalSettingsHome" class="projectsShell" aria-label="Verwaltung und Einstellungen" style="display:none">
  <div class="projectsTopbar">
-  <button class="btn secondary" type="button" onclick="showModuleHome()">← Bereichsauswahl</button>
-  <div><h1 style="margin:0">Verwaltung & Einstellungen</h1><div class="muted">Alle übergeordneten Einstellungen werden direkt hier verwaltet.</div></div>
+  <div class="moduleTitleGroupV454">
+   <button class="moduleChooserBtnV454" type="button" onclick="showModuleHome()" title="Bereichauswahl" aria-label="Bereichauswahl"><span aria-hidden="true">☰</span></button>
+   <div><h1 style="margin:0">Verwaltung & Einstellungen</h1><div class="muted">Alle übergeordneten Einstellungen werden direkt hier verwaltet.</div></div>
+  </div>
  </div>
  <div class="globalSettingsGrid">
   <button class="globalSettingsCard" type="button" onclick="selectGlobalSettingsCard(this,'users')"><b>Benutzer & Rechte</b><span>Benutzer, Rollen und Berechtigungen verwalten.</span><i>↓</i></button>
@@ -3647,10 +4140,12 @@ window.APP_RELEASE = {
 
 <div id="smallOrdersHome" class="projectsShell" aria-label="Kleinaufträge">
  <div class="projectsTopbar">
-   <button class="btn secondary" type="button" onclick="showModuleHome()">← Bereichsauswahl</button>
-   <div>
-     <h1 style="margin:0">Kleinaufträge</h1>
-     <div class="muted">Regie-Rapporte erstellen und automatisch nach Kunde gruppieren.</div>
+   <div class="moduleTitleGroupV454">
+    <button class="moduleChooserBtnV454" type="button" onclick="showModuleHome()" title="Bereichauswahl" aria-label="Bereichauswahl"><span aria-hidden="true">☰</span></button>
+    <div>
+      <h1 style="margin:0">Kleinaufträge</h1>
+      <div class="muted">Regie-Rapporte erstellen und automatisch nach Kunde gruppieren.</div>
+    </div>
    </div>
    <button class="btn" type="button" onclick="openSmallOrderReport()">+ Neuer Rapport</button>
  </div>
@@ -3667,10 +4162,12 @@ window.APP_RELEASE = {
  <div id="smallOrderCustomerGroups" class="smallOrderGroups"></div>
 </div>
 
-<div id="projectsHome" class="projectsShell" aria-label="Projekte">
+<div id="projectsHome" class="projectsShell" aria-label="Produktion">
  <div class="projectsTopbar">
-   <button class="btn secondary" type="button" onclick="showModuleHome()">← Bereichsauswahl</button>
-   <div><h1 style="margin:0">Projekte</h1><div class="muted">Projekte erfassen und Produktionsstunden planen · Cloud-synchronisiert.</div></div>
+   <div class="moduleTitleGroupV454">
+    <button class="moduleChooserBtnV454" type="button" onclick="showModuleHome()" title="Bereichauswahl" aria-label="Bereichauswahl"><span aria-hidden="true">☰</span></button>
+    <div><h1 style="margin:0">Produktion</h1><div class="muted">Projekte erfassen und Produktionsstunden planen · Cloud-synchronisiert.</div></div>
+   </div>
    <button class="btn" type="button" onclick="openProjectEditor()">+ Neues Projekt</button>
  </div>
  <div class="projectMainTabs" id="projectsHomeTabs" role="tablist" aria-label="Projektbereiche">
@@ -3706,7 +4203,6 @@ window.APP_RELEASE = {
 </div>
 
 <div class="app">
-<button id="moduleBackBtn" type="button" onclick="showModuleHome()" title="Zur Bereichsauswahl">← Bereichsauswahl</button>
 <nav><div class="brand">HOLZ<br>LAGER</div>
 <div class="navGroupLabel">Lager</div>
 <button class="nav active" data-page="map">⌖ Karte</button>
@@ -3720,7 +4216,7 @@ window.APP_RELEASE = {
 <button class="nav" data-page="archive">▣ Archiv</button>
 </nav>
 <main>
-<header><div class="actions"><button class="btn secondary" id="backBtn" onclick="goBack()" style="display:none">← Zurück</button><h1 id="title">Aussenlager</h1></div><div class="actions"><span id="syncStatusBadge" class="syncBadge" title="Speicherstatus">Lokal</span><button id="authHeaderBtn" class="btn secondary authBtn" onclick="openAuthModal()">Anmelden</button><span id="activeRoleBadge" class="statusbadge"></span><button class="btn secondary" id="drawBtn" onclick="startDraw()">+ Fläche erstellen</button><button class="btn" onclick="openMaterial()">+ Material erfassen</button></div></header>
+<header><div class="actions moduleTitleGroupV454"><button class="moduleChooserBtnV454" type="button" onclick="showModuleHome()" title="Bereichauswahl" aria-label="Bereichauswahl"><span aria-hidden="true">☰</span></button><button class="btn secondary" id="backBtn" onclick="goBack()" style="display:none">← Zurück</button><h1 id="title">Aussenlager</h1></div><div class="actions"><span id="syncStatusBadge" class="syncBadge" title="Speicherstatus">Lokal</span><button id="authHeaderBtn" class="btn secondary authBtn" onclick="openAuthModal()">Anmelden</button><span id="activeRoleBadge" class="statusbadge"></span><button class="btn secondary" id="drawBtn" onclick="startDraw()">+ Fläche erstellen</button><button class="btn" onclick="openMaterial()">+ Material erfassen</button></div></header>
 
 <section class="page active" id="page-map">
 <div class="grid">
@@ -6189,8 +6685,7 @@ function renderImmerPriceMaster(){
  box.innerHTML=mats.length?mats.map(m=>`<div class="manageRow">
    <div><b>${esc(m.name)}</b><div class="muted">${esc(m.unit||'Stk')} · CHF ${numSO(m.price).toFixed(2)}</div></div>
    <div class="toolbar">
-     <button class="btn secondary" type="button" onclick="openImmerMaterialEditor('${m.id}')">Bearbeiten</button>
-     <button class="btn danger" type="button" onclick="deleteImmerMaterial('${m.id}')">Löschen</button>
+     <div class="compactActionsV451"><button class="compactActionTriggerV451" type="button" onclick="toggleCompactActionsV451(this,event)" aria-label="Aktionen">⋮</button><div class="compactActionMenuV451"><button type="button" onclick="openImmerMaterialEditor(&#39;${m.id}&#39;);closeCompactActionsV451()">Bearbeiten</button><button type="button" class="danger" onclick="deleteImmerMaterial(&#39;${m.id}&#39;);closeCompactActionsV451()">Löschen</button></div></div>
    </div>
  </div>`).join(''):'<p class="muted">Noch keine IMMER AG Materialien erfasst.</p>';
 }
@@ -9710,19 +10205,65 @@ function openPlatformManagement(){
  if(!hasAppPermission('platforms')){alert('Für Pritschenverwaltung besteht keine Freigabe.');return}
  activeMainModule='platforms';
 
- activeMainModule='platforms';
  closeProjectShells?.();
  let home=E('moduleHome');if(home)home.classList.remove('open');
  let app=document.querySelector('.app');if(app)app.style.visibility='hidden';
  E('platformModule')?.classList.add('open');
+
+ // V443: Beim Öffnen immer zuerst die echte Übersicht aktivieren.
+ // Wichtig: vor renderPlatformManagement(), damit kein alter Lieferanten-/Masterzustand
+ // aus dem vorherigen Besuch erneut aufgebaut wird.
  selectedPlatformProjectId='';
+ selectedPlatformSupplier='';
  platformMode='plan';
+ platformMainTab='overview';
+ window.platformMasterSubTab='suppliers';
+
  let ws=E('platformProjectWorkspace');if(ws)ws.style.display='none';
  let area=E('platformProjectArea');if(area)area.classList.remove('platformProjectHidden');
+
  renderPlatformManagement();
  renderPlatformProjectOverview();
  renderPlatformTransportOverview();
  setPlatformMainTab('overview');
+
+ // Legacy-Bereiche besitzen teilweise zusätzlich inline display-Werte.
+ // Deshalb die Übersicht hier ausdrücklich sichtbar und Lieferanten/Master unsichtbar setzen.
+ let zoneDaily=E('platformZoneDaily');
+ let quick=E('platformQuickReturnCard');
+ let zoneMaster=E('platformZoneMaster');
+ let master=E('platformMasterV362');
+ let supplierOverview=E('platformSupplierOverview');
+ let stock=E('platformStockPanel');
+
+ if(zoneDaily){
+   zoneDaily.classList.remove('platformV314Hidden');
+   zoneDaily.style.display='block';
+ }
+ if(quick){
+   quick.classList.remove('platformV314Hidden');
+   quick.style.display='block';
+ }
+ if(zoneMaster){
+   zoneMaster.classList.add('platformV314Hidden');
+   zoneMaster.style.display='none';
+ }
+ if(master){
+   master.classList.add('platformV314Hidden');
+   master.style.display='none';
+ }
+ if(supplierOverview){
+   supplierOverview.classList.add('platformV314Hidden');
+   supplierOverview.style.display='none';
+ }
+ if(stock){
+   stock.classList.add('platformV314Hidden');
+   stock.style.display='none';
+ }
+
+ renderPlatformOverviewCompact();
+ renderPlatformQuickReturn();
+
  savePlatformBackupSnapshot(platformStore,'Pritschenverwaltung geöffnet');
  platformRecoveryNotice();
  // V261: vorhandene lokale Pritschendaten werden bei der ersten Online-Nutzung
@@ -10458,13 +10999,13 @@ function renderPlatformTransportOverview(){
      <td class="platformTransportVehicleCell">${platformTransportVehiclePairHtml(t)}</td>
      <td><div><b>${(t.transportType||'delivery')==='return'?'⬅ Rücktransport':'➡ Baustelle'}</b></div>${esc(t.from||'')} → ${esc(t.to||'')}</td>
      <td><span class="platformBadge ${cl}">${esc(shownStatus==='Abgeschlossen'?'Archiviert':shownStatus)}</span></td>
-     <td><div class="toolbar">
-       <button class="btn secondary small" onclick="editPlatformTransport('${t.id}')">Bearbeiten</button>
-       ${(t.transportType||'delivery')==='delivery'&&shownStatus!=='Abgeschlossen'?`<button class="btn secondary small platformReturnFromDeliveryBtnV370" onclick="createReturnTransportFromDeliveryV370('${t.id}')">↩ Rücktransport erstellen</button>`:''}
-       ${shownStatus!=='Abgeschlossen'?['Geplant','Bestätigt','Geliefert'].filter(x=>x!==shownStatus).map(x=>`<button class="btn secondary small" onclick="setPlatformTransportStatus('${t.id}','${x}')">${x}</button>`).join(''):''}
-       ${shownStatus==='Geliefert'?`<button class="btn archive small" onclick="archivePlatformTransportV388('${t.id}')">Archivieren</button>`:''}
-       <button class="btn danger small" onclick="deletePlatformTransport('${t.id}')">Löschen</button>
-     </div></td>
+     <td><details class="actionMenuV451"><summary title="Aktionen">⋮</summary><div class="actionMenuPanelV451">
+       <button class="btn secondary small" onclick="closeActionMenuV451(this);editPlatformTransport('${t.id}')">Bearbeiten</button>
+       ${(t.transportType||'delivery')==='delivery'&&shownStatus!=='Abgeschlossen'?`<button class="btn secondary small platformReturnFromDeliveryBtnV370" onclick="closeActionMenuV451(this);createReturnTransportFromDeliveryV370('${t.id}')">↩ Rücktransport erstellen</button>`:''}
+       ${shownStatus!=='Abgeschlossen'?['Geplant','Bestätigt','Geliefert'].filter(x=>x!==shownStatus).map(x=>`<button class="btn secondary small" onclick="closeActionMenuV451(this);setPlatformTransportStatus('${t.id}','${x}')">${x}</button>`).join(''):''}
+       ${shownStatus==='Geliefert'?`<button class="btn archive small" onclick="closeActionMenuV451(this);archivePlatformTransportV388('${t.id}')">Archivieren</button>`:''}
+       <button class="btn danger small" onclick="closeActionMenuV451(this);deletePlatformTransport('${t.id}')">Löschen</button>
+     </div></details></td>
    </tr>`;
  };
 
@@ -10548,8 +11089,98 @@ function platformProjectById(id){
 }
 function platformRentalQty(projectId,supplier){
  let r=(platformStore.rentals||[]).find(x=>x.projectId===projectId&&x.supplier===supplier);
+ if(Array.isArray(r?.selectedPlatformIds))return r.selectedPlatformIds.length;
  return Math.max(0,Number(r?.qty)||0);
 }
+function platformRentalSelectedIdsV434(projectId,supplier){
+ let r=(platformStore.rentals||[]).find(x=>x.projectId===projectId&&x.supplier===supplier);
+ return Array.isArray(r?.selectedPlatformIds)?r.selectedPlatformIds.map(String):[];
+}
+
+function platformOwnPoolAssignedIdsV439(projectId){
+ let row=(platformStore.projectPlatformAssignments||[]).find(x=>String(x.projectId||'')===String(projectId||'')&&x.supplier==='Künzli');
+ return Array.isArray(row?.selectedPlatformIds)?row.selectedPlatformIds.map(String):[];
+}
+function platformAssignedIdsV439(projectId,supplier){
+ if(supplier==='Künzli')return platformOwnPoolAssignedIdsV439(projectId);
+ return platformRentalSelectedIdsV434(projectId,supplier);
+}
+
+function platformPlannedQtyBySupplierV440(projectId,supplier){
+ return platformProjectNeedsV437(projectId)
+   .filter(n=>(n.supplier||'Künzli')===supplier)
+   .reduce((sum,n)=>sum+Math.max(0,Number(n.qty)||0),0);
+}
+function updatePlatformAssignmentLimitsV440(){
+ let projectId=selectedPlatformProjectId;
+ document.querySelectorAll('#platformProjectRentalFields [data-assignment-supplier-card]').forEach(card=>{
+   let supplier=card.dataset.assignmentSupplierCard||'';
+   let limit=platformPlannedQtyBySupplierV440(projectId,supplier);
+   let boxes=[...card.querySelectorAll('input[data-assign-supplier]')];
+   let checked=boxes.filter(x=>x.checked);
+   let count=checked.length;
+   let reached=limit>0 && count>=limit;
+
+   let countEl=card.querySelector('[data-assignment-count]');
+   if(countEl){
+     if(limit>0)countEl.textContent=`${count} von ${limit} zugewiesen`;
+     else countEl.textContent='Kein Bedarf geplant';
+     countEl.classList.toggle('complete',limit>0&&count===limit);
+     countEl.classList.toggle('over',count>limit);
+   }
+   let infoEl=card.querySelector('[data-assignment-info]');
+   if(infoEl){
+     if(!limit)infoEl.textContent='Im Schritt Bedarf wurde für diesen Lieferanten keine Pritsche reserviert.';
+     else if(count<limit)infoEl.textContent=`Noch ${limit-count} Pritsche${limit-count===1?'':'n'} auswählen.`;
+     else if(count===limit)infoEl.textContent='Geplante Anzahl erreicht.';
+     else infoEl.textContent=`${count-limit} Pritsche${count-limit===1?'':'n'} zu viel ausgewählt – bitte abwählen.`;
+   }
+
+   boxes.forEach(cb=>{
+     let row=cb.closest('.platformRentalRowV435');
+     let originallyBlocked=cb.dataset.baseBlocked==='1';
+     let shouldLimit=!cb.checked && (limit===0 || reached);
+     cb.disabled=originallyBlocked || shouldLimit;
+     if(row){
+       row.classList.toggle('platformAssignmentLimitBlockedV440',shouldLimit&&!originallyBlocked);
+       row.classList.toggle('selected',cb.checked);
+     }
+   });
+ });
+}
+function onPlatformAssignmentChangeV440(cb){
+ if(!cb)return;
+ let supplier=cb.dataset.assignSupplier||'';
+ let limit=platformPlannedQtyBySupplierV440(selectedPlatformProjectId,supplier);
+ let card=cb.closest('[data-assignment-supplier-card]');
+ let boxes=[...card.querySelectorAll('input[data-assign-supplier]')];
+ let count=boxes.filter(x=>x.checked).length;
+ if(limit>0 && count>limit){
+   cb.checked=false;
+   alert(`Für ${supplier} sind im Bedarf nur ${limit} Pritsche${limit===1?'':'n'} reserviert.`);
+ }
+ updatePlatformAssignmentLimitsV440();
+}
+
+function platformAllAssignedIdsV439(projectId){
+ return new Set(PLATFORM_SUPPLIERS.flatMap(supplier=>platformAssignedIdsV439(projectId,supplier)));
+}
+function savePlatformOwnPoolAssignmentsV439(projectId,ids){
+ platformStore.projectPlatformAssignments=platformStore.projectPlatformAssignments||[];
+ let row=platformStore.projectPlatformAssignments.find(x=>String(x.projectId||'')===String(projectId||'')&&x.supplier==='Künzli');
+ let now=new Date().toISOString();
+ if(row){
+   row.selectedPlatformIds=ids.slice();
+   row.qty=ids.length;
+   row.updatedAt=now;
+ }else{
+   platformStore.projectPlatformAssignments.push({
+     id:'passign_'+Date.now(),projectId,supplier:'Künzli',
+     selectedPlatformIds:ids.slice(),qty:ids.length,createdAt:now,updatedAt:now
+   });
+ }
+}
+
 function platformProjectRentalReserved(projectId,supplier,from,to){
  return (platformStore.needs||[]).filter(n=>
    n.projectId===projectId &&
@@ -10604,6 +11235,137 @@ function closePlatformProjectWorkspace(){
  renderPlatformProjectOverview();
  applyPlatformMainTab();
 }
+
+function platformProjectNeedsV437(projectId){
+ return (platformStore.needs||[]).filter(n=>n.projectId===projectId&&n.needKind==='platforms'&&(n.status||'Reserviert')!=='Aufgehoben');
+}
+function platformProcessStatsV437(){
+ let projectId=selectedPlatformProjectId;
+ let needs=platformProjectNeedsV437(projectId);
+ let needBySupplier={};
+ needs.forEach(n=>{let s=n.supplier||'Künzli';needBySupplier[s]=(needBySupplier[s]||0)+(Number(n.qty)||0);});
+ let totalNeed=Object.values(needBySupplier).reduce((a,b)=>a+b,0);
+
+ let assignedExternal=PLATFORM_SUPPLIERS.filter(s=>s!=='Künzli')
+   .reduce((n,s)=>n+platformAssignedIdsV439(projectId,s).length,0);
+ let assignedOwn=platformAssignedIdsV439(projectId,'Künzli').length;
+ let externalNeed=Object.entries(needBySupplier).filter(([s])=>s!=='Künzli').reduce((n,[,q])=>n+q,0);
+ let ownNeed=Number(needBySupplier['Künzli']||0);
+
+ let actuals=(platformStore.actual||[]).filter(a=>String(a.projectId||'')===String(projectId||''));
+ let loading=actuals.filter(a=>['In Beladung','Belegt','Transport geplant'].includes(a.status)).length;
+ let onSite=actuals.filter(a=>a.status==='Abgeholt').length;
+
+ let transports=(platformStore.transports||[]).filter(t=>String(t.projectId||'')===String(projectId||''));
+ let openTransports=transports.filter(t=>!['Geliefert','Abgeschlossen'].includes(t.status)).length;
+ let delivered=transports.filter(t=>['Geliefert','Abgeschlossen'].includes(t.status)).length;
+
+ return {needs,needBySupplier,totalNeed,externalNeed,assignedExternal,ownNeed,assignedOwn,actuals,loading,onSite,transports,openTransports,delivered};
+}
+function renderPlatformProcessV437(){
+ let box=E('platformProcessV437');if(!box)return;
+ let p=platformProjectById(selectedPlatformProjectId);
+ box.style.display=p?'block':'none';
+ if(!p)return;
+ let st=platformProcessStatsV437();
+
+ let needText=st.totalNeed
+   ? `${st.totalNeed} Pritsche${st.totalNeed===1?'':'n'} geplant`
+   : 'Noch kein Bedarf geplant';
+
+ let assignParts=[];
+ if(st.ownNeed)assignParts.push(`Künzli ${st.assignedOwn}/${st.ownNeed}`);
+ if(st.externalNeed)assignParts.push(`Miete ${st.assignedExternal}/${st.externalNeed}`);
+ let assignText=assignParts.length?assignParts.join(' · '):'Noch keine konkrete Zuweisung nötig / geplant';
+
+ let loadText=st.loading||st.onSite
+   ? `${st.loading} in Arbeit · ${st.onSite} auf Baustelle`
+   : 'Noch keine konkrete Pritsche in Beladung';
+
+ let trText=st.transports.length
+   ? `${st.openTransports} offen · ${st.delivered} geliefert/archiviert`
+   : 'Noch kein Transport erstellt';
+
+ if(E('platformProcessNeedV437'))E('platformProcessNeedV437').textContent=needText;
+ if(E('platformProcessAssignV437'))E('platformProcessAssignV437').textContent=assignText;
+ if(E('platformProcessLoadV437'))E('platformProcessLoadV437').textContent=loadText;
+ if(E('platformProcessTransportV437'))E('platformProcessTransportV437').textContent=trText;
+
+ let hint=[];
+ if(!st.totalNeed)hint.push('Als Erstes den Bedarf nach Lieferant und Anzahl festlegen.');
+ else if(st.ownNeed>st.assignedOwn || st.externalNeed>st.assignedExternal){
+   let missing=Math.max(0,st.ownNeed-st.assignedOwn)+Math.max(0,st.externalNeed-st.assignedExternal);
+   hint.push(`Noch ${missing} Pritsche${missing===1?'':'n'} konkret zuweisen.`);
+ }
+ else if(!st.actuals.length)hint.push('Bedarf und Zuweisung sind vorbereitet. Als Nächstes Beladung starten.');
+ else if(!st.transports.length)hint.push('Beladung ist erfasst. Als Nächstes den Transport planen.');
+ else hint.push('Der Prozess ist aktiv. Über die vier Schritte kannst du direkt in den passenden Bereich springen.');
+ if(E('platformProcessHintV437'))E('platformProcessHintV437').textContent=hint.join(' ');
+
+ document.querySelectorAll('.platformProcessStepV437').forEach(b=>b.classList.remove('active'));
+ let active=window.platformProcessActiveStepV438||((window.platformProjectSubTab==='actual')?'load':'need');
+ document.querySelector(`.platformProcessStepV437[data-step="${active}"]`)?.classList.add('active');
+}
+function showPlatformProcessOnlyV438(step){
+ if(step==='load'){
+   // Oben sichtbar auf „Beladung / aktuelle Situation“ wechseln.
+   window.platformProcessActiveStepV438='';
+   setPlatformProjectSubTab('actual',true);
+ }else{
+   window.platformProcessActiveStepV438='';
+   setPlatformProjectSubTab('planning',true);
+ }
+
+ let planning=E('platformPlanningSection');
+ let rental=E('platformProjectRentalPanel');
+ let actual=E('platformActualSection');
+ let transportBody=E('platformProjectTransportBody');
+ let transportCard=transportBody?.closest('.platformTransportProjectCard');
+
+ [planning,rental,actual,transportCard].forEach(x=>{
+   if(!x)return;
+   x.style.display='none';
+   x.classList.add('platformV438ProcessHidden');
+ });
+
+ if(step==='need'){
+   if(planning){
+     planning.style.display='block';planning.classList.remove('platformV438ProcessHidden');
+     let body=E('platformPlanningPanelBody'),card=body?.closest('.platformPlanCard');
+     if(card?.classList.contains('platformPlanningCollapsed'))togglePlatformPlanningPanel();
+   }
+ }
+ if(step==='assign'){
+   if(rental){
+     rental.style.display='block';rental.classList.remove('platformV438ProcessHidden');
+     if(rental.classList.contains('platformRentalPanelCollapsed'))togglePlatformRentalPanel();
+   }
+ }
+ if(step==='load'){
+   if(actual){
+     actual.style.display='block';actual.classList.remove('platformV438ProcessHidden');
+     renderPlatformActual();
+   }
+ }
+ if(step==='transport'){
+   if(transportCard){
+     transportCard.style.display='block';transportCard.classList.remove('platformV438ProcessHidden');
+   }
+   if(transportBody){
+     transportBody.style.display='block';
+     let toggle=E('platformProjectTransportToggle');if(toggle)toggle.textContent='▲';
+   }
+ }
+ window.platformProcessActiveStepV438=step;
+ document.querySelectorAll('.platformProcessStepV437').forEach(b=>b.classList.toggle('active',b.dataset.step===step));
+ renderPlatformProcessV437();
+}
+function openPlatformProcessStepV437(step){
+ if(!selectedPlatformProjectId)return;
+ // Kein automatisches Scrollen mehr: Inhalt wird direkt unter dem Prozessbalken umgeschaltet.
+ showPlatformProcessOnlyV438(step);
+}
+
 function refreshPlatformWorkspace(){
  let p=platformProjectById(selectedPlatformProjectId);
  let ws=E('platformProjectWorkspace'),area=E('platformProjectArea');
@@ -10615,6 +11377,7 @@ function refreshPlatformWorkspace(){
  if(area)area.classList.add('platformProjectHidden');
  if(ws)ws.style.display='block';
  if(E('platformWorkspaceTitle'))E('platformWorkspaceTitle').textContent=`${p.number?`${p.number} · `:''}${p.name||''}`;
+ setTimeout(renderPlatformProcessV437,0);
 }
 
 function setPlatformProjectSubTab(tab,silent=false){
@@ -10670,10 +11433,15 @@ function setPlatformProjectSubTab(tab,silent=false){
  if(!silent)applyPlatformMainTab();
 
  if(has){
-   show(planning,window.platformProjectSubTab==='planning');
-   show(transportCard,window.platformProjectSubTab==='planning');
-   show(actual,window.platformProjectSubTab==='actual');
+   if(window.platformProcessActiveStepV438){
+     setTimeout(()=>showPlatformProcessOnlyV438(window.platformProcessActiveStepV438),0);
+   }else{
+     show(planning,window.platformProjectSubTab==='planning');
+     show(transportCard,window.platformProjectSubTab==='planning');
+     show(actual,window.platformProjectSubTab==='actual');
+   }
  }
+ setTimeout(renderPlatformProcessV437,0);
 }
 function platformSupplierCountsV363(supplier){
  let platforms=(platformStore.stock||[]).filter(x=>x.supplier===supplier).length;
@@ -11186,6 +11954,7 @@ function renderPlatformOverviewCompact(){
  </div>`;
 }
 function selectPlatformProject(id){
+ window.platformProcessActiveStepV438='need';
  if(id&&!hasProjectAccess(id)){alert('Für dieses Projekt besteht keine Freigabe.');return}
  selectedPlatformProjectId=id||'';platformMainTab='projects';
  renderPlatformProjectOverview();refreshPlatformWorkspace();setPlatformRentalCollapsed(true);setPlatformPlanningCollapsed(true);
@@ -11279,26 +12048,104 @@ function renderPlatformProjectOverview(){
  let p=platformProjectById(selectedPlatformProjectId);
  panel.style.display=p?'block':'none';
  if(!p)return;
- E('platformProjectRentalTitle').textContent=`${p.number?`${p.number} · `:''}${p.name||''} – Eingemietete Pritschen`;
- let rentalSuppliers=PLATFORM_SUPPLIERS.filter(s=>s!=='Künzli');
- E('platformProjectRentalFields').innerHTML=rentalSuppliers.map((s,i)=>`
-   <label>${esc(s)}
-     <input id="platformRentalQty${i}" type="number" min="0" step="1" value="${platformRentalQty(p.id,s)}">
-   </label>`).join('');
+ E('platformProjectRentalTitle').textContent=`${p.number?`${p.number} · `:''}${p.name||''} – Pritschen zuweisen`;
+ let assignmentSuppliers=PLATFORM_SUPPLIERS;
+ E('platformProjectRentalFields').innerHTML=`
+   <div class="platformAssignmentIntroV439">
+     <b>Schritt 2: konkrete Pritschen zuweisen</b>
+     <span>Der Planer reserviert vorher nur Lieferant + Anzahl. Hier werden erst danach die tatsächlich verwendbaren Pritschen dem Projekt zugeordnet.</span>
+   </div>
+   ${assignmentSuppliers.map((supplier,i)=>{
+     let selected=new Set(platformAssignedIdsV439(p.id,supplier));
+     let legacyQty=supplier==='Künzli'?0:platformRentalQty(p.id,supplier);
+     let row=supplier==='Künzli'
+       ? (platformStore.projectPlatformAssignments||[]).find(x=>String(x.projectId||'')===String(p.id)&&x.supplier==='Künzli')
+       : (platformStore.rentals||[]).find(x=>x.projectId===p.id&&x.supplier===supplier);
+     let stocks=(platformStore.stock||[]).filter(x=>x.supplier===supplier&&x.active!==false)
+       .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de-CH'));
+     let poolLabel=supplier==='Künzli'?'Eigener Pool':'Mietpool';
+     let plannedQty=platformPlannedQtyBySupplierV440(p.id,supplier);
+     return `<div class="platformRentalSupplierV435" data-assignment-supplier-card="${esc(supplier)}">
+       <div class="platformRentalSupplierHeadV435">
+         <div>
+           <div class="platformRentalSupplierNameV435">${esc(supplier)} <span class="platformPoolBadgeV439 ${supplier==='Künzli'?'own':'rent'}">${poolLabel}</span></div>
+           <div class="muted">${stocks.length} Pritsche${stocks.length===1?'':'n'} erfasst · <b>Bedarf: ${plannedQty}</b></div>
+           <div class="platformAssignmentInfoV440" data-assignment-info></div>
+         </div>
+         <div class="platformRentalCountV435" data-assignment-count>${selected.size} von ${plannedQty} zugewiesen</div>
+       </div>
+       ${supplier!=='Künzli'&&row&&!Array.isArray(row.selectedPlatformIds)&&legacyQty>0?`<div class="platformRentalLegacyV434">Bisher war nur die Mietmenge <b>${legacyQty}</b> gespeichert. Bitte die tatsächlich gemieteten Pritschen konkret zuweisen.</div>`:''}
+       <div class="platformRentalTableV435">
+         ${stocks.length?`
+           <div class="platformRentalTableHeadV435">
+             <span></span><span>Pritsche</span><span>Länge</span><span>SUVA</span><span>Status</span>
+           </div>
+           ${stocks.map(x=>{
+             let checked=selected.has(String(x.id));
+             let atSupplier=platformStockIsAtSupplierV390(x);
+             let locked=platformAssetIsLockedV373(x);
+             let latest=platformLatestActualForStock(x.id);
+             let otherProject=latest&&latest.status!=='Frei'&&latest.projectId&&String(latest.projectId)!==String(p.id);
+             let blocked=atSupplier||locked||otherProject;
+             let status=atSupplier?'Beim Lieferant':locked?'Gesperrt':otherProject?'Anderes Projekt':'Verfügbar';
+             return `<label class="platformRentalRowV435 ${checked?'selected':''} ${blocked?'blocked':''}">
+               <span class="platformRentalCheckV435"><input type="checkbox" data-assign-supplier="${esc(supplier)}" data-base-blocked="${blocked?'1':'0'}" value="${esc(x.id)}" ${checked?'checked':''} ${blocked&&!checked?'disabled':''} onchange="onPlatformAssignmentChangeV440(this)"></span>
+               <span class="platformRentalNameV435">${esc(x.name||'Pritsche')}</span>
+               <span>${Number(x.length||0).toFixed(2)} m</span>
+               <span>${x.suva?'Ja':'Nein'}</span>
+               <span><span class="platformRentalStatusV435 ${atSupplier?'supplier':locked||otherProject?'locked':'free'}">${esc(status)}</span></span>
+             </label>`;
+           }).join('')}
+         `:'<div class="platformRentalEmptyV435">Keine Pritschen dieses Lieferanten erfasst.</div>'}
+       </div>
+     </div>`;
+   }).join('')}`;
+ setTimeout(updatePlatformAssignmentLimitsV440,0);
 }
 function savePlatformProjectRentals(){
  let p=platformProjectById(selectedPlatformProjectId);if(!p)return;
  platformStore.rentals=platformStore.rentals||[];
- platformStore.rentals=platformStore.rentals.filter(x=>!(x.projectId===p.id&&x.supplier==='Künzli'));
- PLATFORM_SUPPLIERS.filter(s=>s!=='Künzli').forEach((s,i)=>{
-   let qty=Math.max(0,Math.floor(Number(E(`platformRentalQty${i}`)?.value)||0));
-   let r=platformStore.rentals.find(x=>x.projectId===p.id&&x.supplier===s);
-   if(r)r.qty=qty;
-   else platformStore.rentals.push({id:'rent'+Date.now()+i,projectId:p.id,supplier:s,qty});
+
+ let invalid=[];
+ PLATFORM_SUPPLIERS.forEach((supplier,i)=>{
+   let ids=[...document.querySelectorAll('#platformProjectRentalFields input[data-assign-supplier]:checked')]
+     .filter(x=>x.dataset.assignSupplier===supplier)
+     .map(x=>x.value);
+   let plannedQty=platformPlannedQtyBySupplierV440(p.id,supplier);
+
+   if(ids.length>plannedQty){
+     invalid.push(`${supplier}: ${ids.length}/${plannedQty}`);
+     return;
+   }
+
+   if(supplier==='Künzli'){
+     savePlatformOwnPoolAssignmentsV439(p.id,ids);
+     return;
+   }
+
+   let r=platformStore.rentals.find(x=>String(x.projectId||'')===String(p.id)&&x.supplier===supplier);
+   if(r){
+     r.qty=ids.length;r.selectedPlatformIds=ids;r.updatedAt=new Date().toISOString();
+   }else if(ids.length){
+     platformStore.rentals.push({
+       id:'rent'+Date.now()+i,projectId:p.id,supplier,qty:ids.length,
+       selectedPlatformIds:ids,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()
+     });
+   }
  });
+
+ if(invalid.length){
+   alert('Es sind mehr Pritschen zugewiesen als im Bedarf geplant:\n'+invalid.join('\n'));
+   updatePlatformAssignmentLimitsV440();
+   return;
+ }
+
  savePlatformStore();
  renderPlatformProjectOverview();
  renderPlatformManagement();
+ renderPlatformProcessV437();
+ renderPlatformActual();
+ alert('Zugewiesene Pritschen gespeichert.');
 }
 
 function platformProjectOptions(){
@@ -11686,17 +12533,39 @@ function renderPlatformReservationAvailability(force=false){
  let freeStocks=stocks.filter(s=>platformStockFreeForPeriod(s,from,to).free);
  let stockBox=E('platformReservationPlatforms');
  if(stockBox){
-   stockBox.innerHTML=stocks.length?stocks.map(s=>{
-     let av=platformStockFreeForPeriod(s,from,to),selected=platformReservationSelectedPlatforms.has(s.id);
-     return `<div class="platformReservationCard ${av.free?'free':'busy'} ${selected?'selected':''}"
-                  ${av.free?`onclick="togglePlatformReservationItem('platform','${s.id}')"`:''}>
-       <div class="platformReservationState">${platformStockIsAtSupplierV390(s)?'Beim Lieferant':platformAssetIsLockedV373(s)?'🔒 Gesperrt':(av.free?(selected?'Ausgewählt':'Frei'):'Belegt')}</div>
-       <div class="platformReservationCardTitle">${esc(s.name||'Pritsche')}</div>
-       <div class="platformReservationCardMeta"><b>${esc(s.supplier||'')}</b> · ${Number(s.length||0).toFixed(2)} m · ${s.suva?'SUVA':'nicht SUVA'}</div>
-       <div class="platformReservationCardMeta">${esc(av.reason)}</div>
-       ${!av.free&&av.nextFreeText?`<div class="platformReservationNextFree ${av.nextFreeOpen?'open':''}">${esc(av.nextFreeText)}</div>`:''}
-     </div>`;
-   }).join(''):'<div class="platformReservationEmpty">Keine Pritschen erfasst.</div>';
+   if(!stocks.length){
+     stockBox.innerHTML='<div class="platformReservationEmpty">Keine Pritschen erfasst.</div>';
+   }else{
+     let supplierOrder=[...PLATFORM_SUPPLIERS,...new Set(stocks.map(x=>x.supplier||'Ohne Lieferant'))]
+       .filter((x,i,a)=>x&&a.indexOf(x)===i);
+     stockBox.innerHTML=supplierOrder.map(supplier=>{
+       let supplierStocks=stocks.filter(x=>(x.supplier||'Ohne Lieferant')===supplier);
+       if(!supplierStocks.length)return '';
+       let supplierFree=supplierStocks.filter(x=>platformStockFreeForPeriod(x,from,to).free).length;
+       let poolLabel=supplier==='Künzli'?'Eigener Pool':'Mietpool';
+       return `<section class="platformSupplierGroupV441">
+         <div class="platformSupplierGroupHeadV441">
+           <div>
+             <h4>${esc(supplier)}</h4>
+             <span class="platformSupplierPoolBadgeV441 ${supplier==='Künzli'?'own':'rent'}">${poolLabel}</span>
+           </div>
+           <div class="platformSupplierGroupCountV441">${supplierFree} von ${supplierStocks.length} frei</div>
+         </div>
+         <div class="platformReservationCards platformSupplierCardsV441">
+           ${supplierStocks.map(item=>{
+             let av=platformStockFreeForPeriod(item,from,to);
+             return `<div class="platformReservationCard ${av.free?'free':'busy'} platformReservationViewOnlyV434">
+               <div class="platformReservationState">${platformStockIsAtSupplierV390(item)?'Beim Lieferant':platformAssetIsLockedV373(item)?'🔒 Gesperrt':(av.free?'Frei':'Belegt')}</div>
+               <div class="platformReservationCardTitle">${esc(item.name||'Pritsche')}</div>
+               <div class="platformReservationCardMeta">${Number(item.length||0).toFixed(2)} m · ${item.suva?'SUVA':'nicht SUVA'}</div>
+               <div class="platformReservationCardMeta">${esc(av.reason)}</div>
+               ${!av.free&&av.nextFreeText?`<div class="platformReservationNextFree ${av.nextFreeOpen?'open':''}">${esc(av.nextFreeText)}</div>`:''}
+             </div>`;
+           }).join('')}
+         </div>
+       </section>`;
+     }).join('');
+   }
  }
  if(E('platformReservationPlatformCount'))E('platformReservationPlatformCount').textContent=`${freeStocks.length} von ${stocks.length} frei`;
 
@@ -11729,14 +12598,53 @@ function renderPlatformReservationAvailability(force=false){
    if(!c||!platformContainerFreeForPeriod(c,from,to).free)platformReservationSelectedContainers.delete(id);
  });
 
- let nP=platformReservationSelectedPlatforms.size,nC=platformReservationSelectedContainers.size;
+ let nC=platformReservationSelectedContainers.size;
  if(E('platformReservationSelectionInfo')){
-   E('platformReservationSelectionInfo').textContent=(nP||nC)
-     ? `${nP} Pritsche${nP===1?'':'n'} und ${nC} Container ausgewählt`
-     : 'Noch nichts ausgewählt.';
+   E('platformReservationSelectionInfo').textContent=nC
+     ? `${nC} Container ausgewählt · Pritschenbedarf wird nur nach Lieferant und Menge reserviert`
+     : 'Pritschenbedarf: Menge je Lieferant angeben. Container können weiterhin konkret ausgewählt werden.';
  }
+ renderPlatformSupplierNeedInputsV434(from,to);
 
  renderPlatformReservationGantt(from,to);
+}
+
+
+function renderPlatformSupplierNeedInputsV434(from,to){
+ let box=E('platformSupplierNeedGridV434');if(!box)return;
+ box.innerHTML=PLATFORM_SUPPLIERS.map(supplier=>{
+   let cap=platformSupplierCapacity(supplier);
+   let available=(from&&to)?platformAvailableCount(supplier,from,to,'any'):cap.total;
+   let physical=(platformStore.stock||[]).filter(x=>x.supplier===supplier&&x.active!==false&&platformStockFreeForPeriod(x,from,to).free).length;
+   let rentalInfo=supplier==='Künzli'
+     ? 'Eigener Künzli-Pool – keine Miete'
+     : `${platformRentalQty(selectedPlatformProjectId,supplier)} für dieses Projekt konkret als Miete hinterlegt`;
+   return `<label class="platformSupplierNeedV434">
+     <span><b>${esc(supplier)}</b><small>${esc(rentalInfo)}</small><small>${from&&to?`${available} Stück im Lieferanten-Pool noch planbar · ${physical} physisch frei angezeigt`:''}</small></span>
+     <input id="platformSupplierNeedQtyV434_${supplier.replace(/[^A-Za-z0-9]/g,'_')}" data-supplier="${esc(supplier)}" type="number" min="0" step="1" value="0" aria-label="Anzahl Pritschen ${esc(supplier)}">
+   </label>`;
+ }).join('');
+}
+function platformSupplierNeedQtyV434(supplier){
+ let el=[...document.querySelectorAll('#platformSupplierNeedGridV434 input[data-supplier]')].find(x=>x.dataset.supplier===supplier);
+ return Math.max(0,Math.floor(Number(el?.value)||0));
+}
+function savePlatformPooledNeedsV434(projectId,from,to,note){
+ let requested=PLATFORM_SUPPLIERS.map(supplier=>({supplier,qty:platformSupplierNeedQtyV434(supplier)})).filter(x=>x.qty>0);
+ if(!requested.length)return 0;
+ for(let r of requested){
+   let available=platformAvailableCount(r.supplier,from,to,'any');
+   if(r.qty>available)throw new Error(`Von ${r.supplier} sind im gewählten Zeitraum nur ${available} Pritschen im Pool planbar.`);
+ }
+ let now=new Date().toISOString(),seq=0;
+ requested.forEach(r=>{
+   platformStore.needs.push({
+     id:'pn'+Date.now()+'_'+(seq++),needKind:'platforms',projectId,from,to,qty:r.qty,
+     supplier:r.supplier,platformType:'any',note,rentalQty:0,sharedQty:r.qty,status:'Reserviert',
+     createdAt:now,updatedAt:now
+   });
+ });
+ return requested.reduce((n,x)=>n+x.qty,0);
 }
 
 function savePlatformVisualReservation(){
@@ -11746,32 +12654,27 @@ function savePlatformVisualReservation(){
  if(!projectId)return alert('Bitte zuerst ein Projekt auswählen.');
  if(!from||!to)return alert('Bitte zuerst den Zeitraum definieren.');
  if(to<from)return alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');
- if(!platformReservationSelectedPlatforms.size&&!platformReservationSelectedContainers.size){
-   return alert('Bitte mindestens eine freie Pritsche oder einen Container auswählen.');
+
+ let platformQty=PLATFORM_SUPPLIERS.reduce((n,supplier)=>n+platformSupplierNeedQtyV434(supplier),0);
+ if(!platformQty&&!platformReservationSelectedContainers.size){
+   return alert('Bitte bei mindestens einem Lieferanten eine Pritschenmenge angeben oder einen Container auswählen.');
  }
 
- // Revalidate immediately before save.
- for(let id of platformReservationSelectedPlatforms){
-   let s=(platformStore.stock||[]).find(x=>x.id===id);
-   let av=platformStockFreeForPeriod(s,from,to);
-   if(!av.free)return alert(`${s?.name||'Pritsche'} ist inzwischen nicht mehr verfügbar: ${av.reason}`);
- }
+ // Container werden weiterhin konkret reserviert.
  for(let id of platformReservationSelectedContainers){
    let c=(platformStore.containerStock||[]).find(x=>x.id===id);
    let av=platformContainerFreeForPeriod(c,from,to);
    if(!av.free)return alert(`${c?.name||'Container'} ist inzwischen nicht mehr verfügbar: ${av.reason}`);
  }
 
+ let savedPlatforms=0;
+ try{
+   savedPlatforms=savePlatformPooledNeedsV434(projectId,from,to,note);
+ }catch(err){
+   return alert(err.message||String(err));
+ }
+
  let now=new Date().toISOString(),seq=0;
- [...platformReservationSelectedPlatforms].forEach(id=>{
-   let s=(platformStore.stock||[]).find(x=>x.id===id);if(!s)return;
-   platformStore.needs.push({
-     id:'pn'+Date.now()+'_'+(seq++),needKind:'platforms',projectId,from,to,qty:1,
-     supplier:s.supplier,platformType:s.suva===true?'suva':'non-suva',note,
-     rentalQty:0,sharedQty:1,status:'Reserviert',exactPlatformId:s.id,
-     selectedPlatformIds:[s.id],createdAt:now,updatedAt:now
-   });
- });
  [...platformReservationSelectedContainers].forEach(id=>{
    let c=(platformStore.containerStock||[]).find(x=>x.id===id);if(!c)return;
    (c.reservations||(c.reservations=[])).push({
@@ -11788,7 +12691,8 @@ function savePlatformVisualReservation(){
  renderPlatformProjectReservationsV396();
  renderPlatformManagement();
  renderPlatformProjectOverview();
- alert('Reservation gespeichert.');
+ renderPlatformProcessV437();
+ alert(`${savedPlatforms} Pritsche${savedPlatforms===1?'':'n'} nach Lieferant/Menge geplant${seq?` · ${seq} Container konkret reserviert`:''}.`);
 }
 
 // V398: Projektzuordnung robust gegen ältere/geänderte Projekt-IDs.
@@ -11901,6 +12805,27 @@ function platformGanttBarHtml(from,to,days,label,cls){
  return `<div class="platformGanttBar ${cls}" style="left:${left}%;width:${width}%;" title="${esc(label)}">${esc(label)}</div>`;
 }
 
+
+function platformAssignedReservationPeriodsV444(stock){
+ if(!stock||!selectedPlatformProjectId)return [];
+ let supplier=stock.supplier||'Künzli';
+ let assigned=platformAssignedIdsV439(selectedPlatformProjectId,supplier).map(String);
+ if(!assigned.includes(String(stock.id)))return [];
+ return platformProjectNeedsV437(selectedPlatformProjectId)
+   .filter(n=>(n.supplier||'Künzli')===supplier && n.from && n.to && (n.status||'Reserviert')!=='Aufgehoben')
+   .map(n=>({from:n.from,to:n.to,projectId:n.projectId}));
+}
+function platformISOWeekV444(iso){
+ let d=new Date(iso+'T12:00:00');
+ let u=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+ let day=u.getUTCDay()||7;u.setUTCDate(u.getUTCDate()+4-day);
+ let ys=new Date(Date.UTC(u.getUTCFullYear(),0,1));
+ return Math.ceil((((u-ys)/86400000)+1)/7);
+}
+function platformMonthShortV444(iso){
+ return new Intl.DateTimeFormat('de-CH',{month:'short',year:'2-digit'}).format(new Date(iso+'T12:00:00'));
+}
+
 function renderPlatformReservationGantt(from='',to=''){
  let box=E('platformReservationGantt');if(!box)return;
  let days=platformGanttDateRange(from,to);
@@ -11911,6 +12836,12 @@ function renderPlatformReservationGantt(from='',to=''){
  (platformStore.stock||[]).filter(s=>s.active!==false).forEach(s=>{
    let bars=[];
    platformStockReservationRows(s.id).forEach(n=>{
+     let p=projects.find(x=>x.id===n.projectId);
+     bars.push(platformGanttBarHtml(n.from,n.to,days,`Reserviert · ${p?.name||'Projekt'}`,'reservation'));
+   });
+   // V444: Nach Schritt 2 übernimmt die konkret zugewiesene Pritsche
+   // den ursprünglichen Bedarfs-/Reservationszeitraum des Lieferanten.
+   platformAssignedReservationPeriodsV444(s).forEach(n=>{
      let p=projects.find(x=>x.id===n.projectId);
      bars.push(platformGanttBarHtml(n.from,n.to,days,`Reserviert · ${p?.name||'Projekt'}`,'reservation'));
    });
@@ -11937,15 +12868,23 @@ function renderPlatformReservationGantt(from='',to=''){
    rows.push({label:`Container · ${c.name||''}`,bars:bars.join('')});
  });
 
- let dayHead=days.map(d=>{
+ let dayHead=days.map((d,i)=>{
    let dt=new Date(d+'T12:00:00'),weekend=[0,6].includes(dt.getDay());
-   return `<div class="platformGanttDay ${weekend?'weekend':''}">${String(dt.getDate()).padStart(2,'0')}.${String(dt.getMonth()+1).padStart(2,'0')}</div>`;
+   let prev=i?days[i-1]:'';
+   let monthChanged=!prev||prev.slice(0,7)!==d.slice(0,7);
+   let kw=platformISOWeekV444(d),prevKw=prev?platformISOWeekV444(prev):null;
+   let kwChanged=!prev||kw!==prevKw;
+   return `<div class="platformGanttDayV444 ${weekend?'weekend':''}">
+     <div class="platformGanttMonthV444">${monthChanged?esc(platformMonthShortV444(d)):''}</div>
+     <div class="platformGanttWeekV444">${kwChanged?'KW '+kw:''}</div>
+     <div class="platformGanttDateV444">${String(dt.getDate()).padStart(2,'0')}.${String(dt.getMonth()+1).padStart(2,'0')}</div>
+   </div>`;
  }).join('');
 
  box.innerHTML=`<div class="platformGanttHead">
    <div><h3>Gantt · Reservationen & aktuelle Belegung</h3><div class="muted">${platformDateFmt(days[0])} – ${platformDateFmt(days[days.length-1])}</div></div>
    <div class="platformGanttLegend">
-     <span><i style="background:#ffe7a8"></i>Reservation Pritsche</span>
+     <span><i style="background:#ffe7a8"></i>Reservation / konkrete Zuweisung</span>
      <span><i style="background:#cfe2f7"></i>Aktuelle Nutzung</span>
      <span><i style="background:#eadcf5"></i>Container</span>
    </div>
@@ -12079,8 +13018,17 @@ function applyPlatformMainTab(){
  let transport=E('platformTransportOverview'),zoneTransport=E('platformZoneTransport'),projects=E('platformProjectArea'),zonePlanning=E('platformZonePlanning');
  let stock=E('platformStockPanel'),workspace=E('platformProjectWorkspace'),picker=E('platformTabSupplierPicker'),masterTabs=E('platformMasterSubTabs'),masterV362=E('platformMasterV362');
  platformV314Show(zoneDaily,tab==='overview');platformV314Show(quick,tab==='overview');
+
+ // V443: class + inline display synchron halten.
+ if(zoneDaily)zoneDaily.style.display=(tab==='overview')?'block':'none';
+ if(quick)quick.style.display=(tab==='overview')?'block':'none';
+
  platformV314Show(zoneMaster,tab==='master');
- if(masterV362)platformMasterV362Force(masterV362,tab==='master','block');
+ if(zoneMaster)zoneMaster.style.display=(tab==='master')?'block':'none';
+ if(masterV362){
+   platformMasterV362Force(masterV362,tab==='master','block');
+   masterV362.style.display=(tab==='master')?'block':'none';
+ }
  if(masterTabs)masterTabs.style.display='none';
  if(tab!=='master'){
    platformV314Show(suppliers,false);
@@ -12745,6 +13693,56 @@ function setPlatformMode(mode){
    renderPlatformProjectPlanAndOccupancy();
  }
 }
+
+function platformAssignedStockOptionsV439(selected=''){
+ let projectId=selectedPlatformProjectId;
+ let assigned=platformAllAssignedIdsV439(projectId);
+
+ // Beim Bearbeiten eines alten Ist-Eintrags dessen Pritsche weiter anzeigen,
+ // auch wenn sie historisch noch nicht über Schritt 2 zugewiesen wurde.
+ if(selected)assigned.add(String(selected));
+
+ let rows=(platformStore.stock||[])
+   .filter(x=>x&&x.active!==false&&assigned.has(String(x.id)))
+   .slice()
+   .sort((a,b)=>
+     String(a.supplier||'').localeCompare(String(b.supplier||''),'de-CH') ||
+     String(a.name||'').localeCompare(String(b.name||''),'de-CH'));
+
+ let html='<option value="">Pritsche wählen</option>';
+ if(!rows.length){
+   return html+'<option value="" disabled>Keine Pritsche zugewiesen – zuerst Schritt 2 ausführen</option>';
+ }
+
+ let suppliers=[...new Set(rows.map(x=>x.supplier||'Ohne Lieferant'))];
+ suppliers.forEach(supplier=>{
+   let groupRows=rows.filter(x=>(x.supplier||'Ohne Lieferant')===supplier);
+   html+=`<optgroup label="${esc(supplier)}">`;
+   groupRows.forEach(x=>{
+     let latest=platformLatestActualForStock(x.id);
+     let occupied=latest&&latest.status!=='Frei'&&latest.projectId;
+     let otherProject=occupied&&String(latest.projectId)!==String(projectId||'');
+     let locked=platformAssetIsLockedV373(x);
+     let atSupplier=platformStockIsAtSupplierV390(x);
+     let disabled=(locked||atSupplier||otherProject)&&String(x.id)!==String(selected||'');
+
+     let suffix=' · zugewiesen';
+     if(atSupplier)suffix=' · BEIM LIEFERANT';
+     else if(locked)suffix=' · 🔒 GESPERRT';
+     else if(otherProject){
+       let p=platformProjectById(latest.projectId);
+       suffix=` · belegt${p?.name?' · '+p.name:''}`;
+     }else if(occupied&&String(latest.projectId)===String(projectId||'')){
+       suffix=' · bereits in diesem Projekt';
+     }
+
+     html+=`<option value="${x.id}" ${String(x.id)===String(selected)?'selected':''} ${disabled?'disabled':''}>${esc(x.name||'Pritsche')} · ${Number(x.length||0).toFixed(2)} m${esc(suffix)}</option>`;
+   });
+   html+='</optgroup>';
+ });
+ return html;
+}
+
 function platformStockOptions(selected=''){
  let rows=(platformStore.stock||[])
    .filter(x=>x&&x.active!==false)
@@ -13059,6 +14057,8 @@ function updatePlatformActualPickupDate(id,value){
  renderPlatformProjectPlanAndOccupancy();
 }
 
+
+function closeActionMenuV451(btn){let d=btn?.closest?.('details.actionMenuV451');if(d)d.removeAttribute('open');}
 function editPlatformActual(id){
  let x=(platformStore.actual||[]).find(a=>a.id===id);if(!x)return;
  E('platformActualPlatform').value=x.platformId||'';
@@ -13344,8 +14344,10 @@ function renderPlatformActual(){
        <td><span class="platformStatusBadge ${platformStatusClass(a.status||'Frei')}">${esc(a.status||'Frei')}</span></td>
        <td>${esc(a.note||'')}</td>
        <td><div class="toolbar">
-         <button class="btn secondary" type="button" onclick="editPlatformActual('${a.id}')">Bearbeiten</button>
-         <button class="btn danger" type="button" onclick="deletePlatformActual('${a.id}')">Löschen</button>
+         <details class="actionMenuV451"><summary title="Aktionen">⋮</summary><div class="actionMenuPanelV451">
+          <button class="btn secondary" type="button" onclick="closeActionMenuV451(this);editPlatformActual('${a.id}')">Bearbeiten</button>
+          <button class="btn danger" type="button" onclick="closeActionMenuV451(this);deletePlatformActual('${a.id}')">Löschen</button>
+         </div></details>
        </div></td>
      </tr>`;
    }).join('');
@@ -13373,8 +14375,10 @@ function renderPlatformActual(){
        <td><span class="platformStatusBadge ${platformStatusClass(a.status||'In Beladung')}">${esc(a.status||'In Beladung')}</span></td>
        <td>${esc(a.note||'')}</td>
        <td><div class="toolbar">
-         <button class="btn secondary" type="button" onclick="editPlatformActualContainerV395('${a.id}')">Bearbeiten</button>
-         <button class="btn danger" type="button" onclick="deletePlatformActualContainerV395('${a.id}')">Löschen</button>
+         <details class="actionMenuV451"><summary title="Aktionen">⋮</summary><div class="actionMenuPanelV451">
+          <button class="btn secondary" type="button" onclick="closeActionMenuV451(this);editPlatformActualContainerV395('${a.id}')">Bearbeiten</button>
+          <button class="btn danger" type="button" onclick="closeActionMenuV451(this);deletePlatformActualContainerV395('${a.id}')">Löschen</button>
+         </div></details>
        </div></td>
      </tr>`;
    }).join('');
@@ -13411,9 +14415,14 @@ function renderPlatformActual(){
 
    if(E('platformActualPlatform')){
      let sel=E('platformActualPlatform'),keep=sel.value||'';
-     sel.innerHTML=platformStockOptions(keep);
+     sel.innerHTML=selectedPlatformProjectId?platformAssignedStockOptionsV439(keep):platformStockOptions(keep);
      if(keep&&Array.from(sel.options).some(o=>o.value===keep))sel.value=keep;
-     sel.disabled=(platformStore.stock||[]).filter(x=>x&&x.active!==false).length===0;
+     let selectable=Array.from(sel.options).some(o=>o.value&&!o.disabled);
+     sel.disabled=!selectable;
+     let hint=E('platformActualAssignedHintV439');
+     if(hint)hint.textContent=selectable
+       ? 'Es werden nur Pritschen angezeigt, die diesem Projekt in Schritt 2 zugewiesen wurden.'
+       : 'Noch keine Pritsche zugewiesen. Bitte zuerst oben Schritt 2 „Pritschen zuweisen“ ausführen.';
    }
 
    // V404: Container-Auswahl bleibt unabhängig von der Rungen-Darstellung; Diagnoseanzeige entfernt.
@@ -16557,6 +17566,96 @@ async function exportInventoryPDF(){
 #wcMaterialBarcodeReaderV429{width:100%;max-width:560px;margin:auto;overflow:hidden;border-radius:12px;background:#111}
 @media(max-width:700px){.toolsBarcodeCaptureV429{grid-template-columns:1fr}.toolsMaterialScannerHeadV429{flex-direction:column}}
 
+
+/* V434: Pritschenbedarf nur Lieferant + Menge, Mietpritschen konkret im Mietbereich */
+.platformReservationViewOnlyV434{cursor:default!important}
+.platformReservationViewOnlyV434:hover{transform:none!important}
+.platformSupplierNeedGridV434{display:grid;grid-template-columns:repeat(4,minmax(190px,1fr));gap:10px}
+.platformSupplierNeedV434{display:grid;grid-template-columns:minmax(0,1fr) 90px;gap:10px;align-items:center;padding:12px;border:1px solid #d7dfdb;border-radius:12px;background:#f7f9f8}
+.platformSupplierNeedV434 span{display:flex;flex-direction:column;gap:3px;min-width:0}
+.platformSupplierNeedV434 small{font-weight:500;color:#67736e;line-height:1.25}
+.platformSupplierNeedV434 input{text-align:center;font-weight:800}
+#platformProjectRentalFields.platformRentalGrid{display:block!important}
+.platformOwnPoolInfoV434{display:flex;gap:14px;align-items:center;padding:12px 14px;margin-bottom:12px;border-radius:12px;background:#edf5f0;border:1px solid #cfe0d6}
+.platformOwnPoolInfoV434 span{color:#52615b}
+.platformRentalSupplierV434{padding:14px;border:1px solid #d7dfdb;border-radius:14px;margin-top:12px;background:#fff}
+.platformRentalSupplierHeadV434{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.platformRentalLegacyV434{padding:9px 11px;margin-bottom:10px;border-radius:10px;background:#fff4d8;color:#745500}
+.platformRentalAssetGridV434{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:8px}
+.platformRentalAssetV434{display:flex!important;flex-direction:row!important;gap:9px;align-items:flex-start;padding:10px;border:1px solid #d7dfdb;border-radius:10px;background:#f7f9f8;cursor:pointer}
+.platformRentalAssetV434.selected{border-color:#245b45;background:#e9f4ee}
+.platformRentalAssetV434.blocked{opacity:.55;cursor:not-allowed}
+.platformRentalAssetV434 input{width:auto!important;margin-top:3px}
+.platformRentalAssetV434 span{display:flex;flex-direction:column;gap:2px}
+.platformRentalAssetV434 small{font-weight:500;color:#67736e}
+@media(max-width:1100px){.platformSupplierNeedGridV434{grid-template-columns:repeat(2,minmax(190px,1fr))}.platformRentalAssetGridV434{grid-template-columns:repeat(2,minmax(180px,1fr))}}
+@media(max-width:650px){.platformSupplierNeedGridV434,.platformRentalAssetGridV434{grid-template-columns:1fr}}
+
+
+/* V435 – geordnete Darstellung der Mietpritschen */
+.platformOwnPoolInfoV435{
+  display:grid;grid-template-columns:220px minmax(0,1fr);gap:18px;align-items:center;
+  padding:14px 16px;margin-bottom:16px;border:1px solid #cfe0d6;border-radius:14px;background:#f3f8f5
+}
+.platformOwnPoolInfoV435>div{display:flex;flex-direction:column;gap:2px}
+.platformOwnPoolInfoV435>div b{font-size:1.08rem}
+.platformOwnPoolInfoV435>div span{font-size:.9rem;font-weight:700;color:#2f6b50}
+.platformOwnPoolInfoV435 p{margin:0;color:#5c6963}
+
+.platformRentalSupplierV435{
+  border:1px solid #d8e0dc;border-radius:14px;background:#fff;margin:14px 0;overflow:hidden
+}
+.platformRentalSupplierHeadV435{
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  padding:14px 16px;background:#f5f7f6;border-bottom:1px solid #dde4e0
+}
+.platformRentalSupplierNameV435{font-size:1.1rem;font-weight:800}
+.platformRentalCountV435{
+  min-width:108px;text-align:center;padding:7px 11px;border-radius:999px;
+  background:#e7f1ec;color:#184f3a;font-weight:800
+}
+.platformRentalTableV435{width:100%}
+.platformRentalTableHeadV435,.platformRentalRowV435{
+  display:grid;grid-template-columns:52px minmax(220px,1.5fr) 110px 90px 140px;
+  align-items:center;gap:10px
+}
+.platformRentalTableHeadV435{
+  padding:9px 14px;background:#fafbfa;border-bottom:1px solid #e4e9e6;
+  color:#6a756f;font-size:.86rem;font-weight:800
+}
+.platformRentalRowV435{
+  padding:11px 14px;border-bottom:1px solid #edf0ee;cursor:pointer
+}
+.platformRentalRowV435:last-child{border-bottom:0}
+.platformRentalRowV435:hover{background:#f8faf9}
+.platformRentalRowV435.selected{background:#edf7f1}
+.platformRentalRowV435.blocked{opacity:.55;cursor:not-allowed;background:#f3f3f3}
+.platformRentalCheckV435{display:flex;justify-content:center}
+.platformRentalCheckV435 input{width:20px!important;height:20px!important;margin:0}
+.platformRentalNameV435{font-weight:800}
+.platformRentalStatusV435{
+  display:inline-block;padding:5px 9px;border-radius:999px;font-size:.82rem;font-weight:800
+}
+.platformRentalStatusV435.free{background:#e9f5ed;color:#22643e}
+.platformRentalStatusV435.supplier{background:#ececec;color:#666}
+.platformRentalStatusV435.locked{background:#fbe8e8;color:#8a2727}
+.platformRentalEmptyV435{padding:16px;color:#6d7772}
+@media(max-width:900px){
+  .platformRentalTableHeadV435,.platformRentalRowV435{
+    grid-template-columns:44px minmax(170px,1fr) 88px 70px 120px
+  }
+  .platformOwnPoolInfoV435{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  .platformRentalTableHeadV435{display:none}
+  .platformRentalRowV435{
+    grid-template-columns:40px minmax(0,1fr);gap:6px 10px
+  }
+  .platformRentalRowV435>span:nth-child(3),
+  .platformRentalRowV435>span:nth-child(4),
+  .platformRentalRowV435>span:nth-child(5){grid-column:2}
+}
+
 </style></head><body><h1>Holzlager – Gesamtinventar</h1><p>Export: ${escHtml(formatDateTime(new Date().toISOString()))} · Positionen: ${body.length}</p>${table}</body></html>`);
    win.document.close();
    win.onload=()=>setTimeout(()=>win.print(),300);
@@ -16815,12 +17914,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 <div id="platformModule" class="projectsShell" aria-label="Pritschenverwaltung">
   <div class="platformWrap">
     <div class="platformHead">
-      <div>
-        <h1 style="margin:0">Pritschenverwaltung</h1><div class="muted">Pritschen, Rungen, Container, Kronen und Transporte · Cloud-synchronisiert</div>
-        <p class="muted">Planung des Pritschenbedarfs nach Projekt, Zeitraum und Lieferant. <b>Cloud-Synchronisierung aktiv.</b></p>
-      </div>
-      <div class="toolbar">
-        <button class="btn secondary" type="button" onclick="showModuleHome()">← Bereichsauswahl</button>
+      <div class="moduleTitleGroupV454">
+        <button class="moduleChooserBtnV454" type="button" onclick="showModuleHome()" title="Bereichauswahl" aria-label="Bereichauswahl"><span aria-hidden="true">☰</span></button>
+        <div>
+          <h1 style="margin:0">Pritschenverwaltung</h1><div class="muted">Pritschen, Rungen, Container, Kronen und Transporte · Cloud-synchronisiert</div>
+          <p class="muted">Planung des Pritschenbedarfs nach Projekt, Zeitraum und Lieferant. <b>Cloud-Synchronisierung aktiv.</b></p>
+        </div>
       </div>
     </div>
 
@@ -17006,7 +18105,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     <div id="platformProjectWorkspace" style="display:none">
       <div id="platformProjectSubTabs" class="platformProjectSubTabs">
         <button class="platformProjectSubTab active" data-project-subtab="planning" type="button" onclick="setPlatformProjectSubTab('planning')">Planung</button>
-        <button class="platformProjectSubTab" data-project-subtab="actual" type="button" onclick="setPlatformProjectSubTab('actual')">Aktuelle Situation</button>
+        <button class="platformProjectSubTab" data-project-subtab="actual" type="button" onclick="setPlatformProjectSubTab('actual')">Beladung / aktuelle Situation</button>
         <button class="platformProjectSubTab" data-project-subtab="transports" type="button" onclick="setPlatformProjectSubTab('transports')">Transporte</button>
       </div>
       <div class="card platformProjectWorkspaceHead">
@@ -17020,21 +18119,50 @@ document.addEventListener('DOMContentLoaded',()=>{
         </div>
       </div>
 
+      <div id="platformProcessV437" class="card platformProcessV437">
+        <div class="platformProcessHeadV437">
+          <div>
+            <div class="muted">Projektablauf</div>
+            <h3 style="margin:3px 0 0">Vom Bedarf bis zur Baustelle</h3>
+          </div>
+          <div class="muted">Jeder Schritt baut auf dem vorherigen auf.</div>
+        </div>
+        <div class="platformProcessStepsV437">
+          <button type="button" class="platformProcessStepV437" data-step="need" onclick="openPlatformProcessStepV437('need')">
+            <span class="platformProcessNrV437">1</span>
+            <span><b>Bedarf</b><small id="platformProcessNeedV437">Lieferant + Anzahl planen</small></span>
+          </button>
+          <button type="button" class="platformProcessStepV437" data-step="assign" onclick="openPlatformProcessStepV437('assign')">
+            <span class="platformProcessNrV437">2</span>
+            <span><b>Pritschen zuweisen</b><small id="platformProcessAssignV437">Externe Mietpritschen konkret festlegen</small></span>
+          </button>
+          <button type="button" class="platformProcessStepV437" data-step="load" onclick="openPlatformProcessStepV437('load')">
+            <span class="platformProcessNrV437">3</span>
+            <span><b>Beladung</b><small id="platformProcessLoadV437">Konkrete Pritsche tatsächlich verwenden</small></span>
+          </button>
+          <button type="button" class="platformProcessStepV437" data-step="transport" onclick="openPlatformProcessStepV437('transport')">
+            <span class="platformProcessNrV437">4</span>
+            <span><b>Transport</b><small id="platformProcessTransportV437">Beladene Pritsche auf die Baustelle bringen</small></span>
+          </button>
+        </div>
+        <div id="platformProcessHintV437" class="platformProcessHintV437"></div>
+      </div>
+
       <div id="platformProjectRentalPanel" class="card platformRentalPanelCollapsed" style="display:none;margin-top:16px">
         <button id="platformRentalToggle" class="platformRentalToggle" type="button" onclick="togglePlatformRentalPanel()">
-          <span id="platformRentalToggleTitle">Eingemietete Pritschen</span>
+          <span id="platformRentalToggleTitle">Pritschen zuweisen</span>
           <span id="platformRentalToggleIcon">▼</span>
         </button>
         <div id="platformRentalPanelBody" class="platformRentalPanelBody">
         <div class="manageHead">
           <div>
             <h3 id="platformProjectRentalTitle" style="margin:0">Eingemietete Pritschen</h3>
-            <p class="muted" style="margin:4px 0 0">Diese Mengen sind ausschliesslich für dieses Projekt verfügbar. Entscheidend ist die Anzahl je Lieferant, nicht die konkrete Pritsche.</p>
+            <p class="muted" style="margin:4px 0 0">Nach der Bedarfsplanung werden hier die konkreten Pritschen dem Projekt zugewiesen. Künzli stammt aus dem eigenen Pool; bei Frei, Brühwiler und Tschopp handelt es sich um Mietpritschen.</p>
           </div>
         </div>
         <div id="platformProjectRentalFields" class="platformRentalGrid"></div>
         <div class="toolbar" style="margin-top:12px">
-          <button class="btn" type="button" onclick="savePlatformProjectRentals()">Mietbestand speichern</button>
+          <button class="btn" type="button" onclick="savePlatformProjectRentals()">Zuweisung speichern</button>
         </div>
         </div>
       </div>
@@ -17126,14 +18254,14 @@ document.addEventListener('DOMContentLoaded',()=>{
       <div id="platformPlanningProjectHint" class="platformProjectHint">Bitte oben ein Projekt auswählen.</div>
       
 <div class="card" style="margin-bottom:16px">
-  <div class="manageHead"><div><h3 style="margin:0">Reservierte Betriebsmittel</h3><p class="muted" style="margin:4px 0 0">Reservationen dieses Projekts direkt bearbeiten oder aufheben.</p></div></div>
+  <div class="manageHead"><div><h3 style="margin:0">Reservierte Betriebsmittel</h3><p class="muted" style="margin:4px 0 0">Konkrete Containerreservationen direkt bearbeiten oder aufheben. Pritschen werden als Bedarf nach Lieferant und Menge in der Belegungsplanung geführt.</p></div></div>
   <div id="platformProjectReservationsV396"></div>
 </div>
 
 <div class="platformReservationPlanner">
   <p class="platformReservationIntro muted">
-    Zuerst den gewünschten Zeitraum wählen. Danach werden nur die in diesem Zeitraum verfügbaren
-    Pritschen und Container zur Auswahl freigegeben.
+    Zuerst den gewünschten Zeitraum wählen. Die verfügbaren Pritschen bleiben einzeln sichtbar, damit der Planer den Bestand beurteilen kann.
+    Reserviert wird bei Pritschen aber nur <b>Lieferant + Anzahl</b> – nicht eine konkrete Pritsche. Container können weiterhin konkret gewählt werden.
   </p>
 
   <div class="platformReservationPeriod">
@@ -17151,10 +18279,18 @@ document.addEventListener('DOMContentLoaded',()=>{
   <div id="platformReservationResults" class="platformReservationResults">
     <div class="platformReservationSection">
       <div class="platformReservationSectionHead">
-        <h3>Freie Pritschen</h3>
+        <h3>Pritschen nach Lieferant</h3>
         <div id="platformReservationPlatformCount" class="muted"></div>
       </div>
       <div id="platformReservationPlatforms" class="platformReservationCards"></div>
+    </div>
+
+    <div class="platformReservationSection platformSupplierNeedSectionV434">
+      <div class="platformReservationSectionHead">
+        <h3>Pritschenbedarf nach Lieferant</h3>
+        <div class="muted">Künzli = eigener Pool · andere Lieferanten = Mietpool</div>
+      </div>
+      <div id="platformSupplierNeedGridV434" class="platformSupplierNeedGridV434"></div>
     </div>
 
     <div class="platformReservationSection">
@@ -17171,7 +18307,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     <div class="platformReservationSelectionBar">
       <strong id="platformReservationSelectionInfo">Noch nichts ausgewählt.</strong>
-      <button class="btn" type="button" onclick="savePlatformVisualReservation()">Auswahl reservieren</button>
+      <button class="btn" type="button" onclick="savePlatformVisualReservation()">Bedarf reservieren</button>
     </div>
   </div>
 </div>
@@ -17203,15 +18339,16 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     <div id="platformActualSection" style="display:none">
       <div class="card">
-        <h2 style="margin-top:0">Aktuelle Situation erfassen</h2>
+        <h2 style="margin-top:0">Beladung / aktuelle Situation erfassen</h2>
         <div id="platformActualProjectHint" class="platformProjectHint">Bitte oben ein Projekt auswählen.</div>
-        <p class="muted">Hier wird die tatsächliche Nutzung festgehalten – unabhängig von der Vorausplanung.</p>
+        <p class="muted">Hier beginnt die tatsächliche Verwendung: konkrete Pritsche wählen, Beladung erfassen und später den Status bis zum Transport weiterführen.</p>
         <div class="help" style="margin:10px 0 16px">
           Nach dem Speichern findest du die Pritsche direkt unten in der <b>„Aktuellen Pritschenübersicht“</b>.
         </div>
         <div class="platformActualForm">
           <label>Pritsche
             <select id="platformActualPlatform" onchange="prefillPlatformActualRungHeights()"></select>
+            <small id="platformActualAssignedHintV439" class="platformActualAssignedHintV439"></small>
           </label>
           <label>Standort
             <input id="platformActualLocation" placeholder="z. B. Halle, Baustelle Müller">
@@ -17336,6 +18473,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 (function(){
  const KEY='kuenzli_tools_white_container_v1';
  let selected='';
+ let editingContainerItemIdV450='';
  let toolsContainerTabV419='list';
  window.setToolsContainerTabV419=function(tab){toolsContainerTabV419=tab==='inventory'?'inventory':'list';applyToolsContainerTabV419();};
  function applyToolsContainerTabV419(){let has=!!selected;let tabs=el('wcContainerTabsV419'),list=el('wcMaterialArea'),inv=el('wcInventoryControlPaneV419'),b1=el('wcTabListV419'),b2=el('wcTabInventoryV419');if(tabs)tabs.style.display=has?'flex':'none';if(list)list.style.display=has&&toolsContainerTabV419==='list'?'block':'none';if(inv)inv.style.display=has&&toolsContainerTabV419==='inventory'?'block':'none';if(b1)b1.classList.toggle('active',toolsContainerTabV419==='list');if(b2)b2.classList.toggle('active',toolsContainerTabV419==='inventory');}
@@ -17353,10 +18491,64 @@ document.addEventListener('DOMContentLoaded',()=>{
    try{queueCloudSync?.();}catch(e){}
  }
  function current(st){return st.containers.find(c=>c.id===selected)}
- window.openWhiteContainerV413=function(){el('toolsOverviewV413').style.display='none';el('whiteContainerV413').style.display='block';render();}
- window.closeWhiteContainerV413=function(){el('whiteContainerV413').style.display='none';el('toolsOverviewV413').style.display='grid';selected='';}
- window.saveWhiteContainerV413=function(){let name=el('wcName').value.trim();if(!name){alert('Bitte Bezeichnung eingeben.');return}let st=load();st.containers.push({id:'wc_'+Date.now(),name,location:el('wcLocation').value.trim()||'Davos',note:el('wcNote').value.trim(),items:[],inventories:[],createdAt:new Date().toISOString()});save(st);el('wcName').value='';el('wcNote').value='';render();}
- window.selectWhiteContainerV413=function(id){stopInventoryScannerV415?.();selected=id;toolsContainerTabV419='list';inventoryDraftV416={};inventorySessionContainerIdV416='';if(el('wcInventoryArea'))el('wcInventoryArea').style.display='none';render();}
+ window.openWhiteContainerV413=function(){el('toolsOverviewV413').style.display='none';el('whiteContainerV413').style.display='block';selected='';render();applySelectedContainerViewV445();closeContainerCreateV448();}
+ window.closeWhiteContainerV413=function(){el('whiteContainerV413').style.display='none';el('toolsOverviewV413').style.display='grid';selected='';applySelectedContainerViewV445();}
+ window.openContainerCreateV448=function(){
+  let closed=el('wcContainerCreateClosedV448'),form=el('wcContainerCreateFormV448');
+  if(closed)closed.style.display='none';
+  if(form)form.style.display='block';
+  setTimeout(()=>el('wcName')?.focus(),0);
+ };
+ window.closeContainerCreateV448=function(){
+  let closed=el('wcContainerCreateClosedV448'),form=el('wcContainerCreateFormV448');
+  if(form)form.style.display='none';
+  if(closed)closed.style.display='block';
+  if(el('wcName'))el('wcName').value='';
+  if(el('wcLocation'))el('wcLocation').value='Davos';
+  if(el('wcNote'))el('wcNote').value='';
+ };
+ window.saveWhiteContainerV413=function(){
+  let name=el('wcName').value.trim();
+  if(!name){alert('Bitte Bezeichnung eingeben.');return}
+  let st=load();
+  st.containers.push({id:'wc_'+Date.now(),name,location:el('wcLocation').value.trim()||'Davos',note:el('wcNote').value.trim(),items:[],inventories:[],createdAt:new Date().toISOString()});
+  save(st);
+  closeContainerCreateV448();
+  render();
+ }
+ window.selectWhiteContainerV413=function(id){
+  stopInventoryScannerV415?.();
+  selected=id;
+  toolsContainerTabV419='list';
+  inventoryDraftV416={};
+  inventorySessionContainerIdV416='';
+  if(el('wcInventoryArea'))el('wcInventoryArea').style.display='none';
+  render();
+  applySelectedContainerViewV445();
+ };
+ window.closeSelectedContainerV445=function(){
+  stopInventoryScannerV415?.();
+  selected='';
+  toolsContainerTabV419='list';
+  inventoryDraftV416={};
+  inventorySessionContainerIdV416='';
+  if(el('wcInventoryArea'))el('wcInventoryArea').style.display='none';
+  render();
+  applySelectedContainerViewV445();
+ };
+ function applySelectedContainerViewV445(){
+  let st=load(),c=current(st),detail=!!c;
+  ['wcContainerOverviewStatsV445','wcContainerCreateCardV445','wcContainerListCardV445'].forEach(id=>{
+    let x=el(id);if(x)x.style.display=detail?'none':'';
+  });
+  let head=el('wcContainerDetailHeadV445');
+  if(head)head.style.display=detail?'block':'none';
+  if(detail){
+    if(el('wcContainerDetailTitleV445'))el('wcContainerDetailTitleV445').textContent=c.name||'Container';
+    if(el('wcContainerDetailMetaV445'))el('wcContainerDetailMetaV445').textContent=
+      `${c.location||'Davos'} · ${(c.items||[]).length} Materialpositionen`;
+  }
+ }
  window.deleteWhiteContainerV413=function(id){let st=load(),c=st.containers.find(x=>x.id===id);if(!c||!confirm('Container „'+c.name+'“ wirklich löschen?'))return;st.containers=st.containers.filter(x=>x.id!==id);if(selected===id)selected='';save(st);render();}
  function itemPhotoMatchKeyV417(item){let b=String(item?.barcode||'').trim(),t=String(item?.toolNumber||'').trim();return b?'b:'+b:(t?'t:'+t:'');}
  function findReusablePhotoV417(st,item){let key=itemPhotoMatchKeyV417(item);if(!key)return '';for(let c of st.containers||[])for(let i of c.items||[])if(i!==item&&itemPhotoMatchKeyV417(i)===key&&i.photo)return i.photo;return '';}
@@ -17366,7 +18558,57 @@ document.addEventListener('DOMContentLoaded',()=>{
  function compressPhotoV417(file){return new Promise((resolve,reject)=>{let rd=new FileReader();rd.onerror=()=>reject(new Error('Bild konnte nicht gelesen werden.'));rd.onload=()=>{let img=new Image();img.onerror=()=>reject(new Error('Bild konnte nicht verarbeitet werden.'));img.onload=()=>{let max=800,scale=Math.min(1,max/img.width,max/img.height),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale)),c=document.createElement('canvas');c.width=w;c.height=h;let ctx=c.getContext('2d');ctx.drawImage(img,0,0,w,h);let webp='';try{webp=c.toDataURL('image/webp',.58)}catch(e){}let jpg=c.toDataURL('image/jpeg',.62);resolve(webp&&webp.startsWith('data:image/webp')&&webp.length<jpg.length?webp:jpg);};img.src=rd.result;};rd.readAsDataURL(file);});}
  window.handleItemPhotoV417=async function(input){let file=input?.files?.[0];if(!file||!photoTargetItemIdV417)return;try{let data=await compressPhotoV417(file),st=load(),target=null;for(let c of st.containers||[]){let i=(c.items||[]).find(x=>x.id===photoTargetItemIdV417);if(i){target=i;break;}}if(!target)return;let key=itemPhotoMatchKeyV417(target);if(key){for(let c of st.containers||[])for(let i of c.items||[])if(itemPhotoMatchKeyV417(i)===key)i.photo=data;}else target.photo=data;save(st);render();let c=current(st);if(c&&el('wcInventoryArea')?.style.display!=='none')renderInventory(c);}catch(err){console.error(err);alert(err.message||err);}finally{input.value='';photoTargetItemIdV417='';}}
  window.removeItemPhotoV417=function(itemId){let st=load(),target=null;for(let c of st.containers||[]){let i=(c.items||[]).find(x=>x.id===itemId);if(i){target=i;break;}}if(!target)return;if(!confirm('Bild bei diesem Material entfernen?'))return;let key=itemPhotoMatchKeyV417(target);if(key){for(let c of st.containers||[])for(let i of c.items||[])if(itemPhotoMatchKeyV417(i)===key)i.photo='';}else target.photo='';save(st);render();let c=current(st);if(c&&el('wcInventoryArea')?.style.display!=='none')renderInventory(c);}
- window.addContainerItemV413=function(){let st=load(),c=current(st);if(!c)return;let name=el('wcItemName').value.trim();let qty=Number(el('wcItemQty').value);if(!name||!Number.isFinite(qty)||qty<0){alert('Bitte Material und gültige Sollmenge eingeben.');return}c.items=c.items||[];let barcode=(el('wcItemBarcode')?.value||'').trim().toUpperCase();let toolNumber=(el('wcItemToolNumber')?.value||'').trim();if(barcode&&(c.items||[]).some(i=>String(i.barcode||'').trim()===barcode)){alert('Dieser Barcode ist in diesem Container bereits einem Material zugeordnet.');return}let newItem={id:'i_'+Date.now(),name,toolNumber,category:el('wcItemCategory').value.trim(),qty,unit:el('wcItemUnit').value.trim()||'Stk.',barcode,photo:''};newItem.photo=findReusablePhotoV417(st,newItem);c.items.push(newItem);save(st);el('wcItemName').value='';if(el('wcItemToolNumber'))el('wcItemToolNumber').value='';el('wcItemCategory').value='';el('wcItemQty').value='1';if(el('wcItemBarcode'))el('wcItemBarcode').value='';render();}
+ window.openManualMaterialFormV449=function(){
+ editingContainerItemIdV450='';
+ ['wcItemName','wcItemToolNumber','wcItemCategory','wcItemBarcode'].forEach(id=>{let x=el(id);if(x)x.value='';});
+ if(el('wcItemQty'))el('wcItemQty').value='1';
+ if(el('wcItemUnit'))el('wcItemUnit').value='Stk.';
+ if(el('wcManualMaterialTitleV450'))el('wcManualMaterialTitleV450').textContent='Material manuell erfassen';
+ if(el('wcManualMaterialSaveV450'))el('wcManualMaterialSaveV450').textContent='Material speichern';
+ let a=el('wcManualMaterialStartV449'),f=el('wcManualMaterialFormV449');if(a)a.style.display='none';if(f)f.style.display='block';setTimeout(()=>el('wcItemName')?.focus(),0);
+};
+ window.closeManualMaterialFormV449=function(){
+ stopMaterialBarcodeScannerV429?.();editingContainerItemIdV450='';
+ let a=el('wcManualMaterialStartV449'),f=el('wcManualMaterialFormV449');if(f)f.style.display='none';if(a)a.style.display='block';
+ if(el('wcManualMaterialTitleV450'))el('wcManualMaterialTitleV450').textContent='Material manuell erfassen';
+ if(el('wcManualMaterialSaveV450'))el('wcManualMaterialSaveV450').textContent='Material speichern';
+};
+ window.addContainerItemV413=function(){
+ let st=load(),c=current(st);if(!c)return;
+ let name=el('wcItemName').value.trim(),qty=Number(el('wcItemQty').value);
+ if(!name||!Number.isFinite(qty)||qty<0){alert('Bitte Material und gültige Sollmenge eingeben.');return}
+ c.items=c.items||[];
+ let barcode=(el('wcItemBarcode')?.value||'').trim().toUpperCase();
+ let toolNumber=(el('wcItemToolNumber')?.value||'').trim();
+ let category=el('wcItemCategory').value.trim();
+ let unit=el('wcItemUnit').value.trim()||'Stk.';
+ if(barcode&&c.items.some(i=>String(i.barcode||'').trim().toUpperCase()===barcode&&i.id!==editingContainerItemIdV450)){
+   alert('Dieser Barcode ist in diesem Container bereits einem anderen Material zugeordnet.');return;
+ }
+ if(editingContainerItemIdV450){
+   let item=c.items.find(i=>i.id===editingContainerItemIdV450);if(!item)return;
+   Object.assign(item,{name,toolNumber,category,qty,unit,barcode,updatedAt:new Date().toISOString()});
+   if(!item.photo)item.photo=findReusablePhotoV417(st,item);
+ }else{
+   let newItem={id:'i_'+Date.now(),name,toolNumber,category,qty,unit,barcode,photo:'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+   newItem.photo=findReusablePhotoV417(st,newItem);c.items.push(newItem);
+ }
+ save(st);render();closeManualMaterialFormV449();
+}
+window.editContainerItemV450=function(id){
+ let st=load(),c=current(st);if(!c)return;let item=(c.items||[]).find(i=>i.id===id);if(!item)return;
+ editingContainerItemIdV450=id;
+ if(el('wcItemName'))el('wcItemName').value=item.name||'';
+ if(el('wcItemToolNumber'))el('wcItemToolNumber').value=item.toolNumber||'';
+ if(el('wcItemCategory'))el('wcItemCategory').value=item.category||'';
+ if(el('wcItemQty'))el('wcItemQty').value=Number(item.qty??1);
+ if(el('wcItemUnit'))el('wcItemUnit').value=item.unit||'Stk.';
+ if(el('wcItemBarcode'))el('wcItemBarcode').value=item.barcode||'';
+ if(el('wcManualMaterialTitleV450'))el('wcManualMaterialTitleV450').textContent='Material bearbeiten';
+ if(el('wcManualMaterialSaveV450'))el('wcManualMaterialSaveV450').textContent='Änderungen speichern';
+ let a=el('wcManualMaterialStartV449'),f=el('wcManualMaterialFormV449');if(a)a.style.display='none';if(f)f.style.display='block';
+ f?.scrollIntoView?.({behavior:'smooth',block:'start'});el('wcItemName')?.focus();
+}
  window.deleteContainerItemV413=function(id){let st=load(),c=current(st);if(!c)return;c.items=(c.items||[]).filter(i=>i.id!==id);save(st);render();}
  function normHeaderV414(v){return String(v??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');}
  function headerIndexV414(headers,names){let hs=headers.map(normHeaderV414);for(let n of names){let i=hs.indexOf(normHeaderV414(n));if(i>=0)return i;}return -1;}
@@ -17423,7 +18665,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(!assigned.length){box.innerHTML='<h3>Nach Status gruppiert</h3><div class="muted">Sobald du einem Material einen Status gibst, erscheint es hier in der passenden Gruppe.</div>';return;}
   box.innerHTML='<h3>Nach Status gruppiert</h3><div class="toolsStatusGridV421">'+defs.map(([key,label])=>{
    let rows=assigned.filter(i=>(inventoryDraftV416[i.id]||{}).status===key);
-   let body=rows.length?rows.map(i=>{let d=inventoryDraftV416[i.id]||{};let meta=[];if(i.toolNumber)meta.push('Werkzeugnr. '+esc(i.toolNumber));if(i.barcode)meta.push('Barcode '+esc(i.barcode));meta.push('Ist '+Number(d.actual||0)+' / Soll '+Number(i.qty||0)+' '+esc(i.unit||'Stk.'));return '<div class="toolsStatusItemV421">'+(i.photo?'<img src="'+esc(i.photo)+'" alt="" title="Bild vergrössern" onclick="openPhotoViewer(this.src)">':'')+'<div><b>'+esc(i.name)+'</b><small>'+meta.join(' · ')+'</small></div></div>';}).join(''):'<div class="toolsStatusEmptyV421">Keine Positionen</div>';
+   let body=rows.length?rows.map(i=>{let d=inventoryDraftV416[i.id]||{};let meta=[];if(i.toolNumber)meta.push('Werkzeugnr. '+esc(i.toolNumber));if(i.barcode)meta.push('Barcode '+esc(i.barcode));meta.push('Status: '+esc(statusLabelV416(d.status)));return '<div class="toolsStatusItemV421">'+(i.photo?'<img src="'+esc(i.photo)+'" alt="" title="Bild vergrössern" onclick="openPhotoViewer(this.src)">':'')+'<div><b>'+esc(i.name)+'</b><small>'+meta.join(' · ')+'</small></div></div>';}).join(''):'<div class="toolsStatusEmptyV421">Keine Positionen</div>';
    return '<section class="toolsStatusGroupV421"><div class="toolsStatusGroupHeadV421 '+key+'"><span>'+esc(label)+'</span><span class="toolsStatusCountV421">'+rows.length+'</span></div><div class="toolsStatusGroupBodyV421">'+body+'</div></section>';
   }).join('')+'</div>';
  }
@@ -17436,11 +18678,117 @@ document.addEventListener('DOMContentLoaded',()=>{
  function renderInventoryDiffs(c){(c.items||[]).forEach(i=>{let d=document.querySelector('[data-diff="'+i.id+'"]');if(!d)return;let actual=Number((inventoryDraftV416[i.id]||{}).actual||0),diff=actual-Number(i.qty||0);d.textContent=(diff>0?'+':'')+diff+' '+i.unit;d.className=diff===0?'toolsDiffOkV413':'toolsDiffBadV413';});}
  function setInventoryItemV416(itemId,{actual,status}={}){let st=load(),c=current(st);if(!c)return false;ensureInventoryDraftV416(c);let d=inventoryDraftV416[itemId];if(actual!==undefined)d.actual=Math.max(0,Number(actual||0));if(status!==undefined)d.status=status;let inp=document.querySelector('[data-inv="'+itemId+'"]');if(inp)inp.value=String(d.actual);let sel=document.querySelector('[data-invstatus="'+itemId+'"]');if(sel){sel.value=d.status;sel.className='toolsInventoryStatusV416 status-'+d.status;}renderInventoryDiffs(c);renderInventorySearchV415();renderInventoryStatusGroupsV421(c);return true;}
  function incrementInventoryItemV415(itemId,amount=1){let st=load(),c=current(st);if(!c)return false;ensureInventoryDraftV416(c);let d=inventoryDraftV416[itemId];d.actual=Math.max(0,Number(d.actual||0)+amount);d.status='vorhanden';return setInventoryItemV416(itemId,{actual:d.actual,status:'vorhanden'});}
- function processInventoryBarcodeV415(raw){let code=String(raw||'').trim();if(!code)return;let now=Date.now();if(lastScanV415.code===code&&now-lastScanV415.at<1600)return;lastScanV415={code,at:now};let st=load(),c=current(st);if(!c)return;ensureInventoryDraftV416(c);let item=(c.items||[]).find(i=>String(i.barcode||'').trim()===code);let status=el('wcScannerStatus');if(!item){if(status){status.textContent='Nicht gefunden: '+code;status.style.color='#9c2d20'}navigator.vibrate?.(120);return}let d=inventoryDraftV416[item.id]||{actual:0,status:''};let target=Math.max(Number(d.actual||0),Number(item.qty||1),1);setInventoryItemV416(item.id,{actual:target,status:'vorhanden'});if(status){status.textContent='✓ '+item.name+(item.toolNumber?' · '+item.toolNumber:'')+' – Vorhanden';status.style.color='#226b35'}navigator.vibrate?.(45);}
+ let inventoryScanPendingV447='';
+function ensureInventoryScanPopupV447(){
+  let modal=el('wcInventoryScanPopupV447');
+  if(modal)return modal;
+
+  modal=document.createElement('div');
+  modal.id='wcInventoryScanPopupV447';
+  modal.className='toolsScanPopupBackdropV447';
+  modal.style.display='none';
+  modal.innerHTML=`
+    <div class="toolsScanPopupV447" role="dialog" aria-modal="true" aria-labelledby="wcInventoryScanPopupTitleV447">
+      <div class="toolsScanPopupTopV447">
+        <div>
+          <div class="muted">Barcode erkannt</div>
+          <h3 id="wcInventoryScanPopupTitleV447">Material</h3>
+        </div>
+        <button class="btn secondary" type="button" onclick="closeInventoryScanPopupV447()">Schliessen</button>
+      </div>
+      <div id="wcInventoryScanPopupBodyV447" class="toolsScanPopupBodyV447"></div>
+      <div class="toolsScanPopupStatusV447">
+        <button type="button" class="toolsScanStatusBtnV447 vorhanden" onclick="chooseInventoryScanStatusV447('vorhanden')">Vorhanden</button>
+        <button type="button" class="toolsScanStatusBtnV447 dirty" onclick="chooseInventoryScanStatusV447('verunreinigt')">Verunreinigt</button>
+        <button type="button" class="toolsScanStatusBtnV447 missing" onclick="chooseInventoryScanStatusV447('fehlt_nachbestellen')">Fehlt → nachbestellen</button>
+        <button type="button" class="toolsScanStatusBtnV447 replace" onclick="chooseInventoryScanStatusV447('nicht_ersetzt')">Wird nicht ersetzt</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  return modal;
+}
+window.closeInventoryScanPopupV447=function(){
+  inventoryScanPendingV447='';
+  let modal=el('wcInventoryScanPopupV447');
+  if(modal)modal.style.display='none';
+};
+window.chooseInventoryScanStatusV447=function(statusValue){
+  if(!inventoryScanPendingV447)return;
+  let st=load(),c=current(st);if(!c)return;
+  let item=(c.items||[]).find(i=>i.id===inventoryScanPendingV447);
+  if(!item)return;
+  ensureInventoryDraftV416(c);
+  setInventoryItemV416(item.id,{status:statusValue});
+  let status=el('wcScannerStatus');
+  if(status){
+    status.textContent='✓ '+item.name+(item.toolNumber?' · '+item.toolNumber:'')+' – '+statusLabelV416(statusValue);
+    status.style.color='#226b35';
+  }
+  navigator.vibrate?.(45);
+  inventoryScanPendingV447='';
+  let modal=el('wcInventoryScanPopupV447');
+  if(modal)modal.style.display='none';
+};
+function openInventoryScanPopupV447(item){
+  let modal=ensureInventoryScanPopupV447();
+  inventoryScanPendingV447=item.id;
+
+  let title=el('wcInventoryScanPopupTitleV447');
+  if(title)title.textContent=item.name||'Material';
+
+  let body=el('wcInventoryScanPopupBodyV447');
+  if(body){
+    let img=photoHtmlV417(item,true);
+    body.innerHTML=`
+      <div class="toolsScanPopupImageV447">${img||''}</div>
+      <div class="toolsScanPopupInfoV447">
+        <div><span>Material</span><b>${esc(item.name||'')}</b></div>
+        <div><span>Werkzeugnummer</span><b>${esc(item.toolNumber||'—')}</b></div>
+        <div><span>Barcode</span><b>${esc(item.barcode||'—')}</b></div>
+        <div><span>Kategorie</span><b>${esc(item.category||'—')}</b></div>
+      </div>`;
+  }
+  modal.style.display='flex';
+}
+function processInventoryBarcodeV415(raw){
+  // Solange das Statusfenster offen ist, keine weiteren Scans verarbeiten.
+  if(inventoryScanPendingV447)return;
+
+  let code=String(raw||'').trim().toUpperCase();if(!code)return;
+  let now=Date.now();if(lastScanV415.code===code&&now-lastScanV415.at<1600)return;
+  lastScanV415={code,at:now};
+
+  let st=load(),c=current(st);if(!c)return;
+  ensureInventoryDraftV416(c);
+
+  let item=(c.items||[]).find(i=>String(i.barcode||'').trim().toUpperCase()===code);
+  let status=el('wcScannerStatus');
+
+  if(!item){
+    if(status){
+      status.textContent='Nicht gefunden: '+code;
+      status.style.color='#9c2d20';
+    }
+    navigator.vibrate?.(120);
+    return;
+  }
+
+  if(status){
+    status.textContent='Barcode erkannt – Status für '+item.name+' auswählen.';
+    status.style.color='#7a5a00';
+  }
+  navigator.vibrate?.(45);
+  openInventoryScanPopupV447(item);
+}
  window.inventoryBarcodeEnterV415=function(){let inp=el('wcInventoryBarcode');if(!inp)return;processInventoryBarcodeV415(inp.value);inp.value='';inp.focus();}
  window.renderInventorySearchV415=function(){let box=el('wcInventorySearchResults');if(!box)return;let st=load(),c=current(st);if(!c){box.innerHTML='';return}ensureInventoryDraftV416(c);let q=(el('wcInventorySearch')?.value||'').trim().toLowerCase();let rows=(c.items||[]).filter(i=>!q||[i.name,i.toolNumber,i.category,i.barcode].some(v=>String(v||'').toLowerCase().includes(q))).slice(0,100);box.innerHTML=rows.length?rows.map(i=>{let d=inventoryDraftV416[i.id]||{actual:0,status:''};return '<div class="toolsSearchRowV415"><div class="toolsSearchMainV417">'+(i.photo?'<img class="toolsSearchPhotoV417" src="'+esc(i.photo)+'" alt="" title="Bild vergrössern" onclick="openPhotoViewer(this.src)">':'')+'<div><b>'+esc(i.name)+'</b><div class="muted">'+(i.toolNumber?'Werkzeugnr. '+esc(i.toolNumber)+' · ':'')+(i.barcode?esc(i.barcode)+' · ':'')+'Status: '+esc(statusLabelV416(d.status))+'</div></div></div><button class="btn secondary" type="button" onclick="inventoryMarkPresentV416(\''+i.id+'\')">✓ Vorhanden</button></div>'}).join(''):'<div class="muted">Keine Treffer.</div>';}
  window.inventoryAddOneV415=function(itemId){incrementInventoryItemV415(itemId,1);}
- window.inventoryMarkPresentV416=function(itemId){let st=load(),c=current(st);if(!c)return;let item=(c.items||[]).find(i=>i.id===itemId);if(!item)return;ensureInventoryDraftV416(c);setInventoryItemV416(itemId,{actual:Math.max(Number(inventoryDraftV416[itemId]?.actual||0),Number(item.qty||1),1),status:'vorhanden'});}
+ window.inventoryMarkPresentV416=function(itemId){
+  let st=load(),c=current(st);if(!c)return;
+  let item=(c.items||[]).find(i=>i.id===itemId);if(!item)return;
+  ensureInventoryDraftV416(c);
+  setInventoryItemV416(itemId,{status:'vorhanden'});
+}
 
  let materialBarcodeScannerV429=null,materialBarcodeScannerRunningV429=false,lastMaterialBarcodeV429={code:'',at:0};
  function normalizeMaterialBarcodeV429(raw){return String(raw||'').trim().toUpperCase();}
@@ -17548,9 +18896,128 @@ document.addEventListener('DOMContentLoaded',()=>{
    console.error('Inventory barcode camera:',err);
   }
  }
- window.stopInventoryScannerV415=async function(){let reader=el('wcScannerReader');if(inventoryScannerV415&&inventoryScannerRunningV415){try{await inventoryScannerV415.stop();}catch(e){} }inventoryScannerRunningV415=false;if(reader)reader.style.display='none';let status=el('wcScannerStatus');if(status){status.textContent='Scanner beendet – du kannst manuell weitermachen. Alle bisherigen Scans bleiben erhalten.';status.style.color='#226b35'};let search=el('wcInventorySearch');if(search)search.focus();}
- window.finishInventoryV413=function(){let st=load(),c=current(st);if(!c)return;ensureInventoryDraftV416(c);let missing=(c.items||[]).filter(i=>!(inventoryDraftV416[i.id]||{}).status);if(missing.length){alert('Bitte für alle Materialpositionen einen Status wählen. Noch offen: '+missing.length);return}let rows=c.items.map(i=>{let d=inventoryDraftV416[i.id]||{actual:0,status:''};let actual=Number(d.actual||0);return {itemId:i.id,name:i.name,toolNumber:i.toolNumber||'',barcode:i.barcode||'',expected:i.qty,actual,diff:actual-i.qty,unit:i.unit,status:d.status}});c.inventories=c.inventories||[];c.inventories.unshift({id:'inv_'+Date.now(),date:new Date().toISOString(),rows});save(st);stopInventoryScannerV415();el('wcInventoryArea').style.display='none';inventoryDraftV416={};inventorySessionContainerIdV416='';render();}
- function render(){let st=load();let allItems=st.containers.reduce((n,c)=>n+(c.items||[]).length,0);let diffs=st.containers.reduce((n,c)=>{let inv=(c.inventories||[])[0];return n+(inv?inv.rows.filter(r=>r.diff!==0||(r.status&&r.status!=='vorhanden')).length:0)},0);el('wcStatContainers').textContent=st.containers.length;el('wcStatItems').textContent=allItems;el('wcStatDiff').textContent=diffs;el('wcContainerList').innerHTML=st.containers.length?st.containers.map(c=>'<div class="toolsContainerRowV413"><div><b>'+esc(c.name)+'</b><span class="muted">'+esc(c.location||'')+' · '+(c.items||[]).length+' Materialpositionen'+((c.inventories||[])[0]?' · letzte Inventur '+new Date(c.inventories[0].date).toLocaleDateString('de-CH'):'')+'</span></div><button class="btn '+(selected===c.id?'primary':'secondary')+'" type="button" onclick="selectWhiteContainerV413(\''+c.id+'\')">'+(selected===c.id?'Ausgewählt':'Öffnen')+'</button><button class="btn secondary" type="button" onclick="deleteWhiteContainerV413(\''+c.id+'\')">Löschen</button></div>').join(''):'<div class="muted">Noch keine Container erfasst.</div>';let c=current(st);if(!c){applyToolsContainerTabV419();return;}applyToolsContainerTabV419();el('wcMaterialTitle').textContent='Inventarliste · '+c.name;let items=c.items||[];let imp=c.materialImportedAt?'<div class="muted" style="margin-bottom:8px">Letzter Excel-Import: '+new Date(c.materialImportedAt).toLocaleString('de-CH')+(c.materialImportFile?' · '+esc(c.materialImportFile):'')+'</div>':'';el('wcItemsTable').innerHTML=imp+(items.length?'<table class="toolsTableV413"><thead><tr><th>Bild</th><th>Material</th><th>Werkzeugnummer</th><th>Kategorie</th><th>Barcode</th><th>Sollbestand</th><th></th></tr></thead><tbody>'+items.map(i=>'<tr><td>'+photoHtmlV417(i,true)+'</td><td><b>'+esc(i.name)+'</b></td><td>'+esc(i.toolNumber||'—')+'</td><td>'+esc(i.category||'—')+'</td><td>'+(i.barcode?esc(i.barcode):'—')+'</td><td>'+i.qty+' '+esc(i.unit)+'</td><td><button class="btn secondary" type="button" onclick="deleteContainerItemV413(\''+i.id+'\')">Entfernen</button></td></tr>').join('')+'</tbody></table>':'<div class="muted">Noch kein Material erfasst oder importiert.</div>');}
+ window.stopInventoryScannerV415=async function(){
+  closeInventoryScanPopupV447?.();let reader=el('wcScannerReader');if(inventoryScannerV415&&inventoryScannerRunningV415){try{await inventoryScannerV415.stop();}catch(e){} }inventoryScannerRunningV415=false;if(reader)reader.style.display='none';let status=el('wcScannerStatus');if(status){status.textContent='Scanner beendet – du kannst manuell weitermachen. Alle bisherigen Scans bleiben erhalten.';status.style.color='#226b35'};let search=el('wcInventorySearch');if(search)search.focus();}
+ 
+window.exportInventoryStatusGroupsPdfV446=async function(){
+ let st=load(),c=current(st);if(!c)return;
+ ensureInventoryDraftV416(c);
+
+ let assigned=(c.items||[]).filter(i=>(inventoryDraftV416[i.id]||{}).status);
+ if(!assigned.length){
+   alert('Noch keine Status erfasst.');
+   return;
+ }
+
+ try{
+   if(typeof loadExternalScript==='function'){
+     await loadExternalScript(
+       'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+       ()=>!!window.jspdf?.jsPDF
+     );
+     await loadExternalScript(
+       'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js',
+       ()=>!!window.jspdf?.jsPDF?.API?.autoTable
+     );
+   }
+   if(!window.jspdf?.jsPDF)throw new Error('PDF-Bibliothek konnte nicht geladen werden.');
+
+   const {jsPDF}=window.jspdf;
+   let doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+   let defs=[
+     ['vorhanden','Vorhanden'],
+     ['verunreinigt','Verunreinigt'],
+     ['fehlt_nachbestellen','Fehlt → nachbestellen'],
+     ['nicht_ersetzt','Wird nicht ersetzt']
+   ];
+
+   let now=new Date();
+   let dateText=new Intl.DateTimeFormat('de-CH',{
+     day:'2-digit',month:'2-digit',year:'numeric',
+     hour:'2-digit',minute:'2-digit'
+   }).format(now);
+
+   doc.setFontSize(16);
+   doc.text('Inventurkontrolle',14,16);
+   doc.setFontSize(11);
+   doc.text(String(c.name||'Container'),14,23);
+   doc.setFontSize(9);
+   doc.setTextColor(95);
+   doc.text(`Standort: ${String(c.location||'Davos')} · ${dateText}`,14,29);
+   doc.setTextColor(0);
+
+   let y=36;
+   defs.forEach(([key,label])=>{
+     let rows=assigned.filter(i=>(inventoryDraftV416[i.id]||{}).status===key);
+     doc.setFontSize(11);
+     doc.setFont(undefined,'bold');
+     doc.text(`${label} (${rows.length})`,14,y);
+     doc.setFont(undefined,'normal');
+     y+=3;
+
+     let body=rows.map(i=>[
+       String(i.name||''),
+       String(i.toolNumber||''),
+       String(i.barcode||''),
+       String(i.category||'')
+     ]);
+
+     if(!body.length)body=[['Keine Positionen','','','']];
+
+     doc.autoTable({
+       startY:y,
+       head:[['Material','Werkzeugnummer','Barcode','Kategorie']],
+       body,
+       theme:'grid',
+       styles:{fontSize:8,cellPadding:2},
+       headStyles:{fontStyle:'bold'},
+       margin:{left:14,right:14}
+     });
+     y=doc.lastAutoTable.finalY+8;
+     if(y>265){
+       doc.addPage();
+       y=18;
+     }
+   });
+
+   let safe=String(c.name||'Container').replace(/[^\w\-äöüÄÖÜ]+/g,'_');
+   doc.save(`Inventur_${safe}_${now.toISOString().slice(0,10)}.pdf`);
+ }catch(err){
+   console.error(err);
+   alert('PDF konnte nicht erstellt werden: '+(err?.message||err));
+ }
+};
+
+window.finishInventoryV413=async function(){
+ let st=load(),c=current(st);if(!c)return;
+ ensureInventoryDraftV416(c);
+ let missing=(c.items||[]).filter(i=>!(inventoryDraftV416[i.id]||{}).status);
+ if(missing.length){
+   alert('Bitte für alle Materialpositionen einen Status wählen. Noch offen: '+missing.length);
+   return;
+ }
+ let rows=c.items.map(i=>{
+   let d=inventoryDraftV416[i.id]||{actual:0,status:''};
+   let actual=Number(d.actual||0);
+   return {
+     itemId:i.id,name:i.name,toolNumber:i.toolNumber||'',barcode:i.barcode||'',
+     expected:i.qty,actual,diff:actual-i.qty,unit:i.unit,status:d.status
+   };
+ });
+ c.inventories=c.inventories||[];
+ c.inventories.unshift({id:'inv_'+Date.now(),date:new Date().toISOString(),rows});
+ save(st);
+
+ let exportPdf=confirm('Inventur gespeichert. Statusgruppen jetzt als PDF exportieren?');
+ if(exportPdf)await exportInventoryStatusGroupsPdfV446();
+
+ stopInventoryScannerV415();
+ el('wcInventoryArea').style.display='none';
+ inventoryDraftV416={};
+ inventorySessionContainerIdV416='';
+ render();
+}
+ function render(){let st=load();let allItems=st.containers.reduce((n,c)=>n+(c.items||[]).length,0);let diffs=st.containers.reduce((n,c)=>{let inv=(c.inventories||[])[0];return n+(inv?inv.rows.filter(r=>r.diff!==0||(r.status&&r.status!=='vorhanden')).length:0)},0);el('wcStatContainers').textContent=st.containers.length;el('wcStatItems').textContent=allItems;el('wcStatDiff').textContent=diffs;el('wcContainerList').innerHTML=st.containers.length?st.containers.map(c=>'<div class="toolsContainerRowV413"><div><b>'+esc(c.name)+'</b><span class="muted">'+esc(c.location||'')+' · '+(c.items||[]).length+' Materialpositionen'+((c.inventories||[])[0]?' · letzte Inventur '+new Date(c.inventories[0].date).toLocaleDateString('de-CH'):'')+'</span></div><button class="btn '+(selected===c.id?'primary':'secondary')+'" type="button" onclick="selectWhiteContainerV413(\''+c.id+'\')">'+(selected===c.id?'Ausgewählt':'Öffnen')+'</button><button class="btn secondary" type="button" onclick="deleteWhiteContainerV413(\''+c.id+'\')">Löschen</button></div>').join(''):'<div class="muted">Noch keine Container erfasst.</div>';let c=current(st);if(!c){applyToolsContainerTabV419();return;}applyToolsContainerTabV419();el('wcMaterialTitle').textContent='Inventarliste · '+c.name;let items=c.items||[];let imp=c.materialImportedAt?'<div class="muted" style="margin-bottom:8px">Letzter Excel-Import: '+new Date(c.materialImportedAt).toLocaleString('de-CH')+(c.materialImportFile?' · '+esc(c.materialImportFile):'')+'</div>':'';el('wcItemsTable').innerHTML=imp+(items.length?'<table class="toolsTableV413"><thead><tr><th>Bild</th><th>Material</th><th>Werkzeugnummer</th><th>Kategorie</th><th>Barcode</th><th>Sollbestand</th><th></th></tr></thead><tbody>'+items.map(i=>'<tr><td>'+photoHtmlV417(i,true)+'</td><td><b>'+esc(i.name)+'</b></td><td>'+esc(i.toolNumber||'—')+'</td><td>'+esc(i.category||'—')+'</td><td>'+(i.barcode?esc(i.barcode):'—')+'</td><td>'+i.qty+' '+esc(i.unit)+'</td><td><details class="actionMenuV451"><summary title="Aktionen">⋮</summary><div class="actionMenuPanelV451"><button class="btn secondary" type="button" onclick="closeActionMenuV451(this);editContainerItemV450(\''+i.id+'\')">Bearbeiten</button><button class="btn danger" type="button" onclick="closeActionMenuV451(this);deleteContainerItemV413(\''+i.id+'\')">Entfernen</button></div></details></td></tr>').join('')+'</tbody></table>':'<div class="muted">Noch kein Material erfasst oder importiert.</div>');applySelectedContainerViewV445();}
  window.renderWhiteContainerV413=render;
 })();
 </script>\n</body></html>
