@@ -3948,6 +3948,59 @@ window.APP_RELEASE = {
   .moduleChooserBtnV454{width:42px;min-width:42px;height:42px;flex-basis:42px}
 }
 
+
+
+.platformQuickTakeV457{margin-bottom:18px}
+.platformQuickTakeHeadV457{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.platformQuickTakeHeadV457 h2{margin:3px 0}
+.platformQuickAllV457{display:flex;gap:7px;align-items:center;padding:9px 12px;border:1px solid #d7e0db;border-radius:11px;background:#f6f8f7;font-weight:800}
+.platformQuickSelectV457{display:grid;gap:6px;max-width:620px;margin:16px 0}
+.platformQuickSelectV457 select{min-height:48px;font-size:1rem}
+#platformQuickTakeResultV457{display:grid;gap:18px}
+.platformQuickSupplierHeadV457{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #dce4df;padding-bottom:7px}
+.platformQuickSupplierHeadV457 h3{margin:0}.platformQuickSupplierHeadV457 span{color:#617068;font-weight:700}
+.platformQuickGridV457{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:10px}
+.platformQuickCardV457{border:2px solid #d7dfdb;border-radius:15px;padding:15px;background:#fff}
+.platformQuickCardV457 h3{font-size:1.35rem;margin:10px 0 6px}.platformQuickCardV457.yes{background:#effaf2;border-color:#94d0a5}
+.platformQuickCardV457.wait{background:#fff9e9;border-color:#e2c568}.platformQuickCardV457.no{background:#fff3f1;border-color:#e6aaa2}
+.platformQuickBadgeV457{display:inline-flex;padding:6px 10px;border-radius:999px;font-weight:950;font-size:.84rem}
+.platformQuickCardV457.yes .platformQuickBadgeV457{background:#d7f1df;color:#126332}.platformQuickCardV457.wait .platformQuickBadgeV457{background:#f8e7a7;color:#725400}
+.platformQuickCardV457.no .platformQuickBadgeV457{background:#f8d8d4;color:#9a3025}.platformQuickReasonV457{margin-top:9px;color:#58665f}
+.platformQuickEmptyV457{padding:18px;border:1px dashed #cbd7d0;border-radius:13px;background:#f8faf9}
+@media(max-width:700px){.platformQuickGridV457{grid-template-columns:1fr}}
+
+
+
+/* V459 – Sammelbestellungen / Nachbestellungen als PDF */
+.toolsOrderPdfCardV459{
+ margin:14px 0;padding:14px;border:1px solid #d8e0dc;border-radius:14px;background:#f7f9f8
+}
+.toolsOrderPdfHeadV459{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.toolsOrderPdfHeadV459 h3{margin:0 0 4px}
+.toolsOrderPdfUploadV459{margin-top:14px;padding:14px;border:1px solid #d8e0dc;border-radius:12px;background:#fff}
+.toolsOrderPdfFieldsV459{display:grid;grid-template-columns:2fr 1fr 2fr;gap:10px}
+.toolsOrderPdfFieldsV459 label,.toolsOrderPdfFileV459{display:grid;gap:5px;font-weight:700}
+.toolsOrderPdfFileV459{margin-top:10px}
+.toolsOrderPdfActionsV459{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 7px}
+.toolsOrderPdfListV459{display:grid;gap:8px;margin-top:12px}
+.toolsOrderPdfRowV459{
+ display:grid;grid-template-columns:54px minmax(0,1fr) auto;gap:12px;align-items:center;
+ padding:10px 12px;border:1px solid #dde4e0;border-radius:12px;background:#fff
+}
+.toolsOrderPdfIconV459{
+ width:46px;height:46px;border-radius:10px;background:#f7dddd;color:#942626;
+ display:grid;place-items:center;font-weight:900;font-size:.8rem
+}
+.toolsOrderPdfInfoV459{display:flex;flex-direction:column;gap:2px}
+.toolsOrderPdfInfoV459 span,.toolsOrderPdfInfoV459 small{color:#65736c}
+.toolsOrderPdfRowActionsV459{display:flex;align-items:center;gap:8px;position:relative}
+.toolsOrderPdfEmptyV459{padding:6px 2px}
+@media(max-width:760px){
+ .toolsOrderPdfFieldsV459{grid-template-columns:1fr}
+ .toolsOrderPdfRowV459{grid-template-columns:46px minmax(0,1fr)}
+ .toolsOrderPdfRowActionsV459{grid-column:2}
+}
+
 </style>
 </head>
 <body class="accessLocked">
@@ -4087,6 +4140,41 @@ window.APP_RELEASE = {
      <button class="btn secondary" type="button" onclick="downloadContainerMaterialTemplateV414()">Excel-Vorlage</button>
     </div>
    </div>
+   
+   <div class="toolsOrderPdfCardV459">
+    <div class="toolsOrderPdfHeadV459">
+     <div>
+      <h3>Sammelbestellungen</h3>
+      <div class="muted">PDFs von Nachbestellungen direkt bei diesem Container ablegen.</div>
+     </div>
+     <button class="btn secondary" type="button" onclick="toggleContainerOrderUploadV459()">+ PDF hochladen</button>
+    </div>
+
+    <div id="wcOrderUploadV459" class="toolsOrderPdfUploadV459" style="display:none">
+     <div class="toolsOrderPdfFieldsV459">
+      <label>Bezeichnung
+       <input id="wcOrderTitleV459" placeholder="z. B. Sammelbestellung September">
+      </label>
+      <label>Bestelldatum
+       <input id="wcOrderDateV459" type="date">
+      </label>
+      <label>Bemerkung
+       <input id="wcOrderNoteV459" placeholder="optional">
+      </label>
+     </div>
+     <label class="toolsOrderPdfFileV459">PDF-Datei
+      <input id="wcOrderPdfV459" type="file" accept="application/pdf,.pdf">
+     </label>
+     <div class="toolsOrderPdfActionsV459">
+      <button class="btn primary" type="button" onclick="saveContainerOrderPdfV459()">PDF speichern</button>
+      <button class="btn secondary" type="button" onclick="toggleContainerOrderUploadV459(false)">Abbrechen</button>
+     </div>
+     <div class="muted">Für eine stabile Synchronisierung sind PDFs bis 2 MB vorgesehen.</div>
+    </div>
+
+    <div id="wcOrderPdfListV459" class="toolsOrderPdfListV459"></div>
+   </div>
+
    <div id="wcItemsTable" class="toolsTableWrapV413"></div>
   </div>
   <div id="wcInventoryControlPaneV419" class="toolsInventoryControlPaneV419">
@@ -12101,6 +12189,8 @@ function renderPlatformProjectOverview(){
      </div>`;
    }).join('')}`;
  setTimeout(updatePlatformAssignmentLimitsV440,0);
+
+ setTimeout(()=>renderPlatformQuickTakeV457?.(),0);
 }
 function savePlatformProjectRentals(){
  let p=platformProjectById(selectedPlatformProjectId);if(!p)return;
@@ -17943,7 +18033,16 @@ document.addEventListener('DOMContentLoaded',()=>{
     </div>
 
     <div id="platformZoneDaily" class="platformZoneTitle"><span>Übersicht</span><small>Bestände, aktuelle Nutzung und Rückgaben</small></div>
-    <div id="platformQuickReturnCard" class="platformQuickReturn card">
+    <div id="platformQuickTakeV457" class="card platformQuickTakeV457">
+ <div class="platformQuickTakeHeadV457">
+  <div><div class="muted">Schnellzugriff auf dem Areal</div><h2>Welche Pritsche darf ich nehmen?</h2>
+  <div class="muted">Projekt wählen – danach werden die konkret zugewiesenen Pritschen sofort angezeigt.</div></div>
+  <label class="platformQuickAllV457"><input id="platformQuickShowAllV457" type="checkbox" onchange="renderPlatformQuickTakeV457()"> Alle anzeigen</label>
+ </div>
+ <label class="platformQuickSelectV457"><b>Projekt</b><select id="platformQuickProjectV457" onchange="renderPlatformQuickTakeV457()"><option value="">Projekt wählen</option></select></label>
+ <div id="platformQuickTakeResultV457"><div class="muted">Projekt wählen, um die freigegebenen Pritschen zu sehen.</div></div>
+</div>
+<div id="platformQuickReturnCard" class="platformQuickReturn card">
       <div class="platformQuickReturnHead">
         <div>
           <h2 style="margin:0">Bestand &amp; Rückgabe ins Lager</h2>
@@ -18492,7 +18591,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  }
  function current(st){return st.containers.find(c=>c.id===selected)}
  window.openWhiteContainerV413=function(){el('toolsOverviewV413').style.display='none';el('whiteContainerV413').style.display='block';selected='';render();applySelectedContainerViewV445();closeContainerCreateV448();}
- window.closeWhiteContainerV413=function(){el('whiteContainerV413').style.display='none';el('toolsOverviewV413').style.display='grid';selected='';applySelectedContainerViewV445();}
+ window.closeWhiteContainerV413=function(){el('whiteContainerV413').style.display='none';el('toolsOverviewV413').style.display='grid';selected='';renderContainerOrdersV459();applySelectedContainerViewV445();}
  window.openContainerCreateV448=function(){
   let closed=el('wcContainerCreateClosedV448'),form=el('wcContainerCreateFormV448');
   if(closed)closed.style.display='none';
@@ -19018,6 +19117,178 @@ window.finishInventoryV413=async function(){
  render();
 }
  function render(){let st=load();let allItems=st.containers.reduce((n,c)=>n+(c.items||[]).length,0);let diffs=st.containers.reduce((n,c)=>{let inv=(c.inventories||[])[0];return n+(inv?inv.rows.filter(r=>r.diff!==0||(r.status&&r.status!=='vorhanden')).length:0)},0);el('wcStatContainers').textContent=st.containers.length;el('wcStatItems').textContent=allItems;el('wcStatDiff').textContent=diffs;el('wcContainerList').innerHTML=st.containers.length?st.containers.map(c=>'<div class="toolsContainerRowV413"><div><b>'+esc(c.name)+'</b><span class="muted">'+esc(c.location||'')+' · '+(c.items||[]).length+' Materialpositionen'+((c.inventories||[])[0]?' · letzte Inventur '+new Date(c.inventories[0].date).toLocaleDateString('de-CH'):'')+'</span></div><button class="btn '+(selected===c.id?'primary':'secondary')+'" type="button" onclick="selectWhiteContainerV413(\''+c.id+'\')">'+(selected===c.id?'Ausgewählt':'Öffnen')+'</button><button class="btn secondary" type="button" onclick="deleteWhiteContainerV413(\''+c.id+'\')">Löschen</button></div>').join(''):'<div class="muted">Noch keine Container erfasst.</div>';let c=current(st);if(!c){applyToolsContainerTabV419();return;}applyToolsContainerTabV419();el('wcMaterialTitle').textContent='Inventarliste · '+c.name;let items=c.items||[];let imp=c.materialImportedAt?'<div class="muted" style="margin-bottom:8px">Letzter Excel-Import: '+new Date(c.materialImportedAt).toLocaleString('de-CH')+(c.materialImportFile?' · '+esc(c.materialImportFile):'')+'</div>':'';el('wcItemsTable').innerHTML=imp+(items.length?'<table class="toolsTableV413"><thead><tr><th>Bild</th><th>Material</th><th>Werkzeugnummer</th><th>Kategorie</th><th>Barcode</th><th>Sollbestand</th><th></th></tr></thead><tbody>'+items.map(i=>'<tr><td>'+photoHtmlV417(i,true)+'</td><td><b>'+esc(i.name)+'</b></td><td>'+esc(i.toolNumber||'—')+'</td><td>'+esc(i.category||'—')+'</td><td>'+(i.barcode?esc(i.barcode):'—')+'</td><td>'+i.qty+' '+esc(i.unit)+'</td><td><details class="actionMenuV451"><summary title="Aktionen">⋮</summary><div class="actionMenuPanelV451"><button class="btn secondary" type="button" onclick="closeActionMenuV451(this);editContainerItemV450(\''+i.id+'\')">Bearbeiten</button><button class="btn danger" type="button" onclick="closeActionMenuV451(this);deleteContainerItemV413(\''+i.id+'\')">Entfernen</button></div></details></td></tr>').join('')+'</tbody></table>':'<div class="muted">Noch kein Material erfasst oder importiert.</div>');applySelectedContainerViewV445();}
+
+window.toggleContainerOrderUploadV459=function(force){
+ let box=el('wcOrderUploadV459');if(!box)return;
+ let show=typeof force==='boolean'?force:box.style.display==='none';
+ box.style.display=show?'block':'none';
+ if(show){
+  let d=el('wcOrderDateV459');
+  if(d&&!d.value)d.value=new Date().toISOString().slice(0,10);
+ }
+};
+function formatBytesV459(n){
+ n=Number(n)||0;
+ if(n<1024)return n+' B';
+ if(n<1024*1024)return (n/1024).toFixed(1)+' KB';
+ return (n/1024/1024).toFixed(1)+' MB';
+}
+function findContainerOrderPdfV459(id){
+ let st=load(),c=current(st);
+ return {st,c,o:(c?.orderPdfs||[]).find(x=>x.id===id)};
+}
+window.renderContainerOrdersV459=function(){
+ let list=el('wcOrderPdfListV459');if(!list)return;
+ let st=load(),c=current(st);
+ if(!c){list.innerHTML='';return}
+ c.orderPdfs=c.orderPdfs||[];
+ let rows=c.orderPdfs.slice().sort((a,b)=>String(b.date||b.createdAt||'').localeCompare(String(a.date||a.createdAt||'')));
+ if(!rows.length){
+  list.innerHTML='<div class="muted toolsOrderPdfEmptyV459">Noch keine Sammelbestellung hinterlegt.</div>';
+  return;
+ }
+ list.innerHTML=rows.map(o=>`
+  <div class="toolsOrderPdfRowV459">
+   <div class="toolsOrderPdfIconV459">PDF</div>
+   <div class="toolsOrderPdfInfoV459">
+    <b>${esc(o.title||o.fileName||'Sammelbestellung')}</b>
+    <span>${esc(o.date||'')}${o.fileSize?' · '+esc(formatBytesV459(o.fileSize)):''}</span>
+    ${o.note?`<small>${esc(o.note)}</small>`:''}
+   </div>
+   <div class="toolsOrderPdfRowActionsV459">
+    <button class="btn secondary" type="button" onclick="openContainerOrderPdfV459('${o.id}')">Öffnen</button>
+    <details class="actionMenuV451">
+     <summary title="Aktionen">⋮</summary>
+     <div class="actionMenuPanelV451">
+      <button class="btn secondary" type="button" onclick="closeActionMenuV451(this);downloadContainerOrderPdfV459('${o.id}')">Herunterladen</button>
+      <button class="btn danger" type="button" onclick="closeActionMenuV451(this);deleteContainerOrderPdfV459('${o.id}')">Löschen</button>
+     </div>
+    </details>
+   </div>
+  </div>`).join('');
+};
+window.saveContainerOrderPdfV459=async function(){
+ let st=load(),c=current(st);if(!c)return;
+ let input=el('wcOrderPdfV459'),file=input?.files?.[0];
+ if(!file)return alert('Bitte eine PDF-Datei auswählen.');
+ if(file.type&&file.type!=='application/pdf'&&!/\.pdf$/i.test(file.name||''))return alert('Bitte eine PDF-Datei auswählen.');
+ if(file.size>2*1024*1024)return alert('Die PDF ist grösser als 2 MB. Bitte die PDF zuerst verkleinern.');
+
+ let dataUrl=await new Promise((resolve,reject)=>{
+  let r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(file);
+ });
+
+ c.orderPdfs=c.orderPdfs||[];
+ c.orderPdfs.unshift({
+  id:'ordpdf_'+Date.now(),
+  title:(el('wcOrderTitleV459')?.value||'').trim()||file.name.replace(/\.pdf$/i,''),
+  date:el('wcOrderDateV459')?.value||new Date().toISOString().slice(0,10),
+  note:(el('wcOrderNoteV459')?.value||'').trim(),
+  fileName:file.name,fileSize:file.size,dataUrl,createdAt:new Date().toISOString()
+ });
+ save(st);
+
+ if(el('wcOrderTitleV459'))el('wcOrderTitleV459').value='';
+ if(el('wcOrderNoteV459'))el('wcOrderNoteV459').value='';
+ if(input)input.value='';
+ toggleContainerOrderUploadV459(false);
+ renderContainerOrdersV459();
+};
+window.openContainerOrderPdfV459=function(id){
+ let {o}=findContainerOrderPdfV459(id);if(!o?.dataUrl)return;
+ let w=window.open('','_blank');
+ if(!w)return alert('Popup wurde blockiert. Bitte Popups für diese Seite erlauben.');
+ w.document.open();
+ w.document.write('<title>'+esc(o.title||'PDF')+'</title><iframe src="'+o.dataUrl+'" style="position:fixed;inset:0;width:100%;height:100%;border:0"></iframe>');
+ w.document.close();
+};
+window.downloadContainerOrderPdfV459=function(id){
+ let {o}=findContainerOrderPdfV459(id);if(!o?.dataUrl)return;
+ let a=document.createElement('a');
+ a.href=o.dataUrl;a.download=o.fileName||((o.title||'Sammelbestellung')+'.pdf');
+ document.body.appendChild(a);a.click();a.remove();
+};
+window.deleteContainerOrderPdfV459=function(id){
+ let {st,c,o}=findContainerOrderPdfV459(id);if(!c||!o)return;
+ if(!confirm(`PDF „${o.title||o.fileName||'Sammelbestellung'}“ löschen?`))return;
+ c.orderPdfs=(c.orderPdfs||[]).filter(x=>x.id!==id);
+ save(st);renderContainerOrdersV459();
+};
+
  window.renderWhiteContainerV413=render;
 })();
+
+
+function platformQuickActualV457(id){
+ let rows=(platformStore.actual||[]).filter(a=>String(a.platformId||'')===String(id));
+ rows.sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));
+ return rows[0]||null;
+}
+function platformQuickPeriodV457(projectId,supplier){
+ let today=new Date().toISOString().slice(0,10);
+ let needs=platformProjectNeedsV437(projectId).filter(n=>(n.supplier||'Künzli')===supplier);
+ if(!needs.length)return {ok:true,text:'Kein Zeitraum hinterlegt'};
+ if(needs.some(n=>(!n.from||n.from<=today)&&(!n.to||n.to>=today)))return {ok:true,text:'Reservation heute aktiv'};
+ let future=needs.filter(n=>n.from&&n.from>today).sort((a,b)=>a.from.localeCompare(b.from))[0];
+ if(future)return {ok:false,text:'Reserviert ab '+future.from};
+ return {ok:false,text:'Reservationszeitraum beendet'};
+}
+function platformQuickDecisionV457(stock,projectId){
+ let supplier=stock.supplier||'Künzli';
+ if(!platformAssignedIdsV439(projectId,supplier).map(String).includes(String(stock.id)))
+   return {level:'no',label:'NICHT NEHMEN',reason:'Nicht diesem Projekt zugewiesen'};
+ let period=platformQuickPeriodV457(projectId,supplier);
+ if(!period.ok)return {level:'wait',label:'NOCH NICHT',reason:period.text};
+ if(stock.locked)return {level:'no',label:'NICHT NEHMEN',reason:'Pritsche gesperrt'};
+ let a=platformQuickActualV457(stock.id);
+ if(a){
+   let same=String(a.projectId||'')===String(projectId);
+   if(!same && (a.status||'Frei')!=='Frei')
+     return {level:'no',label:'NICHT NEHMEN',reason:(a.status||'Belegt')+' · anderes Projekt'};
+   if(same && ['In Beladung','Belegt','Transport geplant','Abgeholt'].includes(a.status))
+     return {level:'wait',label:'BEREITS IN GEBRAUCH',reason:a.status};
+ }
+ return {level:'yes',label:'NEHMEN',reason:period.text};
+}
+window.renderPlatformQuickTakeV457=function(){
+ let sel=E('platformQuickProjectV457'),out=E('platformQuickTakeResultV457');if(!sel||!out)return;
+ let projects=(projectStore?.projects||[])
+   .filter(p=>!p.archived&&hasProjectAccess(p.id))
+   .slice()
+   .sort((a,b)=>{
+     let aa=[a.number,a.name].filter(Boolean).join(' · ');
+     let bb=[b.number,b.name].filter(Boolean).join(' · ');
+     return aa.localeCompare(bb,'de-CH');
+   });
+ let old=sel.value;
+ sel.innerHTML='<option value="">Projekt wählen</option>'+projects.map(p=>`<option value="${esc(String(p.id))}">${esc([p.number,p.name].filter(Boolean).join(' · ')||'Projekt')}</option>`).join('');
+ if(projects.some(p=>String(p.id)===String(old)))sel.value=old;
+ if(!projects.length){
+   out.innerHTML='<div class="platformQuickEmptyV457"><b>Keine freigegebenen Projekte sichtbar.</b><div class="muted">Es werden dieselben Projekte verwendet wie unter „Pritschenverwaltung → Projekte“.</div></div>';
+   return;
+ }
+ let pid=sel.value;if(!pid){out.innerHTML='<div class="muted">Projekt wählen, um die freigegebenen Pritschen zu sehen.</div>';return}
+ let showAll=!!E('platformQuickShowAllV457')?.checked;
+ let assigned=new Set(PLATFORM_SUPPLIERS.flatMap(x=>platformAssignedIdsV439(pid,x).map(String)));
+ let rows=(platformStore.stock||[]).map(stock=>({stock,d:platformQuickDecisionV457(stock,pid)}));
+ if(showAll) rows=rows.filter(x=>assigned.has(String(x.stock.id)) || x.d.level==='yes');
+ else rows=rows.filter(x=>x.d.level==='yes');
+ if(!rows.length){
+   out.innerHTML=assigned.size
+    ?'<div class="platformQuickEmptyV457"><b>Aktuell keine zugewiesene Pritsche freigegeben.</b><div class="muted">„Alle anzeigen“ aktivieren, um den Grund zu sehen.</div></div>'
+    :'<div class="platformQuickEmptyV457"><b>Noch keine konkrete Pritsche zugewiesen.</b><div class="muted">Die Zuweisung erfolgt im Projekt unter Planung.</div></div>';
+   return;
+ }
+ out.innerHTML=PLATFORM_SUPPLIERS.map(supplier=>{
+   let rr=rows.filter(x=>(x.stock.supplier||'Künzli')===supplier);if(!rr.length)return '';
+   return `<section class="platformQuickSupplierV457"><div class="platformQuickSupplierHeadV457"><h3>${esc(supplier)}</h3><span>${rr.filter(x=>x.d.level==='yes').length} jetzt freigegeben</span></div>
+   <div class="platformQuickGridV457">${rr.map(x=>`<article class="platformQuickCardV457 ${x.d.level}">
+    <div class="platformQuickBadgeV457">${esc(x.d.label)}</div><h3>${esc(x.stock.name||x.stock.designation||'Pritsche')}</h3>
+    <div><b>${esc(supplier)}</b>${x.stock.length?' · '+esc(String(x.stock.length))+' m':''}</div><div class="platformQuickReasonV457">${esc(x.d.reason)}</div>
+   </article>`).join('')}</div></section>`;
+ }).join('');
+};
+document.addEventListener('click',e=>{if((e.target.textContent||'').trim()==='Übersicht')setTimeout(renderPlatformQuickTakeV457,0)});
+window.addEventListener('load',()=>setTimeout(renderPlatformQuickTakeV457,300));
+
 </script>\n</body></html>
