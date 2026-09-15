@@ -4001,6 +4001,96 @@ window.APP_RELEASE = {
  .toolsOrderPdfRowActionsV459{grid-column:2}
 }
 
+
+
+/* V464 – kompakte Drei-Punkte-Aktionen in der Lager-Inventarliste */
+.inventoryActionMenuV464{display:inline-block;position:relative}
+.inventoryActionMenuV464>summary{
+ width:38px;height:38px;display:grid;place-items:center;cursor:pointer;
+ border:1px solid #d5dfda;border-radius:11px;background:#eef3f0;
+ color:#123d31;font-size:24px;font-weight:800;line-height:1;list-style:none;
+ user-select:none
+}
+.inventoryActionMenuV464>summary::-webkit-details-marker{display:none}
+.inventoryActionPanelV464{
+ right:0;left:auto;top:44px;min-width:210px;z-index:100;
+ display:grid!important;gap:6px;padding:8px
+}
+.inventoryActionPanelV464 .btn{width:100%;text-align:left;justify-content:flex-start;white-space:nowrap}
+
+
+
+/* V466 – Auswahl und direkte Lagerortbearbeitung */
+.inventoryCheckV466,.inventorySelectHeadV466 label{
+ display:inline-flex;align-items:center;justify-content:center;cursor:pointer
+}
+.inventoryCheckV466 input,.inventorySelectHeadV466 input{width:21px;height:21px;accent-color:#164b3c;cursor:pointer}
+.inventorySelectHeadV466{width:72px;min-width:72px;text-align:center!important}
+.inventorySelectHeadV466 small{display:block;margin-top:4px;white-space:nowrap;font-size:10px;color:#52645d}
+.inventoryLocationBtnV466{
+ border:0;background:transparent;padding:5px 7px;margin:-5px -7px;border-radius:8px;
+ color:inherit;font:inherit;text-align:left;display:flex;align-items:flex-start;gap:8px;
+ cursor:pointer;max-width:240px
+}
+.inventoryLocationBtnV466:hover{background:#edf3f0}
+.inventoryLocationBtnV466 b{color:#164b3c;font-size:15px;flex:0 0 auto}
+.bulkEditHintV466{
+ background:#eef6f2;border:1px solid #cbded5;border-radius:12px;padding:12px 14px;
+ color:#173e32;margin-bottom:2px
+}
+.inventoryLocationBoxV466{max-width:620px}
+#tbody tr:has(input[data-inv-select-v466]:checked){background:#f0f7f3}
+
+
+
+/* V467 – Lagerort und Ebene getrennt */
+#tbody td .inventoryLocationBtnV466{max-width:180px}
+
+
+
+/* V468 – farbige Kommissionskennzeichnung */
+.commissionBadgeV468{
+ display:inline-flex;align-items:center;max-width:100%;
+ padding:4px 9px;border:1px solid;border-radius:999px;
+ font-weight:800;font-size:.88em;line-height:1.2;white-space:nowrap
+}
+
+
+
+/* V469 – Excel / monday.com Spaltensteuerung */
+#invTable{table-layout:fixed}
+#invHead th.invHeadCell{position:relative;user-select:none;cursor:grab;padding-right:10px}
+#invHead th.invHeadCell:active{cursor:grabbing}
+#invHead th.invHeadCell.draggingV469{opacity:.45}
+#invHead th.invHeadCell.dragOverV469{box-shadow:inset 4px 0 0 #164b3c;background:#eef6f2}
+#invHead .moveCols{display:none!important}
+.invResizeHandleV469{position:absolute;top:0;right:-3px;width:8px;height:100%;cursor:col-resize;z-index:8}
+.invResizeHandleV469:hover,.invResizeHandleV469.resizingV469{background:rgba(22,75,60,.16)}
+#invHead th.invHeadCell>div:first-child{display:flex;align-items:center;justify-content:flex-start;gap:4px;min-height:26px;padding-right:8px}
+
+
+
+/* V475 – farbige Holzarten */
+.woodTypeBadgeV475{
+ display:inline-flex;align-items:center;max-width:100%;
+ padding:4px 9px;border:1px solid;border-radius:999px;
+ font-weight:800;font-size:.88em;line-height:1.2;white-space:nowrap
+}
+
+
+
+/* V484 – Materialgruppen in der Materialübersicht */
+#tbody tr.materialGroupV484 td{
+ position:sticky;left:0;z-index:2;
+ padding:10px 12px 7px;
+ background:#eef3f0;
+ border-top:2px solid #c9d5cf;
+ border-bottom:1px solid #d8e0dc;
+}
+#tbody tr.materialGroupV484 td>div{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#tbody tr.materialGroupV484 b{font-size:1.02rem}
+#tbody tr.materialGroupV484 span{font-size:.82rem;color:#5d6b65;font-weight:700}
+
 </style>
 </head>
 <body class="accessLocked">
@@ -4344,10 +4434,10 @@ window.APP_RELEASE = {
 
 <section class="page" id="page-inventory">
 <div class="stats"><div class="stat"><b id="sPkg">0</b><span>Pakete</span></div><div class="stat"><b id="sRack">0</b><span>Gestelle</span></div><div class="stat"><b id="sLvl">0</b><span>Ebenen</span></div><div class="stat"><b id="sMat">0</b><span>Materialarten</span></div></div>
-<div class="card"><div class="toolbar"><input id="search" placeholder="Suchen" oninput="renderInv()"><select id="areaFilter" onchange="renderInv()"></select><select id="archiveFilter" onchange="renderInv()"><option value="active">Aktives Lager</option><option value="archive">Aufgebraucht / Archiv</option><option value="all">Alle Materialien</option></select><button class="btn secondary" onclick="csv()">CSV exportieren</button>
+<div class="card"><div class="toolbar"><input id="search" placeholder="Suchen" oninput="renderInv()"><select id="areaFilter" onchange="renderInv()"></select><select id="categoryFilterV471" onchange="renderInv()"><option value="">Alle Kategorien</option></select><select id="archiveFilter" onchange="renderInv()"><option value="active">Aktives Lager</option><option value="archive">Aufgebraucht / Archiv</option><option value="all">Alle Materialien</option></select><button class="btn secondary" onclick="csv()">CSV exportieren</button>
 <button class="btn secondary" onclick="exportInventoryExcel()">Excel exportieren</button>
 <button class="btn secondary" onclick="exportInventoryPDF()">PDF exportieren</button>
-<button class="btn secondary" onclick="resetInventoryColumns()">Spalten zurücksetzen</button></div><div class="dragHint">Spalten mit ◀ / ▶ verschieben. Die Reihenfolge wird gespeichert.</div>
+<button class="btn secondary" onclick="resetInventoryColumns()">Spalten zurücksetzen</button></div><div class="dragHint">Spalten per Drag & Drop verschieben · Spaltenbreite am Rand ziehen. Die Ansicht wird gespeichert.</div>
 <div class="tablewrap"><table><thead><tr id="invHead"></tr></thead><tbody id="tbody"></tbody></table></div>
 <div class="sumBox">
   <b>Summe der aktuell angezeigten Materialien</b>
@@ -4776,13 +4866,27 @@ window.APP_RELEASE = {
 </div></div>
 
 <div class="modal" id="matModal"><div class="box"><div class="mh"><h2 id="matTitle">Material / Paket erfassen</h2><button class="x" onclick="closeM('matModal')">✕</button></div><form class="form" onsubmit="saveMat(event)">
-<label class="f">Gestell<select id="mRack" required onchange="fillLevels()"></select></label><label class="f">Ebene<select id="mLevel" required></select></label>
+<label class="f">Gestell<select id="mRack" required onchange="fillLevels()"></select></label><label class="f">Ebene<select id="mLevel"></select></label>
 <label class="f">Material
 <select id="mMaterial" required onchange="materialCatalogChanged()"></select>
 <div class="toolbar" style="margin-top:6px">
  <button class="btn secondary" type="button" onclick="openNewMaterialCatalog()">+ Neues Material</button>
  <button class="btn secondary" type="button" onclick="openMaterialCatalogManager()">Materialien bearbeiten</button>
 </div>
+</label>
+<label class="f">Holzart
+<select id="mWoodType">
+ <option value="">– Holzart wählen –</option>
+ <option>Fichte</option>
+ <option>Tanne</option>
+ <option>Lärche</option>
+ <option>Douglasie</option>
+ <option>Föhre</option>
+ <option>Eiche</option>
+ <option>Buche</option>
+ <option>Esche</option>
+ <option value="Andere">Andere</option>
+</select>
 </label>
 <label class="f" id="mQualityWrap" style="display:none">Qualität
 <select id="mQuality">
@@ -4791,9 +4895,9 @@ window.APP_RELEASE = {
 <small class="muted">Nur für 1-SP / 3-SP.</small>
 </label>
 <div class="span2 dimRow">
- <label class="f">Breite [m]<input id="mWid" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 0.12"></label>
- <label class="f">Höhe [m]<input id="mHei" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 0.60"></label>
- <label class="f">Länge [m]<input id="mLen" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 6.00"></label>
+ <label class="f">Breite [mm]<input id="mWid" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 120"></label>
+ <label class="f">Höhe [mm]<input id="mHei" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 60"></label>
+ <label class="f">Länge [mm]<input id="mLen" type="text" inputmode="decimal" autocomplete="off" oninput="smartMetricInput(this)" placeholder="z. B. 6000"></label>
 </div>
 <label class="f">Menge<input id="mQty" inputmode="numeric">
 <button class="btn secondary" type="button" style="margin-top:7px" onclick="openCameraCounter()">📷 Kamerazählung</button>
@@ -5259,9 +5363,11 @@ let currentRack='',selectedPackage='',editingPackage='',drawMode=false,drawPoint
 const INVENTORY_COLS={
  elementId:{label:'Element-ID',sort:'elementId'},
  material:{label:'Material',sort:'material'},
- width:{label:'Breite',sort:'width'},
- height:{label:'Höhe',sort:'height'},
- length:{label:'Länge',sort:'length'},
+ formatV479:{label:'Format',sort:'formatV479'},
+ woodTypeV474:{label:'Holzart',sort:'woodTypeV474'},
+ width:{label:'Breite [mm]',sort:'width'},
+ height:{label:'Höhe [mm]',sort:'height'},
+ length:{label:'Länge [mm]',sort:'length'},
  linearMeters:{label:'Meter m1',sort:'linearMeters'},
  areaHorizontal:{label:'Fläche m²',sort:'areaHorizontal'},
  qty:{label:'Menge',sort:'qty'},
@@ -5270,10 +5376,11 @@ const INVENTORY_COLS={
  status:{label:'Paketstatus',sort:'status'},
  reservation:{label:'Reservierung',sort:'reservation'},
  location:{label:'Lagerort',sort:'location'},
+ levelV467:{label:'Ebene',sort:'levelV467'},
  createdAt:{label:'Erfasst am',sort:'createdAt'},
  action:{label:'Aktion',sort:''}
 };
-const DEFAULT_INVENTORY_ORDER=['elementId','material','width','height','length','linearMeters','areaHorizontal','qty','project','usage','status','reservation','location','createdAt','action'];
+const DEFAULT_INVENTORY_ORDER=['elementId','material','formatV479','woodTypeV474','width','height','length','linearMeters','areaHorizontal','qty','project','usage','status','reservation','location','levelV467','createdAt','action'];
 function ensureInventoryOrder(){
  let o=Array.isArray(st.inventoryColumnOrder)?st.inventoryColumnOrder.filter(k=>k!=='packCode'&&INVENTORY_COLS[k]):[];
  DEFAULT_INVENTORY_ORDER.forEach(k=>{if(!o.includes(k))o.push(k)});
@@ -5437,7 +5544,7 @@ function renderArchive(){
  let box=E('archiveList');if(!box)return;
  let q=(E('archiveSearch')?.value||'').toLowerCase();
  let ps=st.packages.filter(p=>p.status==='aufgebraucht').filter(p=>[p.elementId,p.material,p.project,p.packCode,packageLocation(p)].join(' ').toLowerCase().includes(q));
- box.innerHTML=ps.map(p=>`<div class="manageItem"><div class="manageHead"><div><b>${esc(p.elementId||'–')} · ${esc(p.material||'–')}</b><div class="muted">${esc(packageLocation(p))} · Kommission: ${esc(p.project||'–')} · archiviert: ${esc(formatDateTime(p.archivedAt||p.createdAt))}</div></div><div class="toolbar"><button class="btn secondary" onclick="showHistory('${p.id}')">Verlauf</button><button class="btn" onclick="restorePackage('${p.id}')">Wieder aktivieren</button></div></div></div>`).join('')||'<p class="muted">Das Archiv ist leer.</p>'
+ box.innerHTML=ps.map(p=>`<div class="manageItem"><div class="manageHead"><div><b>${esc(p.elementId||'–')} · ${esc(p.material||'–')}</b><div class="muted">${esc(packageLocation(p))} · Kommission: ${commissionBadgeV468(p.project)} · archiviert: ${esc(formatDateTime(p.archivedAt||p.createdAt))}</div></div><div class="toolbar"><button class="btn secondary" onclick="showHistory('${p.id}')">Verlauf</button><button class="btn" onclick="restorePackage('${p.id}')">Wieder aktivieren</button></div></div></div>`).join('')||'<p class="muted">Das Archiv ist leer.</p>'
 }
 
 
@@ -5516,25 +5623,71 @@ function releaseReservation(pid,rid){
  if(currentPage==='reserved')renderReserved();
  else showPkg(pid)
 }
-function horizontalArea(p){return numM(p.length)*numM(p.width)*numM(p.qty)}
-function linearMeters(p){return numM(p.length)*numM(p.qty)}
+function horizontalArea(p){return (numM(p.length)/1000)*(numM(p.width)/1000)*numM(p.qty)}
+function linearMeters(p){return (numM(p.length)/1000)*numM(p.qty)}
+
+/* V468 – jede Kommission erhält dauerhaft eine eigene, aus dem Namen abgeleitete Farbe */
+function commissionColorV468(name){
+ let str=String(name||'').trim();
+ if(!str)return null;
+ let h=0;
+ for(let i=0;i<str.length;i++)h=((h<<5)-h+str.charCodeAt(i))|0;
+ let hue=((Math.abs(h)*137.508)%360);
+ return {
+   bg:`hsl(${hue.toFixed(1)} 58% 91%)`,
+   border:`hsl(${hue.toFixed(1)} 42% 76%)`,
+   text:`hsl(${hue.toFixed(1)} 55% 25%)`
+ };
+}
+function commissionBadgeV468(name){
+ let n=String(name||'').trim();
+ if(!n)return '<span class="muted">–</span>';
+ let c=commissionColorV468(n);
+ return `<span class="commissionBadgeV468" style="background:${c.bg};border-color:${c.border};color:${c.text}">${esc(n)}</span>`;
+}
+
+
+/* V475 – jede Holzart erhält dauerhaft eine eigene Farbe */
+function woodTypeColorV475(name){
+ let str=String(name||'').trim();
+ if(!str)return null;
+ let h=0;
+ for(let i=0;i<str.length;i++)h=((h<<5)-h+str.charCodeAt(i))|0;
+ /* anderer Versatz als bei Kommissionen, damit die Farbwelten nicht identisch wirken */
+ let hue=((Math.abs(h)*137.508+43)%360);
+ return {
+   bg:`hsl(${hue.toFixed(1)} 55% 91%)`,
+   border:`hsl(${hue.toFixed(1)} 38% 75%)`,
+   text:`hsl(${hue.toFixed(1)} 52% 24%)`
+ };
+}
+function woodTypeBadgeV475(name){
+ let n=String(name||'').trim();
+ if(!n)return '<span class="muted">–</span>';
+ let c=woodTypeColorV475(n);
+ return `<span class="woodTypeBadgeV475" style="background:${c.bg};border-color:${c.border};color:${c.text}">${esc(n)}</span>`;
+}
+
 function inventoryCell(p,key,r,l){
  if(key==='elementId')return `<b>${esc(p.elementId||'–')}</b>`;
  if(key==='material')return `<b>${esc(p.material||'–')}</b>`;
+ if(key==='formatV479')return esc(p.format||'–');
+ if(key==='woodTypeV474')return woodTypeBadgeV475(p.woodType);
  if(key==='width')return esc(p.width||'–');
  if(key==='height')return esc(p.height||'–');
  if(key==='length')return esc(p.length||'–');
  if(key==='linearMeters')return linearMeters(p).toFixed(2)+' m';
  if(key==='areaHorizontal')return horizontalArea(p).toFixed(2)+' m²';
  if(key==='qty')return esc(p.qty||'–');
- if(key==='project')return esc(p.project||'–');
+ if(key==='project')return commissionBadgeV468(p.project);
  if(key==='packCode')return esc(p.packCode||'–');
  if(key==='usage')return esc((p.usage||[]).join(' / ')||'–');
  if(key==='status')return `<span class="statusbadge ${stClass(p.status)}">${esc(p.status||'–')}</span>`;
  if(key==='reservation'){let over=overReservedQty(p);return hasReservation(p)?`<span class="reserveBadge">frei ${esc(freeQty(p))} / reserviert ${esc(reservedQty(p))}</span>${over>0?`<span class="overBadge">ÜBERRESERVIERT +${esc(over)}</span>`:''}`:`frei ${esc(reservationTotalQty(p))} / reserviert 0`;}
- if(key==='location')return `${esc(areaName(r?.areaId))} / ${esc(r?.name||'–')} / ${esc(l?.name||'–')}`;
+ if(key==='location')return esc(r?.name||'–');
+ if(key==='levelV467')return esc(l?.name||'–');
  if(key==='createdAt')return esc(formatDateTime(p.createdAt));
- if(key==='action')return `<div class="toolbar" style="margin:0"><button class="btn secondary" onclick="jump('${r.id}','${p.id}')">Zu Lagerort</button>${p.status!=='aufgebraucht'?`<button class="btn secondary" onclick="reservePackage('${p.id}')">Reservieren</button>`:''}<button class="btn" onclick="editPackage('${p.id}')">Bearbeiten</button><button class="btn secondary" onclick="showHistory('${p.id}')">Verlauf</button>${p.status==='aufgebraucht'?`<button class="btn" onclick="restorePackage('${p.id}')">Wieder aktivieren</button>`:`<button class="btn secondary" onclick="archivePackage('${p.id}')">Archiv</button>`}${st.settings?.allowMaterialDelete?`<button class="btn danger" onclick="deletePackage('${p.id}')">Löschen</button>`:''}</div>`;
+ if(key==='action')return `<details class="actionMenuV451 inventoryActionMenuV464"><summary title="Aktionen">⋮</summary><div class="actionMenuPanelV451 inventoryActionPanelV464"><button class="btn secondary" onclick="closeActionMenuV451(this);jump('${r.id}','${p.id}')">Zu Lagerort</button>${p.status!=='aufgebraucht'?`<button class="btn secondary" onclick="closeActionMenuV451(this);reservePackage('${p.id}')">Reservieren</button>`:''}<button class="btn" onclick="closeActionMenuV451(this);editPackage('${p.id}')">Bearbeiten</button><button class="btn secondary" onclick="closeActionMenuV451(this);showHistory('${p.id}')">Verlauf</button>${p.status==='aufgebraucht'?`<button class="btn" onclick="closeActionMenuV451(this);restorePackage('${p.id}')">Wieder aktivieren</button>`:`<button class="btn secondary" onclick="closeActionMenuV451(this);archivePackage('${p.id}')">Archiv</button>`}${st.settings?.allowMaterialDelete?`<button class="btn danger" onclick="closeActionMenuV451(this);deletePackage('${p.id}')">Löschen</button>`:''}</div></details>`;
  return '';
 }
 function renderInventoryHead(){
@@ -6282,7 +6435,7 @@ function renderHomeTodo(){
    (p.planningCommissions||[]).forEach(c=>{
      let els=commissionElements(p,c.id)||[];
      if(!els.length)return;
-     let open=els.some(el=>!actualElementFinishDate(p,el.id));
+     let open=els.some(el=>!productionElementIsDoneV460(p,el.id));
      if(!open)return;
 
      let ids=new Set(els.map(x=>x.id));
@@ -8396,6 +8549,13 @@ function elementProducedQty(p,elementId,excludeDate=''){
  return (p.dailyProduction||[]).filter(d=>!excludeDate||d.date!==excludeDate)
    .reduce((n,d)=>n+Number((d.entries||[]).find(e=>e.elementId===elementId)?.units||0),0);
 }
+function productionElementIsDoneV460(p,elementId){
+ // Ein Element gilt für den Tagesfortschritt als produziert, sobald es in einem
+ // gespeicherten Tagesstand ausdrücklich als produziert gespeichert wurde.
+ // Zusätzlich bleibt die bisherige Mengen-/Flächenprüfung als Rückwärtskompatibilität bestehen.
+ if((p.dailyProduction||[]).some(d=>(d.entries||[]).some(e=>String(e.elementId)===String(elementId)&&e.produced===true)))return true;
+ return !!actualElementFinishDate(p,elementId);
+}
 function actualElementFinishDate(p,elementId){
  let el=(p.productionPlan?.elements||[]).find(x=>x.id===elementId);if(!el)return '';
  let countMode=!!el.countOnly||Number(el.area||0)<=0;
@@ -8770,7 +8930,7 @@ function productionCommissionSplitHtml(p){
 
  let openGroups=groups.map(g=>({
    ...g,
-   elements:(g.elements||[]).filter(x=>!actualElementFinishDate(p,x.id))
+   elements:(g.elements||[]).filter(x=>!productionElementIsDoneV460(p,x.id))
  })).filter(g=>g.elements.length);
 
  let openHtml=openGroups.length?openGroups.map(g=>`<div class="productionGroupBlock">
@@ -9151,7 +9311,7 @@ function openProductionProgress(){
  E('ppActualHours').value='';
  E('ppProductionType').value='';
  E('ppNote').value='';
- productionDraft=els.filter(x=>!actualElementFinishDate(p,x.id)).map(x=>({
+ productionDraft=els.filter(x=>!productionElementIsDoneV460(p,x.id)).map(x=>({
    elementId:x.id,
    produced:false,
    wasProduced:false,
@@ -9181,7 +9341,18 @@ function setProductionDraftProduced(i,checked){
 }
 function setProductionDraftDate(i,value){
  if(!productionDraft[i])return;
- productionDraft[i].productionDate=value||E('ppDate')?.value||new Date().toISOString().slice(0,10);
+ let newDate=value||E('ppDate')?.value||new Date().toISOString().slice(0,10);
+
+ // V461: Wird das Datum bei einem markierten Element geändert,
+ // erhalten alle aktuell auf „Produziert“ gesetzten Elemente dasselbe Datum.
+ if(productionDraft[i].produced){
+   productionDraft.forEach(d=>{
+     if(d.produced)d.productionDate=newDate;
+   });
+ }else{
+   productionDraft[i].productionDate=newDate;
+ }
+
  calculateDailyProduction();
  renderProductionDraftRows();
 }
@@ -9214,7 +9385,7 @@ function renderProductionDraftRows(){
  let p=projectById(currentProjectId),c=activeProjectCommission(p),groups=commissionGroups(p,c?.id||''),box=E('ppElementRows');if(!box)return;
  let flat=commissionElements(p,c?.id||'');
  distributeTodayActualHours();
- let visibleCount=productionDraft.filter(d=>!d.wasProduced).length;
+ let visibleCount=productionDraft.filter(d=>!d.wasProduced&&!productionElementIsDoneV460(p,d.elementId)).length;
  if(!visibleCount){
    box.innerHTML='<div class="ppOpenEmpty">Alle Elemente dieser Kommission sind abgeschlossen.</div>';
    renderProductionProgressHistory();
@@ -9223,7 +9394,7 @@ function renderProductionDraftRows(){
  box.innerHTML=groups.map(g=>{
    let visible=(g.elements||[]).filter(el=>{
      let i=productionDraft.findIndex(x=>x.elementId===el.id),draft=productionDraft[i]||{};
-     return !draft.wasProduced;
+     return !draft.wasProduced && !productionElementIsDoneV460(p,el.id);
    });
    if(!visible.length)return '';
    return `<div class="productionGroupBlock">
@@ -15296,7 +15467,7 @@ function resetV75Editors(p=null){v75SubMaterials=JSON.parse(JSON.stringify(p?.su
 function addSubMaterialRow(){v75SubMaterials.push({material:'',width:'',height:'',length:'',qty:''});renderSubMaterialsEditor()}
 function removeSubMaterialRow(i){v75SubMaterials.splice(i,1);renderSubMaterialsEditor()}
 function updateSubMaterial(i,k,v){if(v75SubMaterials[i])v75SubMaterials[i][k]=v}
-function renderSubMaterialsEditor(){let el=E('subMaterialsEditor');if(!el)return;el.innerHTML=v75SubMaterials.length?v75SubMaterials.map((m,i)=>`<div class="subMaterialRow"><div class="subMaterialGrid"><label class="wide">Material<input value="${esc(m.material||'')}" oninput="updateSubMaterial(${i},'material',this.value)"></label><label>Breite [m]<input inputmode="decimal" value="${esc(m.width||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'width',this.value)"></label><label>Höhe [m]<input inputmode="decimal" value="${esc(m.height||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'height',this.value)"></label><label>Länge [m]<input inputmode="decimal" value="${esc(m.length||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'length',this.value)"></label><label>Menge<input inputmode="numeric" value="${esc(m.qty||'')}" oninput="updateSubMaterial(${i},'qty',this.value)"></label><button class="btn danger" type="button" onclick="removeSubMaterialRow(${i})">Entfernen</button></div></div>`).join(''):'<p class="muted">Keine zusätzlichen Materialien.</p>'}
+function renderSubMaterialsEditor(){let el=E('subMaterialsEditor');if(!el)return;el.innerHTML=v75SubMaterials.length?v75SubMaterials.map((m,i)=>`<div class="subMaterialRow"><div class="subMaterialGrid"><label class="wide">Material<input value="${esc(m.material||'')}" oninput="updateSubMaterial(${i},'material',this.value)"></label><label>Breite [mm]<input inputmode="decimal" value="${esc(m.width||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'width',this.value)"></label><label>Höhe [mm]<input inputmode="decimal" value="${esc(m.height||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'height',this.value)"></label><label>Länge [mm]<input inputmode="decimal" value="${esc(m.length||'')}" oninput="smartMetricInput(this);updateSubMaterial(${i},'length',this.value)"></label><label>Menge<input inputmode="numeric" value="${esc(m.qty||'')}" oninput="updateSubMaterial(${i},'qty',this.value)"></label><button class="btn danger" type="button" onclick="removeSubMaterialRow(${i})">Entfernen</button></div></div>`).join(''):'<p class="muted">Keine zusätzlichen Materialien.</p>'}
 function addDefectEditor(openPhoto=false){
  v75Defects.push({description:'',photos:[],createdAt:new Date().toISOString()});renderDefectsEditor();
  if(openPhoto)setTimeout(()=>openDefectPhotoPicker(v75Defects.length-1),80);
@@ -15838,7 +16009,7 @@ function saveQuickMaterial(){
  let before=packageSnapshot(p),qtyBefore=p.qty,resBefore=reservedQty(p);
  let oldRack=st.racks.find(x=>x.id===p.rackId),oldLevel=oldRack?.levels?.[p.levelIndex];
  let from=`${areaName(oldRack?.areaId)} / ${oldRack?.name||'–'} / ${oldLevel?.name||'–'}`;
- let to=`${areaName(r.areaId)} / ${r.name} / ${l.name}`;
+ let to=`${areaName(r.areaId)} / ${r.name} / ${l?.name||'Keine Ebene'}`;
  if(p.rackId!==r.id||p.levelIndex!==li){
    if(!p.movements)p.movements=[];
    let mv={at:new Date().toISOString(),from,to};
@@ -16288,7 +16459,7 @@ function openRack(id){
 }
 function showPkg(id){
  let p=st.packages.find(x=>x.id===id),r=st.racks.find(x=>x.id===p.rackId),l=r.levels[p.levelIndex];
- let pkgArea=st.areas.find(a=>a.id===r.areaId),pkgSide=sideForMap(areaMapType(pkgArea));pkgSide.innerHTML=`<h2>${esc(p.material)}</h2><p class="muted">${esc(areaName(r.areaId))} · ${esc(r.name)} · ${esc(l.name)}</p>${packagePhotoHtml(p)}<table><tbody><tr><th>Breite</th><td>${esc(p.width||'–')} m</td></tr><tr><th>Höhe</th><td>${esc(p.height||'–')} m</td></tr><tr><th>Länge</th><td>${esc(p.length||'–')} m</td></tr><tr><th>Menge</th><td>${esc(p.qty||'–')}</td></tr><tr><th>Projekt</th><td>${esc(p.project||'–')}</td></tr><tr><th>Erfasst am</th><td>${esc(formatDateTime(p.createdAt))}</td></tr><tr><th>Element-ID</th><td><b>${esc(p.elementId||'–')}</b></td></tr><tr><th>ID-Kategorie</th><td>${esc(ID_CATS[p.idCategory]||'–')}</td></tr><tr><th>Verwendungsort</th><td>${esc((p.usage||[]).join(' / ')||'–')}</td></tr><tr><th>Paketstatus</th><td><span class="statusbadge ${stClass(p.status)}">${esc(p.status||'–')}</span></td></tr><tr><th>Zuletzt kontrolliert</th><td>${esc(formatDateTime(p.lastCheckedAt))}${p.lastCheckedBy?' · '+esc(p.lastCheckedBy):''}</td></tr><tr><th>Reserviert</th><td><b>${esc(reservedQty(p))}</b> · frei ${esc(freeQty(p))}${overReservedQty(p)>0?` <span class="overBadge">ÜBERRESERVIERT +${esc(overReservedQty(p))}</span>`:''}</td></tr></tbody></table>${(p.reservations||[]).length?`<h3>Reservierungen</h3><div class="manageList">${p.reservations.map(rr=>`<div class="manageItem"><b>${esc(rr.qty)} reserviert</b><div class="muted">${esc(rr.project||'Ohne Kommission')}${rr.who?' · '+esc(rr.who):''} · ${esc(formatDateTime(rr.createdAt))}${rr.note?' · '+esc(rr.note):''}</div><div class="toolbar"><button class="btn" onclick="editReservation('${p.id}','${rr.id}')">Reservierung bearbeiten</button><button class="btn secondary" onclick="releaseReservation('${p.id}','${rr.id}')">Reservierung aufheben</button></div></div>`).join('')}</div>`:''}${(p.movements||[]).length?`<h3>Bewegungsverlauf</h3><div class="manageList">${p.movements.slice().reverse().map(m=>`<div class="manageItem"><b>${esc(formatDateTime(m.at))}</b><div class="muted">${esc(m.from||'–')} → ${esc(m.to||'–')}</div></div>`).join('')}</div>`:''}<div class="toolbar"><button class="btn secondary" onclick="openRack('${r.id}')">← Gestell</button>${p.status!=='aufgebraucht'?`<button class="btn secondary" onclick="reservePackage('${p.id}')">Reservieren</button>`:''}<button class="btn" onclick="editPackage('${p.id}')">Bearbeiten</button>${st.settings?.allowMaterialDelete?`<button class="btn danger" onclick="deletePackage('${p.id}')">Material löschen</button>`:''}</div>`
+ let pkgArea=st.areas.find(a=>a.id===r.areaId),pkgSide=sideForMap(areaMapType(pkgArea));pkgSide.innerHTML=`<h2>${esc(p.material)}</h2><p class="muted">${esc(areaName(r.areaId))} · ${esc(r.name)} · ${esc(l.name)}</p>${packagePhotoHtml(p)}<table><tbody><tr><th>Breite</th><td>${esc(p.width||'–')} mm</td></tr><tr><th>Höhe</th><td>${esc(p.height||'–')} mm</td></tr><tr><th>Länge</th><td>${esc(p.length||'–')} mm</td></tr><tr><th>Menge</th><td>${esc(p.qty||'–')}</td></tr><tr><th>Projekt</th><td>${commissionBadgeV468(p.project)}</td></tr><tr><th>Erfasst am</th><td>${esc(formatDateTime(p.createdAt))}</td></tr><tr><th>Element-ID</th><td><b>${esc(p.elementId||'–')}</b></td></tr><tr><th>ID-Kategorie</th><td>${esc(ID_CATS[p.idCategory]||'–')}</td></tr><tr><th>Verwendungsort</th><td>${esc((p.usage||[]).join(' / ')||'–')}</td></tr><tr><th>Paketstatus</th><td><span class="statusbadge ${stClass(p.status)}">${esc(p.status||'–')}</span></td></tr><tr><th>Zuletzt kontrolliert</th><td>${esc(formatDateTime(p.lastCheckedAt))}${p.lastCheckedBy?' · '+esc(p.lastCheckedBy):''}</td></tr><tr><th>Reserviert</th><td><b>${esc(reservedQty(p))}</b> · frei ${esc(freeQty(p))}${overReservedQty(p)>0?` <span class="overBadge">ÜBERRESERVIERT +${esc(overReservedQty(p))}</span>`:''}</td></tr></tbody></table>${(p.reservations||[]).length?`<h3>Reservierungen</h3><div class="manageList">${p.reservations.map(rr=>`<div class="manageItem"><b>${esc(rr.qty)} reserviert</b><div class="muted">${esc(rr.project||'Ohne Kommission')}${rr.who?' · '+esc(rr.who):''} · ${esc(formatDateTime(rr.createdAt))}${rr.note?' · '+esc(rr.note):''}</div><div class="toolbar"><button class="btn" onclick="editReservation('${p.id}','${rr.id}')">Reservierung bearbeiten</button><button class="btn secondary" onclick="releaseReservation('${p.id}','${rr.id}')">Reservierung aufheben</button></div></div>`).join('')}</div>`:''}${(p.movements||[]).length?`<h3>Bewegungsverlauf</h3><div class="manageList">${p.movements.slice().reverse().map(m=>`<div class="manageItem"><b>${esc(formatDateTime(m.at))}</b><div class="muted">${esc(m.from||'–')} → ${esc(m.to||'–')}</div></div>`).join('')}</div>`:''}<div class="toolbar"><button class="btn secondary" onclick="openRack('${r.id}')">← Gestell</button>${p.status!=='aufgebraucht'?`<button class="btn secondary" onclick="reservePackage('${p.id}')">Reservieren</button>`:''}<button class="btn" onclick="editPackage('${p.id}')">Bearbeiten</button>${st.settings?.allowMaterialDelete?`<button class="btn danger" onclick="deletePackage('${p.id}')">Material löschen</button>`:''}</div>`
 }
 
 function toggleAreaLock(id){
@@ -16458,21 +16629,24 @@ function openMaterial(rid=''){
  E('mRack').innerHTML=materialRackOptions(preferred);
  if(preferred&&E('mRack').querySelector(`option[value="${preferred}"]`))E('mRack').value=preferred;
  if(!E('mRack').options.length){alert('Es gibt aktuell keinen freigegebenen Lagerort. Entsperre zuerst eine Lagerfläche.');return}
- fillLevels();ensureIdSettings();ensureCommissions();fillMaterialCatalog('');E('mQuality').innerHTML=qualityOptions('');E('mQuality').value='';updateQualityVisibility('');E('mProj').innerHTML=commissionOptions('');E('mCat').value='';E('mElementId').value='';E('mBatchCount').disabled=false;E('mBatchCount').value=1;pendingMaterialPhotoDelete=false;renderMaterialPhotoEditor(null);resetV75Editors(null);updateElementIdPreview();E('matModal').classList.add('open')
+ fillLevels();ensureIdSettings();ensureCommissions();fillMaterialCatalog('');E('mWoodType').value='';E('mQuality').innerHTML=qualityOptions('');E('mQuality').value='';updateQualityVisibility('');E('mProj').innerHTML=commissionOptions('');E('mCat').value='';E('mElementId').value='';E('mBatchCount').disabled=false;E('mBatchCount').value=1;pendingMaterialPhotoDelete=false;renderMaterialPhotoEditor(null);resetV75Editors(null);updateElementIdPreview();E('matModal').classList.add('open')
 }
 function editPackage(id){
  let p=st.packages.find(x=>x.id===id);if(!p)return;
  editingPackage=id;
  E('matTitle').textContent='Material / Paket bearbeiten';
  E('mRack').innerHTML=materialRackOptions(p.rackId);
- E('mRack').value=p.rackId;fillLevels();E('mLevel').value=String(p.levelIndex);
- fillMaterialCatalog(p.material||'');E('mQuality').innerHTML=qualityOptions(p.quality||'');E('mQuality').value=p.quality||'';updateQualityVisibility(p.quality||'');E('mWid').value=p.width||'';E('mHei').value=p.height||'';E('mLen').value=p.length||'';
+ E('mRack').value=p.rackId;fillLevels();E('mLevel').value=(Number.isInteger(Number(p.levelIndex))&&Number(p.levelIndex)>=0)?String(p.levelIndex):'';
+ fillMaterialCatalog(p.material||'');E('mWoodType').value=p.woodType||'';E('mQuality').innerHTML=qualityOptions(p.quality||'');E('mQuality').value=p.quality||'';updateQualityVisibility(p.quality||'');E('mWid').value=p.width||'';E('mHei').value=p.height||'';E('mLen').value=p.length||'';
  E('mQty').value=p.qty||'';E('mBatchCount').value=1;E('mBatchCount').disabled=true;E('mStatus').value=p.status||'Kommission';ensureCommissions();E('mProj').innerHTML=commissionOptions(p.project||'');E('mProj').value=p.project||'';E('mCat').value=p.idCategory||'';E('mElementId').value=p.elementId||'';if(E('mPack'))E('mPack').value=p.packCode||'';
  E('mUseProd').checked=(p.usage||[]).includes('Produktion');E('mUseSite').checked=(p.usage||[]).includes('Baustelle');
  E('mNote').value=p.note||'';E('mPhoto').value='';renderMaterialPhotoEditor(p);resetV75Editors(p);
  E('matModal').classList.add('open')
 }
-function fillLevels(){let r=st.racks.find(x=>x.id===E('mRack').value);E('mLevel').innerHTML=(r?.levels||[]).map((l,i)=>`<option value="${i}">${esc(l.name)} (${l.length||'–'} × ${l.width||'–'} · H ${l.height||'–'} m)</option>`).join('')}
+function fillLevels(){
+ let r=st.racks.find(x=>x.id===E('mRack').value);
+ E('mLevel').innerHTML=`<option value="">– Keine Ebene –</option>`+(r?.levels||[]).map((l,i)=>`<option value="${i}">${esc(l.name)} (${l.length||'–'} × ${l.width||'–'} · H ${l.height||'–'} m)</option>`).join('');
+}
 
 let pendingMaterialPhotoDelete=false,photoViewerZoom=1,photoPinchStart=0,photoPinchZoom=1;
 function openPhotoViewer(src){
@@ -16732,8 +16906,10 @@ const rawFileURL=f=>new Promise((res,rej)=>{let rd=new FileReader();rd.onload=()
 const fileURL=async f=>rawFileURL(await compressImageFile(f,1600,.78));
 async function saveMat(e){
  e.preventDefault();
- let r=st.racks.find(x=>x.id===E('mRack').value),li=+E('mLevel').value,l=r?.levels[li];
- if(!l){alert('Bitte zuerst eine Ebene anlegen.');return}
+ let r=st.racks.find(x=>x.id===E('mRack').value);
+ if(!r){alert('Bitte einen Lagerort auswählen.');return}
+ let levelRaw=E('mLevel').value,li=levelRaw===''?-1:Number(levelRaw),l=li>=0?r?.levels?.[li]:null;
+ if(li>=0&&!l){alert('Die gewählte Ebene ist nicht mehr vorhanden. Bitte neu auswählen.');return}
  if(areaIsLocked(r.areaId)){alert('Diese Lagerfläche ist gesperrt. Material kann dort nicht eingelagert werden.');return}
  // V74: Breite, Höhe und Länge beschreiben ein einzelnes Teil im Paket.
  // Deshalb kein Vergleich mehr mit den Abmessungen der Gestellebene.
@@ -16752,12 +16928,18 @@ async function saveMat(e){
  }
 
  if(manualId){
+   /* V482: Bereits vorhandene/importierte Element-IDs (z.B. A-13) dürfen beim
+      Bearbeiten unverändert gespeichert werden. Das strenge Format gilt nur
+      für neu eingegebene bzw. tatsächlich geänderte IDs. */
+   let unchangedExistingId=!!old&&String(old.elementId||'').trim().toUpperCase()===manualId;
    let parsed=parseElementId(manualId);
-   if(!parsed){alert('Element-ID bitte im Format A-001, B-001, C-001, D-001, E-001 oder TB-001 eingeben.');return}
-   if(cat&&parsed.prefix!==cat){alert('Die Element-ID passt nicht zur gewählten Kategorie.');return}
-   if(!cat)cat=parsed.prefix;
-   let duplicate=st.packages.find(x=>x.elementId===manualId&&x.id!==editingPackage);
-   if(duplicate||elementIdUnavailable(manualId,old?.elementId)){alert('Diese Element-ID wurde bereits vergeben und bleibt aus Gründen der Rückverfolgbarkeit gesperrt.');return}
+   if(!parsed&&!unchangedExistingId){alert('Element-ID bitte im Format A-001, B-001, C-001, D-001, E-001 oder TB-001 eingeben.');return}
+   if(parsed&&cat&&parsed.prefix!==cat){alert('Die Element-ID passt nicht zur gewählten Kategorie.');return}
+   if(parsed&&!cat)cat=parsed.prefix;
+   if(!unchangedExistingId){
+     let duplicate=st.packages.find(x=>x.elementId===manualId&&x.id!==editingPackage);
+     if(duplicate||elementIdUnavailable(manualId,old?.elementId)){alert('Diese Element-ID wurde bereits vergeben und bleibt aus Gründen der Rückverfolgbarkeit gesperrt.');return}
+   }
  }
 
  if(old&&reservedQty(old)>0){
@@ -16778,7 +16960,7 @@ async function saveMat(e){
    }else{photo=await fileURL(f);photoPath=''}
  }
  let baseData={
-   rackId:r.id,levelIndex:li,material:E('mMaterial').value.trim(),quality:materialUsesQuality(E('mMaterial').value)?E('mQuality').value.trim():'',
+   rackId:r.id,levelIndex:li,material:E('mMaterial').value.trim(),woodType:E('mWoodType').value.trim(),quality:materialUsesQuality(E('mMaterial').value)?E('mQuality').value.trim():'',
    width:E('mWid').value,height:E('mHei').value,length:E('mLen').value,
    qty:E('mQty').value.trim(),project:E('mProj').value.trim(),idCategory:cat,
    packCode:'',
@@ -16789,7 +16971,7 @@ async function saveMat(e){
  if(old){
    let oldRack=st.racks.find(x=>x.id===old.rackId),oldLevel=oldRack?.levels[old.levelIndex];
    let from=`${areaName(oldRack?.areaId)} / ${oldRack?.name||'–'} / ${oldLevel?.name||'–'}`;
-   let to=`${areaName(r.areaId)} / ${r.name} / ${l.name}`;
+   let to=`${areaName(r.areaId)} / ${r.name} / ${l?.name||'Keine Ebene'}`;
    if(old.rackId!==r.id||old.levelIndex!==li){if(!old.movements)old.movements=[];let mv={at:new Date().toISOString(),from,to};old.movements.push(mv);st.movements.push({packageId:old.id,elementId:old.elementId||manualId,...mv})}
    let previousId=old.elementId;
    let qtyBeforeReserved=old.qty,reservedBeforeQty=reservedQty(old);
@@ -16848,15 +17030,19 @@ function deletePackage(id){
 function sortInv(k){if(invSort.key===k)invSort.dir*=-1;else{invSort.key=k;invSort.dir=1}renderInv()}
 function renderInv(){
  ensureInventoryOrder();renderInventoryHead();
- let q=(E('search').value||'').toLowerCase(),af=E('areaFilter').value,ps=st.packages.filter(p=>{
+ let q=(E('search').value||'').toLowerCase(),af=E('areaFilter').value,cf=E('categoryFilterV471')?.value||'',ps=st.packages.filter(p=>{
    let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex],
    h=[p.elementId,ID_CATS[p.idCategory],p.material,p.width,p.height,p.length,linearMeters(p).toFixed(2),horizontalArea(p).toFixed(2),p.qty,p.project,p.packCode,(p.usage||[]).join(' '),p.status,formatDateTime(p.createdAt),r?.name,areaName(r?.areaId),l?.name,...(p.reservations||[]).flatMap(x=>[x.project,x.who,x.note,x.qty])].join(' ').toLowerCase();
    let mode=E('archiveFilter')?.value||'active',archiveOk=mode==='all'||(mode==='archive'?p.status==='aufgebraucht':p.status!=='aufgebraucht');
-   return(!q||h.includes(q))&&(!af||r?.areaId===af)&&archiveOk
+   let categoryOk=!cf||String(p.idCategory||'')===cf;
+   return(!q||h.includes(q))&&(!af||r?.areaId===af)&&categoryOk&&archiveOk
  });
  const V=(p,k)=>{
    let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];
-   if(k==='location')return (areaName(r?.areaId)+' '+r?.name+' '+l?.name).toLowerCase();
+   if(k==='location')return String(r?.name||'').toLowerCase();
+   if(k==='levelV467')return String(l?.name||'').toLowerCase();
+   if(k==='formatV479')return String(p.format||'').toLowerCase();
+   if(k==='woodTypeV474')return String(p.woodType||'').toLowerCase();
    if(k==='usage')return (p.usage||[]).join(' ').toLowerCase();
    if(k==='elementId')return String(p.elementId||'').toLowerCase();
    if(k==='linearMeters')return linearMeters(p);
@@ -16867,14 +17053,37 @@ function renderInv(){
    if(k==='qty')return parseFloat(String(p.qty||'').replace(',','.'))||0;
    return String(p[k]||'').toLowerCase()
  };
- ps.sort((a,b)=>(V(a,invSort.key)<V(b,invSort.key)?-1:V(a,invSort.key)>V(b,invSort.key)?1:0)*invSort.dir);
- E('tbody').innerHTML=ps.map(p=>{
-   let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];
-   return `<tr class="${hasReservation(p)?'reservedRow':''}">${st.inventoryColumnOrder.map(key=>`<td>${inventoryCell(p,key,r,l)}</td>`).join('')}</tr>`
- }).join('');
+ /* V485: Spaltenköpfe sortieren wieder die gesamte Tabelle.
+    Standard bleibt Material A–Z; Gruppenköpfe erscheinen nur bei Materialsortierung. */
+ ps.sort((a,b)=>{
+   let av=V(a,invSort.key),bv=V(b,invSort.key);
+   if(typeof av==='string'&&typeof bv==='string')return av.localeCompare(bv,'de',{numeric:true,sensitivity:'base'})*invSort.dir;
+   return (av<bv?-1:av>bv?1:0)*invSort.dir;
+ });
+ let bodyV485=[];
+ if(invSort.key==='material'){
+   let last=null;
+   ps.forEach(p=>{
+     let name=String(p.material||'–').trim()||'–',key=name.toLocaleLowerCase('de');
+     if(key!==last){
+       let group=ps.filter(x=>String(x.material||'–').trim().toLocaleLowerCase('de')===key);
+       let qty=group.reduce((sum,x)=>sum+numM(x.qty),0);
+       bodyV485.push(`<tr class="materialGroupV484"><td colspan="${st.inventoryColumnOrder.length}"><div><b>${esc(name)}</b><span>${group.length} ${group.length===1?'Paket':'Pakete'} · Menge ${Number.isInteger(qty)?qty:qty.toFixed(2)}</span></div></td></tr>`);
+       last=key;
+     }
+     let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];
+     bodyV485.push(`<tr class="${hasReservation(p)?'reservedRow':''}">${st.inventoryColumnOrder.map(k=>`<td>${inventoryCell(p,k,r,l)}</td>`).join('')}</tr>`);
+   });
+ }else{
+   ps.forEach(p=>{
+     let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];
+     bodyV485.push(`<tr class="${hasReservation(p)?'reservedRow':''}">${st.inventoryColumnOrder.map(k=>`<td>${inventoryCell(p,k,r,l)}</td>`).join('')}</tr>`);
+   });
+ }
+ E('tbody').innerHTML=bodyV485.join('');
  let qsum=ps.reduce((s,p)=>s+numM(p.qty),0);
  let lsum=ps.reduce((s,p)=>s+linearMeters(p),0);
- let vsum=ps.reduce((s,p)=>s+numM(p.width)*numM(p.length)*numM(p.qty),0);
+ let vsum=ps.reduce((s,p)=>s+(numM(p.width)/1000)*(numM(p.length)/1000)*numM(p.qty),0);
  if(E('sumPackages'))E('sumPackages').textContent=ps.length;
  if(E('sumQty'))E('sumQty').textContent=Number.isInteger(qsum)?String(qsum):qsum.toFixed(2);
  if(E('sumLinear'))E('sumLinear').textContent=lsum.toFixed(2)+' m';
@@ -16889,7 +17098,18 @@ function jump(rid,pid){
  selectedPackage=pid;showPage(areaMapType(a)==='production'?'production':'map');renderAreas();openRack(rid);
  setTimeout(()=>{let t=document.querySelector('.pkg.target');if(t)t.scrollIntoView({behavior:'smooth',block:'center',inline:'center'})},80);
 }
-function renderFilters(){E('areaFilter').innerHTML='<option value="">Alle Lagerflächen</option>'+st.areas.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}
+function renderFilters(){
+ E('areaFilter').innerHTML='<option value="">Alle Lagerflächen</option>'+st.areas.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');
+ renderCategoryFilterV471();
+}
+function renderCategoryFilterV471(){
+ let el=E('categoryFilterV471');if(!el)return;
+ let current=el.value||'';
+ let used=new Set((st.packages||[]).map(p=>String(p.idCategory||'').trim()).filter(Boolean));
+ let keys=[...Object.keys(ID_CATS||{}),...used].filter((v,i,a)=>a.indexOf(v)===i);
+ el.innerHTML='<option value="">Alle Kategorien</option>'+keys.map(k=>`<option value="${esc(k)}">${esc(ID_CATS[k]||k)}</option>`).join('');
+ if([...el.options].some(o=>o.value===current))el.value=current;
+}
 
 function toggleProductionMoveLock(v){if(!requireAdmin())return;
  ensureV24();st.settings.lockProductionMove=!!v;
@@ -16972,7 +17192,7 @@ function renderManage(){
  if(E('lockProductionMove')){E('lockProductionMove').checked=!!st.settings.lockProductionMove;E('lockProductionMove').disabled=!canAdmin()}
  if(E('allowDeleteMaterials'))E('allowDeleteMaterials').disabled=!canAdmin();
  if(E('allowDeleteMaterials'))E('allowDeleteMaterials').checked=!!st.settings.allowMaterialDelete;
- if(E('commissionManage'))E('commissionManage').innerHTML=st.commissions.map(c=>`<div class="manageItem"><div class="manageHead"><div><b>${esc(c.name)}</b> <span class="statusbadge ${c.status==='Abgeschlossen'?'st-out':'st-stock'}">${esc(c.status||'Aktiv')}</span><div class="muted">${st.packages.filter(p=>p.project===c.name).length} Materialeintrag/-einträge</div></div><div class="toolbar"><button class="btn secondary" onclick="toggleCommissionStatus('${c.id}')">${c.status==='Abgeschlossen'?'Reaktivieren':'Abschliessen'}</button><button class="btn secondary" onclick="renameCommission('${c.id}')">Umbenennen</button><button class="btn danger" onclick="deleteCommission('${c.id}')">Löschen</button></div></div></div>`).join('')||'<p class="muted">Noch keine Kommission angelegt.</p>';
+ if(E('commissionManage'))E('commissionManage').innerHTML=st.commissions.map(c=>`<div class="manageItem"><div class="manageHead"><div><b>${commissionBadgeV468(c.name)}</b> <span class="statusbadge ${c.status==='Abgeschlossen'?'st-out':'st-stock'}">${esc(c.status||'Aktiv')}</span><div class="muted">${st.packages.filter(p=>p.project===c.name).length} Materialeintrag/-einträge</div></div><div class="toolbar"><button class="btn secondary" onclick="toggleCommissionStatus('${c.id}')">${c.status==='Abgeschlossen'?'Reaktivieren':'Abschliessen'}</button><button class="btn secondary" onclick="renameCommission('${c.id}')">Umbenennen</button><button class="btn danger" onclick="deleteCommission('${c.id}')">Löschen</button></div></div></div>`).join('')||'<p class="muted">Noch keine Kommission angelegt.</p>';
  if(E('autoIdCheck'))E('autoIdCheck').checked=!!st.idSettings.auto;
  if(E('idCounters'))E('idCounters').innerHTML=Object.entries(ID_CATS).map(([k,n])=>`<div class="manageItem"><div><b>${esc(n)}</b><div class="muted">Präfix ${k}-xxx</div></div><div><b>Nächste ID: ${esc(formatElementId(k,scanNextId(k)))}</b></div></div>`).join('');
  E('areaManage').innerHTML=st.areas.map(a=>{let n=st.racks.filter(r=>r.areaId===a.id).length,m=areaActiveMaterialCount(a.id);return `<div class="manageItem"><div class="manageHead"><div><b>${esc(a.name)}</b>${a.locked?' <span class="lockBadge">GESPERRT</span>':''}<div class="muted">${areaMapType(a)==='production'?'Produktion':'Aussenlager'} · ${n} Gestell(e) · ${m} aktive Materialeinträge</div></div><div class="toolbar"><button class="btn ${a.locked?'secondary':'danger'}" onclick="toggleAreaLock('${a.id}')">${a.locked?'Entsperren':'Sperren'}</button><button class="btn secondary" onclick="renameArea('${a.id}')">Umbenennen</button><button class="btn secondary" onclick="editAreaGeometry('${a.id}')">Fläche bearbeiten</button><button class="btn danger" onclick="deleteArea('${a.id}')">Löschen</button></div></div></div>`}).join('');
@@ -17126,7 +17346,7 @@ function renderFullControl(){
        let qty=p?.qty??snap.qty??'–';
        let project=p?.project||snap.project||'–';
        let quality=p?.quality||'';
-       let dims=p?`B ${p.width||'–'} · H ${p.height||'–'} · L ${p.length||'–'} m`:'';
+       let dims=p?`B ${p.width||'–'} · H ${p.height||'–'} · L ${p.length||'–'} mm`:'';
        let cls=i.result==='Vorhanden'?'done':i.result==='Nicht gefunden'?'miss':i.result==='Geändert'||i.result==='Neu gefunden'?'changed':'';
        let status=i.result?`<b>${esc(i.result)}</b>`:'<span class="muted">offen</span>';
        let actions=p&&!i.result?`<div class="toolbar">
@@ -18121,7 +18341,7 @@ document.addEventListener('DOMContentLoaded',()=>{
           </select>
         </label>
         <label>Länge [m]
-          <input id="platformStockLength" type="number" min="0" step="0.01" placeholder="z. B. 6.00">
+          <input id="platformStockLength" type="number" min="0" step="0.01" placeholder="z. B. 6000">
         </label>
         <label>Bemerkung
           <input id="platformStockNote" placeholder="optional">
@@ -18140,7 +18360,7 @@ document.addEventListener('DOMContentLoaded',()=>{
             <input id="platformContainerName" placeholder="z. B. Container 01">
           </label>
           <label>Länge [m]
-            <input id="platformContainerLength" type="number" min="0" step="0.01" placeholder="z. B. 6.00">
+            <input id="platformContainerLength" type="number" min="0" step="0.01" placeholder="z. B. 6000">
           </label>
           <label>Breite [m]
             <input id="platformContainerWidth" type="number" min="0" step="0.01" placeholder="z. B. 2.45">
@@ -19290,5 +19510,896 @@ window.renderPlatformQuickTakeV457=function(){
 };
 document.addEventListener('click',e=>{if((e.target.textContent||'').trim()==='Übersicht')setTimeout(renderPlatformQuickTakeV457,0)});
 window.addEventListener('load',()=>setTimeout(renderPlatformQuickTakeV457,300));
+
+
+
+/* V463 – einmaliger Import Excel-Zeilen 2–51 */
+const EXCEL_LAGER_IMPORT_V463=[{"excelRow":2,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"75","rack":"Gleis 1 Bach","elementId":"A-130","status":"Kommission","project":""},{"excelRow":3,"material":"KVH 40/60","woodType":"","length":"5000","width":"","height":"","qty":"83","rack":"Gleis 1 Bach","elementId":"A-147","status":"Kommission","project":""},{"excelRow":4,"material":"KVH 40/60 schwarz","woodType":"","length":"","width":"","height":"","qty":"12","rack":"Gleis 1 Bach","elementId":"A-153","status":"Kommission","project":""},{"excelRow":5,"material":"KVH 60/80","woodType":"","length":"5000","width":"","height":"","qty":"36","rack":"Gleis 1 Bach","elementId":"A-148","status":"Kommission","project":""},{"excelRow":6,"material":"60/180 nsi","woodType":"Fichte","length":"13000","width":"60","height":"180","qty":"48","rack":"Seeliplatz","elementId":"A-54","status":"Lagerware","project":""},{"excelRow":7,"material":"BHS 100/370","woodType":"Lärche","length":"5200","width":"100","height":"370","qty":"2","rack":"RHL 4","elementId":"A-75","status":"Lagerware","project":""},{"excelRow":8,"material":"DUO 60/140","woodType":"","length":"13000","width":"60","height":"140","qty":"48","rack":"Seeliplatz","elementId":"A-128","status":"Lagerware","project":""},{"excelRow":9,"material":"DUO 60/200","woodType":"Fichte","length":"13000","width":"60","height":"200","qty":"30","rack":"Seeliplatz","elementId":"A-15","status":"Lagerware","project":""},{"excelRow":10,"material":"DUO 60/220","woodType":"Fichte","length":"13000","width":"60","height":"220","qty":"30","rack":"RHL 3","elementId":"A-57","status":"Lagerware","project":""},{"excelRow":11,"material":"DUO 60/220","woodType":"","length":"13000","width":"60","height":"220","qty":"4","rack":"RHL 3","elementId":"A-129","status":"Lagerware","project":""},{"excelRow":12,"material":"DUO 60/240","woodType":"Fichte","length":"13000","width":"60","height":"240","qty":"10","rack":"RHL 3","elementId":"A-55","status":"Lagerware","project":""},{"excelRow":13,"material":"DUO 60/240","woodType":"","length":"13000","width":"60","height":"240","qty":"35","rack":"Seeliplatz","elementId":"A-127","status":"Lagerware","project":""},{"excelRow":14,"material":"DUO 80/280","woodType":"Fichte","length":"13000","width":"60","height":"280","qty":"15","rack":"Seeliplatz","elementId":"A-58","status":"Lagerware","project":""},{"excelRow":15,"material":"KVH 100/100","woodType":"Fichte","length":"4000","width":"100","height":"100","qty":"24","rack":"RHL 2","elementId":"A-65","status":"Lagerware","project":""},{"excelRow":16,"material":"KVH 100/100","woodType":"Fichte","length":"4000","width":"100","height":"100","qty":"40","rack":"RHL 2","elementId":"A-66","status":"Lagerware","project":""},{"excelRow":17,"material":"KVH 27/60","woodType":"Fichte","length":"5000","width":"60","height":"27","qty":"360","rack":"RHL 3","elementId":"A-45","status":"Lagerware","project":""},{"excelRow":18,"material":"KVH 27/60","woodType":"Fichte","length":"5000","width":"60","height":"27","qty":"306","rack":"RHL 3","elementId":"A-109","status":"Lagerware","project":""},{"excelRow":19,"material":"KVH 27/70","woodType":"Fichte","length":"5000","width":"70","height":"27","qty":"474","rack":"RHL 4","elementId":"A-117","status":"Lagerware","project":""},{"excelRow":20,"material":"KVH 27/70","woodType":"Fichte","length":"5000","width":"70","height":"27","qty":"420","rack":"RHL 4","elementId":"A-142","status":"Lagerware","project":""},{"excelRow":21,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"324","rack":"RHL 4","elementId":"A-144","status":"Lagerware","project":""},{"excelRow":22,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"324","rack":"RHL 4","elementId":"A-145","status":"Lagerware","project":""},{"excelRow":23,"material":"KVH 40/40 sägeroh","woodType":"Fichte","length":"5000","width":"40","height":"40","qty":"264","rack":"RHL 3","elementId":"A-46","status":"Lagerware","project":""},{"excelRow":24,"material":"KVH 40/60","woodType":"Fichte","length":"5000","width":"40","height":"60","qty":"288","rack":"RHL 2","elementId":"A-136","status":"Lagerware","project":""},{"excelRow":25,"material":"KVH 40/60","woodType":"Fichte","length":"5000","width":"40","height":"60","qty":"288","rack":"RHL 2","elementId":"A-137","status":"Lagerware","project":""},{"excelRow":26,"material":"KVH 60/100","woodType":"Fichte","length":"5000","width":"60","height":"100","qty":"45","rack":"Kom. Gestell 5","elementId":"A-73","status":"Lagerware","project":""},{"excelRow":27,"material":"KVH 60/100","woodType":"Fichte","length":"5000","width":"60","height":"100","qty":"57","rack":"Kom. Gestell 5","elementId":"A-74","status":"Lagerware","project":""},{"excelRow":28,"material":"KVH 60/60","woodType":"Fichte","length":"5000","width":"60","height":"60","qty":"144","rack":"RHL 4","elementId":"A-141","status":"Lagerware","project":""},{"excelRow":29,"material":"KVH 60/60","woodType":"Fichte","length":"5000","width":"60","height":"60","qty":"112","rack":"RHL 1","elementId":"A-146","status":"Lagerware","project":""},{"excelRow":30,"material":"60/180 nis","woodType":"Fichte","length":"13000","width":"60","height":"180","qty":"48","rack":"RHL 2","elementId":"A-13","status":"Lagerware","project":""},{"excelRow":31,"material":"Dachrandkeile","woodType":"Fichte","length":"4300","width":"280","height":"80","qty":"6","rack":"Durchgang Büro","elementId":"A-28","status":"Lagerware","project":""},{"excelRow":32,"material":"DUO 100/200","woodType":"Fichte","length":"13000","width":"100","height":"200","qty":"11","rack":"RHL 2","elementId":"A-24","status":"Lagerware","project":""},{"excelRow":33,"material":"DUO 100/220","woodType":"Fichte","length":"13000","width":"100","height":"220","qty":"2","rack":"RHL 2","elementId":"A-25","status":"Lagerware","project":""},{"excelRow":34,"material":"DUO 60/100","woodType":"Fichte","length":"13000","width":"60","height":"100","qty":"60","rack":"Bushaltestelle","elementId":"A-4","status":"Lagerware","project":""},{"excelRow":35,"material":"DUO 60/110","woodType":"Fichte","length":"13000","width":"60","height":"110","qty":"8","rack":"RHL 3","elementId":"A-30","status":"Lagerware","project":""},{"excelRow":36,"material":"DUO 60/120","woodType":"Fichte","length":"13000","width":"60","height":"120","qty":"43","rack":"Bushaltestelle","elementId":"A-7","status":"Lagerware","project":""},{"excelRow":37,"material":"DUO 60/140","woodType":"Fichte","length":"13000","width":"60","height":"140","qty":"12","rack":"Bushaltestelle","elementId":"A-9","status":"Lagerware","project":""},{"excelRow":38,"material":"DUO 60/160","woodType":"Fichte","length":"13000","width":"60","height":"160","qty":"45","rack":"Bushaltestelle","elementId":"A-11","status":"Lagerware","project":""},{"excelRow":39,"material":"DUO 60/200","woodType":"Fichte","length":"13000","width":"60","height":"200","qty":"25","rack":"RHL 2","elementId":"A-94","status":"Lagerware","project":""},{"excelRow":40,"material":"DUO 60/80","woodType":"Fichte","length":"13000","width":"60","height":"80","qty":"88","rack":"RHL 1","elementId":"A-2","status":"Lagerware","project":""},{"excelRow":41,"material":"DUO 80/220","woodType":"Fichte","length":"13000","width":"80","height":"220","qty":"7","rack":"RHL 3","elementId":"A-22","status":"Lagerware","project":""},{"excelRow":42,"material":"DUO 80/240","woodType":"Fichte","length":"13000","width":"80","height":"240","qty":"10","rack":"RHL 2","elementId":"A-23","status":"Lagerware","project":""},{"excelRow":43,"material":"DUO 60/120","woodType":"Fichte","length":"13000","width":"60","height":"120","qty":"1","rack":"Seeliplatz","elementId":"A-112","status":"Kommission","project":""},{"excelRow":44,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"135","rack":"Gleis 1 Bach","elementId":"A-133","status":"Kommission","project":"Ried F"},{"excelRow":45,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"290","rack":"Gleis 1 Bach","elementId":"A-149","status":"Kommission","project":"CBB"},{"excelRow":46,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"320","rack":"Gleis 1 Bach","elementId":"A-150","status":"Kommission","project":"CBB"},{"excelRow":47,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"320","rack":"Gleis 1 Bach","elementId":"A-151","status":"Kommission","project":"CBB"},{"excelRow":48,"material":"KVH 30/60 schwarz","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"104","rack":"Gleis 1 Bach","elementId":"A-154","status":"Kommission","project":"CBB"},{"excelRow":49,"material":"KVH 30/60 schwarz","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"320","rack":"Gleis 1 Bach","elementId":"A-155","status":"Kommission","project":"CBB"},{"excelRow":50,"material":"KVH 40/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"24","rack":"Gleis 1 Bach","elementId":"A-152","status":"Kommission","project":"CBB"},{"excelRow":51,"material":"KVH 60/60","woodType":"","length":"5000","width":"60","height":"60","qty":"252","rack":"Gleis 1 Bach","elementId":"A-119","status":"Kommission","project":""}];
+const EXCEL_LAGER_IMPORT_KEY_V463='holzlager_excel_import_kvh_duo_bsh_v463';
+
+function normalizeRackNameV463(v){
+ return String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+}
+function ensureExcelRackV463(name){
+ let target=normalizeRackNameV463(name);
+ let r=(st.racks||[]).find(x=>normalizeRackNameV463(x.name)===target);
+ if(r)return r;
+
+ if(!Array.isArray(st.areas))st.areas=[];
+ if(!Array.isArray(st.racks))st.racks=[];
+ let area=st.areas.find(a=>a.id==='excel_import_lagerorte_v463');
+ if(!area){
+   area={id:'excel_import_lagerorte_v463',name:'Weitere Lagerorte',points:[]};
+   st.areas.push(area);
+ }
+ r={
+   id:'excelrack_'+target.replace(/[^a-z0-9]+/g,'_')+'_'+Date.now().toString(36),
+   areaId:area.id,
+   name:name||'Excel Lagerort',
+   photo:'',
+   levels:[{name:'Lagerplatz',length:'',width:'',height:''}]
+ };
+ st.racks.push(r);
+ return r;
+}
+function importExcelLagerV463(){
+ if(localStorage.getItem(EXCEL_LAGER_IMPORT_KEY_V463)==='done')return;
+ ensureV24?.();
+ if(!Array.isArray(st.packages))st.packages=[];
+
+ let imported=0,skipped=0;
+ EXCEL_LAGER_IMPORT_V463.forEach((row,idx)=>{
+   if(!row.material){skipped++;return}
+   let existing=row.elementId && st.packages.find(p=>String(p.elementId||'').trim().toUpperCase()===row.elementId);
+   if(existing){skipped++;return}
+
+   let rack=ensureExcelRackV463(row.rack);
+   let p={
+     id:'excelv463_'+row.excelRow+'_'+Date.now().toString(36)+'_'+idx,
+     rackId:rack.id,
+     levelIndex:0,
+     material:row.material,
+     woodType:row.woodType||'',
+     quality:'',
+     width:row.width,
+     height:row.height,
+     length:row.length,
+     qty:row.qty,
+     project:row.project||'',
+     idCategory:'A',
+     elementId:row.elementId||'',
+     packCode:'',
+     usage:[],
+     status:row.status==='Kommission'?'Kommission':'Lagerware',
+     note:'Import aus Excel · Zeile '+row.excelRow,
+     photo:'',
+     photoPath:'',
+     subMaterials:[],
+     defects:[],
+     countPhoto:'',
+     countPhotoName:'',
+     createdAt:new Date().toISOString(),
+     movements:[],
+     history:[],
+     reservations:[]
+   };
+   if(typeof addHistory==='function')addHistory(p,'Erfasst','Excel-Import · Lagerort: '+(row.rack||'–'));
+   st.packages.push(p);
+   if(row.elementId)reserveElementId?.(row.elementId);
+   imported++;
+ });
+
+ ensureCommissions?.();
+ persist();
+ localStorage.setItem(EXCEL_LAGER_IMPORT_KEY_V463,'done');
+ try{queueCloudSync?.()}catch(e){}
+ console.info('V463 Excel-Lagerimport:',imported,'importiert,',skipped,'übersprungen');
+ if(imported) setTimeout(()=>{try{renderInventory?.();renderMap?.()}catch(e){}},100);
+}
+
+/* Erst nach dem initialen Cloud-Abgleich importieren; vorhandene Element-IDs werden nie doppelt angelegt. */
+window.addEventListener('load',()=>setTimeout(importExcelLagerV463,6500));
+
+
+
+/* V465 – zuverlässiger Excel-Import nach Cloud-Abgleich, Excel-Zeilen 2–51 */
+const EXCEL_LAGER_IMPORT_V465=[{"excelRow":2,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"75","rack":"Gleis 1 Bach","elementId":"A-130","status":"Kommission","project":""},{"excelRow":3,"material":"KVH 40/60","woodType":"","length":"5000","width":"","height":"","qty":"83","rack":"Gleis 1 Bach","elementId":"A-147","status":"Kommission","project":""},{"excelRow":4,"material":"KVH 40/60 schwarz","woodType":"","length":"","width":"","height":"","qty":"12","rack":"Gleis 1 Bach","elementId":"A-153","status":"Kommission","project":""},{"excelRow":5,"material":"KVH 60/80","woodType":"","length":"5000","width":"","height":"","qty":"36","rack":"Gleis 1 Bach","elementId":"A-148","status":"Kommission","project":""},{"excelRow":6,"material":"60/180 nsi","woodType":"Fichte","length":"13000","width":"60","height":"180","qty":"48","rack":"Seeliplatz","elementId":"A-54","status":"Im Lager","project":""},{"excelRow":7,"material":"BHS 100/370","woodType":"Lärche","length":"5200","width":"100","height":"370","qty":"2","rack":"RHL 4","elementId":"A-75","status":"Im Lager","project":""},{"excelRow":8,"material":"DUO 60/140","woodType":"","length":"13000","width":"60","height":"140","qty":"48","rack":"Seeliplatz","elementId":"A-128","status":"Im Lager","project":""},{"excelRow":9,"material":"DUO 60/200","woodType":"Fichte","length":"13000","width":"60","height":"200","qty":"30","rack":"Seeliplatz","elementId":"A-15","status":"Im Lager","project":""},{"excelRow":10,"material":"DUO 60/220","woodType":"Fichte","length":"13000","width":"60","height":"220","qty":"30","rack":"RHL 3","elementId":"A-57","status":"Im Lager","project":""},{"excelRow":11,"material":"DUO 60/220","woodType":"","length":"13000","width":"60","height":"220","qty":"4","rack":"RHL 3","elementId":"A-129","status":"Im Lager","project":""},{"excelRow":12,"material":"DUO 60/240","woodType":"Fichte","length":"13000","width":"60","height":"240","qty":"10","rack":"RHL 3","elementId":"A-55","status":"Im Lager","project":""},{"excelRow":13,"material":"DUO 60/240","woodType":"","length":"13000","width":"60","height":"240","qty":"35","rack":"Seeliplatz","elementId":"A-127","status":"Im Lager","project":""},{"excelRow":14,"material":"DUO 80/280","woodType":"Fichte","length":"13000","width":"60","height":"280","qty":"15","rack":"Seeliplatz","elementId":"A-58","status":"Im Lager","project":""},{"excelRow":15,"material":"KVH 100/100","woodType":"Fichte","length":"4000","width":"100","height":"100","qty":"24","rack":"RHL 2","elementId":"A-65","status":"Im Lager","project":""},{"excelRow":16,"material":"KVH 100/100","woodType":"Fichte","length":"4000","width":"100","height":"100","qty":"40","rack":"RHL 2","elementId":"A-66","status":"Im Lager","project":""},{"excelRow":17,"material":"KVH 27/60","woodType":"Fichte","length":"5000","width":"60","height":"27","qty":"360","rack":"RHL 3","elementId":"A-45","status":"Im Lager","project":""},{"excelRow":18,"material":"KVH 27/60","woodType":"Fichte","length":"5000","width":"60","height":"27","qty":"306","rack":"RHL 3","elementId":"A-109","status":"Im Lager","project":""},{"excelRow":19,"material":"KVH 27/70","woodType":"Fichte","length":"5000","width":"70","height":"27","qty":"474","rack":"RHL 4","elementId":"A-117","status":"Im Lager","project":""},{"excelRow":20,"material":"KVH 27/70","woodType":"Fichte","length":"5000","width":"70","height":"27","qty":"420","rack":"RHL 4","elementId":"A-142","status":"Im Lager","project":""},{"excelRow":21,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"324","rack":"RHL 4","elementId":"A-144","status":"Im Lager","project":""},{"excelRow":22,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"324","rack":"RHL 4","elementId":"A-145","status":"Im Lager","project":""},{"excelRow":23,"material":"KVH 40/40 sägeroh","woodType":"Fichte","length":"5000","width":"40","height":"40","qty":"264","rack":"RHL 3","elementId":"A-46","status":"Im Lager","project":""},{"excelRow":24,"material":"KVH 40/60","woodType":"Fichte","length":"5000","width":"40","height":"60","qty":"288","rack":"RHL 2","elementId":"A-136","status":"Im Lager","project":""},{"excelRow":25,"material":"KVH 40/60","woodType":"Fichte","length":"5000","width":"40","height":"60","qty":"288","rack":"RHL 2","elementId":"A-137","status":"Im Lager","project":""},{"excelRow":26,"material":"KVH 60/100","woodType":"Fichte","length":"5000","width":"60","height":"100","qty":"45","rack":"Kom. Gestell 5","elementId":"A-73","status":"Im Lager","project":""},{"excelRow":27,"material":"KVH 60/100","woodType":"Fichte","length":"5000","width":"60","height":"100","qty":"57","rack":"Kom. Gestell 5","elementId":"A-74","status":"Im Lager","project":""},{"excelRow":28,"material":"KVH 60/60","woodType":"Fichte","length":"5000","width":"60","height":"60","qty":"144","rack":"RHL 4","elementId":"A-141","status":"Im Lager","project":""},{"excelRow":29,"material":"KVH 60/60","woodType":"Fichte","length":"5000","width":"60","height":"60","qty":"112","rack":"RHL 1","elementId":"A-146","status":"Im Lager","project":""},{"excelRow":30,"material":"60/180 nis","woodType":"Fichte","length":"13000","width":"60","height":"180","qty":"48","rack":"RHL 2","elementId":"A-13","status":"Im Lager","project":""},{"excelRow":31,"material":"Dachrandkeile","woodType":"Fichte","length":"4300","width":"280","height":"80","qty":"6","rack":"Durchgang Büro","elementId":"A-28","status":"Im Lager","project":""},{"excelRow":32,"material":"DUO 100/200","woodType":"Fichte","length":"13000","width":"100","height":"200","qty":"11","rack":"RHL 2","elementId":"A-24","status":"Im Lager","project":""},{"excelRow":33,"material":"DUO 100/220","woodType":"Fichte","length":"13000","width":"100","height":"220","qty":"2","rack":"RHL 2","elementId":"A-25","status":"Im Lager","project":""},{"excelRow":34,"material":"DUO 60/100","woodType":"Fichte","length":"13000","width":"60","height":"100","qty":"60","rack":"Bushaltestelle","elementId":"A-4","status":"Im Lager","project":""},{"excelRow":35,"material":"DUO 60/110","woodType":"Fichte","length":"13000","width":"60","height":"110","qty":"8","rack":"RHL 3","elementId":"A-30","status":"Im Lager","project":""},{"excelRow":36,"material":"DUO 60/120","woodType":"Fichte","length":"13000","width":"60","height":"120","qty":"43","rack":"Bushaltestelle","elementId":"A-7","status":"Im Lager","project":""},{"excelRow":37,"material":"DUO 60/140","woodType":"Fichte","length":"13000","width":"60","height":"140","qty":"12","rack":"Bushaltestelle","elementId":"A-9","status":"Im Lager","project":""},{"excelRow":38,"material":"DUO 60/160","woodType":"Fichte","length":"13000","width":"60","height":"160","qty":"45","rack":"Bushaltestelle","elementId":"A-11","status":"Im Lager","project":""},{"excelRow":39,"material":"DUO 60/200","woodType":"Fichte","length":"13000","width":"60","height":"200","qty":"25","rack":"RHL 2","elementId":"A-94","status":"Im Lager","project":""},{"excelRow":40,"material":"DUO 60/80","woodType":"Fichte","length":"13000","width":"60","height":"80","qty":"88","rack":"RHL 1","elementId":"A-2","status":"Im Lager","project":""},{"excelRow":41,"material":"DUO 80/220","woodType":"Fichte","length":"13000","width":"80","height":"220","qty":"7","rack":"RHL 3","elementId":"A-22","status":"Im Lager","project":""},{"excelRow":42,"material":"DUO 80/240","woodType":"Fichte","length":"13000","width":"80","height":"240","qty":"10","rack":"RHL 2","elementId":"A-23","status":"Im Lager","project":""},{"excelRow":43,"material":"DUO 60/120","woodType":"Fichte","length":"13000","width":"60","height":"120","qty":"1","rack":"Seeliplatz","elementId":"A-112","status":"Kommission","project":""},{"excelRow":44,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"135","rack":"Gleis 1 Bach","elementId":"A-133","status":"Kommission","project":"Ried F"},{"excelRow":45,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"290","rack":"Gleis 1 Bach","elementId":"A-149","status":"Kommission","project":"CBB"},{"excelRow":46,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"320","rack":"Gleis 1 Bach","elementId":"A-150","status":"Kommission","project":"CBB"},{"excelRow":47,"material":"KVH 30/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"320","rack":"Gleis 1 Bach","elementId":"A-151","status":"Kommission","project":"CBB"},{"excelRow":48,"material":"KVH 30/60 schwarz","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"104","rack":"Gleis 1 Bach","elementId":"A-154","status":"Kommission","project":"CBB"},{"excelRow":49,"material":"KVH 30/60 schwarz","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"320","rack":"Gleis 1 Bach","elementId":"A-155","status":"Kommission","project":"CBB"},{"excelRow":50,"material":"KVH 40/60","woodType":"Fichte","length":"5000","width":"60","height":"30","qty":"24","rack":"Gleis 1 Bach","elementId":"A-152","status":"Kommission","project":"CBB"},{"excelRow":51,"material":"KVH 60/60","woodType":"","length":"5000","width":"60","height":"60","qty":"252","rack":"Gleis 1 Bach","elementId":"A-119","status":"Kommission","project":""}];
+let excelImportRunningV465=false;
+let excelImportFinishedThisSessionV465=false;
+
+function normRackV465(v){
+ return String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+}
+function findOrCreateRackV465(name){
+ if(!Array.isArray(st.racks))st.racks=[];
+ if(!Array.isArray(st.areas))st.areas=[];
+ let key=normRackV465(name);
+ let found=st.racks.find(r=>normRackV465(r.name)===key);
+ if(found)return found;
+ let area=st.areas.find(a=>a.id==='excel_import_lagerorte_v465') ||
+          st.areas.find(a=>String(a.name||'').trim()==='Weitere Lagerorte');
+ if(!area){
+   area={id:'excel_import_lagerorte_v465',name:'Weitere Lagerorte',points:[]};
+   st.areas.push(area);
+ }
+ let rack={
+   id:'excelrack_v465_'+String(name||'lagerort').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,''),
+   areaId:area.id,
+   name:name||'Excel Lagerort',
+   photo:'',
+   levels:[{name:'Lagerplatz',length:'',width:'',height:''}]
+ };
+ if(st.racks.some(r=>String(r.id)===rack.id))rack.id+='_2';
+ st.racks.push(rack);
+ return rack;
+}
+function excelRowExistsV465(row){
+ let eid=String(row.elementId||'').trim().toUpperCase();
+ if(eid && (st.packages||[]).some(p=>String(p.elementId||'').trim().toUpperCase()===eid))return true;
+ return (st.packages||[]).some(p=>String(p.note||'').includes('Excel-Import V465 · Zeile '+row.excelRow));
+}
+function runExcelImportV465(){
+ if(excelImportRunningV465 || excelImportFinishedThisSessionV465)return;
+ excelImportRunningV465=true;
+ try{
+   ensureV24?.();
+   if(!Array.isArray(st.packages))st.packages=[];
+   let imported=0,already=0;
+   EXCEL_LAGER_IMPORT_V465.forEach(row=>{
+     if(!row.material)return;
+     if(excelRowExistsV465(row)){already++;return}
+     let rack=findOrCreateRackV465(row.rack);
+     let p={
+       id:'excelv465_row_'+row.excelRow,
+       rackId:rack.id,
+       levelIndex:0,
+       material:row.material,
+       woodType:row.woodType||'',
+       quality:'',
+       width:row.width,
+       height:row.height,
+       length:row.length,
+       qty:row.qty,
+       project:row.project||'',
+       idCategory:'A',
+       elementId:row.elementId||'',
+       packCode:'',
+       usage:[],
+       status:row.status==='Kommission'?'Kommission':'Lagerware',
+       note:'Excel-Import V465 · Zeile '+row.excelRow,
+       photo:'',
+       photoPath:'',
+       subMaterials:[],
+       defects:[],
+       countPhoto:'',
+       countPhotoName:'',
+       createdAt:new Date().toISOString(),
+       movements:[],
+       history:[],
+       reservations:[]
+     };
+     if(typeof addHistory==='function')addHistory(p,'Erfasst','Excel-Import V465 · Lagerort: '+(row.rack||'–'));
+     st.packages.push(p);
+     if(row.elementId)reserveElementId?.(row.elementId);
+     imported++;
+   });
+   ensureCommissions?.();
+   persist();
+   excelImportFinishedThisSessionV465=true;
+   localStorage.setItem('holzlager_excel_import_v465_last',new Date().toISOString());
+   try{refresh?.()}catch(e){try{renderInventory?.()}catch(_){}}
+   if(imported){
+     try{queueCloudSync?.()}catch(e){}
+     console.info('V465 Excel-Import:',imported,'neu importiert,',already,'bereits vorhanden');
+   }else{
+     console.info('V465 Excel-Import: alle',already,'Positionen bereits vorhanden');
+   }
+ }finally{
+   excelImportRunningV465=false;
+ }
+}
+
+/* Nach jedem eingelesenen Cloud-Stand prüfen wir erneut, ob die Excel-Positionen wirklich vorhanden sind. */
+try{
+ const applyRemoteEntitiesV465=applyRemoteEntities;
+ applyRemoteEntities=function(remote,preserveKeys=new Set()){
+   const result=applyRemoteEntitiesV465(remote,preserveKeys);
+   excelImportFinishedThisSessionV465=false;
+   setTimeout(runExcelImportV465,80);
+   return result;
+ };
+}catch(e){console.warn('V465 Cloud-Hook nicht verfügbar',e)}
+
+/* Fallback für lokalen Betrieb bzw. wenn kein Cloud-Abgleich läuft. */
+window.addEventListener('load',()=>setTimeout(runExcelImportV465,1400));
+
+
+
+/* V466 – Mehrfachauswahl in der Lagerliste + Lagerort direkt bearbeiten */
+const inventorySelectedV466=new Set();
+
+function inventorySelectionIdsV466(){
+ return [...inventorySelectedV466].filter(id=>(st.packages||[]).some(p=>p.id===id));
+}
+function inventoryToggleV466(id,checked){
+ if(checked)inventorySelectedV466.add(id);else inventorySelectedV466.delete(id);
+ updateInventorySelectionUiV466();
+}
+function inventoryToggleVisibleV466(checked){
+ document.querySelectorAll('#tbody input[data-inv-select-v466]').forEach(cb=>{
+   cb.checked=!!checked;
+   if(checked)inventorySelectedV466.add(cb.dataset.invSelectV466);
+   else inventorySelectedV466.delete(cb.dataset.invSelectV466);
+ });
+ updateInventorySelectionUiV466();
+}
+function updateInventorySelectionUiV466(){
+ let ids=inventorySelectionIdsV466();
+ let label=E('inventorySelectionInfoV466');
+ if(label)label.textContent=ids.length?ids.length+' ausgewählt':'';
+ let all=[...document.querySelectorAll('#tbody input[data-inv-select-v466]')];
+ let head=E('inventorySelectAllV466');
+ if(head){
+   let selectedVisible=all.filter(x=>x.checked).length;
+   head.checked=all.length>0&&selectedVisible===all.length;
+   head.indeterminate=selectedVisible>0&&selectedVisible<all.length;
+ }
+}
+function inventorySelectCellV466(p){
+ return `<label class="inventoryCheckV466" title="Element auswählen"><input type="checkbox" data-inv-select-v466="${esc(p.id)}" ${inventorySelectedV466.has(p.id)?'checked':''} onchange="inventoryToggleV466('${p.id}',this.checked)"><span></span></label>`;
+}
+function inventoryLocationCellV466(p,r,l){
+ return `<button type="button" class="inventoryLocationBtnV466" onclick="openInventoryLocationV466('${p.id}')" title="Lagerort ändern"><span>${esc(r?.name||'–')}</span><b>✎</b></button>`;
+}
+
+/* Auswahlspalte dauerhaft ganz links einfügen. */
+INVENTORY_COLS.selectV466={label:'',sort:''};
+const ensureInventoryOrderBeforeV466=ensureInventoryOrder;
+ensureInventoryOrder=function(){
+ ensureInventoryOrderBeforeV466();
+ let rest=(st.inventoryColumnOrder||[]).filter(k=>k!=='selectV466');
+ if(!rest.includes('formatV479')){
+   let mi=rest.indexOf('material');rest.splice(mi>=0?mi+1:1,0,'formatV479');
+ }
+ if(!rest.includes('woodTypeV474')){
+   let mi=rest.indexOf('material');
+   rest.splice(mi>=0?mi+1:1,0,'woodTypeV474');
+ }
+ st.inventoryColumnOrder=['selectV466',...rest];
+};
+
+/* Zellen erweitern, ohne die bestehende Darstellung der übrigen Spalten zu verändern. */
+const inventoryCellBeforeV466=inventoryCell;
+inventoryCell=function(p,key,r,l){
+ if(key==='selectV466')return inventorySelectCellV466(p);
+ if(key==='location')return inventoryLocationCellV466(p,r,l);
+ if(key==='levelV467')return esc(l?.name||'–');
+ return inventoryCellBeforeV466(p,key,r,l);
+};
+
+/* Kopfzeile: Auswahl aller aktuell sichtbaren Zeilen + Zähler. */
+const renderInventoryHeadBeforeV466=renderInventoryHead;
+renderInventoryHead=function(){
+ ensureInventoryOrder();
+ E('invHead').innerHTML=st.inventoryColumnOrder.map((key,i)=>{
+   if(key==='selectV466')return `<th class="invHeadCell inventorySelectHeadV466"><label title="Alle sichtbaren Elemente auswählen"><input id="inventorySelectAllV466" type="checkbox" onchange="inventoryToggleVisibleV466(this.checked)"><span></span></label><small id="inventorySelectionInfoV466"></small></th>`;
+   let c=INVENTORY_COLS[key],sort=c.sort?`onclick="sortInv('${c.sort}')"`:'';
+   let arrows=`<span class="moveCols"><button class="moveBtn" title="Spalte nach links" onclick="event.stopPropagation();moveInventoryColumn('${key}',-1)" ${i===1?'disabled':''}>◀</button><button class="moveBtn" title="Spalte nach rechts" onclick="event.stopPropagation();moveInventoryColumn('${key}',1)" ${i===st.inventoryColumnOrder.length-1?'disabled':''}>▶</button></span>`;
+   return `<th class="${c.sort?'sort ':''}invHeadCell" ${sort}><div>${esc(c.label)}${c.sort?' ↕':''}</div>${arrows}</th>`;
+ }).join('');
+ setTimeout(updateInventorySelectionUiV466,0);
+};
+
+/* Nach jedem Render Checkbox-Zustand/Zähler sauber setzen. */
+const renderInvBeforeV466=renderInv;
+renderInv=function(){
+ renderInvBeforeV466();
+ setTimeout(updateInventorySelectionUiV466,0);
+};
+
+let inventoryBulkEditSourceV466='';
+
+/* Beim Bearbeiten anzeigen, wenn die angeklickte Zeile Teil einer Mehrfachauswahl ist. */
+const editPackageBeforeV466=editPackage;
+editPackage=function(id){
+ inventoryBulkEditSourceV466='';
+ let ids=inventorySelectionIdsV466();
+ if(ids.length>1&&ids.includes(id))inventoryBulkEditSourceV466=id;
+ editPackageBeforeV466(id);
+ if(inventoryBulkEditSourceV466){
+   let n=ids.length;
+   E('matTitle').textContent='Material / Paket bearbeiten · '+n+' ausgewählt';
+   let form=E('matModal')?.querySelector('form');
+   if(form&&!E('bulkEditHintV466')){
+     let hint=document.createElement('div');
+     hint.id='bulkEditHintV466';
+     hint.className='bulkEditHintV466 span2';
+     hint.innerHTML=`<b>Mehrfachbearbeitung aktiv</b><br>Beim Speichern werden die bearbeitbaren Materialdaten und der Lagerort auf alle ${n} ausgewählten Elemente übertragen. Die Element-IDs, Fotos und Verläufe bleiben je Element individuell.`;
+     form.prepend(hint);
+   }else if(E('bulkEditHintV466')){
+     E('bulkEditHintV466').innerHTML=`<b>Mehrfachbearbeitung aktiv</b><br>Beim Speichern werden die bearbeitbaren Materialdaten und der Lagerort auf alle ${n} ausgewählten Elemente übertragen. Die Element-IDs, Fotos und Verläufe bleiben je Element individuell.`;
+   }
+ }else{
+   E('bulkEditHintV466')?.remove();
+ }
+};
+
+function bulkFormDataV466(){
+ return {
+   rackId:E('mRack')?.value||'',
+   levelIndex:(E('mLevel')?.value||'')===''?-1:Number(E('mLevel')?.value),
+   material:(E('mMaterial')?.value||'').trim(),
+   woodType:(E('mWoodType')?.value||'').trim(),
+   quality:materialUsesQuality(E('mMaterial')?.value||'')?(E('mQuality')?.value||'').trim():'',
+   width:E('mWid')?.value||'',
+   height:E('mHei')?.value||'',
+   length:E('mLen')?.value||'',
+   qty:(E('mQty')?.value||'').trim(),
+   project:(E('mProj')?.value||'').trim(),
+   idCategory:E('mCat')?.value||'',
+   usage:[E('mUseProd')?.checked?'Produktion':'',E('mUseSite')?.checked?'Baustelle':''].filter(Boolean),
+   status:E('mStatus')?.value||'',
+   note:(E('mNote')?.value||'').trim()
+ };
+}
+/* V477 – sichere Mehrfachbearbeitung auf Basis V475.
+   Gestelle/Lagerorte/Cloud-Initialisierung bleiben unverändert aus V475. */
+function bulkSourceSnapshotV477(p){
+ return {
+   rackId:p?.rackId||'',levelIndex:Number.isFinite(Number(p?.levelIndex))?Number(p.levelIndex):-1,
+   material:String(p?.material||''),woodType:String(p?.woodType||''),quality:String(p?.quality||''),
+   width:String(p?.width||''),height:String(p?.height||''),length:String(p?.length||''),
+   qty:String(p?.qty||''),project:String(p?.project||''),idCategory:String(p?.idCategory||''),
+   usage:Array.isArray(p?.usage)?[...p.usage]:[],status:String(p?.status||''),note:String(p?.note||'')
+ };
+}
+function bulkEqualV477(a,b){
+ if(Array.isArray(a)||Array.isArray(b))return JSON.stringify(a||[])===JSON.stringify(b||[]);
+ return String(a??'')===String(b??'');
+}
+function applyBulkEditV466(ids,sourceId,data,beforeSource){
+ let keys=Object.keys(data).filter(k=>!bulkEqualV477(beforeSource?.[k],data[k]));
+ let locationChanged=keys.includes('rackId')||keys.includes('levelIndex'),changed=0;
+ ids.filter(id=>id!==sourceId).forEach(id=>{
+   let p=(st.packages||[]).find(x=>x.id===id);if(!p)return;
+   let before=packageSnapshot(p);
+   if(locationChanged){
+     let oldRack=st.racks.find(x=>x.id===p.rackId),oldLevel=oldRack?.levels?.[p.levelIndex];
+     let newRack=st.racks.find(x=>x.id===data.rackId),newLevel=data.levelIndex>=0?newRack?.levels?.[data.levelIndex]:null;
+     if(!newRack||(data.levelIndex>=0&&!newLevel)||areaIsLocked(newRack.areaId))return;
+     if(p.rackId!==data.rackId||Number(p.levelIndex)!==Number(data.levelIndex)){
+       let from=`${areaName(oldRack?.areaId)} / ${oldRack?.name||'–'} / ${oldLevel?.name||'Keine Ebene'}`;
+       let to=`${areaName(newRack.areaId)} / ${newRack.name||'–'} / ${newLevel?.name||'Keine Ebene'}`;
+       if(!Array.isArray(p.movements))p.movements=[];
+       let mv={at:new Date().toISOString(),from,to};p.movements.push(mv);
+       if(!Array.isArray(st.movements))st.movements=[];
+       st.movements.push({packageId:p.id,elementId:p.elementId||'',...mv});
+     }
+     p.rackId=data.rackId;p.levelIndex=data.levelIndex;
+   }
+   keys.forEach(k=>{
+     if(k==='rackId'||k==='levelIndex')return;
+     p[k]=Array.isArray(data[k])?[...data[k]]:data[k];
+   });
+   let txt=historyChangeText(before,packageSnapshot(p));
+   if(txt){addHistory(p,'Mehrfach geändert',txt);changed++}
+ });
+ return changed;
+}
+const saveMatBeforeV466=saveMat;
+saveMat=async function(e){
+ let sourceId=editingPackage,ids=inventorySelectionIdsV466();
+ let doBulk=!!sourceId&&ids.length>1&&ids.includes(sourceId);
+ let sourcePkg=doBulk?(st.packages||[]).find(x=>x.id===sourceId):null;
+ let beforeSource=doBulk?bulkSourceSnapshotV477(sourcePkg):null;
+ let data=doBulk?bulkFormDataV466():null;
+ await saveMatBeforeV466(e);
+ if(doBulk&&editingPackage===''&&data){
+   let count=applyBulkEditV466(ids,sourceId,data,beforeSource);
+   if(count){persist();try{queueCloudSync?.()}catch(_){}renderInv()}
+   inventoryBulkEditSourceV466='';E('bulkEditHintV466')?.remove();
+ }
+};
+/* Lagerort-Picker direkt aus der Spalte Lagerort. */
+function ensureInventoryLocationModalV466(){
+ let modal=E('inventoryLocationModalV466');
+ if(modal)return modal;
+ modal=document.createElement('div');
+ modal.id='inventoryLocationModalV466';
+ modal.className='modal';
+ modal.innerHTML=`<div class="box inventoryLocationBoxV466">
+   <div class="mh"><div><h2 style="margin:0">Lagerort ändern</h2><p id="inventoryLocationInfoV466" class="muted" style="margin:5px 0 0"></p></div><button class="x" type="button" onclick="closeInventoryLocationV466()">✕</button></div>
+   <div class="form">
+     <label class="f span2">Gestell / Lagerort<select id="inventoryLocationRackV466" onchange="fillInventoryLocationLevelsV466()"></select></label>
+     <label class="f span2">Ebene<select id="inventoryLocationLevelV466"></select></label>
+     <div class="span2 toolbar"><button class="btn" type="button" onclick="saveInventoryLocationV466()">Lagerort übernehmen</button><button class="btn secondary" type="button" onclick="closeInventoryLocationV466()">Abbrechen</button></div>
+   </div>
+ </div>`;
+ document.body.appendChild(modal);
+ return modal;
+}
+let inventoryLocationTargetV466='';
+function openInventoryLocationV466(id){
+ let p=(st.packages||[]).find(x=>x.id===id);if(!p)return;
+ inventoryLocationTargetV466=id;
+ let modal=ensureInventoryLocationModalV466();
+ let selected=inventorySelectionIdsV466();
+ let multi=selected.length>1&&selected.includes(id);
+ E('inventoryLocationInfoV466').textContent=multi?`Der neue Lagerort wird auf ${selected.length} ausgewählte Elemente angewendet.`:`Element ${p.elementId||p.material||''}`;
+ E('inventoryLocationRackV466').innerHTML=materialRackOptions(p.rackId);
+ E('inventoryLocationRackV466').value=p.rackId;
+ fillInventoryLocationLevelsV466();
+ E('inventoryLocationLevelV466').value=(Number.isInteger(Number(p.levelIndex))&&Number(p.levelIndex)>=0)?String(p.levelIndex):'';
+ modal.classList.add('open');
+}
+function fillInventoryLocationLevelsV466(){
+ let rid=E('inventoryLocationRackV466')?.value||'';
+ let r=st.racks.find(x=>x.id===rid);
+ E('inventoryLocationLevelV466').innerHTML=`<option value="">– Keine Ebene –</option>`+(r?.levels||[]).map((l,i)=>`<option value="${i}">${esc(l.name||('Ebene '+(i+1)))}</option>`).join('');
+}
+function closeInventoryLocationV466(){
+ E('inventoryLocationModalV466')?.classList.remove('open');
+ inventoryLocationTargetV466='';
+}
+function saveInventoryLocationV466(){
+ let source=(st.packages||[]).find(x=>x.id===inventoryLocationTargetV466);if(!source)return;
+ let rid=E('inventoryLocationRackV466')?.value||'',levelRaw=E('inventoryLocationLevelV466')?.value||'',li=levelRaw===''?-1:Number(levelRaw);
+ let r=st.racks.find(x=>x.id===rid),l=li>=0?r?.levels?.[li]:null;
+ if(!r||(li>=0&&!l)){alert('Bitte einen gültigen Lagerort auswählen.');return}
+ if(areaIsLocked(r.areaId)){alert('Diese Lagerfläche ist gesperrt.');return}
+ let selected=inventorySelectionIdsV466();
+ let ids=(selected.length>1&&selected.includes(source.id))?selected:[source.id];
+ let count=0;
+ ids.forEach(id=>{
+   let p=(st.packages||[]).find(x=>x.id===id);if(!p)return;
+   if(p.rackId===rid&&Number(p.levelIndex)===li)return;
+   let oldRack=st.racks.find(x=>x.id===p.rackId),oldLevel=oldRack?.levels?.[p.levelIndex];
+   let from=`${areaName(oldRack?.areaId)} / ${oldRack?.name||'–'} / ${oldLevel?.name||'–'}`;
+   let to=`${areaName(r.areaId)} / ${r.name||'–'} / ${l?.name||'Keine Ebene'}`;
+   if(!Array.isArray(p.movements))p.movements=[];
+   let mv={at:new Date().toISOString(),from,to};
+   p.movements.push(mv);
+   if(!Array.isArray(st.movements))st.movements=[];
+   st.movements.push({packageId:p.id,elementId:p.elementId||'',...mv});
+   p.rackId=rid;p.levelIndex=li;
+   addHistory(p,'Lagerort geändert',from+' → '+to+(ids.length>1?' · Mehrfachauswahl':''));
+   count++;
+ });
+ if(count){
+   persist();
+   try{queueCloudSync?.()}catch(_){}
+   renderInv();
+ }
+ closeInventoryLocationV466();
+}
+
+
+
+/* V469 – Spalten per Drag & Drop verschieben und per Ziehen verbreitern */
+const INV_WIDTH_KEY_V469='inventoryColumnWidthsV469';
+let invDragKeyV469='';
+let invResizeV469=null;
+function invWidthsV469(){try{return JSON.parse(localStorage.getItem(INV_WIDTH_KEY_V469)||'{}')||{}}catch(_){return {}}}
+function saveInvWidthsV469(v){try{localStorage.setItem(INV_WIDTH_KEY_V469,JSON.stringify(v||{}))}catch(_){}}
+function ensureInvColgroupV469(){
+ const table=E('invTable'); if(!table)return;
+ let cg=table.querySelector('colgroup');
+ if(!cg){cg=document.createElement('colgroup');table.insertBefore(cg,table.firstChild)}
+ ensureInventoryOrder();
+ cg.innerHTML=st.inventoryColumnOrder.map(k=>`<col data-col-v469="${k}">`).join('');
+ applyInvWidthsV469();
+}
+function applyInvWidthsV469(){
+ const table=E('invTable'); if(!table)return;
+ const widths=invWidthsV469();
+ table.querySelectorAll('col[data-col-v469]').forEach(c=>{let w=widths[c.dataset.colV469];c.style.width=(Number.isFinite(w)&&w>=70)?w+'px':''});
+}
+function startInvResizeV469(e,key){
+ e.preventDefault();e.stopPropagation();
+ const th=e.currentTarget.parentElement;
+ invResizeV469={key,startX:e.clientX,startW:th.getBoundingClientRect().width};
+ e.currentTarget.classList.add('resizingV469');document.body.style.cursor='col-resize';document.body.style.userSelect='none';
+}
+function moveInvResizeV469(e){
+ if(!invResizeV469)return;
+ const w=Math.max(70,Math.round(invResizeV469.startW+(e.clientX-invResizeV469.startX)));
+ const widths=invWidthsV469();widths[invResizeV469.key]=w;saveInvWidthsV469(widths);applyInvWidthsV469();
+}
+function endInvResizeV469(){
+ if(!invResizeV469)return;invResizeV469=null;document.body.style.cursor='';document.body.style.userSelect='';document.querySelectorAll('.invResizeHandleV469.resizingV469').forEach(x=>x.classList.remove('resizingV469'));
+}
+document.addEventListener('pointermove',moveInvResizeV469);document.addEventListener('pointerup',endInvResizeV469);
+function invDragStartV469(e,key){if(e.target.classList.contains('invResizeHandleV469'))return;invDragKeyV469=key;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',key);requestAnimationFrame(()=>e.currentTarget.classList.add('draggingV469'))}
+function invDragOverV469(e,key){e.preventDefault();if(!invDragKeyV469||invDragKeyV469===key)return;e.dataTransfer.dropEffect='move';document.querySelectorAll('#invHead th.dragOverV469').forEach(x=>x.classList.remove('dragOverV469'));e.currentTarget.classList.add('dragOverV469')}
+function invDragLeaveV469(e){e.currentTarget.classList.remove('dragOverV469')}
+function invDragEndV469(){invDragKeyV469='';document.querySelectorAll('#invHead th.draggingV469,#invHead th.dragOverV469').forEach(x=>x.classList.remove('draggingV469','dragOverV469'))}
+function invDropV469(e,target){
+ e.preventDefault();const source=invDragKeyV469||e.dataTransfer.getData('text/plain');
+ if(!source||source===target){invDragEndV469();return}
+ ensureInventoryOrder();const order=[...st.inventoryColumnOrder];const from=order.indexOf(source),to=order.indexOf(target);
+ if(from<0||to<0){invDragEndV469();return}
+ order.splice(from,1);order.splice(to,0,source);st.inventoryColumnOrder=order;persist();renderInv();invDragEndV469();
+}
+const renderInventoryHeadBeforeV469=renderInventoryHead;
+renderInventoryHead=function(){
+ ensureInventoryOrder();ensureInvColgroupV469();
+ E('invHead').innerHTML=st.inventoryColumnOrder.map(key=>{
+  if(key==='selectV466')return `<th class="invHeadCell inventorySelectHeadV466"><label title="Alle sichtbaren Elemente auswählen"><input id="inventorySelectAllV466" type="checkbox" onchange="inventoryToggleVisibleV466(this.checked)"><span></span></label><small id="inventorySelectionInfoV466"></small></th>`;
+  const c=INVENTORY_COLS[key],sort=c.sort?`onclick="sortInv('${c.sort}')"`:'';
+  return `<th class="${c.sort?'sort ':''}invHeadCell" draggable="true" ondragstart="invDragStartV469(event,'${key}')" ondragover="invDragOverV469(event,'${key}')" ondragleave="invDragLeaveV469(event)" ondrop="invDropV469(event,'${key}')" ondragend="invDragEndV469()" ${sort}><div>${esc(c.label)}${c.sort?' ↕':''}</div><span class="invResizeHandleV469" onpointerdown="startInvResizeV469(event,'${key}')"></span></th>`;
+ }).join('');
+ setTimeout(()=>{updateInventorySelectionUiV466();applyInvWidthsV469();},0);
+};
+const renderInvBeforeV469=renderInv;
+renderInv=function(){renderInvBeforeV469();setTimeout(()=>{ensureInvColgroupV469();applyInvWidthsV469();},0)};
+
+
+
+/* V470 – einmalige Umstellung der Material-Abmessungen von m auf mm.
+   Bestehende Daten bleiben erhalten; nur die Einheit wird umgerechnet. */
+function migrateMaterialDimensionsToMmV470(){
+ const key='holzlager_material_dimensions_mm_v470';
+ if(localStorage.getItem(key)==='done')return false;
+ let changed=0;
+ (st.packages||[]).forEach(p=>{
+   ['width','height','length'].forEach(k=>{
+     let raw=p?.[k];
+     if(raw===null||raw===undefined||String(raw).trim()==='')return;
+     let n=parseFloat(String(raw).replace(',','.'));
+     if(!Number.isFinite(n))return;
+     /* Bisherige Materialwerte waren Meter. Typische Werte liegen deutlich unter 100.
+        Bereits in mm erfasste Werte werden dadurch nicht erneut multipliziert. */
+     if(n>0 && n<100){
+       let mm=n*1000;
+       p[k]=Math.abs(mm-Math.round(mm))<1e-9?String(Math.round(mm)):String(Math.round(mm*1000)/1000);
+       changed++;
+     }
+   });
+   if(Array.isArray(p.subMaterials))p.subMaterials.forEach(m=>{
+     ['width','height','length'].forEach(k=>{
+       let n=parseFloat(String(m?.[k]??'').replace(',','.'));
+       if(Number.isFinite(n)&&n>0&&n<100){
+         let mm=n*1000;
+         m[k]=Math.abs(mm-Math.round(mm))<1e-9?String(Math.round(mm)):String(Math.round(mm*1000)/1000);
+         changed++;
+       }
+     });
+   });
+ });
+ localStorage.setItem(key,'done');
+ if(changed){
+   localStorage.setItem(KEY,JSON.stringify(st));
+   try{queueCloudSync?.()}catch(_){}
+ }
+ return changed>0;
+}
+window.addEventListener('load',()=>setTimeout(()=>{
+ try{
+   if(migrateMaterialDimensionsToMmV470()){
+     refresh();
+     console.info('V470: Material-Abmessungen auf mm umgestellt.');
+   }
+ }catch(e){console.warn('V470 mm-Migration',e)}
+},1800));
+
+
+
+/* V472 – Import Werkstoffplatten Holz, Excel-Zeilen 2–89 */
+const EXCEL_WERKSTOFFPLATTEN_V472=[{"excelRow":2,"material":"12mm Sperrholz","woodType":"Pappel","length":"2530","width":"1730","height":"12","qty":"77","rack":"Vis à Vis Büro","project":"","elementId":"B-36","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":3,"material":"15mm MFP","woodType":"","length":"5000","width":"1250","height":"15","qty":"13","rack":"Vis à Vis Büro","project":"","elementId":"B-39","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":4,"material":"15mm MFP","woodType":"","length":"3200","width":"1250","height":"15","qty":"56","rack":"Vis à Vis Büro","project":"","elementId":"B-228","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":5,"material":"15mm MFP","woodType":"","length":"3200","width":"1250","height":"15","qty":"56","rack":"Vis à Vis Büro","project":"Sarsura","elementId":"B-234","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":6,"material":"15mm OSB","woodType":"","length":"5000","width":"2500","height":"15","qty":"4","rack":"Vis à Vis Büro","project":"","elementId":"B-40","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":7,"material":"15mm OSB","woodType":"","length":"6000","width":"2500","height":"15","qty":"16","rack":"Vis à Vis Büro","project":"","elementId":"B-41","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":8,"material":"15mm OSB","woodType":"","length":"6000","width":"2500","height":"15","qty":"3","rack":"Vis à Vis Büro","project":"","elementId":"B-50","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":9,"material":"15mm OSB","woodType":"","length":"5000","width":"1250","height":"15","qty":"30","rack":"Vis à Vis Büro","project":"","elementId":"B-54","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":10,"material":"15mm OSB","woodType":"","length":"6000","width":"2500","height":"15","qty":"16","rack":"Vis à Vis Büro","project":"","elementId":"B-49","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":11,"material":"15mm OSB","woodType":"","length":"2800","width":"1250","height":"15","qty":"60","rack":"Vis à Vis Büro","project":"","elementId":"B-231","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":12,"material":"15mm OSB","woodType":"","length":"2800","width":"1250","height":"15","qty":"60","rack":"Vis à Vis Büro","project":"Gian","elementId":"B-238","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":13,"material":"15mm OSB","woodType":"","length":"2800","width":"1250","height":"15","qty":"60","rack":"Vis à Vis Büro","project":"Gian","elementId":"B-239","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":14,"material":"15mm OSB","woodType":"","length":"2800","width":"1250","height":"15","qty":"60","rack":"Vis à Vis Büro","project":"Gian","elementId":"B-240","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":15,"material":"15mm OSB","woodType":"","length":"2800","width":"1250","height":"15","qty":"60","rack":"Vis à Vis Büro","project":"Gian","elementId":"B-241","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":16,"material":"15mm OSB","woodType":"","length":"2800","width":"1250","height":"15","qty":"10","rack":"Vis à Vis Büro","project":"Gian","elementId":"B-242","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":17,"material":"16mm 3-SP B/C","woodType":"Fichte","length":"5050","width":"2050","height":"16","qty":"24","rack":"Vis à Vis Büro","project":"","elementId":"B-22","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":18,"material":"16mm 3-SP B/C","woodType":"Fichte","length":"5050","width":"2050","height":"16","qty":"25","rack":"Vis à Vis Büro","project":"","elementId":"B-51","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":19,"material":"16mm DWD","woodType":"","length":"2515","width":"1015","height":"16","qty":"12","rack":"Alte Sägerei","project":"MEH Chur","elementId":"B-217","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":20,"material":"16mm DWD","woodType":"","length":"2515","width":"1015","height":"16","qty":"40","rack":"Alte Sägerei","project":"MEH Chur","elementId":"B-218","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":21,"material":"18mm OSB","woodType":"","length":"2800","width":"1250","height":"18","qty":"52","rack":"Vis à Vis Büro","project":"","elementId":"B-163","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":22,"material":"18mm OSB","woodType":"","length":"2800","width":"1250","height":"18","qty":"52","rack":"Vis à Vis Büro","project":"","elementId":"B-164","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":23,"material":"18mm OSB","woodType":"","length":"2800","width":"1250","height":"18","qty":"52","rack":"Vis à Vis Büro","project":"","elementId":"B-167","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":24,"material":"18mm OSB","woodType":"","length":"2800","width":"1250","height":"18","qty":"52","rack":"Vis à Vis Büro","project":"","elementId":"B-168","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":25,"material":"18mm OSB","woodType":"","length":"2800","width":"1250","height":"18","qty":"52","rack":"Vis à Vis Büro","project":"","elementId":"B-170","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":26,"material":"18mm OSB","woodType":"","length":"13000","width":"2500","height":"18","qty":"12","rack":"Gleis 3 Büelen","project":"MEH Chur","elementId":"B-171","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":27,"material":"18mm OSB","woodType":"","length":"2800","width":"1250","height":"18","qty":"52","rack":"Vis à Vis Büro","project":"","elementId":"B-204","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":28,"material":"18mm OSB","woodType":"","length":"2800","width":"1250","height":"18","qty":"17","rack":"Vis à Vis Büro","project":"","elementId":"B-205","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":29,"material":"18mm OSB","woodType":"","length":"2800","width":"1250","height":"18","qty":"15","rack":"Vis à Vis Büro","project":"","elementId":"B-206","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":30,"material":"18mm Schraubenlöcher OSB","woodType":"","length":"2800","width":"1250","height":"18","qty":"28","rack":"Vis à Vis Büro","project":"CBB","elementId":"B-244","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":31,"material":"19mm 3-SP B/C","woodType":"Fichte","length":"5000","width":"1250","height":"19","qty":"7","rack":"Schreinerei","project":"","elementId":"B-2","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":32,"material":"19mm 3-SP B/C","woodType":"Fichte","length":"5000","width":"2050","height":"19","qty":"18","rack":"Vis à Vis Büro","project":"","elementId":"B-10","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":33,"material":"19mm 3-SP B/C","woodType":"Fichte","length":"5000","width":"1250","height":"19","qty":"25","rack":"Schreinerei","project":"","elementId":"B-65","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":34,"material":"19mm 3-SP B/C","woodType":"Fichte","length":"5000","width":"1250","height":"19","qty":"17","rack":"Schreinerei","project":"","elementId":"B-76","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":35,"material":"19mm 3-SP B/C","woodType":"","length":"5000","width":"2100","height":"19","qty":"3","rack":"Vis à Vis Büro","project":"CBB","elementId":"B-212","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":36,"material":"19mm 3-SP B/C","woodType":"","length":"","width":"","height":"19","qty":"","rack":"Vis à Vis Büro","project":"CBB","elementId":"B-220","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":37,"material":"19mm 3-SP B/C","woodType":"Fichte","length":"5000","width":"2100","height":"19","qty":"27","rack":"Vis à Vis Büro","project":"TPG","elementId":"B-245","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":38,"material":"19mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"19","qty":"25","rack":"Schreinerei","project":"","elementId":"B-108","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":39,"material":"19mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"19","qty":"25","rack":"Schreinerei","project":"","elementId":"B-109","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":40,"material":"19mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"19","qty":"3","rack":"Schreinerei","project":"","elementId":"B-113","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":41,"material":"19mm 3-SP C+/C","woodType":"Lärche","length":"5000","width":"1250","height":"19","qty":"4","rack":"Vis à Vis Büro","project":"","elementId":"B-207","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":42,"material":"19mm gehackt und gebürstet 3-SP B/C","woodType":"Lärche","length":"5000","width":"1250","height":"19","qty":"2","rack":"Schreinerei","project":"","elementId":"B-150","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":43,"material":"21mm 3-SP B/C","woodType":"Fichte","length":"5000","width":"2100","height":"21","qty":"6","rack":"Vis à Vis Büro","project":"CBB","elementId":"B-226","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":44,"material":"21mm 3-SP B/C","woodType":"","length":"5000","width":"1200","height":"21","qty":"2","rack":"Vis à Vis Büro","project":"CBB","elementId":"B-243","sourceStatus":"","idCategory":"B"},{"excelRow":45,"material":"24mm 1-SP","woodType":"Lärche","length":"5000","width":"1250","height":"24","qty":"19","rack":"Schreinerei","project":"","elementId":"B-26","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":46,"material":"24mm 1-SP","woodType":"Lärche","length":"5000","width":"1250","height":"24","qty":"16","rack":"Schreinerei","project":"","elementId":"B-57","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":47,"material":"24mm 1-SP","woodType":"Fichte","length":"5000","width":"1220","height":"24","qty":"18","rack":"Schreinerei","project":"","elementId":"B-107","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":48,"material":"24mm offene Fugen 1-SP","woodType":"Lärche","length":"5000","width":"1250","height":"24","qty":"6","rack":"Schreinerei","project":"","elementId":"B-58","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":49,"material":"25mm OSB","woodType":"","length":"5000","width":"2500","height":"25","qty":"2","rack":"Vis à Vis Büro","project":"","elementId":"B-103","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":50,"material":"27mm 1-SP","woodType":"Douglasie","length":"5000","width":"1050","height":"27","qty":"15","rack":"Schreinerei","project":"","elementId":"B-32","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":51,"material":"27mm 1-SP","woodType":"Fichte","length":"5000","width":"1030","height":"27","qty":"8","rack":"Schreinerei","project":"","elementId":"B-56","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":52,"material":"27mm 1-SP","woodType":"Fichte","length":"5000","width":"1200","height":"27","qty":"1","rack":"Vis à Vis Büro","project":"CBB","elementId":"B-225","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":53,"material":"27mm 3-SP B/C","woodType":"Douglasie","length":"5000","width":"2050","height":"27","qty":"18","rack":"Vis à Vis Büro","project":"","elementId":"B-21","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":54,"material":"27mm 3-SP B/C","woodType":"Fichte","length":"5000","width":"1250","height":"27","qty":"12","rack":"Schreinerei","project":"","elementId":"B-63","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":55,"material":"27mm 3-SP B/C","woodType":"Fichte","length":"6000","width":"1250","height":"27","qty":"4","rack":"Schreinerei","project":"","elementId":"B-148","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":56,"material":"27mm 3-SP B/C","woodType":"Lärche","length":"5000","width":"1250","height":"27","qty":"2","rack":"Schreinerei","project":"","elementId":"B-151","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":57,"material":"27mm 3-SP B/C","woodType":"Fichte","length":"5000","width":"1250","height":"27","qty":"11","rack":"Schreinerei","project":"Sarsura","elementId":"B-7","sourceStatus":"Reserviert","idCategory":"B"},{"excelRow":58,"material":"27mm 3-SP C+/C","woodType":"Fichte","length":"6000","width":"2500","height":"27","qty":"6","rack":"Vis à Vis Büro","project":"","elementId":"B-12","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":59,"material":"27mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"2050","height":"27","qty":"14","rack":"Vis à Vis Büro","project":"","elementId":"B-119","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":60,"material":"27mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"2050","height":"27","qty":"4","rack":"Vis à Vis Büro","project":"MEH Chur","elementId":"B-136","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":61,"material":"27mm 3-SP C+/C","woodType":"Fichte","length":"6000","width":"2500","height":"27","qty":"20","rack":"Vis à Vis Büro","project":"MEH Chur","elementId":"B-160","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":62,"material":"27mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"2050","height":"27","qty":"4","rack":"Vis à Vis Büro","project":"TPG","elementId":"B-235","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":63,"material":"27mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"2050","height":"27","qty":"20","rack":"Vis à Vis Büro","project":"TPG","elementId":"B-236","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":64,"material":"27mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"2050","height":"27","qty":"10","rack":"Vis à Vis Büro","project":"TPG","elementId":"B-237","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":65,"material":"27mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"27","qty":"20","rack":"Schreinerei","project":"","elementId":"B-249","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":66,"material":"27mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"27","qty":"20","rack":"Schreinerei","project":"","elementId":"B-252","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":67,"material":"34mm 1-SP","woodType":"Fichte","length":"5000","width":"1000","height":"34","qty":"3","rack":"Schreinerei","project":"","elementId":"B-152","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":68,"material":"40mm 1-SP","woodType":"Fichte","length":"5000","width":"1220","height":"40","qty":"10","rack":"Schreinerei","project":"","elementId":"B-28","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":69,"material":"40mm 1-SP","woodType":"Lärche","length":"5000","width":"1250","height":"40","qty":"2","rack":"Schreinerei","project":"","elementId":"B-30","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":70,"material":"40mm 1-SP","woodType":"Fichte","length":"5050","width":"1250","height":"40","qty":"7","rack":"Vis à Vis Büro","project":"","elementId":"B-196","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":71,"material":"40mm 1-SP","woodType":"Lärche","length":"5000","width":"1250","height":"40","qty":"12","rack":"Schreinerei","project":"","elementId":"B-210","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":72,"material":"40mm 1-SP","woodType":"Lärche","length":"5000","width":"1250","height":"40","qty":"12","rack":"Schreinerei","project":"","elementId":"B-211","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":73,"material":"40mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"40","qty":"2","rack":"Schreinerei","project":"","elementId":"B-16","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":74,"material":"40mm Spanplatte","woodType":"Pappel","length":"2800","width":"2070","height":"40","qty":"3","rack":"Vis à Vis Büro","project":"","elementId":"B-37","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":75,"material":"42mm 1-SP","woodType":"Fichte","length":"5000","width":"1250","height":"42","qty":"12","rack":"Vis à Vis Büro","project":"","elementId":"B-75","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":76,"material":"42mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"42","qty":"11","rack":"Vis à Vis Büro","project":"MEH Chur","elementId":"B-141","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":77,"material":"42mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"2500","height":"42","qty":"12","rack":"Vis à Vis Büro","project":"MEH Chur","elementId":"B-159","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":78,"material":"42mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"42","qty":"6","rack":"Schreinerei","project":"","elementId":"B-208","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":79,"material":"42mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"2500","height":"42","qty":"9","rack":"Vis à Vis Büro","project":"CBB","elementId":"B-246","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":80,"material":"42mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"42","qty":"12","rack":"Vis à Vis Büro","project":"","elementId":"B-254","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":81,"material":"42mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"1250","height":"42","qty":"12","rack":"Vis à Vis Büro","project":"","elementId":"B-255","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":82,"material":"4mm Sperrholz","woodType":"Pappel","length":"2530","width":"1730","height":"4","qty":"61","rack":"Vis à Vis Büro","project":"","elementId":"B-42","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":83,"material":"5mm Sperrholz","woodType":"Pappel","length":"2520","width":"1850","height":"5","qty":"77","rack":"Vis à Vis Büro","project":"CBB","elementId":"B-256","sourceStatus":"Kommission","idCategory":"B"},{"excelRow":84,"material":"60mm 3-SP C+/C","woodType":"Fichte","length":"6000","width":"2500","height":"60","qty":"6","rack":"Vis à Vis Büro","project":"","elementId":"B-19","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":85,"material":"60mm 3-SP C+/C","woodType":"Fichte","length":"5000","width":"2500","height":"60","qty":"2","rack":"Vis à Vis Büro","project":"","elementId":"B-20","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":86,"material":"60mm 3-SP C+/C","woodType":"Fichte","length":"6000","width":"1250","height":"60","qty":"2","rack":"Schreinerei","project":"","elementId":"B-149","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":87,"material":"6mm Sperrholz","woodType":"Pappel","length":"2530","width":"1730","height":"6","qty":"91","rack":"Vis à Vis Büro","project":"","elementId":"B-34","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":88,"material":"8mm Sperrholz","woodType":"Pappel","length":"2530","width":"1730","height":"8","qty":"32","rack":"Vis à Vis Büro","project":"","elementId":"B-35","sourceStatus":"Im Lager","idCategory":"B"},{"excelRow":89,"material":"9mm OSB","woodType":"","length":"2400","width":"1250","height":"9","qty":"12","rack":"Vis à Vis Büro","project":"","elementId":"B-38","sourceStatus":"Im Lager","idCategory":"B"}];
+let werkstoffImportRunningV472=false;
+let werkstoffImportDoneSessionV472=false;
+
+function normRackV472(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function findOrCreateRackV472(name){
+ if(!Array.isArray(st.racks))st.racks=[];
+ if(!Array.isArray(st.areas))st.areas=[];
+ let key=normRackV472(name);
+ let found=st.racks.find(r=>normRackV472(r.name)===key);
+ if(found)return found;
+ let area=st.areas.find(a=>a.id==='excel_import_lagerorte_v465') ||
+          st.areas.find(a=>String(a.name||'').trim()==='Weitere Lagerorte');
+ if(!area){
+   area={id:'excel_import_lagerorte_v465',name:'Weitere Lagerorte',points:[]};
+   st.areas.push(area);
+ }
+ let base='excelrack_'+String(name||'lagerort').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+ let id=base,n=2;
+ while(st.racks.some(r=>String(r.id)===id))id=base+'_'+(n++);
+ let rack={id,areaId:area.id,name:name||'Excel Lagerort',photo:'',levels:[{name:'Lagerplatz',length:'',width:'',height:''}]};
+ st.racks.push(rack);return rack;
+}
+function werkstoffRowExistsV472(row){
+ let eid=String(row.elementId||'').trim().toUpperCase();
+ if(eid&&(st.packages||[]).some(p=>String(p.elementId||'').trim().toUpperCase()===eid))return true;
+ return (st.packages||[]).some(p=>String(p.note||'').includes('Werkstoffplatten-Import V472 · Zeile '+row.excelRow));
+}
+function mapStatusV472(v){
+ v=String(v||'').trim().toLowerCase();
+ if(v==='kommission'||v==='reserviert')return 'Kommission';
+ return 'Lagerware';
+}
+function runWerkstoffplattenImportV472(){
+ if(werkstoffImportRunningV472||werkstoffImportDoneSessionV472)return;
+ werkstoffImportRunningV472=true;
+ try{
+   ensureV24?.();
+   if(!Array.isArray(st.packages))st.packages=[];
+   let imported=0,already=0;
+   EXCEL_WERKSTOFFPLATTEN_V472.forEach(row=>{
+     if(werkstoffRowExistsV472(row)){already++;return}
+     let rack=findOrCreateRackV472(row.rack);
+     let p={
+       id:'excelv472_row_'+row.excelRow,
+       rackId:rack.id,levelIndex:-1,
+       material:row.material,woodType:row.woodType||'',quality:'',
+       width:row.width,height:'',length:row.length,qty:row.qty,
+       project:row.project||'',idCategory:'B',elementId:row.elementId||'',
+       packCode:'',usage:[],status:mapStatusV472(row.sourceStatus),
+       note:'Werkstoffplatten-Import V472 · Zeile '+row.excelRow,
+       photo:'',photoPath:'',subMaterials:[],defects:[],countPhoto:'',countPhotoName:'',
+       createdAt:new Date().toISOString(),movements:[],history:[],reservations:[]
+     };
+     if(typeof addHistory==='function')addHistory(p,'Erfasst','Excel-Import Werkstoffplatten Holz · Lagerort: '+(row.rack||'–')+' · ohne Ebene');
+     st.packages.push(p);
+     if(row.elementId)reserveElementId?.(row.elementId);
+     imported++;
+   });
+   ensureCommissions?.();
+   persist();
+   werkstoffImportDoneSessionV472=true;
+   try{renderInv?.();renderFilters?.()}catch(e){}
+   if(imported)try{queueCloudSync?.()}catch(e){}
+   console.info('V472 Werkstoffplatten-Import:',imported,'neu,',already,'bereits vorhanden');
+ }finally{werkstoffImportRunningV472=false}
+}
+
+/* Erst Cloud-Daten einlesen, dann fehlende Excel-Positionen ergänzen. Lokale Daten werden nicht ersetzt. */
+try{
+ const applyRemoteEntitiesV472=applyRemoteEntities;
+ applyRemoteEntities=function(remote,preserveKeys=new Set()){
+   const result=applyRemoteEntitiesV472(remote,preserveKeys);
+   werkstoffImportDoneSessionV472=false;
+   setTimeout(runWerkstoffplattenImportV472,100);
+   return result;
+ };
+}catch(e){console.warn('V472 Cloud-Hook nicht verfügbar',e)}
+window.addEventListener('load',()=>setTimeout(runWerkstoffplattenImportV472,1600));
+
+
+
+/* V473 – Werkstoffplatten: Dicke/Höhe aus Materialname übernehmen */
+function werkstoffplattenHoeheAusNameV473(name){
+ let nums=String(name||'').match(/\d{1,3}(?:[.,]\d+)?/g)||[];
+ for(let raw of nums){
+   let n=parseFloat(raw.replace(',','.'));
+   if(Number.isFinite(n)&&n>=3&&n<=100)return Number.isInteger(n)?String(n):String(n);
+ }
+ return '';
+}
+function migrateWerkstoffplattenHoeheV473(){
+ let changed=0;
+ (st.packages||[]).forEach(p=>{
+   if(String(p.idCategory||'')!=='B')return;
+   /* Nur leere Höhen automatisch ergänzen; manuell gepflegte Höhen niemals überschreiben. */
+   if(String(p.height??'').trim()!=='')return;
+   let h=werkstoffplattenHoeheAusNameV473(p.material);
+   if(!h)return;
+   p.height=h;
+   addHistory?.(p,'Dicke ergänzt','Werkstoffplatten-Dicke '+h+' mm aus Materialname übernommen');
+   changed++;
+ });
+ if(changed){
+   persist();
+   try{queueCloudSync?.()}catch(_){}
+   try{renderInv?.()}catch(_){}
+ }
+ return changed;
+}
+window.addEventListener('load',()=>setTimeout(()=>{
+ try{
+   let n=migrateWerkstoffplattenHoeheV473();
+   if(n)console.info('V473:',n,'Werkstoffplatten-Höhen aus Materialnamen ergänzt');
+ }catch(e){console.warn('V473 Höhenmigration',e)}
+},2200));
+
+
+
+/* V478 – Import Werkstoffplatten NICHT Holz, Kategorie C */
+const EXCEL_WERKSTOFFPLATTEN_NICHT_HOLZ_V478=[{"excelRow":2,"material":"15mm Diamant","woodType":"","length":"2000","width":"1250","height":"","qty":"25","rack":"","project":"","elementId":"C-2","sourceStatus":"","idCategory":"C"},{"excelRow":3,"material":"15mm VK Diamant SX","woodType":"","length":"1500","width":"1250","height":"","qty":"43","rack":"","project":"MEH","elementId":"C-68","sourceStatus":"","idCategory":"C"},{"excelRow":4,"material":"15mm VK Diamant SX","woodType":"","length":"1500","width":"1250","height":"","qty":"22","rack":"","project":"","elementId":"C-102","sourceStatus":"","idCategory":"C"},{"excelRow":5,"material":"15mm VK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"25","rack":"","project":"Sarsura","elementId":"C-117","sourceStatus":"","idCategory":"C"},{"excelRow":6,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Sarsura","elementId":"C-119","sourceStatus":"","idCategory":"C"},{"excelRow":7,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-154","sourceStatus":"","idCategory":"C"},{"excelRow":8,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-157","sourceStatus":"","idCategory":"C"},{"excelRow":9,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-159","sourceStatus":"","idCategory":"C"},{"excelRow":10,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-160","sourceStatus":"","idCategory":"C"},{"excelRow":11,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-161","sourceStatus":"","idCategory":"C"},{"excelRow":12,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-165","sourceStatus":"","idCategory":"C"},{"excelRow":13,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-166","sourceStatus":"","idCategory":"C"},{"excelRow":14,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-167","sourceStatus":"","idCategory":"C"},{"excelRow":15,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-171","sourceStatus":"","idCategory":"C"},{"excelRow":16,"material":"15mm HRAK Diamant SX","woodType":"","length":"2800","width":"1250","height":"","qty":"40","rack":"","project":"Gian","elementId":"C-172","sourceStatus":"","idCategory":"C"},{"excelRow":17,"material":"18mm Widifire","woodType":"","length":"1000","width":"1250","height":"","qty":"21","rack":"","project":"Graf","elementId":"C-142","sourceStatus":"","idCategory":"C"},{"excelRow":18,"material":"15mm 2 VT Vidiwall","woodType":"","length":"2800","width":"1250","height":"","qty":"35","rack":"","project":"","elementId":"C-63","sourceStatus":"","idCategory":"C"},{"excelRow":19,"material":"15mm 2 VT Vidiwall","woodType":"","length":"2800","width":"1250","height":"","qty":"35","rack":"","project":"","elementId":"C-64","sourceStatus":"","idCategory":"C"},{"excelRow":20,"material":"15mm 2 VT Vidiwall","woodType":"","length":"1400","width":"1250","height":"","qty":"8","rack":"","project":"","elementId":"C-97","sourceStatus":"","idCategory":"C"},{"excelRow":21,"material":"15mm 4 VT Vidiwall","woodType":"","length":"1000","width":"1250","height":"","qty":"22","rack":"","project":"KRE","elementId":"C-54","sourceStatus":"","idCategory":"C"},{"excelRow":22,"material":"15mm 4 VT Vidiwall","woodType":"","length":"1000","width":"1250","height":"","qty":"50","rack":"","project":"KRE","elementId":"C-55","sourceStatus":"","idCategory":"C"},{"excelRow":23,"material":"15mm 4 VT Vidiwall","woodType":"","length":"2700","width":"1250","height":"","qty":"27","rack":"","project":"","elementId":"C-61","sourceStatus":"","idCategory":"C"},{"excelRow":24,"material":"10mm SK Vidiwall","woodType":"","length":"2500","width":"1250","height":"","qty":"44","rack":"","project":"","elementId":"C-15","sourceStatus":"","idCategory":"C"},{"excelRow":25,"material":"12,5mm SK Vidiwall","woodType":"","length":"2100","width":"1250","height":"","qty":"15","rack":"","project":"","elementId":"C-16","sourceStatus":"","idCategory":"C"},{"excelRow":26,"material":"12,5mm SK Vidiwall","woodType":"","length":"2500","width":"1250","height":"","qty":"4","rack":"","project":"","elementId":"C-101","sourceStatus":"","idCategory":"C"},{"excelRow":27,"material":"15mm SK Vidiwall","woodType":"","length":"2600","width":"1250","height":"","qty":"19","rack":"","project":"","elementId":"C-143","sourceStatus":"","idCategory":"C"},{"excelRow":28,"material":"15mm SK Vidiwall","woodType":"","length":"3000","width":"1250","height":"","qty":"35","rack":"","project":"Gian","elementId":"C-146","sourceStatus":"","idCategory":"C"},{"excelRow":29,"material":"15mm SK Vidiwall","woodType":"","length":"3000","width":"1250","height":"","qty":"35","rack":"","project":"Gian","elementId":"C-147","sourceStatus":"","idCategory":"C"},{"excelRow":30,"material":"15mm SK Vidiwall","woodType":"","length":"3000","width":"1250","height":"","qty":"35","rack":"","project":"Gian","elementId":"C-148","sourceStatus":"","idCategory":"C"},{"excelRow":31,"material":"15mm SK Vidiwall","woodType":"","length":"3000","width":"1250","height":"","qty":"35","rack":"","project":"Gian","elementId":"C-150","sourceStatus":"","idCategory":"C"},{"excelRow":32,"material":"15mm SK Vidiwall","woodType":"","length":"3000","width":"1250","height":"","qty":"35","rack":"","project":"Gian","elementId":"C-151","sourceStatus":"","idCategory":"C"},{"excelRow":33,"material":"15mm SK Vidiwall","woodType":"","length":"2600","width":"1250","height":"","qty":"15","rack":"","project":"","elementId":"C-173","sourceStatus":"","idCategory":"C"},{"excelRow":34,"material":"18mm SK Vidiwall","woodType":"","length":"2600","width":"1250","height":"","qty":"23","rack":"","project":"Gian","elementId":"C-175","sourceStatus":"","idCategory":"C"},{"excelRow":35,"material":"12,5mm Aquapanel Outdoor","woodType":"","length":"1250","width":"895","height":"","qty":"50","rack":"","project":"","elementId":"C-86","sourceStatus":"","idCategory":"C"},{"excelRow":36,"material":"12,5mm Aquapanel Outdoor","woodType":"","length":"1250","width":"895","height":"","qty":"50","rack":"","project":"","elementId":"C-88","sourceStatus":"","idCategory":"C"},{"excelRow":37,"material":"12,5mm Aquapanel Outdoor","woodType":"","length":"1250","width":"895","height":"","qty":"50","rack":"","project":"","elementId":"C-89","sourceStatus":"","idCategory":"C"},{"excelRow":38,"material":"12,5mm Aquapanel Outdoor","woodType":"","length":"1250","width":"895","height":"","qty":"29","rack":"","project":"","elementId":"C-87","sourceStatus":"","idCategory":"C"},{"excelRow":39,"material":"12,5mm Aquapanel Outdoor","woodType":"","length":"1250","width":"895","height":"","qty":"50","rack":"","project":"","elementId":"C-93","sourceStatus":"","idCategory":"C"},{"excelRow":40,"material":"12,5mm Aquapanel Outdoor","woodType":"","length":"1250","width":"895","height":"","qty":"50","rack":"","project":"","elementId":"C-91","sourceStatus":"","idCategory":"C"},{"excelRow":41,"material":"12,5mm Aquapanel Outdoor","woodType":"","length":"1250","width":"895","height":"","qty":"50","rack":"","project":"","elementId":"C-90","sourceStatus":"","idCategory":"C"},{"excelRow":42,"material":"12,5mm Aquapanel Outdoor","woodType":"","length":"1250","width":"895","height":"","qty":"50","rack":"","project":"","elementId":"C-92","sourceStatus":"","idCategory":"C"},{"excelRow":43,"material":"12,5mm Aquapanel Outdoor","woodType":"","length":"1250","width":"895","height":"","qty":"50","rack":"","project":"","elementId":"C-94","sourceStatus":"","idCategory":"C"},{"excelRow":44,"material":"16mm Duripanel","woodType":"","length":"2830","width":"1250","height":"","qty":"35","rack":"","project":"","elementId":"C-17","sourceStatus":"","idCategory":"C"},{"excelRow":45,"material":"16mm Duripanel","woodType":"","length":"3100","width":"1250","height":"","qty":"8","rack":"","project":"","elementId":"C-36","sourceStatus":"","idCategory":"C"},{"excelRow":46,"material":"14mm Duripanel","woodType":"","length":"3100","width":"1250","height":"","qty":"30","rack":"","project":"Ried F","elementId":"C-38","sourceStatus":"","idCategory":"C"},{"excelRow":47,"material":"14mm Duripanel","woodType":"","length":"3100","width":"1250","height":"","qty":"31","rack":"","project":"Ried F","elementId":"C-39","sourceStatus":"","idCategory":"C"},{"excelRow":48,"material":"14mm Duripanel","woodType":"","length":"2600","width":"1250","height":"","qty":"26","rack":"","project":"","elementId":"C-40","sourceStatus":"","idCategory":"C"},{"excelRow":49,"material":"18mm Duripanel","woodType":"","length":"2600","width":"1250","height":"","qty":"4","rack":"","project":"MEH","elementId":"C-85","sourceStatus":"","idCategory":"C"},{"excelRow":50,"material":"14mm Duripanel","woodType":"","length":"1250","width":"270","height":"","qty":"64","rack":"","project":"","elementId":"C-136","sourceStatus":"","idCategory":"C"},{"excelRow":51,"material":"14mm Duripanel","woodType":"","length":"1250","width":"320","height":"","qty":"62","rack":"","project":"","elementId":"C-137","sourceStatus":"","idCategory":"C"},{"excelRow":52,"material":"14mm Duripanel","woodType":"","length":"3100","width":"1250","height":"","qty":"31","rack":"","project":"","elementId":"C-138","sourceStatus":"","idCategory":"C"}];
+let importRunningV478=false,importDoneSessionV478=false;
+function normRackV478(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function findOrCreateRackV478(name){
+ if(!Array.isArray(st.racks))st.racks=[];
+ if(!Array.isArray(st.areas))st.areas=[];
+ let key=normRackV478(name);
+ let found=st.racks.find(r=>normRackV478(r.name)===key);
+ if(found)return found;
+ let area=st.areas.find(a=>a.id==='excel_import_lagerorte_v465')||st.areas.find(a=>String(a.name||'').trim()==='Weitere Lagerorte');
+ if(!area){area={id:'excel_import_lagerorte_v465',name:'Weitere Lagerorte',points:[]};st.areas.push(area)}
+ let base='excelrack_'+String(name||'lagerort').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'excelrack_lagerort';
+ let id=base,n=2;while(st.racks.some(r=>String(r.id)===id))id=base+'_'+(n++);
+ let rack={id,areaId:area.id,name:name||'Excel Lagerort',photo:'',levels:[{name:'Lagerplatz',length:'',width:'',height:''}]};
+ st.racks.push(rack);return rack;
+}
+function existsV478(row){
+ let eid=String(row.elementId||'').trim().toUpperCase();
+ if(eid&&(st.packages||[]).some(p=>String(p.elementId||'').trim().toUpperCase()===eid))return true;
+ return (st.packages||[]).some(p=>String(p.note||'').includes('Werkstoffplatten NICHT Holz V478 · Zeile '+row.excelRow));
+}
+function statusV478(v){v=String(v||'').trim().toLowerCase();return (v==='kommission'||v==='reserviert')?'Kommission':'Lagerware'}
+function runImportV478(){
+ if(importRunningV478||importDoneSessionV478)return;importRunningV478=true;
+ try{
+   ensureV24?.();if(!Array.isArray(st.packages))st.packages=[];
+   let imported=0,already=0;
+   EXCEL_WERKSTOFFPLATTEN_NICHT_HOLZ_V478.forEach(row=>{
+     if(existsV478(row)){already++;return}
+     let rack=findOrCreateRackV478(row.rack);
+     let p={
+       id:'excelv478_row_'+row.excelRow,rackId:rack.id,levelIndex:-1,
+       material:row.material,woodType:row.woodType||'',quality:'',
+       width:row.width,height:row.height,length:row.length,qty:row.qty,
+       project:row.project||'',idCategory:'C',elementId:row.elementId||'',
+       packCode:'',usage:[],status:statusV478(row.sourceStatus),
+       note:'Werkstoffplatten NICHT Holz V478 · Zeile '+row.excelRow,
+       photo:'',photoPath:'',subMaterials:[],defects:[],countPhoto:'',countPhotoName:'',
+       createdAt:new Date().toISOString(),movements:[],history:[],reservations:[]
+     };
+     addHistory?.(p,'Erfasst','Excel-Import Werkstoffplatten NICHT Holz · Kategorie C · Lagerort: '+(row.rack||'–')+' · ohne Ebene');
+     st.packages.push(p);if(row.elementId)reserveElementId?.(row.elementId);imported++;
+   });
+   ensureCommissions?.();persist();importDoneSessionV478=true;
+   try{renderInv?.();renderFilters?.()}catch(_ ){}
+   if(imported)try{queueCloudSync?.()}catch(_ ){}
+   console.info('V478 Import:',imported,'neu,',already,'bereits vorhanden');
+ }finally{importRunningV478=false}
+}
+try{
+ const applyRemoteEntitiesV478=applyRemoteEntities;
+ applyRemoteEntities=function(remote,preserveKeys=new Set()){
+   const result=applyRemoteEntitiesV478(remote,preserveKeys);
+   importDoneSessionV478=false;setTimeout(runImportV478,100);return result;
+ };
+}catch(e){console.warn('V478 Cloud-Hook nicht verfügbar',e)}
+window.addEventListener('load',()=>setTimeout(runImportV478,1800));
+
+
+
+/* V479 – Dämmung Kategorie E; zusätzliches Feld/Spalte Format */
+const EXCEL_DAEMMUNG_V479=[{"excelRow":3,"material":"100mm /  WFP N+K MULTI THERM 110","format":"Platten","length":"2000","width":"580","height":"100","qty":"10","rack":"Alte Sägerei","elementId":"E-70","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":4,"material":"100mm /  WFP N+K WALL 140","format":"Platten","length":"2000","width":"580","height":"100","qty":"20","rack":"Alte Sägerei","elementId":"E-71","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":5,"material":"100mm / PARA","format":"Platten","length":"1000","width":"600","height":"100","qty":"39","rack":"Hackerhalle","elementId":"E-380","sourceStatus":"Kommission","project":"Ried F","idCategory":"E"},{"excelRow":6,"material":"100mm / PARA","format":"Platten","length":"1000","width":"600","height":"100","qty":"42","rack":"Hackerhalle","elementId":"E-381","sourceStatus":"Kommission","project":"Ried F","idCategory":"E"},{"excelRow":7,"material":"100mm / PARA","format":"Platten","length":"1000","width":"330","height":"100","qty":"60","rack":"Hackerhalle","elementId":"E-391","sourceStatus":"Kommission","project":"Ried F","idCategory":"E"},{"excelRow":8,"material":"100mm / TOP 160","format":"Platten","length":"2000","width":"580","height":"100","qty":"24","rack":"Alte Sägerei","elementId":"E-439","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":9,"material":"100mm / TOP 160","format":"Platten","length":"2000","width":"580","height":"100","qty":"22","rack":"Alte Sägerei","elementId":"E-440","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":10,"material":"100mm / WFP N+K","format":"Platten","length":"2000","width":"580","height":"100","qty":"10","rack":"Alte Sägerei","elementId":"E-72","sourceStatus":"im Lager","project":"Jäckle","idCategory":"E"},{"excelRow":11,"material":"100mm / WFP N+K","format":"Platten","length":"2000","width":"580","height":"100","qty":"24","rack":"Alte Sägerei","elementId":"E-73","sourceStatus":"im Lager","project":"Jäckle","idCategory":"E"},{"excelRow":12,"material":"100mm / WFP N+K","format":"Platten","length":"2000","width":"585","height":"100","qty":"17","rack":"Alte Sägerei","elementId":"E-441","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":13,"material":"100mm / XPS TOP P","format":"Platten","length":"1250","width":"600","height":"100","qty":"12","rack":"Hackerhalle","elementId":"E-395","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":14,"material":"100mm / XPS TOP P","format":"Platten","length":"","width":"","height":"100","qty":"6","rack":"Hackerhalle","elementId":"E-396","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":15,"material":"120mm / DPF-30","format":"Platten","length":"1200","width":"625","height":"120","qty":"60","rack":"Kiesplatz Fels","elementId":"E-444","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":16,"material":"120mm / DPF-30","format":"Platten","length":"1200","width":"625","height":"120","qty":"60","rack":"Kiesplatz Fels","elementId":"E-446","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":17,"material":"120mm / DPF-30","format":"Platten","length":"1200","width":"625","height":"120","qty":"60","rack":"Kiesplatz Fels","elementId":"E-467","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":18,"material":"120mm / XPS 300 GE","format":"Platten","length":"1250","width":"600","height":"120","qty":"6","rack":"Hackerhalle","elementId":"E-400","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":19,"material":"120mm / XPS 300 GE","format":"Platten","length":"1250","width":"600","height":"120","qty":"6","rack":"Nicht zugeordnet","elementId":"E-403","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":20,"material":"12mm / TPE","format":"Platten","length":"1200","width":"625","height":"12","qty":"22","rack":"Hackerhalle","elementId":"E-420","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":21,"material":"12mm / TPE","format":"Platten","length":"1200","width":"625","height":"12","qty":"22","rack":"Hackerhalle","elementId":"E-421","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":22,"material":"12mm / TPE","format":"Platten","length":"1200","width":"625","height":"12","qty":"22","rack":"Hackerhalle","elementId":"E-422","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":23,"material":"12mm / TPE","format":"Platten","length":"1200","width":"625","height":"12","qty":"22","rack":"Hackerhalle","elementId":"E-423","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":24,"material":"140mm / KP-0036 HB","format":"Platten","length":"1200","width":"625","height":"140","qty":"36","rack":"Hackerhalle","elementId":"E-365","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":25,"material":"140mm / MINERAL PLUS","format":"Platten","length":"1250","width":"600","height":"140","qty":"20","rack":"Hackerhalle","elementId":"E-366","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":26,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"550","height":"140","qty":"32","rack":"Hackerhalle","elementId":"E-382","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":27,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"32","rack":"Hackerhalle","elementId":"E-383","sourceStatus":"Kommission","project":"Ried F","idCategory":"E"},{"excelRow":28,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"32","rack":"Hackerhalle","elementId":"E-384","sourceStatus":"Kommission","project":"Ried F","idCategory":"E"},{"excelRow":29,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"32","rack":"Hackerhalle","elementId":"E-385","sourceStatus":"Kommission","project":"Ried F","idCategory":"E"},{"excelRow":30,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"32","rack":"Hackerhalle","elementId":"E-392","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":31,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"32","rack":"Hackerhalle","elementId":"E-393","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":32,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"32","rack":"Hackerhalle","elementId":"E-394","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":33,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"","rack":"Nicht zugeordnet","elementId":"E-477","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":34,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"","rack":"Nicht zugeordnet","elementId":"E-478","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":35,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"","rack":"Nicht zugeordnet","elementId":"E-479","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":36,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"","rack":"Nicht zugeordnet","elementId":"E-480","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":37,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"","rack":"Nicht zugeordnet","elementId":"E-481","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":38,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"","rack":"Nicht zugeordnet","elementId":"E-482","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":39,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"","rack":"Nicht zugeordnet","elementId":"E-483","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":40,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"","rack":"Nicht zugeordnet","elementId":"E-484","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":41,"material":"140mm / SOLO","format":"Platten","length":"1000","width":"600","height":"140","qty":"","rack":"Nicht zugeordnet","elementId":"E-485","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":42,"material":"140mm / TI 132U","format":"Rolle","length":"3000","width":"1200","height":"140","qty":"12","rack":"Hackerhalle","elementId":"E-360","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":43,"material":"140mm / TI 132U","format":"Rolle","length":"3000","width":"1200","height":"140","qty":"18","rack":"Hackerhalle","elementId":"E-361","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":44,"material":"140mm / TI 132U","format":"Rolle","length":"3000","width":"1200","height":"140","qty":"18","rack":"Hackerhalle","elementId":"E-362","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":45,"material":"140mm / XPS","format":"Platten","length":"1200","width":"600","height":"140","qty":"3","rack":"Nicht zugeordnet","elementId":"E-414","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":46,"material":"160mm /  WFP N+K MULTI THERM 110","format":"Platten","length":"2000","width":"580","height":"160","qty":"4","rack":"Alte Sägerei","elementId":"E-69","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":47,"material":"160mm / DPL1","format":"Platten","length":"1000","width":"600","height":"160","qty":"24","rack":"Hackerhalle","elementId":"E-386","sourceStatus":"im Lager","project":"Sarsura","idCategory":"E"},{"excelRow":48,"material":"160mm / DPL1","format":"Platten","length":"","width":"","height":"160","qty":"32","rack":"Hackerhalle","elementId":"E-387","sourceStatus":"im Lager","project":"Sarsura","idCategory":"E"},{"excelRow":49,"material":"160mm / ROC TYP 1","format":"Platten","length":"1000","width":"600","height":"160","qty":"3","rack":"Hackerhalle","elementId":"E-428","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":50,"material":"160mm / ROC TYP 1","format":"Platten","length":"1000","width":"600","height":"160","qty":"3","rack":"Hackerhalle","elementId":"E-429","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":51,"material":"160mm / TI 135U","format":"Rolle","length":"3300","width":"1200","height":"160","qty":"","rack":"Kiesplatz Fels","elementId":"E-442","sourceStatus":"Kommission","project":"","idCategory":"E"},{"excelRow":52,"material":"16mm / PAVAPOR TRITTSCHAL","format":"Platten","length":"1020","width":"600","height":"16","qty":"10","rack":"Hackerhalle","elementId":"E-430","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":53,"material":"16mm / PAVAPOR TRITTSCHAL","format":"Platten","length":"1020","width":"600","height":"16","qty":"10","rack":"Hackerhalle","elementId":"E-431","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":54,"material":"180mm / SOLO","format":"Platten","length":"1000","width":"600","height":"180","qty":"24","rack":"Hackerhalle","elementId":"E-374","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":55,"material":"180mm / SOLO","format":"Platten","length":"1000","width":"600","height":"180","qty":"24","rack":"Hackerhalle","elementId":"E-375","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":56,"material":"180mm / SOLO","format":"Platten","length":"1000","width":"600","height":"180","qty":"24","rack":"Hackerhalle","elementId":"E-376","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":57,"material":"180mm / SOLO","format":"Platten","length":"1000","width":"600","height":"180","qty":"9","rack":"Hackerhalle","elementId":"E-377","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":58,"material":"200mm / DPF-30","format":"Platten","length":"1200","width":"625","height":"200","qty":"36","rack":"Kiesplatz Fels","elementId":"E-469","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":59,"material":"200mm / FIXROC","format":"Platten","length":"1000","width":"625","height":"200","qty":"24","rack":"Hackerhalle","elementId":"E-417","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":60,"material":"200mm / FIXROC","format":"Platten","length":"1000","width":"625","height":"200","qty":"24","rack":"Hackerhalle","elementId":"E-418","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":61,"material":"200mm / FIXROC","format":"Platten","length":"1000","width":"625","height":"200","qty":"24","rack":"Hackerhalle","elementId":"E-419","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":62,"material":"200mm / TI 132U","format":"Rollen","length":"2600","width":"1200","height":"200","qty":"18","rack":"Kiesplatz Fels","elementId":"E-128","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":63,"material":"200mm / TI 132U","format":"Rollen","length":"2600","width":"1200","height":"200","qty":"18","rack":"Kiesplatz Fels","elementId":"E-132","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":64,"material":"200mm / TI 132U","format":"Rollen","length":"2600","width":"1200","height":"200","qty":"18","rack":"Kiesplatz Fels","elementId":"E-133","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":65,"material":"200mm / TI 132U","format":"Rollen","length":"2600","width":"1200","height":"200","qty":"18","rack":"Kiesplatz Fels","elementId":"E-138","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":66,"material":"200mm / TI 135U","format":"Rolle","length":"2500","width":"1200","height":"200","qty":"12","rack":"Kiesplatz Fels","elementId":"E-229","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":67,"material":"200mm / XPS","format":"Platten","length":"1200","width":"600","height":"200","qty":"1","rack":"Nicht zugeordnet","elementId":"E-406","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":68,"material":"200mm / XPS","format":"Platten","length":"1200","width":"600","height":"200","qty":"2","rack":"Nicht zugeordnet","elementId":"E-407","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":69,"material":"200mm / XPS","format":"Platten","length":"1200","width":"600","height":"200","qty":"2","rack":"Nicht zugeordnet","elementId":"E-408","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":70,"material":"200mm / XPS","format":"Platten","length":"1200","width":"600","height":"200","qty":"2","rack":"Nicht zugeordnet","elementId":"E-409","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":71,"material":"20mm / WFP o.N+K","format":"Platten","length":"1350","width":"600","height":"20","qty":"26","rack":"Alte Sägerei","elementId":"E-76","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":72,"material":"220mm / DPL3","format":"Platten","length":"1000","width":"600","height":"220","qty":"20","rack":"Hackerhalle","elementId":"E-91","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":73,"material":"240mm / DPF-30","format":"Platten","length":"1200","width":"625","height":"240","qty":"30","rack":"Kiesplatz Fels","elementId":"E-450","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":74,"material":"240mm / DPF-30","format":"Platten","length":"1200","width":"625","height":"240","qty":"30","rack":"Kiesplatz Fels","elementId":"E-451","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":75,"material":"240mm / DPF-31","format":"Platten","length":"1200","width":"625","height":"240","qty":"30","rack":"Kiesplatz Fels","elementId":"E-453","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":76,"material":"240mm / DPF-32","format":"Platten","length":"1200","width":"625","height":"240","qty":"30","rack":"Kiesplatz Fels","elementId":"E-463","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":77,"material":"240mm / DPF-33","format":"Platten","length":"1200","width":"625","height":"240","qty":"30","rack":"Kiesplatz Fels","elementId":"E-473","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":78,"material":"240mm / DPF-34","format":"Platten","length":"1200","width":"625","height":"240","qty":"30","rack":"Kiesplatz Fels","elementId":"E-475","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":79,"material":"240mm / TI 135U","format":"Rolle","length":"2700","width":"1200","height":"240","qty":"18","rack":"Kiesplatz Fels","elementId":"E-454","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":80,"material":"240mm / TI 135U","format":"Rolle","length":"2700","width":"1200","height":"240","qty":"18","rack":"Kiesplatz Fels","elementId":"E-455","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":81,"material":"240mm / TI 135U","format":"Rolle","length":"2700","width":"1200","height":"240","qty":"18","rack":"Kiesplatz Fels","elementId":"E-456","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":82,"material":"240mm / TI 135U","format":"Rolle","length":"2700","width":"1200","height":"240","qty":"18","rack":"Kiesplatz Fels","elementId":"E-457","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":83,"material":"240mm / TI 135U","format":"Rolle","length":"2700","width":"1200","height":"240","qty":"18","rack":"Kiesplatz Fels","elementId":"E-458","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":84,"material":"240mm / TI 135U","format":"Rolle","length":"2700","width":"1200","height":"240","qty":"18","rack":"Kiesplatz Fels","elementId":"E-462","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":85,"material":"25mm / MEGA","format":"Platten","length":"1000","width":"1000","height":"25","qty":"38","rack":"Kiesplatz Fels","elementId":"E-255","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":86,"material":"30mm / ROC BODENPLATTEN","format":"Platten","length":"1200","width":"625","height":"30","qty":"5","rack":"Hackerhalle","elementId":"E-399","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":87,"material":"30mm / TI 432U","format":"Rolle","length":"13500","width":"1200","height":"30","qty":"1","rack":"Nicht zugeordnet","elementId":"E-435","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":88,"material":"30mm / TI 432U","format":"Rolle","length":"13500","width":"1200","height":"30","qty":"","rack":"Nicht zugeordnet","elementId":"E-436","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":89,"material":"30mm / TI 432U","format":"Rolle","length":"13500","width":"1200","height":"30","qty":"","rack":"Nicht zugeordnet","elementId":"E-437","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":90,"material":"30mm / TI 432U","format":"Rolle","length":"13500","width":"1200","height":"30","qty":"15","rack":"Hackerhalle","elementId":"E-476","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":91,"material":"40mm / PIR","format":"Platten","length":"1200","width":"600","height":"40","qty":"12","rack":"Nicht zugeordnet","elementId":"E-404","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":92,"material":"40mm / WFP N+K","format":"Platten","length":"2800","width":"1250","height":"40","qty":"2","rack":"Alte Sägerei","elementId":"E-74","sourceStatus":"im Lager","project":"DKB","idCategory":"E"},{"excelRow":93,"material":"50mm / EPS","format":"Platten","length":"1000","width":"500","height":"50","qty":"10","rack":"Hackerhalle","elementId":"E-397","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":94,"material":"50mm / EPS","format":"Platten","length":"1000","width":"500","height":"50","qty":"10","rack":"Hackerhalle","elementId":"E-398","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":95,"material":"50mm / EPS","format":"Platten","length":"1000","width":"500","height":"50","qty":"10","rack":"Hackerhalle","elementId":"E-415","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":96,"material":"60mm / DPF-30","format":"Platten","length":"1200","width":"625","height":"60","qty":"120","rack":"Kiesplatz Fels","elementId":"E-461","sourceStatus":"Kommission","project":"Sarsura","idCategory":"E"},{"excelRow":97,"material":"60mm / DPL3","format":"Platten","length":"1000","width":"600","height":"60","qty":"56","rack":"Kiesplatz Fels","elementId":"E-284","sourceStatus":"Kommission","project":"MEH","idCategory":"E"},{"excelRow":98,"material":"60mm / EPS","format":"Platten","length":"1000","width":"500","height":"60","qty":"8","rack":"Nicht zugeordnet","elementId":"E-410","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":99,"material":"60mm / EPS","format":"Platten","length":"1000","width":"500","height":"60","qty":"8","rack":"Nicht zugeordnet","elementId":"E-411","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":100,"material":"60mm / EPS","format":"Platten","length":"1000","width":"500","height":"60","qty":"8","rack":"Nicht zugeordnet","elementId":"E-412","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":101,"material":"60mm / EPS","format":"Platten","length":"1000","width":"500","height":"60","qty":"8","rack":"Nicht zugeordnet","elementId":"E-413","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":102,"material":"60mm / LENIO","format":"Platten","length":"1000","width":"600","height":"60","qty":"30","rack":"Hackerhalle","elementId":"E-427","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":103,"material":"60mm / NATUR","format":"Platten","length":"1880","width":"615","height":"60","qty":"10","rack":"Alte Sägerei","elementId":"E-438","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":104,"material":"70mm / CONLIT STEELPROTECT","format":"Platten","length":"1200","width":"1000","height":"70","qty":"16","rack":"Hackerhalle","elementId":"E-426","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":105,"material":"70mm / EPS","format":"Platten","length":"1000","width":"500","height":"70","qty":"8","rack":"Nicht zugeordnet","elementId":"E-401","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":106,"material":"70mm / EPS","format":"Platten","length":"1000","width":"500","height":"70","qty":"10","rack":"Nicht zugeordnet","elementId":"E-402","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":107,"material":"80mm /  WFP N+K TOP 160","format":"Platten","length":"2000","width":"580","height":"80","qty":"12","rack":"Alte Sägerei","elementId":"E-67","sourceStatus":"im Lager","project":"Jäckle","idCategory":"E"},{"excelRow":108,"material":"80mm / DPL1","format":"Platten","length":"1000","width":"600","height":"80","qty":"48","rack":"Hackerhalle","elementId":"E-368","sourceStatus":"Reserviert","project":"Gian","idCategory":"E"},{"excelRow":109,"material":"80mm / PIR","format":"Platten","length":"1200","width":"600","height":"80","qty":"6","rack":"Nicht zugeordnet","elementId":"E-405","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":110,"material":"80mm / TI 132U","format":"Rollen","length":"5000","width":"1200","height":"80","qty":"6","rack":"Hackerhalle","elementId":"E-142","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":111,"material":"8mm / PAVASTEP","format":"Platten","length":"1020","width":"600","height":"8","qty":"15","rack":"Hackerhalle","elementId":"E-432","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":112,"material":"8mm / PAVASTEP","format":"Platten","length":"1020","width":"600","height":"8","qty":"15","rack":"Hackerhalle","elementId":"E-433","sourceStatus":"im Lager","project":"","idCategory":"E"},{"excelRow":113,"material":"8mm / PAVASTEP","format":"Platten","length":"1020","width":"600","height":"8","qty":"15","rack":"Hackerhalle","elementId":"E-434","sourceStatus":"im Lager","project":"","idCategory":"E"}];
+let importRunningV479=false,importDoneSessionV479=false;
+function normRackV479(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function findOrCreateRackV479(name){
+ if(!Array.isArray(st.racks))st.racks=[];if(!Array.isArray(st.areas))st.areas=[];
+ let key=normRackV479(name),found=st.racks.find(r=>normRackV479(r.name)===key);if(found)return found;
+ let area=st.areas.find(a=>a.id==='excel_import_lagerorte_v465')||st.areas.find(a=>String(a.name||'').trim()==='Weitere Lagerorte');
+ if(!area){area={id:'excel_import_lagerorte_v465',name:'Weitere Lagerorte',points:[]};st.areas.push(area)}
+ let base='excelrack_'+String(name||'lagerort').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'excelrack_lagerort';
+ let id=base,n=2;while(st.racks.some(r=>String(r.id)===id))id=base+'_'+(n++);
+ let rack={id,areaId:area.id,name:name||'Excel Lagerort',photo:'',levels:[{name:'Lagerplatz',length:'',width:'',height:''}]};
+ st.racks.push(rack);return rack;
+}
+function existsV479(row){
+ let eid=String(row.elementId||'').trim().toUpperCase();
+ if(eid&&(st.packages||[]).some(p=>String(p.elementId||'').trim().toUpperCase()===eid))return true;
+ return (st.packages||[]).some(p=>String(p.note||'').includes('Dämmung Import V479 · Zeile '+row.excelRow));
+}
+function runImportV479(){
+ if(importRunningV479||importDoneSessionV479)return;importRunningV479=true;
+ try{
+  ensureV24?.();if(!Array.isArray(st.packages))st.packages=[];
+  let imported=0;
+  EXCEL_DAEMMUNG_V479.forEach(row=>{
+   if(existsV479(row))return;
+   let rack=findOrCreateRackV479(row.rack);
+   let p={id:'excelv479_row_'+row.excelRow,rackId:rack.id,levelIndex:-1,material:row.material,format:row.format||'',woodType:'',quality:'',
+    width:row.width,height:row.height,length:row.length,qty:row.qty,project:row.project||'',idCategory:'E',elementId:row.elementId||'',
+    packCode:'',usage:[],status:(String(row.sourceStatus||'').trim().toLowerCase()==='kommission'?'Kommission':'Lagerware'),
+    note:'Dämmung Import V479 · Zeile '+row.excelRow,photo:'',photoPath:'',subMaterials:[],defects:[],countPhoto:'',countPhotoName:'',
+    createdAt:new Date().toISOString(),movements:[],history:[],reservations:[]};
+   addHistory?.(p,'Erfasst','Excel-Import Dämmung · Format: '+(row.format||'–')+' · Lagerort: '+(row.rack||'–'));
+   st.packages.push(p);if(row.elementId)reserveElementId?.(row.elementId);imported++;
+  });
+  ensureCommissions?.();persist();importDoneSessionV479=true;
+  try{renderInv?.();renderFilters?.()}catch(_){}
+  if(imported)try{queueCloudSync?.()}catch(_){}
+ }finally{importRunningV479=false}
+}
+try{const oldApplyV479=applyRemoteEntities;applyRemoteEntities=function(remote,preserveKeys=new Set()){let x=oldApplyV479(remote,preserveKeys);importDoneSessionV479=false;setTimeout(runImportV479,100);return x}}catch(e){}
+window.addEventListener('load',()=>setTimeout(runImportV479,1800));
+
+
+
+/* V480 – Schalung / Massivholzbretter aller Arten, Kategorie D */
+const EXCEL_SCHALUNG_V480=[{"excelRow":2,"material":"20mm","woodType":"Lärche","length":"5000","width":"145","height":"60","qty":"1","rack":"Nicht zugeordnet","elementId":"D-22","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":3,"material":"20mm / Chalet-Schalung","woodType":"Fichte","length":"5000","width":"185","height":"35","qty":"1","rack":"RHL 1","elementId":"D-18","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":4,"material":"21mm / Pararellbretter sägeroh","woodType":"Douglasie","length":"5000","width":"120","height":"56","qty":"1","rack":"Nicht zugeordnet","elementId":"D-63","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":5,"material":"19mm / N+K","woodType":"Fichte","length":"5000","width":"140","height":"45","qty":"1","rack":"RHL 1","elementId":"D-59","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":6,"material":"20-45mm / gebrennt Bretter","woodType":"Fichte","length":"5000","width":"200","height":"16","qty":"1","rack":"Hinter Festhütte","elementId":"D-56","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":7,"material":"21mm / Pararellbretter sägeroh","woodType":"Fichte","length":"6000","width":"120","height":"144","qty":"1","rack":"Gleis 1 Bach","elementId":"D-64","sourceStatus":"im Lager","project":"KiSpi","idCategory":"D"},{"excelRow":8,"material":"21mm / Pararellbretter sägeroh","woodType":"Fichte","length":"4000","width":"120","height":"33","qty":"1","rack":"Gleis 1 Bach","elementId":"D-65","sourceStatus":"im Lager","project":"KiSpi","idCategory":"D"},{"excelRow":9,"material":"21mm / Pararellbretter sägeroh","woodType":"Fichte","length":"5000","width":"150","height":"196","qty":"1","rack":"Gleis 1 Bach","elementId":"D-66","sourceStatus":"im Lager","project":"KiSpi","idCategory":"D"},{"excelRow":10,"material":"21mm / Pararellbretter sägeroh","woodType":"Fichte","length":"5000","width":"150","height":"54","qty":"1","rack":"Gleis 1 Bach","elementId":"D-67","sourceStatus":"im Lager","project":"KiSpi","idCategory":"D"},{"excelRow":11,"material":"21mm / Pararellbretter sägeroh","woodType":"Fichte","length":"5000","width":"150","height":"76","qty":"1","rack":"Gleis 1 Bach","elementId":"D-68","sourceStatus":"im Lager","project":"KiSpi","idCategory":"D"},{"excelRow":12,"material":"21mm / Pararellbretter sägeroh","woodType":"Fichte","length":"4000","width":"65","height":"52","qty":"1","rack":"Gleis 1 Bach","elementId":"D-69","sourceStatus":"im Lager","project":"KiSpi","idCategory":"D"},{"excelRow":13,"material":"30mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"100","height":"171","qty":"1","rack":"RHL 1","elementId":"D-55","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":14,"material":"30mm / Pararellbretter","woodType":"Fichte","length":"5000","width":"155","height":"133","qty":"1","rack":"Kom.Gestell 3","elementId":"D-61","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":15,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Hinter Festhütte","elementId":"D-38","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":16,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Hinter Festhütte","elementId":"D-39","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":17,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"12","qty":"1","rack":"Hinter Festhütte","elementId":"D-40","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":18,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Hinter Festhütte","elementId":"D-41","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":19,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Hinter Festhütte","elementId":"D-42","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":20,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Hinter Festhütte","elementId":"D-43","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":21,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Hinter Festhütte","elementId":"D-45","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":22,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Hinter Festhütte","elementId":"D-46","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":23,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Hinter Festhütte","elementId":"D-47","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":24,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Hinter Festhütte","elementId":"D-48","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":25,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Gleis 1 Bach","elementId":"D-50","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":26,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"12","qty":"1","rack":"Gleis 1 Bach","elementId":"D-51","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":27,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Gleis 1 Bach","elementId":"D-52","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":28,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Gleis 1 Bach","elementId":"D-53","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":29,"material":"45mm / Gerüstdielen","woodType":"Fichte","length":"5000","width":"240","height":"20","qty":"1","rack":"Gleis 1 Bach","elementId":"D-54","sourceStatus":"im Lager","project":"","idCategory":"D"},{"excelRow":30,"material":"20mm","woodType":"Lärche","length":"5000","width":"125","height":"192","qty":"1","rack":"RHL 4","elementId":"D-60","sourceStatus":"Kommission","project":"Seegarten","idCategory":"D"},{"excelRow":31,"material":"21mm / Sichtschalung, gestrichen","woodType":"Fichte","length":"5000","width":"106","height":"62","qty":"1","rack":"Kom. Gestell 1","elementId":"D-57","sourceStatus":"Kommission","project":"MEH Chur","idCategory":"D"},{"excelRow":32,"material":"30mm / Pararellbretter","woodType":"Fichte","length":"5000","width":"120","height":"104","qty":"1","rack":"MHG 2.0","elementId":"D-62","sourceStatus":"Kommission","project":"Ried F","idCategory":"D"}];
+let importRunningV480=false,importDoneSessionV480=false;
+function normRackV480(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function findOrCreateRackV480(name){
+ if(!Array.isArray(st.racks))st.racks=[];if(!Array.isArray(st.areas))st.areas=[];
+ let key=normRackV480(name),found=st.racks.find(r=>normRackV480(r.name)===key);if(found)return found;
+ let area=st.areas.find(a=>a.id==='excel_import_lagerorte_v465')||st.areas.find(a=>String(a.name||'').trim()==='Weitere Lagerorte');
+ if(!area){area={id:'excel_import_lagerorte_v465',name:'Weitere Lagerorte',points:[]};st.areas.push(area)}
+ let base='excelrack_'+String(name||'lagerort').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'excelrack_lagerort';
+ let id=base,n=2;while(st.racks.some(r=>String(r.id)===id))id=base+'_'+(n++);
+ let rack={id,areaId:area.id,name:name||'Excel Lagerort',photo:'',levels:[{name:'Lagerplatz',length:'',width:'',height:''}]};
+ st.racks.push(rack);return rack;
+}
+function existsV480(row){
+ let eid=String(row.elementId||'').trim().toUpperCase();
+ if(eid&&(st.packages||[]).some(p=>String(p.elementId||'').trim().toUpperCase()===eid))return true;
+ return (st.packages||[]).some(p=>String(p.note||'').includes('Schalung Import V480 · Zeile '+row.excelRow));
+}
+function runImportV480(){
+ if(importRunningV480||importDoneSessionV480)return;importRunningV480=true;
+ try{
+  ensureV24?.();if(!Array.isArray(st.packages))st.packages=[];
+  let imported=0;
+  EXCEL_SCHALUNG_V480.forEach(row=>{
+   if(existsV480(row))return;
+   let rack=findOrCreateRackV480(row.rack);
+   let p={id:'excelv480_row_'+row.excelRow,rackId:rack.id,levelIndex:-1,
+    material:row.material,format:'',woodType:row.woodType||'',quality:'',
+    width:row.width,height:row.height,length:row.length,qty:row.qty,
+    project:row.project||'',idCategory:'D',elementId:row.elementId||'',packCode:'',usage:[],
+    status:(String(row.sourceStatus||'').trim().toLowerCase()==='kommission'?'Kommission':'Lagerware'),
+    note:'Schalung Import V480 · Zeile '+row.excelRow,photo:'',photoPath:'',subMaterials:[],defects:[],
+    countPhoto:'',countPhotoName:'',createdAt:new Date().toISOString(),movements:[],history:[],reservations:[]};
+   addHistory?.(p,'Erfasst','Excel-Import Schalung / Massivholzbretter · Kategorie D · Lagerort: '+(row.rack||'–'));
+   st.packages.push(p);if(row.elementId)reserveElementId?.(row.elementId);imported++;
+  });
+  ensureCommissions?.();persist();importDoneSessionV480=true;
+  try{renderInv?.();renderFilters?.()}catch(_){}
+  if(imported)try{queueCloudSync?.()}catch(_){}
+ }finally{importRunningV480=false}
+}
+try{const oldApplyV480=applyRemoteEntities;applyRemoteEntities=function(remote,preserveKeys=new Set()){let x=oldApplyV480(remote,preserveKeys);importDoneSessionV480=false;setTimeout(runImportV480,100);return x}}catch(e){}
+window.addEventListener('load',()=>setTimeout(runImportV480,1800));
+
+
+
+/* V481 – Terrassenbretter, Kategorie TB */
+const EXCEL_TERRASSENBRETTER_V481=[{"excelRow":2,"material":"26mm","woodType":"Douglasie","length":"5000","width":"120","height":"","qty":"56","rack":"Bushaltestelle","elementId":"TB-8","sourceStatus":"im Lager","project":"","idCategory":"TB"},{"excelRow":3,"material":"26mm","woodType":"Douglasie","length":"5000","width":"120","height":"","qty":"70","rack":"Bushaltestelle","elementId":"TB-9","sourceStatus":"im Lager","project":"","idCategory":"TB"},{"excelRow":4,"material":"20mm Termo Esche","woodType":"Termo Esche","length":"3.6","width":"110","height":"","qty":"1","rack":"Bushaltestelle","elementId":"TB-17","sourceStatus":"im Lager","project":"","idCategory":"TB"},{"excelRow":5,"material":"26mm","woodType":"Weisstanne","length":"5000","width":"144","height":"","qty":"13","rack":"Bushaltestelle","elementId":"TB-6","sourceStatus":"im Lager","project":"","idCategory":"TB"},{"excelRow":6,"material":"24mm","woodType":"Lärche","length":"5000","width":"115","height":"","qty":"23","rack":"Bushaltestelle","elementId":"TB-14","sourceStatus":"im Lager","project":"","idCategory":"TB"},{"excelRow":7,"material":"30mm","woodType":"Lärche","length":"5000","width":"115","height":"","qty":"15","rack":"Bushaltestelle","elementId":"TB-18","sourceStatus":"im Lager","project":"","idCategory":"TB"}];
+let importRunningV481=false,importDoneSessionV481=false;
+function normRackV481(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function findOrCreateRackV481(name){
+ if(!Array.isArray(st.racks))st.racks=[];if(!Array.isArray(st.areas))st.areas=[];
+ let key=normRackV481(name),found=st.racks.find(r=>normRackV481(r.name)===key);if(found)return found;
+ let area=st.areas.find(a=>a.id==='excel_import_lagerorte_v465')||st.areas.find(a=>String(a.name||'').trim()==='Weitere Lagerorte');
+ if(!area){area={id:'excel_import_lagerorte_v465',name:'Weitere Lagerorte',points:[]};st.areas.push(area)}
+ let base='excelrack_'+String(name||'lagerort').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'excelrack_lagerort';
+ let id=base,n=2;while(st.racks.some(r=>String(r.id)===id))id=base+'_'+(n++);
+ let rack={id,areaId:area.id,name:name||'Excel Lagerort',photo:'',levels:[{name:'Lagerplatz',length:'',width:'',height:''}]};
+ st.racks.push(rack);return rack;
+}
+function existsV481(row){
+ let eid=String(row.elementId||'').trim().toUpperCase();
+ if(eid&&(st.packages||[]).some(p=>String(p.elementId||'').trim().toUpperCase()===eid))return true;
+ return (st.packages||[]).some(p=>String(p.note||'').includes('Terrassenbretter Import V481 · Zeile '+row.excelRow));
+}
+function runImportV481(){
+ if(importRunningV481||importDoneSessionV481)return;importRunningV481=true;
+ try{
+  ensureV24?.();if(!Array.isArray(st.packages))st.packages=[];
+  let imported=0;
+  EXCEL_TERRASSENBRETTER_V481.forEach(row=>{
+   if(existsV481(row))return;
+   let rack=findOrCreateRackV481(row.rack);
+   let p={id:'excelv481_row_'+row.excelRow,rackId:rack.id,levelIndex:-1,
+    material:row.material,format:'',woodType:row.woodType||'',quality:'',
+    width:row.width,height:row.height,length:row.length,qty:row.qty,
+    project:row.project||'',idCategory:'TB',elementId:row.elementId||'',packCode:'',usage:[],
+    status:(String(row.sourceStatus||'').trim().toLowerCase()==='kommission'?'Kommission':'Lagerware'),
+    note:'Terrassenbretter Import V481 · Zeile '+row.excelRow,photo:'',photoPath:'',subMaterials:[],defects:[],
+    countPhoto:'',countPhotoName:'',createdAt:new Date().toISOString(),movements:[],history:[],reservations:[]};
+   addHistory?.(p,'Erfasst','Excel-Import Terrassenbretter · Kategorie TB · Lagerort: '+(row.rack||'–'));
+   st.packages.push(p);if(row.elementId)reserveElementId?.(row.elementId);imported++;
+  });
+  ensureCommissions?.();persist();importDoneSessionV481=true;
+  try{renderInv?.();renderFilters?.()}catch(_){}
+  if(imported)try{queueCloudSync?.()}catch(_){}
+ }finally{importRunningV481=false}
+}
+try{const oldApplyV481=applyRemoteEntities;applyRemoteEntities=function(remote,preserveKeys=new Set()){let x=oldApplyV481(remote,preserveKeys);importDoneSessionV481=false;setTimeout(runImportV481,100);return x}}catch(e){}
+window.addEventListener('load',()=>setTimeout(runImportV481,1800));
 
 </script>\n</body></html>
