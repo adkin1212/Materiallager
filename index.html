@@ -5,7 +5,7 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
 <!-- V406: Transporte direkt unter der Projekterfassung -->
-<title>Künzli Lagerverwaltung V345</title>
+<title>Künzli Lagerverwaltung V345 · BV2026-1-01</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -4170,6 +4170,18 @@ window.APP_RELEASE = {
 }
 </style>
 
+
+<style>
+/* V544 – Kleinauftrag: Anzahl × Abmessungen für Künzli m1/m2/m3 */
+.soDimsV543{display:grid;grid-template-columns:repeat(2,minmax(105px,1fr));gap:6px;min-width:230px}
+.soDimV543,.soQtyResultV543{display:grid;gap:2px;font-size:11px;font-weight:800;color:#53645b}
+.soDimV543 input,.soQtyResultV543 input{min-height:38px!important;padding:6px 8px!important;font-size:15px!important}
+.soQtyResultV543{grid-column:1/-1}
+.soQtyResultV543 input{background:#f3f6f4}
+.smallOrderMaterialRow:has(.soDimsV543){grid-template-columns:70px minmax(420px,2.2fr) 120px minmax(240px,1fr) 140px 140px 54px}
+@media(max-width:1100px){.smallOrderMaterialRow:has(.soDimsV543){grid-template-columns:90px 1fr 120px minmax(240px,1fr)}}
+</style>
+
 </head>
 <body class="accessLocked">
 <div id="moduleHome" aria-label="Bereich auswählen">
@@ -7137,10 +7149,56 @@ function selectSmallOrderMaterial(i,id){
    row.materialSource='Künzli';
    row.article=mat.name||'';
    row.unit=mat.unit||'Stk';
+   row.dimensionsV543=row.dimensionsV543||{length:'',width:'',height:'',count:'1'};
    // Verkaufspreis Kleinauftrag = Stammpreis + 50 %. Der Zuschlag wird in der Oberfläche nicht separat ausgewiesen.
    row.unitPrice=(numSO(mat.price)*(row.noMarkup?1:1.5)).toFixed(2);
  }
  renderSmallOrderMaterialRows();recalcSmallOrderTotals();
+}
+
+function smallOrderMeasureUnitV543(unit){
+ const u=String(unit||'').trim().toLowerCase().replace(/\s+/g,'');
+ if(['m1','lfm','lm'].includes(u))return 'm1';
+ if(['m2','m²'].includes(u))return 'm2';
+ if(['m3','m³'].includes(u))return 'm3';
+ return '';
+}
+function updateSmallOrderDimensionV544(i,key,value){
+ const row=smallOrderMaterialDraft[i];if(!row)return;
+ row.dimensionsV543=row.dimensionsV543||{length:'',width:'',height:'',count:'1'};
+ row.dimensionsV543[key]=value;
+ recalcSmallOrderDimensionQtyV544(i);
+}
+function recalcSmallOrderDimensionQtyV544(i){
+ const row=smallOrderMaterialDraft[i];if(!row)return;
+ row.dimensionsV543=row.dimensionsV543||{length:'',width:'',height:'',count:'1'};
+ const unit=smallOrderMeasureUnitV543(row.unit);
+ const n=k=>numSO(row.dimensionsV543?.[k]);
+ const count=Math.max(0,n('count')||0);
+ let qty=0;
+ if(unit==='m1')qty=n('length')*count;
+ if(unit==='m2')qty=n('length')*n('width')*count;
+ if(unit==='m3')qty=n('length')*n('width')*n('height')*count;
+ row.qty=qty>0?String(Math.round(qty*10000)/10000):'';
+ const q=E('sorQtyV543_'+i);if(q)q.value=row.qty;
+ recalcSmallOrderTotals();
+}
+function smallOrderQuantityCellV543(x,i){
+ const unit=smallOrderMeasureUnitV543(x.unit);
+ const isKuenzli=x.materialSource!=='IMMER AG';
+ if(!isKuenzli||!unit){
+   return `<input aria-label="Menge" inputmode="decimal" value="${esc(x.qty||'')}" oninput="updateSmallOrderMaterial(${i},'qty',this.value)">`;
+ }
+ x.dimensionsV543=x.dimensionsV543||{length:'',width:'',height:'',count:'1'};
+ if(x.dimensionsV543.count===undefined||x.dimensionsV543.count==='')x.dimensionsV543.count='1';
+ const d=x.dimensionsV543;
+ const fields=[
+   `<label class="soDimV543">Anzahl<input type="number" min="0" step="1" value="${esc(d.count||'1')}" oninput="updateSmallOrderDimensionV544(${i},'count',this.value)"></label>`,
+   `<label class="soDimV543">Länge [m]<input inputmode="decimal" value="${esc(d.length||'')}" oninput="updateSmallOrderDimensionV544(${i},'length',this.value)"></label>`,
+   unit!=='m1'?`<label class="soDimV543">Breite [m]<input inputmode="decimal" value="${esc(d.width||'')}" oninput="updateSmallOrderDimensionV544(${i},'width',this.value)"></label>`:'',
+   unit==='m3'?`<label class="soDimV543">Höhe [m]<input inputmode="decimal" value="${esc(d.height||'')}" oninput="updateSmallOrderDimensionV544(${i},'height',this.value)"></label>`:''
+ ].join('');
+ return `<div class="soDimsV543">${fields}<label class="soQtyResultV543">Berechnete Menge ${esc(x.unit||'')}<input id="sorQtyV543_${i}" value="${esc(x.qty||'')}" readonly></label></div>`;
 }
 function renderSmallOrderMaterialRows(){
  let b=E('sorMaterialRows');if(!b)return;
@@ -7170,7 +7228,7 @@ function renderSmallOrderMaterialRows(){
     <button class="btn secondary" style="margin-top:6px" type="button" onclick="quickAddImmerMaterialForSmallOrder(${i})">+ Neues IMMER AG Material</button>
   </div>
   <div><input aria-label="Einheit" value="${esc(x.unit||'')}" readonly></div>
-  <div><input aria-label="Menge" inputmode="decimal" value="${esc(x.qty||'')}" oninput="updateSmallOrderMaterial(${i},'qty',this.value)"></div>
+  <div>${smallOrderQuantityCellV543(x,i)}</div>
   <div><input aria-label="Stückpreis" inputmode="decimal" value="${esc(x.unitPrice||'')}" readonly></div>
   <div class="matTotal"><b id="sorMaterialLine_${i}">${soMoney(numSO(x.qty)*numSO(x.unitPrice))}</b></div>
   <div><button class="btn danger" type="button" onclick="removeSmallOrderMaterial(${i})">×</button></div>
