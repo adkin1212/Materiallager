@@ -4621,7 +4621,7 @@ window.APP_RELEASE = {
      <button class="btn" onclick="saveCloudSettings()">Speichern</button>
      <button class="btn secondary" onclick="openAuthModal()">Anmelden / Konto</button>
      <button class="btn secondary" onclick="testCloudConnection()">Verbindung testen</button>
-     <button class="btn secondary" onclick="pushEntitySync(true)">Lokal → Cloud</button>
+     <button class="btn secondary" onclick="setSyncStatus('syncing','Lokal → Cloud gestartet');pushEntitySync(true)">Lokal → Cloud</button>
      <button class="btn secondary" onclick="pullEntitySync(true)">Cloud → Gerät</button>
      <button class="btn secondary" onclick="migrateLocalPhotosToCloud()">Fotos → Cloud</button>
     </div>
@@ -9893,21 +9893,25 @@ async function fetchRemoteEntities(){
  rows.forEach(x=>out[cloudKey(x.entity_type,x.entity_id)]={type:x.entity_type,id:x.entity_id,data:x.data,version:Number(x.version||0),updated_at:x.updated_at,updated_by:x.updated_by});
  return out;
 }
+/* V486 – Frontend an die bereinigten Supabase-RPCs V487 angepasst.
+   RPC verwendet p_warehouse_id; p_force existiert serverseitig nicht mehr. */
 async function rpcEntitySave(type,id,data,expectedVersion,force=false){
- let r=await fetch(rpcBase('save_warehouse_entity'),{method:'POST',headers:cloudHeaders(),body:JSON.stringify({p_warehouse:cloudCfg.warehouseId,p_entity_type:type,p_entity_id:id,p_data:data,p_expected_version:Number(expectedVersion||0),p_updated_by:currentUserName(),p_force:!!force})});
+ let r=await fetch(rpcBase('save_warehouse_entity'),{method:'POST',headers:cloudHeaders(),body:JSON.stringify({p_warehouse_id:cloudCfg.warehouseId,p_entity_type:type,p_entity_id:id,p_data:data,p_expected_version:Number(expectedVersion||0),p_updated_by:currentUserName()})});
  let txt=await r.text(),val=null;try{val=JSON.parse(txt)}catch(e){}
- if(!r.ok)throw new Error((val&&val.message)||txt||('HTTP '+r.status));
- if(val&&val.ok===false){
-   let e=new Error(val.message||'Synchronisationskonflikt');e.syncConflict=!!val.conflict;e.remoteVersion=Number(val.current_version||val.version||0);e.remote=val.current_data||val.data||null;throw e;
+ if(!r.ok){
+   let msg=(val&&val.message)||txt||('HTTP '+r.status),e=new Error(msg);
+   if(r.status===409||String(msg).includes('VERSION_CONFLICT')||String(val?.code||'')==='40001')e.syncConflict=true;
+   throw e;
  }
- return val;
+ return Array.isArray(val)?(val[0]||null):val;
 }
 async function rpcEntityDelete(type,id,expectedVersion,force=false){
- let r=await fetch(rpcBase('delete_warehouse_entity'),{method:'POST',headers:cloudHeaders(),body:JSON.stringify({p_warehouse:cloudCfg.warehouseId,p_entity_type:type,p_entity_id:id,p_expected_version:Number(expectedVersion||0),p_force:!!force})});
+ let r=await fetch(rpcBase('delete_warehouse_entity'),{method:'POST',headers:cloudHeaders(),body:JSON.stringify({p_warehouse_id:cloudCfg.warehouseId,p_entity_type:type,p_entity_id:id,p_expected_version:Number(expectedVersion||0),p_updated_by:currentUserName()})});
  let txt=await r.text(),val=null;try{val=JSON.parse(txt)}catch(e){}
- if(!r.ok)throw new Error((val&&val.message)||txt||('HTTP '+r.status));
- if(val&&val.ok===false){
-   let e=new Error(val.message||'Synchronisationskonflikt');e.syncConflict=!!val.conflict;e.remoteVersion=Number(val.current_version||val.version||0);e.remote=val.current_data||val.data||null;throw e;
+ if(!r.ok){
+   let msg=(val&&val.message)||txt||('HTTP '+r.status),e=new Error(msg);
+   if(r.status===409||String(msg).includes('VERSION_CONFLICT')||String(val?.code||'')==='40001')e.syncConflict=true;
+   throw e;
  }
  return val;
 }
@@ -10136,9 +10140,23 @@ async function resolveSyncConflict(index,choice){
    await pullEntitySync(false);
  }catch(e){alert('Konflikt konnte nicht gelöst werden:\n'+String(e.message||e))}
 }
+let pendingManualCloudPushV487=false;
 async function pushEntitySync(manual=false){
- cloudCfg=loadCloudConfig();if(!cloudReady()){if(manual)alert('Bitte zuerst Cloud einrichten und anmelden.');return false}
- if(cloudBusy)return false;cloudBusy=true;setSyncStatus('syncing','Änderungen werden abgeglichen');
+ cloudCfg=loadCloudConfig();
+ if(!cloudReady()){
+   if(manual)alert('Cloud ist noch nicht bereit. Bitte Anmeldung und Cloud-Benutzer prüfen.');
+   return false;
+ }
+ /* V487: Ein automatischer Sync konnte den manuellen Button bisher lautlos blockieren.
+    Ein manueller Klick wird jetzt vorgemerkt und direkt nach dem laufenden Sync ausgeführt. */
+ if(cloudBusy){
+   if(manual){
+     pendingManualCloudPushV487=true;
+     setSyncStatus('syncing','Lokal → Cloud wartet auf laufende Synchronisierung');
+   }
+   return false;
+ }
+ cloudBusy=true;setSyncStatus('syncing',manual?'Lokal → Cloud wird übertragen':'Änderungen werden abgeglichen');
  try{
    let remote=await fetchRemoteEntities(),base=loadSyncBase(),local=localEntityMap(),keys=new Set([...Object.keys(base),...Object.keys(local),...Object.keys(remote)]),conflicts=[],changed=0;
    for(let k of keys){
@@ -10169,7 +10187,13 @@ async function pushEntitySync(manual=false){
    }
    if(!conflicts.length)setSyncStatus('ok','Objektweise synchronisiert');return !conflicts.length;
  }catch(e){setSyncStatus('err',String(e.message||e));if(manual)alert('Synchronisierung fehlgeschlagen:\n'+String(e.message||e));return false}
- finally{cloudBusy=false}
+ finally{
+   cloudBusy=false;
+   if(pendingManualCloudPushV487){
+     pendingManualCloudPushV487=false;
+     setTimeout(()=>pushEntitySync(true),120);
+   }
+ }
 }
 async function pullEntitySync(manual=false){
  cloudCfg=loadCloudConfig();
