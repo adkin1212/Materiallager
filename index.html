@@ -10254,7 +10254,11 @@ function setSyncStatus(kind,msg){
  lastCloudMessage=msg||'';
  let text=kind==='syncing'?'Synchronisiere…':kind==='ok'?'Cloud aktuell':kind==='err'?'Cloud-Fehler':(cloudCfg.mode==='supabase'?'Cloud':'Lokal');
  ['syncStatusBadge','cloudManageStatus'].forEach(id=>{
-   let el=E(id);if(!el)return;el.textContent=text;el.className='syncBadge '+(kind||'');el.title=msg||text;
+   let el=E(id);if(!el)return;
+   let cls='syncBadge '+(kind||''),title=msg||text;
+   if(el.textContent!==text)el.textContent=text;
+   if(el.className!==cls)el.className=cls;
+   if(el.title!==title)el.title=title;
  });
 }
 function cloudHeaders(){
@@ -10318,7 +10322,10 @@ function renderCloudSettings(){
 function queueCloudSync(){
  cloudCfg=loadCloudConfig();
  if(!cloudReady()||!cloudCfg.autoSync)return;
- clearTimeout(cloudTimer);cloudTimer=setTimeout(()=>pushEntitySync(false),700);startCloudPolling();
+ clearTimeout(cloudTimer);
+ cloudTimer=setTimeout(()=>pushEntitySync(false),700);
+ /* V488: den 8-Sekunden-Poller nicht bei jedem persist() neu starten. */
+ if(!cloudPollTimer)startCloudPolling();
 }
 async function pushStateToCloud(manual=false){
  cloudCfg=loadCloudConfig();
@@ -19708,12 +19715,11 @@ function runExcelImportV465(){
      imported++;
    });
    ensureCommissions?.();
-   persist();
+   if(imported)persist();
    excelImportFinishedThisSessionV465=true;
    localStorage.setItem('holzlager_excel_import_v465_last',new Date().toISOString());
    try{refresh?.()}catch(e){try{renderInventory?.()}catch(_){}}
    if(imported){
-     try{queueCloudSync?.()}catch(e){}
      console.info('V465 Excel-Import:',imported,'neu importiert,',already,'bereits vorhanden');
    }else{
      console.info('V465 Excel-Import: alle',already,'Positionen bereits vorhanden');
@@ -19745,9 +19751,21 @@ const inventorySelectedV466=new Set();
 function inventorySelectionIdsV466(){
  return [...inventorySelectedV466].filter(id=>(st.packages||[]).some(p=>p.id===id));
 }
-function inventoryToggleV466(id,checked){
- if(checked)inventorySelectedV466.add(id);else inventorySelectedV466.delete(id);
- updateInventorySelectionUiV466();
+let inventoryLastClickedV490=null;
+function inventoryToggleV466(id,checked,ev){
+ const visible=[...document.querySelectorAll('#tbody input[data-inv-select-v466]')]
+   .map(cb=>cb.dataset.invSelectV466).filter(Boolean);
+
+ if(ev && ev.shiftKey && inventoryLastClickedV490 && visible.includes(inventoryLastClickedV490) && visible.includes(id)){
+   const a=visible.indexOf(inventoryLastClickedV490), b=visible.indexOf(id);
+   visible.slice(Math.min(a,b),Math.max(a,b)+1).forEach(x=>{
+     if(checked)inventorySelectedV466.add(x);else inventorySelectedV466.delete(x);
+   });
+ }else{
+   if(checked)inventorySelectedV466.add(id);else inventorySelectedV466.delete(id);
+ }
+ inventoryLastClickedV490=id;
+ renderInv();
 }
 function inventoryToggleVisibleV466(checked){
  document.querySelectorAll('#tbody input[data-inv-select-v466]').forEach(cb=>{
@@ -19770,7 +19788,7 @@ function updateInventorySelectionUiV466(){
  }
 }
 function inventorySelectCellV466(p){
- return `<label class="inventoryCheckV466" title="Element auswählen"><input type="checkbox" data-inv-select-v466="${esc(p.id)}" ${inventorySelectedV466.has(p.id)?'checked':''} onchange="inventoryToggleV466('${p.id}',this.checked)"><span></span></label>`;
+ return `<label class="inventoryCheckV466" title="Element auswählen"><input type="checkbox" data-inv-select-v466="${esc(p.id)}" ${inventorySelectedV466.has(p.id)?'checked':''} onclick="inventoryToggleV466('${p.id}',this.checked,event)"><span></span></label>`;
 }
 function inventoryLocationCellV466(p,r,l){
  return `<button type="button" class="inventoryLocationBtnV466" onclick="openInventoryLocationV466('${p.id}')" title="Lagerort ändern"><span>${esc(r?.name||'–')}</span><b>✎</b></button>`;
@@ -20169,10 +20187,9 @@ function runWerkstoffplattenImportV472(){
      imported++;
    });
    ensureCommissions?.();
-   persist();
+   if(imported)persist();
    werkstoffImportDoneSessionV472=true;
    try{renderInv?.();renderFilters?.()}catch(e){}
-   if(imported)try{queueCloudSync?.()}catch(e){}
    console.info('V472 Werkstoffplatten-Import:',imported,'neu,',already,'bereits vorhanden');
  }finally{werkstoffImportRunningV472=false}
 }
@@ -20272,9 +20289,8 @@ function runImportV478(){
      addHistory?.(p,'Erfasst','Excel-Import Werkstoffplatten NICHT Holz · Kategorie C · Lagerort: '+(row.rack||'–')+' · ohne Ebene');
      st.packages.push(p);if(row.elementId)reserveElementId?.(row.elementId);imported++;
    });
-   ensureCommissions?.();persist();importDoneSessionV478=true;
+   ensureCommissions?.();if(imported)persist();importDoneSessionV478=true;
    try{renderInv?.();renderFilters?.()}catch(_ ){}
-   if(imported)try{queueCloudSync?.()}catch(_ ){}
    console.info('V478 Import:',imported,'neu,',already,'bereits vorhanden');
  }finally{importRunningV478=false}
 }
@@ -20324,9 +20340,8 @@ function runImportV479(){
    addHistory?.(p,'Erfasst','Excel-Import Dämmung · Format: '+(row.format||'–')+' · Lagerort: '+(row.rack||'–'));
    st.packages.push(p);if(row.elementId)reserveElementId?.(row.elementId);imported++;
   });
-  ensureCommissions?.();persist();importDoneSessionV479=true;
+  ensureCommissions?.();if(imported)persist();importDoneSessionV479=true;
   try{renderInv?.();renderFilters?.()}catch(_){}
-  if(imported)try{queueCloudSync?.()}catch(_){}
  }finally{importRunningV479=false}
 }
 try{const oldApplyV479=applyRemoteEntities;applyRemoteEntities=function(remote,preserveKeys=new Set()){let x=oldApplyV479(remote,preserveKeys);importDoneSessionV479=false;setTimeout(runImportV479,100);return x}}catch(e){}
@@ -20371,9 +20386,8 @@ function runImportV480(){
    addHistory?.(p,'Erfasst','Excel-Import Schalung / Massivholzbretter · Kategorie D · Lagerort: '+(row.rack||'–'));
    st.packages.push(p);if(row.elementId)reserveElementId?.(row.elementId);imported++;
   });
-  ensureCommissions?.();persist();importDoneSessionV480=true;
+  ensureCommissions?.();if(imported)persist();importDoneSessionV480=true;
   try{renderInv?.();renderFilters?.()}catch(_){}
-  if(imported)try{queueCloudSync?.()}catch(_){}
  }finally{importRunningV480=false}
 }
 try{const oldApplyV480=applyRemoteEntities;applyRemoteEntities=function(remote,preserveKeys=new Set()){let x=oldApplyV480(remote,preserveKeys);importDoneSessionV480=false;setTimeout(runImportV480,100);return x}}catch(e){}
@@ -20418,9 +20432,8 @@ function runImportV481(){
    addHistory?.(p,'Erfasst','Excel-Import Terrassenbretter · Kategorie TB · Lagerort: '+(row.rack||'–'));
    st.packages.push(p);if(row.elementId)reserveElementId?.(row.elementId);imported++;
   });
-  ensureCommissions?.();persist();importDoneSessionV481=true;
+  ensureCommissions?.();if(imported)persist();importDoneSessionV481=true;
   try{renderInv?.();renderFilters?.()}catch(_){}
-  if(imported)try{queueCloudSync?.()}catch(_){}
  }finally{importRunningV481=false}
 }
 try{const oldApplyV481=applyRemoteEntities;applyRemoteEntities=function(remote,preserveKeys=new Set()){let x=oldApplyV481(remote,preserveKeys);importDoneSessionV481=false;setTimeout(runImportV481,100);return x}}catch(e){}
