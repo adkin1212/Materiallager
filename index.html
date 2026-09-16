@@ -4801,7 +4801,7 @@ window.APP_RELEASE = {
   <div class="toolbar"><button class="btn secondary" onclick="closeM('defectsOverviewModal')">Schliessen</button></div>
 </div></div>
 <div class="modal" id="historyModal"><div class="box"><div class="mh"><h2 id="historyTitle">Verlauf</h2><button class="x" onclick="closeM('historyModal')">✕</button></div><div id="historyBody" class="manageList"></div></div></div>
-<div class="modal" id="areaNameModal"><div class="box"><div class="mh"><h2>Fläche benennen</h2><button class="x" onclick="closeM('areaNameModal')">✕</button></div><form class="form" onsubmit="saveDrawArea(event)"><label class="f span2">Name der Lagerfläche<input id="newAreaName" required placeholder="z. B. Plattenlager"></label><div class="span2"><button class="btn">Fläche speichern</button></div></form></div></div>
+<div class="modal" id="areaNameModal"><div class="box"><div class="mh"><h2>Fläche benennen</h2><button class="x" onclick="closeM('areaNameModal')">✕</button></div><form class="form" onsubmit="event.preventDefault();saveDrawArea(event)"><label class="f span2">Name der Lagerfläche<input id="newAreaName" required placeholder="z. B. Plattenlager"></label><div class="span2"><button class="btn">Fläche speichern</button></div></form></div></div>
 <div class="modal" id="renameModal"><div class="box"><div class="mh"><h2 id="renameTitle">Umbenennen</h2><button class="x" onclick="closeM('renameModal')">✕</button></div><form class="form" onsubmit="saveRename(event)"><label class="f span2">Neuer Name<input id="renameValue" required></label><div class="span2"><button class="btn">Speichern</button></div></form></div></div>
 
 <div class="modal" id="authModal"><div class="modalbox" style="max-width:520px">
@@ -4824,7 +4824,7 @@ window.APP_RELEASE = {
 <div class="authBox">
 <label><b>Neues Passwort / neue PIN</b><input id="forcePasswordValue" type="password" autocomplete="new-password" placeholder="mind. 6 Zeichen"></label>
 <label><b>Wiederholen</b><input id="forcePasswordConfirm" type="password" autocomplete="new-password"></label>
-<div class="toolbar"><button class="btn" type="button" onclick="completeForcedPasswordChange()">Neues Passwort speichern</button><button class="btn danger" type="button" onclick="signOutCloud()">Abmelden</button></div>
+<div class="toolbar"><button class="btn" type="submit" onclick="completeForcedPasswordChange()">Neues Passwort speichern</button><button class="btn danger" type="button" onclick="signOutCloud()">Abmelden</button></div>
 <p class="muted">Die App bleibt gesperrt, bis ein neues Passwort gesetzt wurde.</p>
 </div>
 </div></div>
@@ -4992,7 +4992,7 @@ window.APP_RELEASE = {
 <div class="span2"><button class="btn">Änderungen speichern</button></div>
 </form></div></div>
 
-<div class="modal" id="rackNewModal"><div class="box"><div class="mh"><h2>Gestell anlegen</h2><button class="x" onclick="closeM('rackNewModal')">✕</button></div><form class="form" onsubmit="saveRack(event)"><label class="f">Lagerfläche<select id="rArea" required></select></label><label class="f">Name<input id="rName" required></label><div class="span2"><button class="btn">Gestell anlegen</button></div></form></div></div>
+<div class="modal" id="rackNewModal"><div class="box"><div class="mh"><h2>Gestell anlegen</h2><button class="x" onclick="closeM('rackNewModal')">✕</button></div><form class="form" onsubmit="saveRack(event)"><label class="f">Lagerfläche<select id="rArea" required></select></label><label class="f">Name<input id="rName" required></label><div class="span2"><button type="submit" class="btn">Gestell anlegen</button></div></form></div></div>
 <div class="modal" id="levelModal"><div class="box"><div class="mh"><h2>Ebene hinzufügen</h2><button class="x" onclick="closeM('levelModal')">✕</button></div><form class="form" onsubmit="saveLevel(event)"><label class="f">Name<input id="lName" required></label><label class="f">Länge [m]<input id="lLen" type="number" step="0.01"></label><label class="f">Breite [m]<input id="lWid" type="number" step="0.01"></label><label class="f">Höhe [m]<input id="lHei" type="number" step="0.01"></label><div class="span2"><button class="btn">Speichern</button></div></form></div></div>
 
 
@@ -16512,7 +16512,7 @@ function deleteArea(id){if(!requireStructure())return;let n=st.racks.filter(r=>r
 function deleteRack(id){if(!requireStructure())return;let n=st.packages.filter(p=>p.rackId===id).length;if(n){alert('Dieses Gestell enthält noch Material. Bitte Material zuerst verschieben oder löschen.');return}if(confirm('Gestell wirklich löschen?')){st.racks=st.racks.filter(r=>r.id!==id);persist()}}
 
 function openRackNew(areaId=''){if(!requireStructure())return;let areas=st.areas.filter(a=>!a.locked);if(!areas.length){alert('Alle Lagerflächen sind gesperrt.');return}E('rArea').innerHTML=areas.map(a=>`<option value="${a.id}" ${a.id===areaId?'selected':''}>${esc(a.name)}</option>`).join('');E('rName').value='';E('rackNewModal').classList.add('open')}
-function saveRack(e){e.preventDefault();let aid=E('rArea').value;if(areaIsLocked(aid)){alert('Diese Lagerfläche ist gesperrt.');return}let order=orderedAreaRacks(aid).length;st.racks.push({id:'r'+Date.now(),areaId:aid,name:E('rName').value.trim(),photo:'',levels:[],displayOrder:order});closeM('rackNewModal');persist();showPage('manage')}
+function saveRack(e){e.preventDefault();let aid=E('rArea').value;if(areaIsLocked(aid)){alert('Diese Lagerfläche ist gesperrt.');return}let order=orderedAreaRacks(aid).length;st.racks.push({id:'r'+Date.now(),areaId:aid,name:E('rName').value.trim(),photo:'',levels:[],displayOrder:order});closeM('rackNewModal');persist();renderAreas();if(typeof renderManage==='function')renderManage()}
 function openLevel(){if(!requireStructure())return;E('lName').value='Ebene '+((st.racks.find(r=>r.id===E('rackSel').value)?.levels.length||0)+1);E('lLen').value=E('lWid').value=E('lHei').value='';E('levelModal').classList.add('open')}
 function saveLevel(e){e.preventDefault();let r=st.racks.find(x=>x.id===E('rackSel').value);r.levels.push({name:E('lName').value.trim(),length:E('lLen').value,width:E('lWid').value,height:E('lHei').value});closeM('levelModal');persist();renderManageRack()}
 
