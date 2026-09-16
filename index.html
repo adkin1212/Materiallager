@@ -4039,7 +4039,7 @@ window.APP_RELEASE = {
  color:#173e32;margin-bottom:2px
 }
 .inventoryLocationBoxV466{max-width:620px}
-#tbody tr:has(input[data-inv-select-v466]:checked){background:#f0f7f3}
+#tbody tr.inventorySelectedV497{background:#f0f7f3}
 
 
 
@@ -4392,6 +4392,8 @@ window.APP_RELEASE = {
 <div class="navGroupLabel">Historie</div>
 <button class="nav" data-page="transfers">↔ Umbuchungen</button>
 <button class="nav" data-page="archive">▣ Archiv</button>
+<div class="navGroupLabel">Verwaltung</div>
+<button class="nav" data-page="manage">⚙ Lagerverwaltung</button>
 </nav>
 <main>
 <header><div class="actions moduleTitleGroupV454"><button class="moduleChooserBtnV454" type="button" onclick="showModuleHome()" title="Bereichauswahl" aria-label="Bereichauswahl"><span aria-hidden="true">☰</span></button><button class="btn secondary" id="backBtn" onclick="goBack()" style="display:none">← Zurück</button><h1 id="title">Aussenlager</h1></div><div class="actions"><span id="syncStatusBadge" class="syncBadge" title="Speicherstatus">Lokal</span><button id="authHeaderBtn" class="btn secondary authBtn" onclick="openAuthModal()">Anmelden</button><span id="activeRoleBadge" class="statusbadge"></span><button class="btn secondary" id="drawBtn" onclick="startDraw()">+ Fläche erstellen</button><button class="btn" onclick="openMaterial()">+ Material erfassen</button></div></header>
@@ -16511,7 +16513,21 @@ function toggleAreaLock(id){
 function renameArea(id){if(!requireStructure())return;let a=st.areas.find(x=>x.id===id);renameTarget={type:'area',id};E('renameTitle').textContent='Lagerfläche umbenennen';E('renameValue').value=a.name;E('renameModal').classList.add('open')}
 function renameRack(id){if(!requireStructure())return;let r=st.racks.find(x=>x.id===id);renameTarget={type:'rack',id};E('renameTitle').textContent='Gestell umbenennen';E('renameValue').value=r.name;E('renameModal').classList.add('open')}
 function saveRename(e){e.preventDefault();let name=E('renameValue').value.trim();if(renameTarget.type==='area')st.areas.find(x=>x.id===renameTarget.id).name=name;else st.racks.find(x=>x.id===renameTarget.id).name=name;closeM('renameModal');persist();renderAreas();renderManage();if(renameTarget.type==='rack'&&currentRack===renameTarget.id)openRack(currentRack)}
-function deleteArea(id){if(!requireStructure())return;let n=st.racks.filter(r=>r.areaId===id).length;if(n){alert('Diese Fläche enthält noch Gestelle. Bitte Gestelle zuerst verschieben oder löschen.');return}if(confirm('Fläche wirklich löschen?')){st.areas=st.areas.filter(a=>a.id!==id);persist()}}
+function deleteArea(id){
+ if(!requireStructure())return;
+ const area=(st.areas||[]).find(a=>a.id===id);if(!area)return;
+ const racks=(st.racks||[]).filter(r=>r.areaId===id);
+ const rackIds=new Set(racks.map(r=>r.id));
+ const material=(st.packages||[]).filter(p=>p.areaId===id||(p.rackId&&rackIds.has(p.rackId)));
+ if(material.length){alert('Lagerfläche kann nicht gelöscht werden.\n\nEs sind noch '+material.length+' Material-/Paketposition(en) dieser Fläche oder ihren Gestellen zugeordnet. Bitte zuerst umbuchen.');return}
+ const msg=racks.length?'Lagerfläche „'+(area.name||'')+'“ wirklich löschen?\n\n'+racks.length+' Gestell(e) werden ebenfalls gelöscht. Material wird niemals gelöscht.':'Lagerfläche „'+(area.name||'')+'“ wirklich löschen?';
+ if(!confirm(msg))return;
+ st.racks=(st.racks||[]).filter(r=>!rackIds.has(r.id));
+ st.areas=(st.areas||[]).filter(a=>a.id!==id);
+ persist();
+ try{renderAreas()}catch(_e){}
+ try{renderManage()}catch(_e){}
+}
 function deleteRack(id){if(!requireStructure())return;let n=st.packages.filter(p=>p.rackId===id).length;if(n){alert('Dieses Gestell enthält noch Material. Bitte Material zuerst verschieben oder löschen.');return}if(confirm('Gestell wirklich löschen?')){st.racks=st.racks.filter(r=>r.id!==id);persist()}}
 
 function openRackNew(areaId=''){if(!requireStructure())return;let areas=st.areas.filter(a=>!a.locked);if(!areas.length){alert('Alle Lagerflächen sind gesperrt.');return}E('rArea').innerHTML=areas.map(a=>`<option value="${a.id}" ${a.id===areaId?'selected':''}>${esc(a.name)}</option>`).join('');E('rName').value='';E('rackNewModal').classList.add('open')}
@@ -17106,12 +17122,12 @@ function renderInv(){
        last=key;
      }
      let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];
-     bodyV485.push(`<tr class="${hasReservation(p)?'reservedRow':''}">${st.inventoryColumnOrder.map(k=>`<td>${inventoryCell(p,k,r,l)}</td>`).join('')}</tr>`);
+     bodyV485.push(`<tr class="${hasReservation(p)?'reservedRow ':''}${inventorySelectedV466.has(p.id)?'inventorySelectedV497':''}">${st.inventoryColumnOrder.map(k=>`<td>${inventoryCell(p,k,r,l)}</td>`).join('')}</tr>`);
    });
  }else{
    ps.forEach(p=>{
      let r=st.racks.find(x=>x.id===p.rackId),l=r?.levels[p.levelIndex];
-     bodyV485.push(`<tr class="${hasReservation(p)?'reservedRow':''}">${st.inventoryColumnOrder.map(k=>`<td>${inventoryCell(p,k,r,l)}</td>`).join('')}</tr>`);
+     bodyV485.push(`<tr class="${hasReservation(p)?'reservedRow ':''}${inventorySelectedV466.has(p.id)?'inventorySelectedV497':''}">${st.inventoryColumnOrder.map(k=>`<td>${inventoryCell(p,k,r,l)}</td>`).join('')}</tr>`);
    });
  }
  E('tbody').innerHTML=bodyV485.join('');
@@ -18000,7 +18016,38 @@ async function exportInventoryPDF(){
   .platformRentalRowV435>span:nth-child(5){grid-column:2}
 }
 
-</style></head><body><h1>Holzlager – Gesamtinventar</h1><p>Export: ${escHtml(formatDateTime(new Date().toISOString()))} · Positionen: ${body.length}</p>${table}</body></html>`);
+</style><style>
+/* V496 – Performance bei Mausbewegungen in grossen Tabellen */
+#invTable tbody tr,
+#invTable tbody td,
+#invTable tbody input,
+#invTable tbody button,
+#invTable tbody .pill,
+#invTable tbody .badge{
+  transition:none !important;
+}
+#invTable tbody tr{
+  contain:paint;
+}
+</style>
+
+<style>
+#invTable tbody tr:hover{
+  transform:none !important;
+  box-shadow:none !important;
+}
+</style>
+<style>
+/* V497 – grosse Lagerliste: weniger Hit-Testing/Repaint bei Mausbewegung */
+#invTable{border-collapse:separate!important;border-spacing:0}
+#tbody td{pointer-events:none}
+#tbody input,#tbody button,#tbody select,#tbody a,#tbody label,
+#tbody [onclick],#tbody [onpointerdown]{pointer-events:auto}
+#tbody tr:hover td{background:inherit!important}
+#tbody tr.reservedRow td{background:#fff0cc!important}
+#tbody tr.inventorySelectedV497 td{background:#f0f7f3!important}
+</style>
+</head><body><h1>Holzlager – Gesamtinventar</h1><p>Export: ${escHtml(formatDateTime(new Date().toISOString()))} · Positionen: ${body.length}</p>${table}</body></html>`);
    win.document.close();
    win.onload=()=>setTimeout(()=>win.print(),300);
  }
@@ -20044,6 +20091,8 @@ function startInvResizeV469(e,key){
  const th=e.currentTarget.parentElement;
  invResizeV469={key,startX:e.clientX,startW:th.getBoundingClientRect().width};
  e.currentTarget.classList.add('resizingV469');document.body.style.cursor='col-resize';document.body.style.userSelect='none';
+ document.addEventListener('pointermove',moveInvResizeV469,{passive:true});
+ document.addEventListener('pointerup',endInvResizeV469,{once:true});
 }
 function moveInvResizeV469(e){
  if(!invResizeV469)return;
@@ -20051,9 +20100,13 @@ function moveInvResizeV469(e){
  const widths=invWidthsV469();widths[invResizeV469.key]=w;saveInvWidthsV469(widths);applyInvWidthsV469();
 }
 function endInvResizeV469(){
- if(!invResizeV469)return;invResizeV469=null;document.body.style.cursor='';document.body.style.userSelect='';document.querySelectorAll('.invResizeHandleV469.resizingV469').forEach(x=>x.classList.remove('resizingV469'));
+ if(!invResizeV469)return;
+ invResizeV469=null;
+ document.removeEventListener('pointermove',moveInvResizeV469);
+ document.body.style.cursor='';document.body.style.userSelect='';
+ document.querySelectorAll('.invResizeHandleV469.resizingV469').forEach(x=>x.classList.remove('resizingV469'));
 }
-document.addEventListener('pointermove',moveInvResizeV469);document.addEventListener('pointerup',endInvResizeV469);
+
 function invDragStartV469(e,key){if(e.target.classList.contains('invResizeHandleV469'))return;invDragKeyV469=key;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',key);requestAnimationFrame(()=>e.currentTarget.classList.add('draggingV469'))}
 function invDragOverV469(e,key){e.preventDefault();if(!invDragKeyV469||invDragKeyV469===key)return;e.dataTransfer.dropEffect='move';document.querySelectorAll('#invHead th.dragOverV469').forEach(x=>x.classList.remove('dragOverV469'));e.currentTarget.classList.add('dragOverV469')}
 function invDragLeaveV469(e){e.currentTarget.classList.remove('dragOverV469')}
@@ -20471,5 +20524,161 @@ document.addEventListener('keydown',function(e){
   renderInv();e.preventDefault();
  }
 });
+</script>
+<script>
+/* V499 – einmalige Bereinigung leerer Excel-Import-Lagerorte */
+(function cleanupImportedPlaceholderLocationsV499(){
+ try{
+  if(localStorage.getItem('kuenzli_cleanup_import_locations_v499')==='done')return;
+  const norm=x=>String(x||'').trim().toLowerCase();
+  const isPlaceholder=x=>{
+    const n=norm(x);
+    return n==='weitere lagerorte' ||
+           n==='weitere lagerorte und gestelle' ||
+           n.startsWith('weitere lagerorte ');
+  };
+  const usedRackIds=new Set((st.packages||[]).map(p=>p.rackId).filter(Boolean));
+  const usedAreaIds=new Set((st.packages||[]).map(p=>p.areaId).filter(Boolean));
+
+  const removableRackIds=new Set(
+    (st.racks||[])
+      .filter(r=>isPlaceholder(r.name) && !usedRackIds.has(r.id))
+      .map(r=>r.id)
+  );
+
+  const racksAfter=(st.racks||[]).filter(r=>!removableRackIds.has(r.id));
+  const areaHasRemainingRack=id=>racksAfter.some(r=>r.areaId===id);
+
+  const removableAreaIds=new Set(
+    (st.areas||[])
+      .filter(a=>isPlaceholder(a.name) && !usedAreaIds.has(a.id) && !areaHasRemainingRack(a.id))
+      .map(a=>a.id)
+  );
+
+  const changed=removableRackIds.size||removableAreaIds.size;
+  if(changed){
+    st.racks=racksAfter;
+    st.areas=(st.areas||[]).filter(a=>!removableAreaIds.has(a.id));
+    persist();
+  }
+  localStorage.setItem('kuenzli_cleanup_import_locations_v499','done');
+ }catch(e){console.warn('V499 Import-Lagerort-Bereinigung:',e)}
+})();
+</script>
+<script>
+/* V500 – Bereinigung der tatsächlich erzeugten Excel-Lagerort-Platzhalter */
+(function cleanupExcelLocationsV500(){
+ try{
+  if(localStorage.getItem('kuenzli_cleanup_excel_locations_v500')==='done')return;
+  const norm=x=>String(x||'').trim().toLowerCase().replace(/[–—]/g,'-').replace(/\s+/g,' ');
+  const generated=x=>{
+    const n=norm(x);
+    return n.startsWith('weitere lagerorte - excel lagerort') ||
+           n.startsWith('weitere lagerorte - schreinerei');
+  };
+
+  const packages=st.packages||[];
+  const rackUsed=id=>packages.some(p=>p.rackId===id);
+  const areaUsed=id=>packages.some(p=>p.areaId===id);
+
+  const removeRackIds=new Set(
+    (st.racks||[]).filter(r=>generated(r.name)&&!rackUsed(r.id)).map(r=>r.id)
+  );
+  const racksAfter=(st.racks||[]).filter(r=>!removeRackIds.has(r.id));
+
+  const removeAreaIds=new Set(
+    (st.areas||[]).filter(a=>
+      generated(a.name) &&
+      !areaUsed(a.id) &&
+      !racksAfter.some(r=>r.areaId===a.id)
+    ).map(a=>a.id)
+  );
+
+  if(removeRackIds.size||removeAreaIds.size){
+    st.racks=racksAfter;
+    st.areas=(st.areas||[]).filter(a=>!removeAreaIds.has(a.id));
+    persist();
+  }
+  localStorage.setItem('kuenzli_cleanup_excel_locations_v500','done');
+  console.info('V500 Excel-Lagerorte entfernt:',removeAreaIds.size,'Flächen,',removeRackIds.size,'Gestelle');
+ }catch(e){console.warn('V500 Excel-Lagerort-Bereinigung:',e)}
+})();
+</script>
+<script>
+/* V501 – Excel-Import-Gestelle endgültig bereinigen */
+(function cleanupExcelRacksV501(){
+ try{
+  if(localStorage.getItem('kuenzli_cleanup_excel_racks_v501')==='done')return;
+  const norm=x=>String(x||'').trim().toLowerCase().replace(/[–—]/g,'-').replace(/\s+/g,' ');
+  const isExcelRackName=x=>norm(x).startsWith('weitere lagerorte - excel lagerort');
+
+  const excelRacks=(st.racks||[]).filter(r=>isExcelRackName(r.name));
+  const excelIds=new Set(excelRacks.map(r=>r.id));
+
+  /* Do not move material that already has a valid non-placeholder rack.
+     Only clear stale references that still point to one of the generated Excel racks. */
+  (st.packages||[]).forEach(p=>{
+    if(excelIds.has(p.rackId)){
+      p.rackId='';
+      p.levelIndex=-1;
+    }
+  });
+
+  st.racks=(st.racks||[]).filter(r=>!excelIds.has(r.id));
+
+  /* Remove now-empty generated Excel areas as well. */
+  const excelAreaIds=new Set(
+    (st.areas||[]).filter(a=>norm(a.name).startsWith('weitere lagerorte - excel lagerort')).map(a=>a.id)
+  );
+  st.areas=(st.areas||[]).filter(a=>{
+    if(!excelAreaIds.has(a.id))return true;
+    return (st.racks||[]).some(r=>r.areaId===a.id) || (st.packages||[]).some(p=>p.areaId===a.id);
+  });
+
+  if(excelIds.size)persist();
+  localStorage.setItem('kuenzli_cleanup_excel_racks_v501','done');
+  console.info('V501 Excel-Gestelle entfernt:',excelIds.size);
+ }catch(e){console.warn('V501 Excel-Gestell-Bereinigung:',e)}
+})();
+</script>
+<script>
+/* V502 – Excel-Lagerort-Platzhalter aus allen Anzeigequellen bereinigen */
+(function cleanupExcelLocationLabelsV502(){
+ try{
+  if(localStorage.getItem('kuenzli_cleanup_excel_labels_v502')==='done')return;
+  const norm=x=>String(x||'').trim().toLowerCase().replace(/[–—]/g,'-').replace(/\s+/g,' ');
+  const isExcel=x=>norm(x).startsWith('weitere lagerorte - excel lagerort');
+  let changed=false;
+
+  /* Pakete können importierte Lagerort-Texte zusätzlich als Alt-/Metadaten tragen.
+     Nur exakt der Excel-Platzhalter wird geleert. */
+  (st.packages||[]).forEach(p=>{
+    ['location','lagerort','rackName','locationName','importLocation','excelLocation'].forEach(k=>{
+      if(typeof p[k]==='string' && isExcel(p[k])){p[k]='';changed=true;}
+    });
+  });
+
+  /* Alle noch vorhandenen generierten Rack-Datensätze entfernen. */
+  const ids=new Set((st.racks||[]).filter(r=>isExcel(r.name)).map(r=>r.id));
+  if(ids.size){
+    (st.packages||[]).forEach(p=>{
+      if(ids.has(p.rackId)){p.rackId='';p.levelIndex=-1;changed=true;}
+    });
+    st.racks=(st.racks||[]).filter(r=>!ids.has(r.id));
+    changed=true;
+  }
+
+  /* Generierte Flächen nur entfernen, wenn nach der Bereinigung nichts mehr darauf liegt. */
+  const areaIds=new Set((st.areas||[]).filter(a=>isExcel(a.name)).map(a=>a.id));
+  const keepArea=id=>(st.racks||[]).some(r=>r.areaId===id)||(st.packages||[]).some(p=>p.areaId===id);
+  const before=(st.areas||[]).length;
+  st.areas=(st.areas||[]).filter(a=>!areaIds.has(a.id)||keepArea(a.id));
+  if(st.areas.length!==before)changed=true;
+
+  if(changed)persist();
+  localStorage.setItem('kuenzli_cleanup_excel_labels_v502','done');
+  setTimeout(()=>{try{refresh()}catch(_){}},0);
+ }catch(e){console.warn('V502 Excel-Lagerort-Anzeige-Bereinigung:',e)}
+})();
 </script>
 </body></html>
