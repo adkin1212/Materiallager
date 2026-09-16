@@ -4623,6 +4623,9 @@ window.APP_RELEASE = {
      <button class="btn secondary" onclick="testCloudConnection()">Verbindung testen</button>
      <button class="btn secondary" onclick="setSyncStatus('syncing','Lokal → Cloud gestartet');pushEntitySync(true)">Lokal → Cloud</button>
      <button class="btn secondary" onclick="pullEntitySync(true)">Cloud → Gerät</button>
+     <button class="btn secondary" type="button" onclick="downloadBackupV495()">Datensicherung herunterladen</button>
+     <input id="backupFileV495" type="file" accept=".json,application/json" style="display:none" onchange="restoreBackupV495(this.files&&this.files[0]);this.value=''">
+     <button class="btn secondary" type="button" onclick="E('backupFileV495').click()">Datensicherung wiederherstellen</button>
      <button class="btn secondary" onclick="migrateLocalPhotosToCloud()">Fotos → Cloud</button>
     </div>
     <div class="manageStatusGrid">
@@ -20439,4 +20442,34 @@ function runImportV481(){
 try{const oldApplyV481=applyRemoteEntities;applyRemoteEntities=function(remote,preserveKeys=new Set()){let x=oldApplyV481(remote,preserveKeys);importDoneSessionV481=false;setTimeout(runImportV481,100);return x}}catch(e){}
 window.addEventListener('load',()=>setTimeout(runImportV481,1800));
 
-</script>\n</body></html>
+</script>\n<script>
+/* V495 – lokale Datensicherung + ESC-Auswahl */
+function downloadBackupV495(){
+ try{
+  const payload={format:'kuenzli-holzlager-backup',formatVersion:1,createdAt:new Date().toISOString(),storageKey:KEY,warehouseId:cloudCfg?.warehouseId||'hauptlager',data:st};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a'),d=new Date(),p=n=>String(n).padStart(2,'0');
+  a.href=url;a.download=`kuenzli_holzlager_backup_${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}_${p(d.getHours())}-${p(d.getMinutes())}.json`;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ }catch(e){alert('Datensicherung konnte nicht erstellt werden:\n'+String(e.message||e))}
+}
+async function restoreBackupV495(file){
+ if(!file)return;
+ try{
+  const payload=JSON.parse(await file.text());
+  if(!payload||payload.format!=='kuenzli-holzlager-backup'||!payload.data||typeof payload.data!=='object')throw new Error('Keine gültige Künzli-Holzlager-Datensicherung.');
+  if(!confirm('Datensicherung wiederherstellen?\n\nDer aktuelle lokale Datenstand wird durch die Sicherung ersetzt.'))return;
+  st=payload.data;ensureV24();localStorage.setItem(KEY,JSON.stringify(st));refresh();
+  alert('Datensicherung lokal wiederhergestellt.\nBitte kontrollieren und erst danach bei Bedarf „Lokal → Cloud“ ausführen.');
+ }catch(e){alert('Wiederherstellung fehlgeschlagen:\n'+String(e.message||e))}
+}
+document.addEventListener('keydown',function(e){
+ if(e.key!=='Escape')return;
+ if(typeof inventorySelectedV466!=='undefined'&&inventorySelectedV466.size){
+  inventorySelectedV466.clear();
+  if(typeof inventoryLastClickedV490!=='undefined')inventoryLastClickedV490=null;
+  renderInv();e.preventDefault();
+ }
+});
+</script>
+</body></html>
