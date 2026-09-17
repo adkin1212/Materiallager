@@ -5,7 +5,7 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
 <!-- V406: Transporte direkt unter der Projekterfassung -->
-<title>Künzli Lagerverwaltung V345 · BV2026-1-09</title>
+<title>Künzli Lagerverwaltung V345 · BV2026-1-10</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -4512,7 +4512,7 @@ window.APP_RELEASE = {
 <div class="toolbar" style="margin:0">
 <button class="btn secondary" onclick="zoomOutside(-0.2)">−</button>
 <button class="btn secondary" onclick="zoomOutside(0.2)">+</button>
-<button class="btn secondary" onclick="resetOutsideZoom()">Ansicht zurücksetzen</button><button class="btn" onclick="openProduction()">Produktionshalle öffnen</button>
+<button class="btn secondary" onclick="resetOutsideZoom()">Ansicht zurücksetzen</button><button class="btn secondary" id="materialPinBtnV552" onclick="toggleMaterialPinModeV552()">📍 Material-Pin setzen</button><button class="btn" onclick="openProduction()">Produktionshalle öffnen</button>
 
 </div>
 </div>
@@ -5102,6 +5102,24 @@ window.APP_RELEASE = {
 </form></div></div>
 
 
+<div class="modal" id="materialPinModalV552"><div class="box" style="max-width:650px">
+ <div class="mh"><div><h2 style="margin:0">📍 Material-Pin</h2><div class="muted" style="margin-top:4px">Lose oder nicht vollständig erfasste Materialien auf der Lagerkarte markieren.</div></div><button class="x" onclick="closeM('materialPinModalV552')">✕</button></div>
+ <form onsubmit="saveMaterialPinV552(event)">
+  <input type="hidden" id="materialPinIdV552">
+  <input type="hidden" id="materialPinXV552"><input type="hidden" id="materialPinYV552">
+  <div class="grid2">
+   <label>Materialbezeichnung<input id="materialPinMaterialV552" required autocomplete="off" placeholder="z. B. Restholz Fichte"></label>
+   <label>Kommission<div class="wtTargetRowV549"><select id="materialPinCommissionV552"></select><button class="btn secondary" type="button" onclick="openMaterialPinCommissionV552()">+ Neue Kommission</button></div></label>
+  </div>
+  <label style="margin-top:12px">Bemerkung<textarea id="materialPinNoteV552" rows="3" placeholder="Optional"></textarea></label>
+  <div class="wtInfoV549" style="margin-top:12px">Material-Pins dienen nur als visuelle Markierung auf der Karte und werden nicht in Stückzahlen, m², m³ oder Inventarbestände eingerechnet.</div>
+  <div class="toolbar" style="justify-content:space-between;margin-top:18px"><button id="materialPinDeleteBtnV552" class="btn danger" type="button" onclick="deleteMaterialPinV552()" style="display:none">Pin löschen</button><div class="toolbar" style="margin:0"><button class="btn secondary" type="button" onclick="closeM('materialPinModalV552')">Abbrechen</button><button class="btn" type="submit">Pin speichern</button></div></div>
+ </form>
+</div></div>
+<div class="modal" id="materialPinCommissionModalV552"><div class="box" style="max-width:500px">
+ <div class="mh"><h2 style="margin:0">Neue Kommission</h2><button class="x" onclick="closeM('materialPinCommissionModalV552')">✕</button></div>
+ <form onsubmit="saveMaterialPinCommissionV552(event)"><label>Kommissionsname<input id="materialPinNewCommissionV552" required autocomplete="off"></label><div class="toolbar" style="justify-content:flex-end;margin-top:18px"><button class="btn secondary" type="button" onclick="closeM('materialPinCommissionModalV552')">Abbrechen</button><button class="btn" type="submit">Kommission erstellen</button></div></form>
+</div></div>
 <div class="modal" id="warehouseTransferModalV545"><div class="box wtModalV549">
  <div class="mh"><div><h2 style="margin:0">Material umbuchen</h2><div class="muted" style="margin-top:4px">Material zwischen Kommissionen verschieben und wertmässig gegenbuchen.</div></div><button class="x" onclick="closeM('warehouseTransferModalV545')">✕</button></div>
  <form onsubmit="saveWarehouseTransferV545(event)">
@@ -9804,7 +9822,7 @@ function validateSequentialDailyProgress(p,entries){
 function saveDailyProduction(){
  let p=projectById(currentProjectId);if(!p)return;
 
- // BV2026-1-09: Beim Bearbeiten wird genau der gewählte Erfassungsvorgang ersetzt.
+ // BV2026-1-10: Beim Bearbeiten wird genau der gewählte Erfassungsvorgang ersetzt.
  if(productionProgressEditV547){
    let oldDay=(p.dailyProduction||[]).find(d=>(d.progressBatchesV547||[]).some(b=>b.id===productionProgressEditV547.batchId));
    let oldBatch=oldDay?.progressBatchesV547?.find(b=>b.id===productionProgressEditV547.batchId);
@@ -16359,9 +16377,9 @@ function renderDefectManageSummary(){
 }
 
 
-// ===== BV2026-1-09 · echte Lager-Kommissionsumbuchungen mit Teilmengen =====
+// ===== BV2026-1-10 · echte Lager-Kommissionsumbuchungen mit Teilmengen =====
 
-// BV2026-1-09: gelernte Preisstamm-Zuordnung und Gegenbuchungen
+// BV2026-1-10: gelernte Preisstamm-Zuordnung und Gegenbuchungen
 function warehousePriceMapV546(){st.settings=st.settings||{};st.settings.warehouseTransferPriceMapV546=st.settings.warehouseTransferPriceMapV546||{};return st.settings.warehouseTransferPriceMapV546}
 function warehouseMaterialSignatureV546(p){return [p?.idCategory||'',p?.material||'',p?.woodType||p?.holzart||'',p?.length||'',p?.width||'',p?.height||''].map(v=>String(v||'').trim().toLowerCase()).join('|')}
 function mappedWarehousePriceMaterialV546(p){return transferMaterialById(warehousePriceMapV546()[warehouseMaterialSignatureV546(p)])}
@@ -17037,6 +17055,61 @@ function productionHasCommission(commission){
  return st.areas.some(a=>areaMapType(a)==='production'&&areaHasCommission(a,commission));
 }
 
+let materialPinModeV552=false;
+function ensureMaterialPinsV552(){st.materialPinsV552=Array.isArray(st.materialPinsV552)?st.materialPinsV552:[];return st.materialPinsV552}
+function materialPinCommissionOptionsV552(selected){
+ ensureCommissions();
+ let names=[...(st.commissions||[]).map(c=>typeof c==='string'?c:c?.name),...(st.internalTransfers||[]).map(c=>c?.name)].map(x=>String(x||'').trim()).filter(Boolean);
+ names=[...new Set(names)].sort((a,b)=>a.localeCompare(b,'de'));
+ return '<option value="">– Keine Kommission –</option>'+names.map(n=>`<option value="${esc(n)}" ${n===selected?'selected':''}>${esc(n)}</option>`).join('');
+}
+function toggleMaterialPinModeV552(force){
+ materialPinModeV552=typeof force==='boolean'?force:!materialPinModeV552;
+ E('materialPinBtnV552')?.classList.toggle('active',materialPinModeV552);
+ E('areaSvg')?.classList.toggle('pinModeV552',materialPinModeV552);
+}
+function openNewMaterialPinV552(x,y){
+ E('materialPinIdV552').value='';E('materialPinXV552').value=Number(x).toFixed(2);E('materialPinYV552').value=Number(y).toFixed(2);
+ E('materialPinMaterialV552').value='';E('materialPinCommissionV552').innerHTML=materialPinCommissionOptionsV552('');
+ E('materialPinNoteV552').value='';E('materialPinDeleteBtnV552').style.display='none';
+ E('materialPinModalV552').classList.add('open');setTimeout(()=>E('materialPinMaterialV552')?.focus(),50);
+}
+function openMaterialPinV552(id){
+ let p=ensureMaterialPinsV552().find(x=>x.id===id);if(!p)return;
+ E('materialPinIdV552').value=p.id;E('materialPinXV552').value=p.x;E('materialPinYV552').value=p.y;
+ E('materialPinMaterialV552').value=p.material||'';E('materialPinCommissionV552').innerHTML=materialPinCommissionOptionsV552(p.commission||'');E('materialPinCommissionV552').value=p.commission||'';
+ E('materialPinNoteV552').value=p.note||'';E('materialPinDeleteBtnV552').style.display='';
+ E('materialPinModalV552').classList.add('open');
+}
+function saveMaterialPinV552(e){
+ e.preventDefault();let id=E('materialPinIdV552').value,arr=ensureMaterialPinsV552(),p=arr.find(x=>x.id===id);
+ let now=new Date().toISOString();
+ if(!p){p={id:'mp'+Date.now()+Math.random().toString(16).slice(2),createdAt:now};arr.push(p)}
+ p.x=Number(E('materialPinXV552').value);p.y=Number(E('materialPinYV552').value);p.material=E('materialPinMaterialV552').value.trim();
+ p.commission=E('materialPinCommissionV552').value||'';p.note=E('materialPinNoteV552').value.trim();p.updatedAt=now;
+ persist();closeM('materialPinModalV552');renderAreas();
+}
+function deleteMaterialPinV552(){
+ let id=E('materialPinIdV552').value;if(!id)return;
+ if(!confirm('Diesen Material-Pin löschen?'))return;
+ st.materialPinsV552=ensureMaterialPinsV552().filter(x=>x.id!==id);persist();closeM('materialPinModalV552');renderAreas();
+}
+function openMaterialPinCommissionV552(){E('materialPinNewCommissionV552').value='';E('materialPinCommissionModalV552').classList.add('open');setTimeout(()=>E('materialPinNewCommissionV552')?.focus(),50)}
+function saveMaterialPinCommissionV552(e){
+ e.preventDefault();let name=E('materialPinNewCommissionV552').value.trim();if(!name)return;ensureCommissions();
+ if(!(st.commissions||[]).some(c=>String(c.name||c).trim().toLowerCase()===name.toLowerCase())){st.commissions.push({id:'c'+Date.now()+Math.random().toString(16).slice(2),name,active:true,createdAt:new Date().toISOString()});persist()}
+ E('materialPinCommissionV552').innerHTML=materialPinCommissionOptionsV552(name);E('materialPinCommissionV552').value=name;closeM('materialPinCommissionModalV552');
+}
+function materialPinsSvgV552(mapType){
+ if(mapType!=='outside')return '';
+ return ensureMaterialPinsV552().map(p=>{
+   let x=Number(p.x)||0,y=Number(p.y)||0,label=p.material+(p.commission?' · '+p.commission:'');
+   let w=Math.max(10,Math.min(32,label.length*.7+2));
+   return `<g class="materialPinV552" onclick="event.stopPropagation();openMaterialPinV552('${p.id}')" transform="translate(${x} ${y})">
+    <line class="pinNeedle" x1="0" y1="-1.2" x2="0" y2="1.4"></line><path class="pinHead" d="M0,0.2 C-1.6,-1.3 -1.8,-3.4 0,-4.2 C1.8,-3.4 1.6,-1.3 0,0.2 Z"></path><circle cx="0" cy="-2.6" r=".55" fill="#fff"></circle>
+    <rect class="pinLabelBg" x="${-w/2}" y="1.5" width="${w}" height="2.2" rx=".7"></rect><text class="pinLabel" x="0" y="3.05" text-anchor="middle">${esc(label)}</text></g>`;
+ }).join('');
+}
 function renderOneAreaMap(mapType){
  let svg=svgForMap(mapType);if(!svg)return;
  let parts='';
@@ -17075,6 +17148,7 @@ function renderOneAreaMap(mapType){
      displayEditPoints.forEach((p,i)=>parts+=`<circle class="editDot" data-p="${i}" cx="${p[0]}" cy="${p[1]}" r=".85"></circle>`);
    }
  }
+ parts+=materialPinsSvgV552(mapType);
  svg.innerHTML=parts;
 }
 function renderProductionHotspot(){
@@ -17120,6 +17194,10 @@ function bindAreaSvg(id,mapType){
  svg.addEventListener('pointerup',()=>{dragPoint=-1;draggingLabel=false});
  svg.addEventListener('pointercancel',()=>{dragPoint=-1;draggingLabel=false});
  svg.addEventListener('click',e=>{
+   if(materialPinModeV552&&mapType==='outside'){
+     let r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;
+     toggleMaterialPinModeV552(false);openNewMaterialPinV552(x,y);e.preventDefault();e.stopPropagation();return;
+   }
    if(!drawMode||drawingMap!==mapType)return;
    let r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;
    let p=mapType==='production'?productionStoredPoint([x,y]):[x,y];
@@ -21783,7 +21861,7 @@ document.addEventListener('toggle',function(ev){
 </script>
 </body></html>
 <style>.platformVehicleFields{grid-template-columns:repeat(4,minmax(150px,1fr))!important}@media(max-width:1100px){.platformVehicleFields{grid-template-columns:repeat(2,minmax(180px,1fr))!important}}@media(max-width:700px){.platformVehicleFields{grid-template-columns:1fr!important}}
-/* BV2026-1-09 · aufgeräumte Material-Umbuchung */
+/* BV2026-1-10 · aufgeräumte Material-Umbuchung */
 .wtModalV549{max-width:920px!important;width:min(920px,calc(100vw - 32px))!important}
 .wtModalV549 form{display:flex;flex-direction:column;gap:14px}
 .wtSectionV549{border:1px solid var(--line,#d9e1dd);border-radius:14px;padding:16px;background:var(--card,#fff)}
@@ -21799,4 +21877,13 @@ document.addEventListener('toggle',function(ev){
 .wtInfoV549{font-size:13px;color:var(--muted,#66736d);line-height:1.45;padding:0 4px}
 .wtFooterV549{display:flex;justify-content:flex-end;gap:10px;padding-top:2px}
 @media(max-width:760px){.wtGridV549,.wtGrid2V549{grid-template-columns:1fr}.wtTargetRowV549{grid-template-columns:1fr}.wtValueCardV549{align-items:flex-start;flex-direction:column}.wtValueCardV549 #wtValueV545{white-space:normal}}
+
+/* BV2026-1-10 · Material-Pins */
+.materialPinV552{cursor:pointer;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
+.materialPinV552 .pinHead{fill:#d62f2f;stroke:#fff;stroke-width:.35}
+.materialPinV552 .pinNeedle{stroke:#5b1c1c;stroke-width:.35}
+.materialPinV552 .pinLabelBg{fill:rgba(20,52,43,.92);stroke:#fff;stroke-width:.15}
+.materialPinV552 .pinLabel{fill:#fff;font-size:1.15px;font-weight:800;paint-order:stroke;stroke:#17372e;stroke-width:.22}
+#materialPinBtnV552.active{background:#174c3d;color:#fff;border-color:#174c3d}
+#areaSvg.pinModeV552{cursor:crosshair}
 </style>
