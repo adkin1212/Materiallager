@@ -5,7 +5,7 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
 <!-- V406: Transporte direkt unter der Projekterfassung -->
-<title>Künzli Lagerverwaltung V345 · BV2026-1-01</title>
+<title>Künzli Lagerverwaltung V345 · BV2026-1-09</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -4647,7 +4647,7 @@ window.APP_RELEASE = {
 <div class="grid transferSplitGrid" id="transferSplitGrid">
  <div class="card">
   <div class="manageHead">
-   <div><h2 style="margin:0">Interne Materialumbuchungen</h2><p class="muted">Materialentnahmen pro Kommission erfassen und mit Einkaufspreisen auswerten.</p></div>
+   <div><h2 style="margin:0">Interne Materialumbuchungen</h2><p class="muted">Materialentnahmen und echte Kommissions-Umbuchungen erfassen und mit eingefrorenen Einkaufspreisen auswerten.</p></div>
    <div class="toolbar">
     <button class="btn" onclick="openTransferCommissionNew()">+ Kommission</button>
     <button class="btn secondary" onclick="toggleTransferArchive()">Archiv anzeigen</button>
@@ -5101,6 +5101,59 @@ window.APP_RELEASE = {
 <div class="span2"><button class="btn">Speichern</button></div>
 </form></div></div>
 
+
+<div class="modal" id="warehouseTransferModalV545"><div class="box wtModalV549">
+ <div class="mh"><div><h2 style="margin:0">Material umbuchen</h2><div class="muted" style="margin-top:4px">Material zwischen Kommissionen verschieben und wertmässig gegenbuchen.</div></div><button class="x" onclick="closeM('warehouseTransferModalV545')">✕</button></div>
+ <form onsubmit="saveWarehouseTransferV545(event)">
+  <input type="hidden" id="wtPackageIdV545">
+  <div class="wtSectionV549">
+   <div class="wtSectionTitleV549">Material</div>
+   <div class="wtGridV549">
+    <label>Material<input id="wtMaterialV545" disabled></label>
+    <label>Element-ID<input id="wtElementIdV545" disabled></label>
+    <label>Verfügbar<input id="wtAvailableV545" disabled></label>
+   </div>
+  </div>
+  <div class="wtSectionV549">
+   <div class="wtSectionTitleV549">Umbuchung</div>
+   <div class="wtGridV549 wtGrid2V549">
+    <label>Von Kommission<input id="wtFromV545" disabled></label>
+    <label>Nach Kommission
+      <div class="wtTargetRowV549"><select id="wtToV545" required></select><button class="btn secondary" type="button" onclick="openQuickCommissionV549()">+ Neue Kommission</button></div>
+    </label>
+    <label>Anzahl umbuchen<input id="wtCountV545" type="number" min="0.001" step="0.001" required oninput="updateWarehouseTransferPreviewV545()"></label>
+   </div>
+  </div>
+  <div class="wtSectionV549">
+   <div class="wtSectionTitleV549">Bewertung</div>
+   <div class="wtGridV549 wtGrid2V549">
+    <label>Preisstamm<div class="wtTargetRowV549"><select id="wtPriceMaterialV545" required onchange="updateWarehouseTransferPreviewV545()"></select><button class="btn secondary" type="button" onclick="openQuickPriceMaterialV551()">+ Neues Preismaterial</button></div><small class="muted">Einmal zuordnen – danach wird diese Zuordnung für Material/Format wiederverwendet.</small></label>
+    <label>Preis-Snapshot<input id="wtPriceV545" disabled></label>
+   </div>
+   <div class="wtValueCardV549"><div id="wtCalcV545"></div><div id="wtValueV545"></div></div>
+  </div>
+  <div class="wtSectionV549">
+   <label>Bemerkung<textarea id="wtNoteV545" rows="2" placeholder="Optional"></textarea></label>
+  </div>
+  <div class="wtInfoV549">Bei einer Teilmenge bleibt der Rest auf der bisherigen Kommission. Für die umgebuchte Teilmenge wird automatisch ein neuer Materialeintrag mit neuer Element-ID erstellt. Der Einkaufspreis wird zum Zeitpunkt der Umbuchung eingefroren.</div>
+  <div class="wtFooterV549"><button class="btn secondary" type="button" onclick="closeM('warehouseTransferModalV545')">Abbrechen</button><button class="btn" type="submit">Umbuchung speichern</button></div>
+ </form>
+</div></div>
+<div class="modal" id="quickPriceMaterialModalV551"><div class="box" style="max-width:580px">
+<div class="mh"><div><h2 style="margin:0">Neues Preismaterial</h2><div class="muted">Direkt für diese Umbuchung im Preisstamm anlegen.</div></div><button class="x" onclick="closeM('quickPriceMaterialModalV551')">✕</button></div>
+<form onsubmit="saveQuickPriceMaterialV551(event)"><div class="grid2">
+<label>Materialbezeichnung<input id="quickPriceNameV551" required></label>
+<label>Preiseinheit<select id="quickPriceUnitV551" required><option value="Stk">Stk.</option><option value="m1">m1</option><option value="m2">m²</option><option value="m3">m³</option></select></label>
+<label>Preis CHF<input id="quickPriceValueV551" type="number" min="0" step="0.01" required inputmode="decimal"></label>
+</div><div class="wtInfoV549" style="margin-top:12px">Wird automatisch ausgewählt und mit dem aktuellen Lager-Material/Format verknüpft.</div>
+<div class="toolbar" style="justify-content:flex-end;margin-top:18px"><button class="btn secondary" type="button" onclick="closeM('quickPriceMaterialModalV551')">Abbrechen</button><button class="btn" type="submit">Preismaterial erstellen</button></div></form>
+</div></div><div class="modal" id="quickCommissionModalV549"><div class="box" style="max-width:520px">
+ <div class="mh"><h2 style="margin:0">Neue Kommission</h2><button class="x" onclick="closeM('quickCommissionModalV549')">✕</button></div>
+ <form onsubmit="saveQuickCommissionV549(event)">
+  <label>Kommissionsname<input id="quickCommissionNameV549" required autocomplete="off" placeholder="z. B. Joch"></label>
+  <div class="toolbar" style="justify-content:flex-end;margin-top:18px"><button class="btn secondary" type="button" onclick="closeM('quickCommissionModalV549')">Abbrechen</button><button class="btn" type="submit">Kommission erstellen</button></div>
+ </form>
+</div></div>
 <div class="modal" id="transferCommissionNewModal"><div class="box"><div class="mh"><h2>Kommission für Umbuchungen</h2><button class="x" onclick="closeM('transferCommissionNewModal')">✕</button></div>
 <form class="form" onsubmit="saveTransferCommissionNew(event)">
 <label class="f span2">Vorhandene Kommission<select id="tcExisting" onchange="transferCommissionExistingChanged()"></select></label>
@@ -5339,7 +5392,7 @@ window.APP_RELEASE = {
   <label class="f">Datum<input id="ppDate" type="date"></label>
   <label class="f">Anzahl Mitarbeiter<input id="ppEmployeeCount" type="number" min="0" step="1" inputmode="numeric" oninput="updateProductionActualHours()" placeholder="z. B. 4"></label>
   <label class="f">Stunden pro Mitarbeiter<input id="ppHoursPerEmployee" type="number" min="0" step="0.25" inputmode="decimal" oninput="updateProductionActualHours()" placeholder="z. B. 8"></label>
-  <label class="f">Ist-Stunden heute [Personenstunden]<input id="ppActualHours" type="number" min="0" step="0.25" inputmode="decimal" readonly tabindex="-1" style="background:#f3f6f4;font-weight:900" title="Wird automatisch aus Anzahl Mitarbeiter × Stunden pro Mitarbeiter berechnet"></label>
+  <label class="f">Ist-Stunden heute [Personenstunden]<input id="ppActualHours" type="number" min="0" step="0.25" inputmode="decimal" readonly tabindex="-1" style="background:#f3f6f4;font-weight:900" title="Wird automatisch aus Anzahl Mitarbeiter × Stunden pro Mitarbeiter berechnet"><button type="button" class="btn secondary" style="margin-top:6px;width:100%" onclick="applyActualHoursProportionallyV548()">Stunden proportional auf Elemente verteilen</button></label>
   <label class="f">Produktionsart
    <select id="ppProductionType">
     <option value="">Bitte wählen</option>
@@ -5358,6 +5411,7 @@ window.APP_RELEASE = {
 
  </div>
  <div id="ppDailyResult" class="hoursPlanResult"></div>
+ <div id="ppProgressHistory" style="margin-top:14px"></div>
  
 </div></div>
 
@@ -5818,7 +5872,7 @@ function inventoryCell(p,key,r,l){
  if(key==='location')return esc(r?.name||'–');
  if(key==='levelV467')return esc(l?.name||'–');
  if(key==='createdAt')return esc(formatDateTime(p.createdAt));
- if(key==='action')return `<details class="actionMenuV451 inventoryActionMenuV464"><summary title="Aktionen">⋮</summary><div class="actionMenuPanelV451 inventoryActionPanelV464"><button class="btn secondary" onclick="closeActionMenuV451(this);jump('${r.id}','${p.id}')">Zu Lagerort</button>${p.status!=='aufgebraucht'?`<button class="btn secondary" onclick="closeActionMenuV451(this);reservePackage('${p.id}')">Reservieren</button>`:''}<button class="btn" onclick="closeActionMenuV451(this);editPackage('${p.id}')">Bearbeiten</button><button class="btn secondary" onclick="closeActionMenuV451(this);showHistory('${p.id}')">Verlauf</button>${p.status==='aufgebraucht'?`<button class="btn" onclick="closeActionMenuV451(this);restorePackage('${p.id}')">Wieder aktivieren</button>`:`<button class="btn secondary" onclick="closeActionMenuV451(this);archivePackage('${p.id}')">Archiv</button>`}${st.settings?.allowMaterialDelete?`<button class="btn danger" onclick="closeActionMenuV451(this);deletePackage('${p.id}')">Löschen</button>`:''}</div></details>`;
+ if(key==='action')return `<details class="actionMenuV451 inventoryActionMenuV464"><summary title="Aktionen">⋮</summary><div class="actionMenuPanelV451 inventoryActionPanelV464"><button class="btn secondary" onclick="closeActionMenuV451(this);jump('${r.id}','${p.id}')">Zu Lagerort</button>${p.status!=='aufgebraucht'?`<button class="btn secondary" onclick="closeActionMenuV451(this);reservePackage('${p.id}')">Reservieren</button>`:''}<button class="btn" onclick="closeActionMenuV451(this);editPackage('${p.id}')">Bearbeiten</button>${p.status!=='aufgebraucht'?`<button class="btn secondary" onclick="event.preventDefault();event.stopPropagation();const _id='${p.id}';closeActionMenuV451(this);setTimeout(()=>openWarehouseTransferV550(_id),0)">↔ Umbuchen</button>`:''}<button class="btn secondary" onclick="closeActionMenuV451(this);showHistory('${p.id}')">Verlauf</button>${p.status==='aufgebraucht'?`<button class="btn" onclick="closeActionMenuV451(this);restorePackage('${p.id}')">Wieder aktivieren</button>`:`<button class="btn secondary" onclick="closeActionMenuV451(this);archivePackage('${p.id}')">Archiv</button>`}${st.settings?.allowMaterialDelete?`<button class="btn danger" onclick="closeActionMenuV451(this);deletePackage('${p.id}')">Löschen</button>`:''}</div></details>`;
  return '';
 }
 function renderInventoryHead(){
@@ -9267,6 +9321,21 @@ function editProductionStartDay(dayDate){
    return hasEntries||hasHours||String(d.note||'').trim();
  });
 
+ // Separate Erfassungseinheit speichern (z.B. IW und AW am selben Tag).
+ let batchDay=p.dailyProduction.find(d=>d.date===date);
+ if(!batchDay){batchDay={date,actualHours:0,note:'',entries:[],actualHoursByCommission:{},updatedAt:new Date().toISOString()};p.dailyProduction.push(batchDay)}
+ batchDay.progressBatchesV547=batchDay.progressBatchesV547||[];
+ let batchId=productionProgressEditV547?.batchId||progressBatchIdV547();
+ batchDay.progressBatchesV547.push({
+   id:batchId,commissionId:cid,date,
+   employeeCount:Math.max(0,numCell(E('ppEmployeeCount').value)),
+   hoursPerEmployee:Math.max(0,numCell(E('ppHoursPerEmployee').value)),
+   actualHours,productionType,note:E('ppNote').value.trim(),
+   elementIds:selected.map(x=>x.el.id),
+   createdAt:new Date().toISOString()
+ });
+ recomputeDayProgressV547(batchDay,cid);
+ productionProgressEditV547=null;
  p.dailyProduction.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
  p.updatedAt=new Date().toISOString();
  saveProjects();
@@ -9476,7 +9545,53 @@ function productionPerformanceHtml(p){
 }
 
 let productionDraft=[];
+let productionProgressEditV547=null;
+function progressBatchIdV547(){return 'PB-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
+function progressBatchesV547(p,cid){
+ let out=[];
+ (p.dailyProduction||[]).forEach(d=>{
+   (d.progressBatchesV547||[]).filter(b=>b.commissionId===cid).forEach(b=>out.push({...b,date:b.date||d.date}));
+ });
+ return out.sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.createdAt||'').localeCompare(String(b.createdAt||'')));
+}
+function recomputeDayProgressV547(day,cid){
+ let batches=(day.progressBatchesV547||[]).filter(b=>b.commissionId===cid);
+ day.actualHoursByCommission=day.actualHoursByCommission||{};
+ if(batches.length)day.actualHoursByCommission[cid]=batches.reduce((n,b)=>n+Number(b.actualHours||0),0);
+ else delete day.actualHoursByCommission[cid];
+ // Keep legacy field usable; with multiple entries it is the sum.
+ day.actualHours=Object.values(day.actualHoursByCommission||{}).reduce((n,v)=>n+Number(v||0),0);
+ let last=batches.at(-1);
+ day.productionTypeByCommission=day.productionTypeByCommission||{};
+ if(last?.productionType)day.productionTypeByCommission[cid]=last.productionType; else delete day.productionTypeByCommission[cid];
+}
+function editProductionProgressEntryV547(batchId){
+ let p=projectById(currentProjectId);if(!p)return;
+ let c=activeProjectCommission(p),cid=c?.id||'';
+ let day=(p.dailyProduction||[]).find(d=>(d.progressBatchesV547||[]).some(b=>b.id===batchId&&b.commissionId===cid));
+ let b=day?.progressBatchesV547?.find(x=>x.id===batchId);if(!b)return;
+ productionProgressEditV547={batchId,originalDate:day.date,commissionId:cid};
+ E('ppDate').value=b.date||day.date||'';
+ E('ppEmployeeCount').value=b.employeeCount??'';
+ E('ppHoursPerEmployee').value=b.hoursPerEmployee??'';
+ E('ppActualHours').value=b.actualHours??'';
+ E('ppProductionType').value=b.productionType||'';
+ E('ppNote').value=b.note||'';
+ let els=commissionElements(p,cid),set=new Set(b.elementIds||[]);
+ productionDraft=els.map(x=>{
+   let oldEntry=(day.entries||[]).find(e=>e.elementId===x.id);
+   return {elementId:x.id,produced:set.has(x.id),wasProduced:false,productionDate:b.date||day.date,allocatedActualHours:Number(oldEntry?.allocatedActualHours||0),editBatchMemberV547:set.has(x.id)};
+ });
+ renderProductionDraftRows();calculateDailyProduction();
+ let btn=document.querySelector('#productionProgressModal .mh .toolbar .btn');
+ if(btn)btn.textContent='Änderungen speichern';
+}
+function cancelProductionProgressEditV547(){
+ productionProgressEditV547=null;
+ let btn=document.querySelector('#productionProgressModal .mh .toolbar .btn');if(btn)btn.textContent='Tagesstand speichern';
+}
 function openProductionProgress(){
+ cancelProductionProgressEditV547();
  let p=projectById(currentProjectId);if(!p)return;
  if(!p.productionPlan?.elements?.length){alert('Bitte zuerst die Excel-Datei mit den Elementen hochladen.');return}
  let c=activeProjectCommission(p),els=commissionElements(p,c?.id||'');
@@ -9562,7 +9677,7 @@ function renderProductionDraftRows(){
  let p=projectById(currentProjectId),c=activeProjectCommission(p),groups=commissionGroups(p,c?.id||''),box=E('ppElementRows');if(!box)return;
  let flat=commissionElements(p,c?.id||'');
  distributeTodayActualHours();
- let visibleCount=productionDraft.filter(d=>!d.wasProduced&&!productionElementIsDoneV460(p,d.elementId)).length;
+ let visibleCount=productionDraft.filter(d=>d.editBatchMemberV547||(!d.wasProduced&&!productionElementIsDoneV460(p,d.elementId))).length;
  if(!visibleCount){
    box.innerHTML='<div class="ppOpenEmpty">Alle Elemente dieser Kommission sind abgeschlossen.</div>';
    renderProductionProgressHistory();
@@ -9571,7 +9686,7 @@ function renderProductionDraftRows(){
  box.innerHTML=groups.map(g=>{
    let visible=(g.elements||[]).filter(el=>{
      let i=productionDraft.findIndex(x=>x.elementId===el.id),draft=productionDraft[i]||{};
-     return !draft.wasProduced && !productionElementIsDoneV460(p,el.id);
+     return !!draft.editBatchMemberV547 || (!draft.wasProduced && !productionElementIsDoneV460(p,el.id));
    });
    if(!visible.length)return '';
    return `<div class="productionGroupBlock">
@@ -9598,44 +9713,55 @@ function renderProductionProgressHistory(){
  let box=E('ppProgressHistory');if(!box)return;
  let p=projectById(currentProjectId);if(!p){box.innerHTML='';return}
  let c=activeProjectCommission(p),cid=c?.id||'',els=commissionElements(p,cid),ids=new Set(els.map(x=>x.id));
+ let batches=progressBatchesV547(p,cid);
+ if(batches.length){
+   box.innerHTML=`<div class="manageHead"><div><h3 style="margin:0">Erfasste Tagesfortschritte</h3><div class="muted">Jeder Erfassungsvorgang bleibt separat – auch mehrere IW/AW-Einträge am gleichen Tag. Beim Bearbeiten können korrigierte Ist-Stunden proportional auf die Elemente verteilt werden.</div></div></div>
+   <div class="ppHistoryWrap"><table class="ppHistoryTable"><thead><tr><th>Datum</th><th>Art</th><th>MA</th><th>h/MA</th><th>Ist h</th><th>Elemente</th><th>Bemerkung</th><th></th></tr></thead><tbody>
+   ${batches.map(b=>{
+     let names=(b.elementIds||[]).map(id=>{let el=els.find(x=>x.id===id);return el?`${el.sequence?esc(el.sequence)+' · ':''}${esc(el.name||'Element')}`:esc(id)}).join('<br>');
+     return `<tr><td><b>${localDateLabel(b.date)||esc(b.date||'–')}</b></td><td><b>${esc(b.productionType||'–')}</b></td><td>${esc(String(b.employeeCount??'–'))}</td><td>${esc(String(b.hoursPerEmployee??'–'))}</td><td><b>${fmtNum(Number(b.actualHours||0))} h</b></td><td class="ppHistoryElements">${names||'0 Elemente'}</td><td>${esc(b.note||'')}</td><td><button class="btn secondary" type="button" onclick="editProductionProgressEntryV547('${b.id}')">Bearbeiten</button></td></tr>`;
+   }).join('')}</tbody></table></div>`;
+   return;
+ }
  let rows=(p.dailyProduction||[]).filter(d=>{
    let hasEntries=(d.entries||[]).some(e=>ids.has(e.elementId));
    let hasHours=d.actualHoursByCommission&&Object.prototype.hasOwnProperty.call(d.actualHoursByCommission,cid);
    return hasEntries||hasHours;
  }).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-
- if(!rows.length){
-   box.innerHTML='<div class="ppHistoryEmpty">Noch kein Produktionstag erfasst.</div>';
-   return;
- }
-
- box.innerHTML=`<div class="ppHistoryWrap"><table class="ppHistoryTable">
-   <thead><tr><th>Datum</th><th>Art</th><th>Ist h</th><th>Fertig</th><th>Elemente</th><th>m²</th><th>Ist h/m²</th></tr></thead>
-   <tbody>${rows.map(d=>{
-     let dayEntries=(d.entries||[]).filter(e=>ids.has(e.elementId));
-     let hours=d.actualHoursByCommission&&Object.prototype.hasOwnProperty.call(d.actualHoursByCommission,cid)
-       ?Number(d.actualHoursByCommission[cid]||0)
-       :dayEntries.reduce((s,e)=>s+Number(e.allocatedActualHours||0),0);
-     let area=dayEntries.reduce((s,e)=>s+Number(e.area||0),0);
-     let units=dayEntries.reduce((s,e)=>s+Number(e.units||0),0);
-     let names=dayEntries.map(e=>{
-       let el=els.find(x=>x.id===e.elementId);
-       return el?`${el.sequence?esc(el.sequence)+' · ':''}${esc(el.name||'Element')}`:esc(e.elementId||'Element');
-     });
-     let factor=area>0?hours/area:null;
-     return `<tr class="${dayEntries.length?'':'ppHistoryDayZero'}">
-       <td><b>${localDateLabel(d.date)||esc(d.date||'–')}</b></td>
-       <td><b>${esc(d.productionTypeByCommission?.[cid]||'–')}</b></td>
-       <td><b>${fmtNum(hours)} h</b></td>
-       <td>${units>0?`${units} Stk.`:`${dayEntries.length} Element${dayEntries.length===1?'':'e'}`}</td>
-       <td class="ppHistoryElements">${names.length?names.join('<br>'):'0 Elemente<span class="ppHistoryElementSub">Anlauf-/Produktionstag ohne fertiges Element</span>'}</td>
-       <td>${fmtNum(area)} m²</td>
-       <td>${factor===null?'–':fmtNum(factor,3)+' h/m²'}</td>
-     </tr>`;
-   }).join('')}</tbody>
- </table></div>`;
+ if(!rows.length){box.innerHTML='<div class="ppHistoryEmpty">Noch kein Produktionstag erfasst.</div>';return}
+ box.innerHTML=`<div class="ppHistoryWrap"><table class="ppHistoryTable"><thead><tr><th>Datum</th><th>Art</th><th>Ist h</th><th>Elemente</th><th>Hinweis</th></tr></thead><tbody>${rows.map(d=>{
+   let dayEntries=(d.entries||[]).filter(e=>ids.has(e.elementId));
+   let hours=Number(d.actualHoursByCommission?.[cid]||0);
+   return `<tr><td><b>${localDateLabel(d.date)||esc(d.date||'–')}</b></td><td>${esc(d.productionTypeByCommission?.[cid]||'–')}</td><td>${fmtNum(hours)} h</td><td>${dayEntries.length}</td><td class="muted">Älterer Eintrag – neue Einträge sind komplett bearbeitbar.</td></tr>`;
+ }).join('')}</tbody></table></div>`;
 }
-
+function distributeDailyHoursV548(totalHours){
+ totalHours=Math.max(0,Number(totalHours)||0);
+ let p=projectById(currentProjectId);if(!p)return;
+ let c=activeProjectCommission(p),cid=c?.id||'';
+ let els=commissionElements(p,cid);
+ let selected=productionDraft.map(d=>({d,el:els.find(e=>e.id===d.elementId)})).filter(x=>x.d.produced&&x.el);
+ if(!selected.length)return;
+ // Existing allocation is the preferred weighting; otherwise use element area.
+ let weights=selected.map(x=>Math.max(0,Number(x.d.allocatedActualHours)||0));
+ let sum=weights.reduce((a,b)=>a+b,0);
+ if(sum<=0){
+   weights=selected.map(x=>Math.max(0,elementArea(x.el)));
+   sum=weights.reduce((a,b)=>a+b,0);
+ }
+ if(sum<=0){weights=selected.map(()=>1);sum=selected.length}
+ let remaining=Math.round(totalHours*100)/100;
+ selected.forEach((x,i)=>{
+   let h=i===selected.length-1?remaining:Math.round((totalHours*weights[i]/sum)*100)/100;
+   h=Math.max(0,h);x.d.allocatedActualHours=h;remaining=Math.round((remaining-h)*100)/100;
+ });
+ renderProductionDraftRows();
+ calculateDailyProduction();
+}
+function applyActualHoursProportionallyV548(){
+ let h=Math.max(0,numCell(E('ppActualHours').value));
+ distributeDailyHoursV548(h);
+}
 function calculateDailyProduction(){
  let p=projectById(currentProjectId);if(!p)return;
  let allocation=distributeTodayActualHours(),selected=allocation.selected,actual=allocation.actual,expected=allocation.expected;
@@ -9677,12 +9803,24 @@ function validateSequentialDailyProgress(p,entries){
 }
 function saveDailyProduction(){
  let p=projectById(currentProjectId);if(!p)return;
+
+ // BV2026-1-09: Beim Bearbeiten wird genau der gewählte Erfassungsvorgang ersetzt.
+ if(productionProgressEditV547){
+   let oldDay=(p.dailyProduction||[]).find(d=>(d.progressBatchesV547||[]).some(b=>b.id===productionProgressEditV547.batchId));
+   let oldBatch=oldDay?.progressBatchesV547?.find(b=>b.id===productionProgressEditV547.batchId);
+   if(oldDay&&oldBatch){
+     let oldIds=new Set(oldBatch.elementIds||[]);
+     oldDay.entries=(oldDay.entries||[]).filter(e=>!oldIds.has(e.elementId));
+     oldDay.progressBatchesV547=(oldDay.progressBatchesV547||[]).filter(b=>b.id!==oldBatch.id);
+     recomputeDayProgressV547(oldDay,productionProgressEditV547.commissionId);
+   }
+ }
  let date=E('ppDate').value;if(!date){alert('Bitte Datum wählen.');return}
  let actualHours=Math.max(0,numCell(E('ppActualHours').value));
  let productionType=String(E('ppProductionType')?.value||'').trim();
  let c=activeProjectCommission(p),cid=c?.id||'',els=commissionElements(p,cid);
  if(actualHours>0&&!productionType){alert('Bitte die Produktionsart AW, IW, DA, DE oder Fassade auswählen.');return}
- let undone=productionDraft.filter(d=>d.wasProduced&&!d.produced);
+ let undone=productionProgressEditV547?[]:productionDraft.filter(d=>d.wasProduced&&!d.produced);
  if(undone.length){
    let names=undone.map(d=>els.find(x=>x.id===d.elementId)?.name||d.elementId);
    if(!confirm(`Produziert-Status bei ${undone.length} Element${undone.length===1?'':'en'} rückgängig machen?\n\n${names.join('\n')}`))return;
@@ -9697,7 +9835,7 @@ function saveDailyProduction(){
 
  if(!selected.length&&actualHours<=0&&!undone.length){alert('Bitte mindestens ein Element auf „Produziert“ setzen oder Ist-Stunden erfassen.');return}
 
- let entries=selected.filter(x=>!x.draft.wasProduced).map(x=>{
+ let entries=selected.filter(x=>productionProgressEditV547||!x.draft.wasProduced).map(x=>{
    let entryDate=x.draft.productionDate||date;
    let countMode=!!x.el.countOnly||Number(x.el.area||0)<=0;
    let remaining=Math.max(0,Number(x.el.area||0)-elementProducedArea(p,x.el.id,entryDate));
@@ -16220,6 +16358,193 @@ function renderDefectManageSummary(){
  el.textContent=count?`${count} Mangel${count===1?'':'/Mängel'} in ${packages.length} Materialeintrag${packages.length===1?'':'/-einträgen'}.`:'Noch keine Mängel erfasst.';
 }
 
+
+// ===== BV2026-1-09 · echte Lager-Kommissionsumbuchungen mit Teilmengen =====
+
+// BV2026-1-09: gelernte Preisstamm-Zuordnung und Gegenbuchungen
+function warehousePriceMapV546(){st.settings=st.settings||{};st.settings.warehouseTransferPriceMapV546=st.settings.warehouseTransferPriceMapV546||{};return st.settings.warehouseTransferPriceMapV546}
+function warehouseMaterialSignatureV546(p){return [p?.idCategory||'',p?.material||'',p?.woodType||p?.holzart||'',p?.length||'',p?.width||'',p?.height||''].map(v=>String(v||'').trim().toLowerCase()).join('|')}
+function mappedWarehousePriceMaterialV546(p){return transferMaterialById(warehousePriceMapV546()[warehouseMaterialSignatureV546(p)])}
+function rememberWarehousePriceMaterialV546(p,id){if(p&&id)warehousePriceMapV546()[warehouseMaterialSignatureV546(p)]=id}
+function warehouseTransferIdV546(){return 'UT-'+new Date().toISOString().slice(0,10).replaceAll('-','')+'-'+Math.random().toString(36).slice(2,7).toUpperCase()}
+function warehouseTransferCounterReportV546(o){
+ let c=ensureTransferCommissionForWarehouseV545(o.commission), sign=o.side==='credit'?-1:1;
+ let r={id:'ir'+Date.now()+Math.random().toString(16).slice(2),date:o.now.slice(0,10),note:o.note||`Umbuchung ${o.from||'Ohne Kommission'} → ${o.to}`,createdAt:o.now,createdBy:o.by,transferType:'warehouse',transferIdV546:o.transferId,bookingSideV546:o.side,sourceCommission:o.from,targetCommission:o.to,sourcePackageId:o.sourcePkg,targetPackageId:o.targetPkg,sourceElementId:o.sourceId,targetElementId:o.targetId,lines:[{id:'irl'+Date.now()+Math.random().toString(16).slice(2),materialId:o.m.id,materialName:o.m.name,unit:o.m.unit,qty:Number((sign*o.priceQty).toFixed(4)),unitPrice:o.unitPrice,packageCount:sign*o.count,warehouseMaterial:o.p.material||'',sourceElementId:o.sourceId,targetElementId:o.targetId}]};
+ (c.reports||(c.reports=[])).push(r);
+}
+
+function warehouseTransferUnitV545(unit){
+ let u=String(unit||'').trim().toLowerCase().replace(/\s/g,'');
+ if(['m1','lfm','lm','m'].includes(u))return 'm1';
+ if(['m2','m²'].includes(u))return 'm2';
+ if(['m3','m³'].includes(u))return 'm3';
+ return 'count';
+}
+function warehouseTransferQtyForPriceV545(p,count,unit){
+ count=Number(count)||0;
+ let l=(Number(p?.length)||0)/1000,w=(Number(p?.width)||0)/1000,h=(Number(p?.height)||0)/1000;
+ let u=warehouseTransferUnitV545(unit);
+ if(u==='m1')return l*count;
+ if(u==='m2')return l*w*count;
+ if(u==='m3')return l*w*h*count;
+ return count;
+}
+function warehouseTransferPriceOptionsV545(p){
+ let arr=(st.internalMaterials||[]).filter(m=>m.active!==false).slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),'de'));
+ let exact=mappedWarehousePriceMaterialV546(p)||arr.find(m=>String(m.name||'').trim().toLowerCase()===String(p?.material||'').trim().toLowerCase());
+ return {html:'<option value="">– Preismaterial wählen –</option>'+arr.map(m=>`<option value="${esc(m.id)}" ${exact?.id===m.id?'selected':''}>${esc(m.name)} · ${moneyCHF(m.price)}/${esc(m.unit||'Stk')}</option>`).join(''),exact};
+}
+function warehouseTransferTargetOptionsV549(from,selected){
+ let names=[];
+ try{
+   if(typeof ensureCommissions==='function')ensureCommissions();
+   names.push(...(st.commissions||[]).map(c=>typeof c==='string'?c:c?.name));
+   names.push(...(st.internalTransfers||[]).map(c=>c?.name));
+   let ps=(typeof projectStore!=='undefined'&&projectStore?.projects)||[];
+   ps.forEach(p=>{
+     (p.commissions||[]).forEach(c=>names.push(typeof c==='string'?c:c?.name));
+     if(p.name)names.push(p.name);
+   });
+ }catch(err){console.warn('Kommissionsliste V550',err)}
+ names=[...new Set(names.map(n=>String(n||'').trim()).filter(Boolean))]
+   .filter(n=>n!==String(from||'').trim()).sort((a,b)=>a.localeCompare(b,'de'));
+ return '<option value="">– Ziel-Kommission wählen –</option>'+names.map(n=>`<option value="${esc(n)}" ${n===selected?'selected':''}>${esc(n)}</option>`).join('');
+}
+function openQuickPriceMaterialV551(){
+ let p=(st.packages||[]).find(x=>String(x.id)===String(E('wtPackageIdV545')?.value));
+ E('quickPriceNameV551').value=p?.material||'';E('quickPriceUnitV551').value='Stk';E('quickPriceValueV551').value='';
+ E('quickPriceMaterialModalV551').classList.add('open');setTimeout(()=>E('quickPriceValueV551')?.focus(),50);
+}
+function saveQuickPriceMaterialV551(e){
+ e.preventDefault();let name=String(E('quickPriceNameV551').value||'').trim(),unit=String(E('quickPriceUnitV551').value||'Stk'),price=Number(E('quickPriceValueV551').value);
+ if(!name){alert('Bitte eine Materialbezeichnung eingeben.');return} if(!Number.isFinite(price)||price<0){alert('Bitte einen gültigen Preis eingeben.');return}
+ st.internalMaterials=st.internalMaterials||[];
+ let mat={id:'im'+Date.now()+Math.random().toString(16).slice(2),name,unit,price:Number(price.toFixed(2)),active:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+ st.internalMaterials.push(mat);
+ let p=(st.packages||[]).find(x=>String(x.id)===String(E('wtPackageIdV545')?.value));if(p)rememberWarehousePriceMaterialV546(p,mat.id);
+ let po=warehouseTransferPriceOptionsV545(p||{});E('wtPriceMaterialV545').innerHTML=po.html;E('wtPriceMaterialV545').value=mat.id;
+ updateWarehouseTransferPreviewV545();persist();closeM('quickPriceMaterialModalV551');
+}
+function openQuickCommissionV549(){
+ E('quickCommissionNameV549').value='';
+ E('quickCommissionModalV549').classList.add('open');
+ setTimeout(()=>E('quickCommissionNameV549')?.focus(),50);
+}
+function saveQuickCommissionV549(e){
+ e.preventDefault();
+ let name=String(E('quickCommissionNameV549').value||'').trim();if(!name)return;
+ ensureCommissions();
+ let existing=(st.commissions||[]).find(c=>String(c.name||'').trim().toLowerCase()===name.toLowerCase());
+ if(!existing){
+   st.commissions.push({id:'c'+Date.now()+Math.random().toString(16).slice(2),name,active:true,createdAt:new Date().toISOString()});
+   persist();
+ }
+ let from=String(E('wtFromV545').value||'').trim();
+ E('wtToV545').innerHTML=warehouseTransferTargetOptionsV549(from==='Ohne Kommission'?'':from,name);
+ E('wtToV545').value=name;
+ closeM('quickCommissionModalV549');
+}
+function openWarehouseTransferV550(id){
+ try{
+   let p=(st.packages||[]).find(x=>String(x.id)===String(id));
+   if(!p){alert('Umbuchen nicht möglich: Materialeintrag wurde nicht gefunden.');return}
+   openWarehouseTransferV545(id);
+   let modal=E('warehouseTransferModalV545');
+   if(!modal){alert('Umbuchen nicht möglich: Dialog fehlt in dieser Version.');return}
+   modal.classList.add('open');
+   modal.style.display='';
+ }catch(err){
+   console.error('Umbuchen V550',err);
+   alert('Umbuchen konnte nicht geöffnet werden: '+(err?.message||err));
+ }
+}
+function openWarehouseTransferV545(id){
+ let p=(st.packages||[]).find(x=>String(x.id)===String(id));
+ if(!p){alert('Materialeintrag nicht gefunden.');return;}
+
+ let from=String(p.project||'').trim();
+ let names=(st.commissions||[]).map(c=>String(c.name||'').trim()).filter(Boolean).filter(n=>n!==from).sort((a,b)=>a.localeCompare(b,'de'));
+ E('wtPackageIdV545').value=p.id;
+ E('wtMaterialV545').value=p.material||'';
+ E('wtElementIdV545').value=p.elementId||'';
+ E('wtFromV545').value=from||'Ohne Kommission';
+ E('wtToV545').innerHTML=warehouseTransferTargetOptionsV549(from,'');
+ E('wtAvailableV545').value=`${p.qty||0} ${Number(p.qty)===1?'Stk.':'Stk.'}`;
+ E('wtCountV545').max=String(Number(p.qty)||0);
+ E('wtCountV545').value='';
+ let po=warehouseTransferPriceOptionsV545(p);
+ E('wtPriceMaterialV545').innerHTML=po.html;
+ E('wtNoteV545').value='';
+ updateWarehouseTransferPreviewV545();
+ E('warehouseTransferModalV545').classList.add('open');
+}
+function updateWarehouseTransferPreviewV545(){
+ let p=(st.packages||[]).find(x=>String(x.id)===String(E('wtPackageIdV545')?.value));if(!p)return;
+ let count=Number(E('wtCountV545')?.value)||0,m=transferMaterialById(E('wtPriceMaterialV545')?.value);
+ let q=m?warehouseTransferQtyForPriceV545(p,count,m.unit):0;
+ let val=q*Number(m?.price||0);
+ if(E('wtPriceV545'))E('wtPriceV545').value=m?`${moneyCHF(m.price)} / ${m.unit||'Stk'}`:'–';
+ let dims=`${p.length||'–'} × ${p.width||'–'} × ${p.height||'–'} mm`;
+ if(E('wtCalcV545'))E('wtCalcV545').innerHTML=m?`<b>Berechnung:</b> ${esc(count)} Stk. · Format ${esc(dims)} → <b>${q.toLocaleString('de-CH',{maximumFractionDigits:4})} ${esc(m.unit||'Stk')}</b>`:'Bitte Preismaterial auswählen.';
+ if(E('wtValueV545'))E('wtValueV545').textContent=m?`Umbuchungswert: ${moneyCHF(val)}`:'';
+}
+function nextSplitElementIdV545(p){
+ let parsed=parseElementId(p?.elementId||'');
+ let prefix=parsed?.prefix||String(p?.idCategory||'A').toUpperCase();
+ if(!['A','B','C','D','E','TB'].includes(prefix))prefix='A';
+ let n=scanNextId(prefix),id=formatElementId(prefix,n);
+ ensureIdSettings();
+ st.idSettings.counters[prefix]=Math.max(Number(st.idSettings.counters[prefix]||1),n+1);
+ st.usedElementIds=st.usedElementIds||[];
+ if(!st.usedElementIds.includes(id))st.usedElementIds.push(id);
+ return id;
+}
+function ensureTransferCommissionForWarehouseV545(name){
+ let c=(st.internalTransfers||[]).find(x=>String(x.name||'').toLowerCase()===String(name||'').toLowerCase());
+ if(c){if(c.status==='Archiv'){c.status='Aktiv';c.archivedAt=''}return c}
+ c={id:'it'+Date.now()+Math.random().toString(16).slice(2),name,status:'Aktiv',createdAt:new Date().toISOString(),reports:[]};
+ st.internalTransfers.push(c);return c;
+}
+function saveWarehouseTransferV545(e){
+ e.preventDefault();
+ let p=(st.packages||[]).find(x=>String(x.id)===String(E('wtPackageIdV545').value));
+ if(!p){alert('Materialeintrag nicht gefunden.');return;}
+ let available=Number(p.qty)||0,count=Number(E('wtCountV545').value)||0;
+ let to=String(E('wtToV545').value||'').trim(),from=String(p.project||'').trim();
+ let m=transferMaterialById(E('wtPriceMaterialV545').value);
+ if(!to||to===from){alert('Bitte eine andere Ziel-Kommission auswählen.');return}
+ if(!(count>0)||count>available){alert(`Die Anzahl muss grösser als 0 und höchstens ${available} sein.`);return}
+ if(!m){alert('Bitte ein Material aus dem Material- & Preisstamm auswählen.');return}
+ let now=new Date().toISOString(),by=currentUserName(),note=E('wtNoteV545').value.trim();
+ let priceQty=warehouseTransferQtyForPriceV545(p,count,m.unit),unitPrice=Number(m.price||0);
+ let full=Math.abs(count-available)<0.000001,newPkg=null,newElementId=p.elementId||'';
+ if(full){
+   p.project=to;p.updatedAt=now;
+   addHistory(p,'Umbuchung',`${from||'Ohne Kommission'} → ${to} · ${count} Stk. · Wert ${moneyCHF(priceQty*unitPrice)}`);
+ }else{
+   p.qty=Number((available-count).toFixed(4));p.updatedAt=now;
+   newElementId=nextSplitElementIdV545(p);
+   newPkg=JSON.parse(JSON.stringify(p));
+   newPkg.id='p'+Date.now()+Math.random().toString(16).slice(2);
+   newPkg.elementId=newElementId;newPkg.qty=Number(count.toFixed(4));newPkg.project=to;
+   newPkg.createdAt=now;newPkg.updatedAt=now;newPkg.archivedAt='';
+   newPkg.reservations=[];newPkg.history=[];
+   addHistory(p,'Teil-Umbuchung',`${count} Stk. von ${available} Stk. · ${from||'Ohne Kommission'} → ${to} · neuer Eintrag ${newElementId} · Wert ${moneyCHF(priceQty*unitPrice)}`);
+   addHistory(newPkg,'Durch Umbuchung erstellt',`${count} Stk. aus ${p.elementId||'–'} · ${from||'Ohne Kommission'} → ${to} · Wert ${moneyCHF(priceQty*unitPrice)}`);
+   st.packages.push(newPkg);
+ }
+ rememberWarehousePriceMaterialV546(p,m.id);
+ let transferId=warehouseTransferIdV546();
+ let common={transferId,from,to,now,by,note,m,p,count,priceQty,unitPrice,sourceId:p.elementId||'',targetId:newElementId,sourcePkg:p.id,targetPkg:newPkg?.id||p.id};
+ if(from)warehouseTransferCounterReportV546({...common,commission:from,side:'credit'});
+ warehouseTransferCounterReportV546({...common,commission:to,side:'debit'});
+ closeM('warehouseTransferModalV545');
+ persist();
+ if(currentPage==='inventory')renderInv();
+ if(currentPage==='transfers')renderTransfers();
+ alert(`Umbuchung gespeichert.${full?'':' Neuer Materialeintrag: '+newElementId}\nWert: ${moneyCHF(priceQty*unitPrice)}`);
+}
+
 // ===== V82 Interne Materialumbuchungen =====
 let transferShowArchive=false,transferCurrentCommissionId='',transferEditingReportId='',transferReportDraftLines=[];
 
@@ -16382,7 +16707,7 @@ function openTransferCommission(id){
  let ab=E('transferArchiveBtn');ab.textContent=c.status==='Archiv'?'Wieder aktivieren':'Ins Archiv';ab.className=c.status==='Archiv'?'btn':'btn secondary';
  E('transferCommissionReports').innerHTML=(c.reports||[]).length?c.reports.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(r=>`
   <div class="transferReport">
-   <div class="manageHead"><div><b>Rapport ${esc(r.date||'')}</b><div class="muted">Erfasst: ${esc(formatDateTime(r.createdAt))} · ${esc(r.createdBy||'')}</div></div><div class="toolbar"><b>${moneyCHF(transferReportSum(r))}</b>${c.status!=='Archiv'?`<button class="btn secondary" onclick="openTransferReport('${r.id}')">Bearbeiten</button>`:''}</div></div>
+   <div class="manageHead"><div><b>Rapport ${esc(r.date||'')}</b><div class="muted">Erfasst: ${esc(formatDateTime(r.createdAt))} · ${esc(r.createdBy||'')}</div>${r.transferType==='warehouse'?`<div style="margin-top:4px"><span class="statusbadge">${r.bookingSideV546==='credit'?'Gutschrift':'Belastung'} · ↔ ${esc(r.sourceCommission||'Ohne Kommission')} → ${esc(r.targetCommission||c.name)}</span>${r.transferIdV546?` <span class="muted">${esc(r.transferIdV546)}</span>`:''}${r.sourceElementId?` <span class="muted">${esc(r.sourceElementId)}${r.targetElementId&&r.targetElementId!==r.sourceElementId?' → '+esc(r.targetElementId):''}</span>`:''}</div>`:''}</div><div class="toolbar"><b>${moneyCHF(transferReportSum(r))}</b>${c.status!=='Archiv'?`<button class="btn secondary" onclick="openTransferReport('${r.id}')">Bearbeiten</button>`:''}</div></div>
    ${r.note?`<div style="margin:5px 0">${esc(r.note)}</div>`:''}
    <div class="tablewrap"><table><thead><tr><th>Material</th><th>Menge</th><th>Einheit</th><th>EP</th><th>Total</th></tr></thead><tbody>
     ${(r.lines||[]).map(l=>`<tr><td>${esc(l.materialName||'–')}</td><td>${esc(l.qty)}</td><td>${esc(l.unit||'')}</td><td>${moneyCHF(l.unitPrice)}</td><td><b>${moneyCHF(transferLineTotal(l))}</b></td></tr>`).join('')}
@@ -21457,4 +21782,21 @@ document.addEventListener('toggle',function(ev){
 },true);
 </script>
 </body></html>
-<style>.platformVehicleFields{grid-template-columns:repeat(4,minmax(150px,1fr))!important}@media(max-width:1100px){.platformVehicleFields{grid-template-columns:repeat(2,minmax(180px,1fr))!important}}@media(max-width:700px){.platformVehicleFields{grid-template-columns:1fr!important}}</style>
+<style>.platformVehicleFields{grid-template-columns:repeat(4,minmax(150px,1fr))!important}@media(max-width:1100px){.platformVehicleFields{grid-template-columns:repeat(2,minmax(180px,1fr))!important}}@media(max-width:700px){.platformVehicleFields{grid-template-columns:1fr!important}}
+/* BV2026-1-09 · aufgeräumte Material-Umbuchung */
+.wtModalV549{max-width:920px!important;width:min(920px,calc(100vw - 32px))!important}
+.wtModalV549 form{display:flex;flex-direction:column;gap:14px}
+.wtSectionV549{border:1px solid var(--line,#d9e1dd);border-radius:14px;padding:16px;background:var(--card,#fff)}
+.wtSectionTitleV549{font-weight:800;font-size:15px;margin-bottom:12px}
+.wtGridV549{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;align-items:start}
+.wtGrid2V549{grid-template-columns:1fr 1fr}
+.wtModalV549 label{display:flex;flex-direction:column;gap:6px;min-width:0}
+.wtModalV549 input,.wtModalV549 select,.wtModalV549 textarea{width:100%;box-sizing:border-box}
+.wtTargetRowV549{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.wtTargetRowV549 .btn{white-space:nowrap}
+.wtValueCardV549{margin-top:12px;padding:14px 16px;border-radius:12px;background:var(--soft,#f4f7f5);display:flex;justify-content:space-between;gap:20px;align-items:center}
+.wtValueCardV549 #wtValueV545{font-size:20px;font-weight:800;white-space:nowrap}
+.wtInfoV549{font-size:13px;color:var(--muted,#66736d);line-height:1.45;padding:0 4px}
+.wtFooterV549{display:flex;justify-content:flex-end;gap:10px;padding-top:2px}
+@media(max-width:760px){.wtGridV549,.wtGrid2V549{grid-template-columns:1fr}.wtTargetRowV549{grid-template-columns:1fr}.wtValueCardV549{align-items:flex-start;flex-direction:column}.wtValueCardV549 #wtValueV545{white-space:normal}}
+</style>
