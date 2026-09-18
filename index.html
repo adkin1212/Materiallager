@@ -5,7 +5,7 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
 <!-- V406: Transporte direkt unter der Projekterfassung -->
-<title>Künzli Lagerverwaltung V345 · BV2026-1-15</title>
+<title>Künzli Lagerverwaltung V345 · BV2026-1-114</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -130,7 +130,7 @@ body.accessLocked #authModal .manageHead > button{
   display:none !important;
 }
 body.accessLocked #authModal .manageHead h2::before{
-  content:"HOLZLAGER · ";
+  content:"KÜNZLI LOGISTIK · ";
   color:#0f4d3c;
   font-weight:950;
 }
@@ -4182,11 +4182,72 @@ window.APP_RELEASE = {
 @media(max-width:1100px){.smallOrderMaterialRow:has(.soDimsV543){grid-template-columns:90px 1fr 120px minmax(240px,1fr)}}
 </style>
 
+
+<style>
+/* BV2026-1-114 · Cloud/Benutzer/Rolle gehören zur Bereichsauswahl, nicht in die einzelnen Bereiche. */
+.app > header #syncStatusBadge,
+.app > header #authHeaderBtn,
+.app > header #activeRoleBadge{display:none!important}
+.moduleHomeAccountV96{
+  display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
+  margin:0 0 22px;
+}
+.moduleHomeAccountV96 .syncBadge,
+.moduleHomeAccountV96 .btn,
+.moduleHomeAccountV96 .statusbadge{
+  min-height:48px;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:16px;font-size:18px;font-weight:850;padding:10px 16px;
+}
+@media(max-width:620px){
+ .moduleHomeAccountV96{gap:8px;margin-bottom:18px}
+ .moduleHomeAccountV96 .syncBadge,.moduleHomeAccountV96 .btn,.moduleHomeAccountV96 .statusbadge{
+   min-height:42px;font-size:15px;padding:8px 12px
+ }
+}
+</style>
+
+
+<style>
+/* BV2026-1-114 · kompakte Mehrfachauswahl für grosse Gerätebestände */
+.equipmentMultiV102{margin-top:10px!important}
+.equipmentMultiV102>.containerEnableV525,
+.equipmentMultiV102>.containerSelectLabelV526,
+.equipmentMultiV102>.multiContainerBtnV524,
+.equipmentMultiV102>[data-equipment-side]{display:none!important}
+.equipmentCompactV103{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.equipmentCompactV103 .btn{padding:9px 14px;min-height:42px}
+.equipmentCompactSummaryV103{font-weight:750;color:var(--muted)}
+.equipmentDialogV103{
+ position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.34);
+ display:none;align-items:center;justify-content:center;padding:18px
+}
+.equipmentDialogV103.open{display:flex}
+.equipmentDialogCardV103{
+ width:min(680px,96vw);max-height:min(720px,90vh);background:#fff;border-radius:18px;
+ box-shadow:0 20px 70px rgba(0,0,0,.25);padding:18px;display:flex;flex-direction:column;gap:12px
+}
+.equipmentDialogHeadV103{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.equipmentDialogHeadV103 h3{margin:0}
+.equipmentDialogSearchV103{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px}
+.equipmentDialogListV103{overflow:auto;border:1px solid var(--line);border-radius:12px;min-height:180px}
+.equipmentDialogOptionV103{display:flex;align-items:flex-start;gap:11px;padding:11px 12px;border-bottom:1px solid var(--line);cursor:pointer}
+.equipmentDialogOptionV103:last-child{border-bottom:0}
+.equipmentDialogOptionV103:hover{background:#f3f7f5}
+.equipmentDialogOptionV103 input{width:20px;height:20px;margin-top:2px}
+.equipmentDialogMetaV103{font-size:13px;color:var(--muted);margin-top:2px}
+.equipmentDialogActionsV103{display:flex;justify-content:flex-end;gap:10px}
+</style>
+
 </head>
 <body class="accessLocked">
 <div id="moduleHome" aria-label="Bereich auswählen">
  <div class="moduleHomeInner">
   <div class="moduleHomeBrand"><img src="data:image/png;base64,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" alt="Künzli Logo"></div>
+  <div class="moduleHomeAccountV96" aria-label="Cloud und Benutzer">
+   <span id="moduleHomeCloudV96" class="syncBadge">Cloud</span>
+   <button id="moduleHomeUserV96" class="btn secondary authBtn" type="button" onclick="openAuthModal()">Konto</button>
+   <span id="moduleHomeRoleV96" class="statusbadge"></span>
+  </div>
   <h1>Bereich auswählen</h1>
   <p>Wähle den gewünschten Bereich.</p>
   <div class="moduleHomeDashboard">
@@ -4900,7 +4961,7 @@ window.APP_RELEASE = {
 <div class="modal" id="renameModal"><div class="box"><div class="mh"><h2 id="renameTitle">Umbenennen</h2><button class="x" onclick="closeM('renameModal')">✕</button></div><form class="form" onsubmit="saveRename(event)"><label class="f span2">Neuer Name<input id="renameValue" required></label><div class="span2"><button class="btn">Speichern</button></div></form></div></div>
 
 <div class="modal" id="authModal"><div class="modalbox" style="max-width:520px">
-<div class="manageHead"><div><h2 style="margin:0">Cloud-Anmeldung</h2><p class="muted">Bitte anmelden. Erst nach erfolgreicher Cloud-Anmeldung wird das Materiallager freigeschaltet.</p></div><button class="btn secondary" onclick="closeM('authModal')">Schliessen</button></div>
+<div class="manageHead"><div><h2 style="margin:0">Cloud-Anmeldung</h2><p class="muted">Bitte anmelden. Erst nach erfolgreicher Cloud-Anmeldung wird Künzli Logistik freigeschaltet.</p></div><button class="btn secondary" onclick="closeM('authModal')">Schliessen</button></div>
 <div id="authSignedOut" class="authBox">
 <label><b>Benutzername</b><input id="authUsername" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="z.B. peter"></label>
 <label><b>PIN / Passwort</b><input id="authPassword" type="password" inputmode="numeric" autocomplete="current-password" placeholder="mind. 6 Zeichen"></label>
@@ -5336,22 +5397,90 @@ window.APP_RELEASE = {
 
 <div class="modal" id="permissionModal"><div class="box" style="max-width:900px">
  <div class="mh"><div><h2 style="margin:0">Berechtigungen</h2><div id="permissionUserName" class="muted"></div></div><button class="x" onclick="closeM('permissionModal')">✕</button></div>
- <div class="permissionGrid">
-  <div class="permissionSection">
-   <h3>Bereiche</h3>
-   <label class="permissionCheck"><input type="checkbox" id="permWarehouse"> Lagerverwaltung</label>
-   <label class="permissionCheck"><input type="checkbox" id="permMaterial"> Material</label>
-   <label class="permissionCheck"><input type="checkbox" id="permControl"> Kontrolle</label>
-   <label class="permissionCheck"><input type="checkbox" id="permReserved"> Reserviert</label>
-   <label class="permissionCheck"><input type="checkbox" id="permArchive"> Archiv</label>
-   <label class="permissionCheck"><input type="checkbox" id="permDefects"> Mängel</label>
-   <label class="permissionCheck"><input type="checkbox" id="permTransfers"> Umbuchungen</label>
-   <label class="permissionCheck"><input type="checkbox" id="permManage"> Verwalten</label>
-   <label class="permissionCheck"><input type="checkbox" id="permProjects"> Projekte</label>
-   <label class="permissionCheck"><input type="checkbox" id="permSmallOrders"> Kleinaufträge</label>
-   <label class="permissionCheck"><input type="checkbox" id="permPlatforms"> Pritschenverwaltung</label>
-   <label class="permissionCheck"><input type="checkbox" id="permTools"> Werkzeug &amp; Geräte</label>
-   <div class="permissionUserNote">Die Haken bestimmen, welche Bereiche diese Person in der App sieht und öffnen kann.</div>
+ <div class="permissionGrid permissionGridV108">
+  <div class="permissionSection permissionSectionV108">
+   <h3>Hauptansichten &amp; Bereiche</h3>
+
+   <div class="permissionGroupV108" data-perm-group="warehouse">
+    <div class="permissionGroupHeadV108">
+     <label class="permissionCheck permissionMainV108"><input type="checkbox" id="permWarehouse"> Lagerverwaltung</label>
+     <button type="button" class="permissionAllV108" onclick="togglePermissionGroupV108('warehouse',true)">Alle auswählen</button>
+    </div>
+    <div class="permissionChildrenV108">
+     <div class="permissionSubgroupV114">
+      <label class="permissionCheck permissionSubHeadV114"><input type="checkbox" id="permMaterial"> Materiallager</label>
+      <div class="permissionSubchildrenV114">
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialMasterDataV114"> Stammdaten / Preise ändern</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialPinsV114"> Pins setzen</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialAreasV114"> Flächen erstellen / bearbeiten</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialFormatsV114"> Formatbearbeitungen</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialColumnsV114"> Spalten verschieben</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialLocationsV114"> Lagerorte ändern</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialRacksV114"> Ebenen / Gestelle erstellen, bearbeiten, löschen</label>
+      </div>
+     </div>
+     <label class="permissionCheck"><input type="checkbox" id="permControl"> Kontrolle</label>
+     <label class="permissionCheck"><input type="checkbox" id="permReserved"> Reserviert</label>
+     <label class="permissionCheck"><input type="checkbox" id="permArchive"> Archiv</label>
+     <label class="permissionCheck"><input type="checkbox" id="permDefects"> Mängel</label>
+     <label class="permissionCheck"><input type="checkbox" id="permTransfers"> Umbuchungen</label>
+     <label class="permissionCheck"><input type="checkbox" id="permManage"> Verwalten</label>
+    </div>
+   </div>
+
+   <div class="permissionGroupV108" data-perm-group="projects">
+    <div class="permissionGroupHeadV108">
+     <label class="permissionCheck permissionMainV108"><input type="checkbox" id="permProjects"> Produktion</label>
+    </div>
+    <div class="permissionChildrenV108">
+     <label class="permissionCheck"><input type="checkbox" id="permProjectCreateV109"> Projekt erstellen</label>
+     <label class="permissionCheck"><input type="checkbox" id="permCommissionV109"> Kommission</label>
+     <label class="permissionCheck"><input type="checkbox" id="permProductionAnalysisV110"> Produktionsanalyse</label>
+    </div>
+   </div>
+
+   <div class="permissionGroupV108" data-perm-group="smallOrders">
+    <div class="permissionGroupHeadV108">
+     <label class="permissionCheck permissionMainV108"><input type="checkbox" id="permSmallOrders"> Kleinaufträge</label>
+    </div>
+    <div class="permissionChildrenV108">
+     <label class="permissionCheck"><input type="checkbox" id="permSmallOrderMaterialKuenzliV111"> Neue Materialien Künzli erstellen</label>
+     <label class="permissionCheck"><input type="checkbox" id="permSmallOrderMaterialImmerV111"> Neue Materialien Immer AG erstellen</label>
+    </div>
+   </div>
+
+   <div class="permissionGroupV108" data-perm-group="platforms">
+    <div class="permissionGroupHeadV108">
+     <label class="permissionCheck permissionMainV108"><input type="checkbox" id="permPlatforms"> Pritschenverwaltung / Logistik</label>
+    </div>
+    <div class="permissionChildrenV108">
+     <label class="permissionCheck"><input type="checkbox" id="permPlatformReturnV113"> Zurückschreiben ins Lager</label>
+     <label class="permissionCheck"><input type="checkbox" id="permPlatformCreateStockV113"> Neue Pritschen / Rungen / Kronen / Container / Geräte erfassen</label>
+     <label class="permissionCheck"><input type="checkbox" id="permPlatformCreateProjectV113"> Neues Projekt erstellen</label>
+     <label class="permissionCheck"><input type="checkbox" id="permPlatformAllTransportsV113"> Ansicht aller Transporte</label>
+     <label class="permissionCheck"><input type="checkbox" id="permPlatformSupplierViewV113"> Lieferanten einsehen</label>
+     <label class="permissionCheck"><input type="checkbox" id="permPlatformSupplierEditV113"> Änderungen bei Lieferanten vornehmen</label>
+     <label class="permissionCheck"><input type="checkbox" id="permPlatformDeleteTransportV113"> Transporte löschen</label>
+    </div>
+   </div>
+
+   <div class="permissionGroupV108" data-perm-group="tools">
+    <div class="permissionGroupHeadV108">
+     <label class="permissionCheck permissionMainV108"><input type="checkbox" id="permTools"> Werkzeug &amp; Geräte</label>
+    </div>
+   </div>
+
+   <div class="permissionGroupV108" data-perm-group="delete">
+    <div class="permissionGroupHeadV108">
+     <div class="permissionMainV108">Löschen</div>
+    </div>
+    <div class="permissionChildrenV108">
+     <label class="permissionCheck"><input type="checkbox" id="permDeleteDataV112"> Daten löschen</label>
+     <label class="permissionCheck"><input type="checkbox" id="permDeleteReportsV112"> Rapporte löschen</label>
+    </div>
+   </div>
+
+   <div class="permissionUserNote">Die Hauptansichten sind getrennt gruppiert. Unter „Lagerverwaltung“ können die einzelnen Bereiche separat freigegeben werden.</div>
   </div>
   <div class="permissionSection" style="display:none">
    <h3>Projektzugriff</h3>
@@ -9843,7 +9972,7 @@ function validateSequentialDailyProgress(p,entries){
 function saveDailyProduction(){
  let p=projectById(currentProjectId);if(!p)return;
 
- // BV2026-1-15: Beim Bearbeiten wird genau der gewählte Erfassungsvorgang ersetzt.
+ // BV2026-1-58: Beim Bearbeiten wird genau der gewählte Erfassungsvorgang ersetzt.
  if(productionProgressEditV547){
    let oldDay=(p.dailyProduction||[]).find(d=>(d.progressBatchesV547||[]).some(b=>b.id===productionProgressEditV547.batchId));
    let oldBatch=oldDay?.progressBatchesV547?.find(b=>b.id===productionProgressEditV547.batchId);
@@ -10751,6 +10880,8 @@ function normalizePlatformStoreData(d){
    rungStock:Array.isArray(d.rungStock)?d.rungStock:[],
    containerStock:Array.isArray(d.containerStock)?d.containerStock:[],
    crownStock:Array.isArray(d.crownStock)?d.crownStock:[],
+   equipmentStock:Array.isArray(d.equipmentStock)?d.equipmentStock:[],
+   projectRungsOpen:Array.isArray(d.projectRungsOpen)?d.projectRungsOpen:[],
    rentals:Array.isArray(d.rentals)?d.rentals:[],
    projectPlatformAssignments:Array.isArray(d.projectPlatformAssignments)?d.projectPlatformAssignments:[],
    transports:Array.isArray(d.transports)?d.transports:[],
@@ -10760,7 +10891,7 @@ function normalizePlatformStoreData(d){
 function platformStoreScore(d){
  let x=normalizePlatformStoreData(d);
  return x.stock.length*20+x.actual.length*12+x.containerActual.length*10+x.rungStock.length*8+
-   x.containerStock.length*8+x.crownStock.length*8+x.needs.length*5+
+   x.containerStock.length*8+x.crownStock.length*8+x.equipmentStock.length*6+x.projectRungsOpen.length*6+x.needs.length*5+
    x.rentals.length*4+x.projectPlatformAssignments.length*4+x.transports.length*4+x.carriers.length;
 }
 function loadPlatformBackups(){
@@ -11046,7 +11177,7 @@ function syncContainerLoadEnableV525(side){
 }
 
 function containerMultiElementsV524(side){
- const prefix=side==='truck'?'platformTransportTruck':'platformTransportTrailer';
+ const prefix=side==='truck'?'platformTransportTractor':'platformTransportTrailer';
  const root=E(prefix+'ContainerMultiV524');
  return {root,btn:root?.querySelector('.multiContainerBtnV524'),panel:root?.querySelector('.multiContainerPanelV524'),
          select:E(prefix+'OnPlatformContainerV521')};
@@ -11111,7 +11242,7 @@ function updatePlatformOnPlatformVisibilityV521(){
 // V321: Pritsche oder Container als Ladungsträger im Transport
 function platformTransportLoadType(kind='truck'){
  let el=E(kind==='truck'?'platformTransportTruckLoadType':'platformTransportTrailerLoadType');
- return el?.value==='container'?'container':'platform';
+ return el?.value==='container'?'container':(el?.value==='equipment'?'equipment':'platform');
 }
 
 function platformContainerAlreadyOnTransportV525(containerId){
@@ -11157,6 +11288,30 @@ function platformContainerIsAtProjectV527(c){
  return !!(c.currentUsage&&String(c.currentUsage.projectId||'')===String(selectedPlatformProjectId));
 }
 
+
+function platformEquipmentAlreadyOnTransportV100(equipmentId,date){
+ const eid=String(equipmentId||''); if(!eid)return false;
+ return (platformStore.transports||[]).some(t=>{
+   if(String(t.id||'')===String(platformTransportEditId||''))return false;
+   if(['Abgeschlossen','Archiviert'].includes(String(t.status||'')))return false;
+   if(date && String(t.date||'')!==String(date))return false;
+   return [t.truckEquipmentId,t.trailerEquipmentId].filter(Boolean).map(String).includes(eid);
+ });
+}
+function platformTransportEquipmentRowsV100(){
+ const date=E('platformTransportDate')?.value||'';
+ return (platformStore.equipmentStock||[])
+   .filter(x=>x.active!==false)
+   .filter(x=>!platformEquipmentAlreadyOnTransportV100(x.id,date))
+   .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de-CH'));
+}
+function platformEquipmentLabelV100(id){
+ const x=(platformStore.equipmentStock||[]).find(e=>String(e.id)===String(id));
+ if(!x)return String(id||'');
+ const dim=[x.length,x.width,x.height].map(v=>v===null||v===undefined||v===''?'–':Number(v).toFixed(2)).join(' × ');
+ return `${x.name||'Fahrzeug / Gerät'}${x.weight!==null&&x.weight!==undefined&&x.weight!==''?` · ${Number(x.weight).toFixed(2)} kg`:''}${dim!=='– × – × –'?` · ${dim} m`:''}`;
+}
+
 function platformProjectActualOptions(truckValue='',trailerValue=''){
  let truck=E('platformTransportTruckPlatform'),trail=E('platformTransportTrailerPlatform');
  if(!truck||!trail)return;
@@ -11171,6 +11326,7 @@ function platformProjectActualOptions(truckValue='',trailerValue=''){
  let containers=platformIsReturnTransportV527()
    ? (platformStore.containerStock||[]).filter(c=>(c.supplier||'Künzli')==='Künzli'&&c.active!==false&&platformContainerIsAtProjectV527(c))
    : platformTransportContainerRows();
+ let equipment=platformTransportEquipmentRowsV100();
  [truckValue,trailerValue].filter(Boolean).forEach(id=>{
    let c=(platformStore.containerStock||[]).find(x=>x.id===id);
    if(c && !containers.some(x=>x.id===id))containers.push(c);
@@ -11186,10 +11342,12 @@ function platformProjectActualOptions(truckValue='',trailerValue=''){
      }).join('');
  const containerHtml=(selectedValue='')=>
    '<option value="">Container wählen</option>'+containers.map(c=>`<option value="${c.id}" ${c.id===selectedValue?'selected':''}>${esc(c.name||'Container')}${c.length?` · ${Number(c.length).toFixed(2)} × ${Number(c.width||0).toFixed(2)} × ${Number(c.height||0).toFixed(2)} m`:''}</option>`).join('');
+ const equipmentHtml=(selectedValue='',excludeId='')=>
+   '<option value="">Fahrzeug / Gerät wählen</option>'+equipment.filter(x=>!excludeId||String(x.id)!==String(excludeId)).map(x=>`<option value="${x.id}" ${String(x.id)===String(selectedValue)?'selected':''}>${esc(platformEquipmentLabelV100(x.id))}</option>`).join('');
 
  let sameType=truckType===trailerType;
- truck.innerHTML=truckType==='container'?containerHtml(truckValue):platformHtml(sameType?trailerValue:'',truckValue);
- trail.innerHTML=trailerType==='container'?containerHtml(trailerValue):platformHtml(sameType?truckValue:'',trailerValue);
+ truck.innerHTML=truckType==='container'?containerHtml(truckValue):(truckType==='equipment'?equipmentHtml(truckValue,sameType?trailerValue:''):platformHtml(sameType?trailerValue:'',truckValue));
+ trail.innerHTML=trailerType==='container'?containerHtml(trailerValue):(trailerType==='equipment'?equipmentHtml(trailerValue,sameType?truckValue:''):platformHtml(sameType?truckValue:'',trailerValue));
  if(sameType&&truckType==='container'){
    if(trailerValue)truck.innerHTML='<option value="">Container wählen</option>'+containers.filter(c=>c.id!==trailerValue).map(c=>`<option value="${c.id}">${esc(c.name||'Container')}</option>`).join('');
    if(truckValue)trail.innerHTML='<option value="">Container wählen</option>'+containers.filter(c=>c.id!==truckValue).map(c=>`<option value="${c.id}">${esc(c.name||'Container')}</option>`).join('');
@@ -11206,8 +11364,8 @@ function platformProjectActualOptions(truckValue='',trailerValue=''){
 }
 function updatePlatformTransportLoadLabels(){
  let truckLabel=E('platformTransportTruckLoadLabel'),trailLabel=E('platformTransportTrailerLoadLabel');
- if(truckLabel)truckLabel.textContent=platformTransportLoadType('truck')==='container'?'Container LKW':'Pritsche LKW';
- if(trailLabel)trailLabel.textContent=platformTransportLoadType('trailer')==='container'?'Container Anhänger':'Pritsche Anhänger';
+ if(truckLabel){const t=platformTransportLoadType('truck');truckLabel.textContent=t==='container'?'Container LKW':(t==='equipment'?'Fahrzeug / Gerät LKW':'Pritsche LKW');}
+ if(trailLabel){const t=platformTransportLoadType('trailer');trailLabel.textContent=t==='container'?'Container Anhänger':(t==='equipment'?'Fahrzeug / Gerät Anhänger':'Pritsche Anhänger');}
 }
 function setPlatformTransportLoadType(kind='truck',selectedValue=''){
  let truck=E('platformTransportTruckPlatform'),trail=E('platformTransportTrailerPlatform');
@@ -11272,7 +11430,7 @@ const PLATFORM_REAL_TRUCK_IMG='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
 const PLATFORM_REAL_TRAILER_IMG='data:image/jpeg;base64,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';
 
 function platformTransportVehicleSvg(kind='truck',vehicle='',carrierId='',fallbackLoad='',carrierType='platform'){
- let info=platformTransportCarrierInfo(carrierType,carrierId), carrierLabel=info.label||(carrierType==='container'?'Container wählen':'Pritsche wählen');
+ let info=carrierType==='equipment'?{label:platformEquipmentLabelV100(carrierId),load:platformEquipmentLabelV100(carrierId)}:platformTransportCarrierInfo(carrierType,carrierId), carrierLabel=info.label||(carrierType==='container'?'Container wählen':(carrierType==='equipment'?'Fahrzeug / Gerät wählen':'Pritsche wählen'));
  let load=info.load||fallbackLoad||'';
  let veh=String(vehicle||'').trim();
  let explicitlySolo=kind==='trailer'&&veh==='Kein Anhänger / LKW solo';
@@ -11298,7 +11456,16 @@ function platformTransportVehicleSvg(kind='truck',vehicle='',carrierId='',fallba
      carrierNo=(m?m[0]:raw).replace(/\s+/g,' ').trim();
    }
  }
- return `<div class="platformVehicleSketch"><div class="platformVehiclePhoto${cls}"><img src="${img}" alt="${kind==='truck'?'LKW':'Anhänger'}"><div class="platformVehicleLoadPlate"><strong>${esc(loadText)}</strong><span>${esc(carrierId?(carrierNo||carrierText):'')}</span></div></div><div class="vehicleMeta">${esc(isUnset?'Nicht definiert':veh)}</div></div>`;
+ let carrierCover='';
+ if(carrierType==='platform'){
+   // V83: Das fest im Standardbild enthaltene Schild wird immer mit einem neutralen,
+   // leeren weissen Feld abgedeckt. Erst wenn eine konkrete Ist-Pritsche zugeordnet ist,
+   // darf die Anwendung dieses Feld mit dem aktuellen "Beladen mit" beschriften.
+   const a=carrierId?(platformStore.actual||[]).find(x=>String(x.id)===String(carrierId)):null;
+   const label=String(a?.loadedWith||'').trim();
+   carrierCover=`<div class="platformVehicleCarrierCoverV77${label?' hasLoad':''}">${label?esc(label):''}</div>`;
+ }
+ return `<div class="platformVehicleSketch"><div class="platformVehiclePhoto${cls}"><img src="${img}" alt="${kind==='truck'?'LKW':'Anhänger'}">${carrierCover}<div class="platformVehicleLoadPlate"><strong>${esc(loadText)}</strong><span>${esc(carrierId?(carrierNo||carrierText):'')}</span></div></div><div class="vehicleMeta">${esc(isUnset?'Nicht definiert':veh)}</div></div>`;
 }
 
 function platformCarrierShortNameV532(type,id){
@@ -11341,18 +11508,143 @@ function renderPlatformTransportVehiclePreviews(){
  if(trail)trail.innerHTML=platformTransportVehicleSvg('trailer',E('platformTransportTrailer')?.value||'',E('platformTransportTrailerPlatform')?.value||'',load,platformTransportLoadType('trailer'));
 }
 function platformTransportVehiclePairHtml(t){
- let truckType=t.truckLoadType||'platform',trailerType=t.trailerLoadType||'platform';
+ const actualById=id=>(platformStore.actual||[]).find(a=>String(a.id)===String(id||''))||null;
+ const shortPr=(type,id)=>{
+   if(!id)return '';
+   let x='';
+   try{x=platformCarrierShortNameV532(type,id)||''}catch(e){}
+   const m=String(x).match(/\bPR\s*[-.]?\s*[A-Za-z0-9.-]+\b/i);
+   return m?m[0].replace(/\s+/g,' ').trim():'';
+ };
+ const actualPr=id=>shortPr('platform',id);
+ const actualByPr=pr=>{
+   const n=normPlatformNoV516(pr||''); if(!n)return null;
+   return (platformStore.actual||[]).find(a=>normPlatformNoV516(actualPr(a.id))===n && a.status!=='Frei' && !a.returnedAt)||null;
+ };
+ const rungBox=id=>{
+   const a=actualById(id); if(!a||!Array.isArray(a.rungAllocations)||!a.rungAllocations.length)return '';
+   const rows=a.rungAllocations.map(x=>{
+     const z=[x.supplier||x.owner||x.name||'Runge'];
+     const q=x.qty??x.quantity??x.count, l=x.height??x.length??x.laenge, n=x.note??x.bemerkung??x.remark;
+     if(q!==undefined&&q!=='')z.push(q+' Stk');
+     if(l!==undefined&&l!=='')z.push('Länge '+l+(Number(l)<20?' m':' mm'));
+     if(x.supplier==='Brühwiler' && x.kind==='middle' && Number(x.crownQty||0)>0)z.push('Kronen '+Number(x.crownQty||0)+' Stk');
+     if(n)z.push('Bem.: '+n);
+     return z.join(' · ');
+   });
+   return `<div class="platformRungDetailV542"><strong>Rungen</strong><br>${rows.join('<br>')}</div>`;
+ };
+
+ const truckType=t.truckLoadType||'platform', trailerType=t.trailerLoadType||'platform';
  let truckId=truckType==='container'?(t.truckContainerId||''):(t.actualId||t.truckPlatformId||'');
  let trailerId=trailerType==='container'?(t.trailerContainerId||''):(t.trailerActualId||t.trailerPlatformId||'');
- let truckInfo=platformTransportCarrierInfo(truckType,truckId);
- let trailerInfo=platformTransportCarrierInfo(trailerType,trailerId);
- let truckFallback=truckInfo.load||'';
- let trailerFallback=trailerInfo.load||'';
- const legacyTrailerPr=String(t.load||'').match(/Anhänger\s+(PR\s*[-.]?\s*[A-Za-z0-9.-]+)/i)?.[1]?.replace(/\s+/g,' ')||'';
- let truck=platformTransportVehicleSvg('truck',t.tractor||'',truckId,truckFallback,truckType);
- let usesTrailer=!!trailerId || !!legacyTrailerPr || (!!t.trailer&&t.trailer!=='Kein Anhänger / LKW solo');
- let trailer=usesTrailer?platformTransportVehicleSvg('trailer',t.trailer||'Nicht festgelegt',trailerId,trailerFallback||legacyTrailerPr,trailerType):'';
- return `<div class="platformTransportVehiclePair"><div class="platformTransportVehicleMini">${truck}</div>${trailer?`<span class="platformTransportVehiclePlus">+</span><div class="platformTransportVehicleMini">${trailer}</div>`:''}</div>`;
+ const planned=String(t.status||'Geplant')==='Geplant';
+ const delivered=String(t.status||'')==='Geliefert';
+
+ let truckPlan=String(t.truckPlannedPlatformV516||'').trim();
+ let trailerPlan=String(t.trailerPlannedPlatformV516||'').trim();
+
+ // V76: Wenn in der Planung keine konkrete WP/PR gewählt wurde, ist "Beladen mit" die Verbindung.
+ // Beispiel: Ist-Pritsche loadedWith="Test" und Transportplanung="Test" -> genau diese Ist-Pritsche.
+ const normLoadV76=v=>String(v||'').trim().toLocaleLowerCase('de-CH').replace(/\s+/g,' ');
+ const findActualByLoadV76=(...vals)=>{
+   const wanted=[...new Set(vals.map(normLoadV76).filter(Boolean))];
+   if(!wanted.length)return null;
+   const rows=(platformStore.actual||[]).filter(a=>
+     !a.returnedAt && a.status!=='Frei' &&
+     (!t.projectId || String(a.projectId||'')===String(t.projectId||'')) &&
+     wanted.includes(normLoadV76(a.loadedWith))
+   );
+   return rows.length===1?rows[0]:null;
+ };
+ if(truckType==='platform'&&!truckId){
+   const a=findActualByLoadV76(t.load,truckPlan,t.beladenMit);
+   if(a)truckId=a.id;
+ }
+ if(trailerType==='platform'&&!trailerId){
+   const a=findActualByLoadV76(t.load,trailerPlan,t.beladenMit);
+   if(a&&String(a.id)!==String(truckId||''))trailerId=a.id;
+ }
+
+ // Older records: derive PR from the concrete assignment or legacy "Beladen mit".
+ if(!truckPlan && truckType==='platform') truckPlan=actualPr(truckId);
+ if(!trailerPlan && trailerType==='platform') trailerPlan=actualPr(trailerId);
+ const legacy=String(t.load||'');
+ if(!trailerPlan){
+   const lm=legacy.match(/Anhänger\s+(PR\s*[-.]?\s*[A-Za-z0-9.-]+)/i);
+   if(lm)trailerPlan=lm[1].replace(/\s+/g,' ').trim();
+ }
+
+ // Delivered trailer must remain visible until its platform is returned to Lager.
+ if(delivered && trailerType==='platform' && !trailerId){
+   let a=trailerPlan?actualByPr(trailerPlan):null;
+   const candidates=(platformStore.actual||[]).filter(x=>{
+     if(String(x.id)===String(truckId)||x.status==='Frei'||x.returnedAt)return false;
+     if(t.projectId && x.projectId && String(x.projectId)!==String(t.projectId))return false;
+     return true;
+   });
+   if(!a){
+     const deliveredCandidates=candidates.filter(x=>/^(Abgeholt|Geliefert)$/i.test(String(x.status||'')));
+     if(deliveredCandidates.length===1)a=deliveredCandidates[0];
+     else if(deliveredCandidates.length>1){
+       // Prefer the platform whose pickup/delivery date is closest to this transport date.
+       const td=String(t.date||'');
+       a=deliveredCandidates.find(x=>String(x.pickupDate||x.deliveryDate||x.date||'')===td)||deliveredCandidates[0];
+     }
+   }
+   if(!a && candidates.length===1)a=candidates[0];
+   if(!a && candidates.length>1){
+     const hints=[t.trailerPlannedPlatformV516,t.load,t.note,t.beladenMit].filter(Boolean).join(' ');
+     const hinted=candidates.find(x=>{
+       const p=actualPr(x.id); return p && hints.toUpperCase().includes(p.toUpperCase());
+     });
+     if(hinted)a=hinted;
+   }
+   if(a){trailerId=a.id; if(!trailerPlan)trailerPlan=actualPr(a.id);}
+ }
+
+ let truckDisplayId=truckId, trailerDisplayId=trailerId;
+ let truckFallback='', trailerFallback='';
+
+ // V76: Bei konkreter/über Beladung eindeutig gefundener Pritsche ist deren Ist-Status die einzige Statusquelle.
+ if(truckType==='platform'){
+   const a=actualById(truckId);
+   truckFallback=a?(String(a.status||'Belegt')==='Belegt'?'Abholbereit':String(a.status||'Belegt')):(planned?(truckPlan?'Geplant · wartet auf '+truckPlan:'Transport geplant'):'');
+ }
+ if(trailerType==='platform'){
+   const a=actualById(trailerId);
+   trailerFallback=a?(String(a.status||'Belegt')==='Belegt'?'Abholbereit':String(a.status||'Belegt')):(planned?(trailerPlan?'Geplant · wartet auf '+trailerPlan:'Transport geplant'):'');
+ }
+
+ let truck=platformTransportVehicleSvg('truck',t.tractor||'',truckDisplayId,truckFallback,truckType);
+ const usesTrailer=!!trailerId||!!trailerPlan|| (!!t.trailer&&t.trailer!=='Kein Anhänger / LKW solo');
+ let trailer=usesTrailer?platformTransportVehicleSvg('trailer',t.trailer||'Nicht festgelegt',trailerDisplayId,trailerFallback,trailerType):'';
+
+ function setPlateStatusV556(html,text){
+   if(!html||!text)return html;
+   // V77: Im Statusfeld steht ausschliesslich der Ist-Status der konkreten Pritsche.
+   return html.replace(/(<div class="platformVehicleLoadPlate(?: [^"]*)?">)[\s\S]*?(<\/div>)/,
+     (_,a,b)=>a+'<strong>'+esc(text)+'</strong>'+b);
+ }
+ if(truckFallback)truck=setPlateStatusV556(truck,truckFallback);
+ if(trailer&&trailerFallback)trailer=setPlateStatusV556(trailer,trailerFallback);
+
+ let html=`<div class="platformTransportVehiclePair">
+   <div class="platformTransportVehicleMini">${truck}${rungBox(truckId)}</div>
+   ${trailer?`<span class="platformTransportVehiclePlus">+</span><div class="platformTransportVehicleMini">${trailer}${rungBox(trailerId)}</div>`:''}
+ </div>`;
+
+ if(delivered){
+   const host=document.createElement('div');host.innerHTML=html;
+   host.querySelectorAll('.platformTransportVehicleMini').forEach(mini=>{
+     [...mini.querySelectorAll('*')].forEach(el=>{
+       const tx=String(el.textContent||'').trim();
+       if(/^(Abgeholt|Transport geplant|In Beladung|Beladen|Beladung|Geplant · wartet auf .+)$/i.test(tx))el.textContent='Geliefert';
+     });
+   });
+   html=host.innerHTML;
+ }
+ return html;
 }
 
 
@@ -11576,23 +11868,30 @@ function savePlatformTransport(){
  let trailerActualId=trailerLoadType==='platform'?trailerCarrierId:'';
  let truckContainerId=truckLoadType==='container'?truckCarrierId:'';
  let trailerContainerId=trailerLoadType==='container'?trailerCarrierId:'';
+ let truckEquipmentId=truckLoadType==='equipment'?truckCarrierId:'';
+ let trailerEquipmentId=trailerLoadType==='equipment'?trailerCarrierId:'';
  let truckOnPlatformContainerIds=truckLoadType==='platform'?platformSelectedContainersV523('platformTransportTruckOnPlatformContainerV521'):[];
  let trailerOnPlatformContainerIds=trailerLoadType==='platform'?platformSelectedContainersV523('platformTransportTrailerOnPlatformContainerV521'):[];
  let truckOnPlatformContainerId=truckOnPlatformContainerIds[0]||'';
  let trailerOnPlatformContainerId=trailerOnPlatformContainerIds[0]||'';
  let transportName=String(E('platformTransportName')?.value||'').trim();
  let tractor=E('platformTransportTractor')?.value||'',trailer=E('platformTransportTrailer')?.value||'';
+ if(tractor==='__unknown__')tractor=''; if(trailer==='__unknown__')trailer='';
  let from=String(E('platformTransportFrom')?.value||'').trim(),to=String(E('platformTransportTo')?.value||'').trim();
  let truckCarrierName=truckLoadType==='container'?'Container LKW':'Pritsche LKW';
- if(!date||!carrier||!truckCarrierId||!from||!to)return alert(`Bitte Datum, Transportfirma, ${truckCarrierName}, Von und Nach ausfüllen.`);
+ let truckPlannedPlatformV516=String(E('platformTransportTruckPlannedPlatformV516')?.value||'').trim();
+ let trailerPlannedPlatformV516=String(E('platformTransportTrailerPlannedPlatformV516')?.value||'').trim();
+ const editingTransportV518=(platformStore.transports||[]).find(x=>String(x.id)===String(platformTransportEditId||''));
+ if(!truckPlannedPlatformV516 && editingTransportV518?.truckPlannedPlatformV516) truckPlannedPlatformV516=editingTransportV518.truckPlannedPlatformV516;
+ if(!trailerPlannedPlatformV516 && editingTransportV518?.trailerPlannedPlatformV516) trailerPlannedPlatformV516=editingTransportV518.trailerPlannedPlatformV516;
+ /* BV2026-1-85: LKW, Anhänger und konkrete Pritschen dürfen vollständig undefiniert sein.
+    Für die Transportplanung genügen Datum, Transportfirma und Route. */
+ if(!date||!carrier||!from||!to)return alert(`Bitte Datum, Transportfirma, Von und Nach ausfüllen.`);
+
  let usesTrailer=!!trailerCarrierId || (!!trailer&&trailer!=='Kein Anhänger / LKW solo'&&trailer!=='Nicht festgelegt');
- if(usesTrailer&&!trailerCarrierId)return alert(`Bitte auch ${trailerLoadType==='container'?'den Container':'die Pritsche'} für den Anhänger auswählen.`);
- if(usesTrailer&&truckLoadType===trailerLoadType&&trailerCarrierId===truckCarrierId)return alert(`Derselbe ${truckLoadType==='container'?'Container':'Pritschenträger'} kann nicht gleichzeitig auf dem LKW und auf dem Anhänger eingeplant werden.`);
- if(truckOnPlatformContainerIds.some(id=>trailerOnPlatformContainerIds.includes(id)))return alert('Derselbe Container kann nicht gleichzeitig auf der LKW- und Anhängerpritsche geladen werden.');
+ /* BV2026-1-85: Anhänger darf ohne Ladungsträger/Pritsche geplant werden. */
  if(!platformIsReturnTransportV527()&&truckContainerId&&platformContainerReservedForOtherProject(truckContainerId,selectedPlatformProjectId,date))return alert('Der gewählte Container LKW ist an diesem Datum für ein anderes Projekt reserviert oder bereits in Gebrauch.');
  if(!platformIsReturnTransportV527()&&truckOnPlatformContainerIds.some(id=>platformContainerReservedForOtherProject(id,selectedPlatformProjectId,date)))return alert('Mindestens ein Container auf der LKW-Pritsche ist an diesem Datum für ein anderes Projekt reserviert oder bereits in Gebrauch.');
- if(!platformIsReturnTransportV527()&&usesTrailer&&trailerOnPlatformContainerIds.some(id=>platformContainerReservedForOtherProject(id,selectedPlatformProjectId,date)))return alert('Mindestens ein Container auf der Anhänger-Pritsche ist an diesem Datum für ein anderes Projekt reserviert oder bereits in Gebrauch.');
- if(!platformIsReturnTransportV527()&&usesTrailer&&trailerContainerId&&platformContainerReservedForOtherProject(trailerContainerId,selectedPlatformProjectId,date))return alert('Der gewählte Container Anhänger ist an diesem Datum für ein anderes Projekt reserviert oder bereits in Gebrauch.');
  let now=new Date().toISOString();
  let oldTransport=platformTransportEditId?(platformStore.transports||[]).find(x=>x.id===platformTransportEditId):null;
  let oldActualIds=oldTransport?[oldTransport.actualId,oldTransport.trailerActualId].filter(Boolean):[];
@@ -11601,10 +11900,13 @@ function savePlatformTransport(){
    id:platformTransportEditId||('tr'+Date.now()),projectId:selectedPlatformProjectId,
    truckLoadType,trailerLoadType:usesTrailer?trailerLoadType:'platform',
    actualId,trailerActualId:usesTrailer?trailerActualId:'',truckContainerId,trailerContainerId:usesTrailer?trailerContainerId:'',
+   truckEquipmentId,trailerEquipmentId:usesTrailer?trailerEquipmentId:'',
    truckOnPlatformContainerId,trailerOnPlatformContainerId:usesTrailer?trailerOnPlatformContainerId:'',
    truckOnPlatformContainerIds:truckOnPlatformContainerIds.slice(),
    trailerOnPlatformContainerIds:usesTrailer?trailerOnPlatformContainerIds.slice():[],
    date,time,carrier,transportName,tractor,trailer,from,to,load:String(E('platformTransportLoad')?.value||'').trim(),
+ truckPlannedPlatformV516:String(truckPlannedPlatformV516||'').trim(),
+ trailerPlannedPlatformV516:String(trailerPlannedPlatformV516||'').trim(),
    status:E('platformTransportStatus')?.value||'Geplant',
    note:String(E('platformTransportNote')?.value||'').trim(),
    linkedDeliveryId:(E('platformTransportType')?.value||'delivery')==='return'?(platformReturnSourceIdV370||oldTransport?.linkedDeliveryId||''):'',
@@ -11630,7 +11932,7 @@ function savePlatformTransport(){
  let saveBtn=E('platformTransportSaveBtn');if(saveBtn)saveBtn.textContent='Transport speichern';
  let cancelBtn=E('platformTransportCancelEditBtn');if(cancelBtn)cancelBtn.style.display='none';
  savePlatformStore();
- ['platformTransportName','platformTransportDate','platformTransportTime','platformTransportLoad','platformTransportNote'].forEach(id=>{if(E(id))E(id).value=''});
+ ['platformTransportName','platformTransportDate','platformTransportTime','platformTransportLoad','platformTransportNote','platformTransportTruckPlannedPlatformV516','platformTransportTrailerPlannedPlatformV516'].forEach(id=>{if(E(id))E(id).value=''});
  if(E('platformTransportTruckLoadType'))E('platformTransportTruckLoadType').value='platform';
  if(E('platformTransportTrailerLoadType'))E('platformTransportTrailerLoadType').value='platform';
  platformProjectActualOptions();
@@ -11755,8 +12057,8 @@ function editPlatformTransport(id){
  }
  renderPlatformVehicleOptions(t.tractor||'',t.trailer||'');
 
- let truckSavedId=truckType==='container'?(t.truckContainerId||''):(t.actualId||'');
- let trailerSavedId=trailerType==='container'?(t.trailerContainerId||''):(t.trailerActualId||'');
+ let truckSavedId=truckType==='container'?(t.truckContainerId||''):(truckType==='equipment'?(t.truckEquipmentId||''):(t.actualId||''));
+ let trailerSavedId=trailerType==='container'?(t.trailerContainerId||''):(trailerType==='equipment'?(t.trailerEquipmentId||''):(t.trailerActualId||''));
  platformProjectActualOptions(truckSavedId,trailerSavedId);
  renderPlatformOnPlatformContainersV521(
    t.truckOnPlatformContainerIds||t.truckOnPlatformContainerId||[],
@@ -11900,8 +12202,17 @@ function renderPlatformProjectTransports(){
    .slice()
    .sort((a,b)=>`${a.date||''} ${a.time||''}`.localeCompare(`${b.date||''} ${b.time||''}`));
 
+ const deliveredNotReturnedV541=t=>{
+   const st=String(t.status||'Geplant');
+   if(st!=='Geliefert')return false;
+   // Sichtbar lassen, bis die zugeordneten Pritschen nicht mehr in der aktuellen Situation geführt werden.
+   const ids=[t.actualId,t.trailerActualId].filter(Boolean).map(String);
+   if(!ids.length)return true;
+   return ids.some(id=>(platformStore.actual||[]).some(a=>String(a.id)===id));
+ };
  let groups=[
-   {key:'delivery',title:'Transporte auf Baustelle',rows:all.filter(t=>(t.transportType||'delivery')!=='return'&&(t.status||'Geplant')!=='Abgeschlossen')},
+   {key:'delivery',title:'Transporte auf Baustelle',rows:all.filter(t=>(t.transportType||'delivery')!=='return'&&(t.status||'Geplant')!=='Abgeschlossen'&&!deliveredNotReturnedV541(t))},
+   {key:'delivered',title:'Gelieferte Pritschen',rows:all.filter(t=>(t.transportType||'delivery')!=='return'&&deliveredNotReturnedV541(t))},
    {key:'return',title:'Rücktransporte nach Davos',rows:all.filter(t=>(t.transportType||'delivery')==='return'&&(t.status||'Geplant')!=='Abgeschlossen')},
    {key:'done',title:'Archivierte Transporte',rows:all.filter(t=>(t.status||'Geplant')==='Abgeschlossen')}
  ];
@@ -12496,7 +12807,8 @@ function platformSupplierCountsV363(supplier){
  let crowns=supplier==='Brühwiler'
    ? (platformStore.crownStock||[]).filter(x=>(x.supplier||'Brühwiler')==='Brühwiler'&&x.active!==false)
        .reduce((n,x)=>n+(Number(x.qty)||0),0) : 0;
- return {platforms,rungs,containers,crowns};
+ let equipment=(platformStore.equipmentStock||[]).filter(x=>(x.supplier||'')===supplier&&x.active!==false).length;
+ return {platforms,rungs,containers,crowns,equipment};
 }
 
 function togglePlatformSupplierV363(supplier){
@@ -12801,6 +13113,37 @@ function renderPlatformSupplierSectionV363(supplier,kind){
    return;
  }
 
+ if(kind==='equipment'){
+   let rows=(platformStore.equipmentStock||[]).filter(x=>(x.supplier||'')===supplier&&x.active!==false);
+   const val=(n,u)=>n===null||n===undefined||n===''?'–':`${Number(n).toFixed(2)} ${u}`;
+   box.innerHTML=`
+    <div style="margin-bottom:12px">
+      <button class="btn" type="button" onclick="togglePlatformEquipmentInlineV99('${supplier}')">+ Fahrzeug / Gerät hinzufügen</button>
+    </div>
+    <div id="platformEquipmentInlineV99_${supplier.replace(/[^A-Za-z0-9]/g,'_')}" style="display:none;margin:0 0 16px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#f8faf9">
+      <div class="platformEquipmentFormV95">
+        <label>Name<input id="peqNameV99_${supplier.replace(/[^A-Za-z0-9]/g,'_')}" placeholder="optional"></label>
+        <label>Gewicht [kg]<input id="peqWeightV99_${supplier.replace(/[^A-Za-z0-9]/g,'_')}" type="number" min="0" step="0.01" placeholder="optional"></label>
+        <label>Länge [m]<input id="peqLengthV99_${supplier.replace(/[^A-Za-z0-9]/g,'_')}" type="number" min="0" step="0.01" placeholder="optional"></label>
+        <label>Breite [m]<input id="peqWidthV99_${supplier.replace(/[^A-Za-z0-9]/g,'_')}" type="number" min="0" step="0.01" placeholder="optional"></label>
+        <label>Höhe [m]<input id="peqHeightV99_${supplier.replace(/[^A-Za-z0-9]/g,'_')}" type="number" min="0" step="0.01" placeholder="optional"></label>
+        <label>PDF<input id="peqPdfV99_${supplier.replace(/[^A-Za-z0-9]/g,'_')}" type="file" accept="application/pdf,.pdf"></label>
+      </div>
+      <div class="toolbar" style="margin-top:12px">
+        <button class="btn" type="button" onclick="savePlatformEquipmentInlineV99('${supplier}')">Speichern</button>
+        <button class="btn secondary" type="button" onclick="togglePlatformEquipmentInlineV99('${supplier}',false)">Abbrechen</button>
+      </div>
+    </div>
+    ${rows.length?`<table class="platformStockTable"><thead><tr><th>Name</th><th>Gewicht</th><th>Abmessungen L × B × H</th><th>PDF</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr>
+      <td><b>${esc(x.name||'–')}</b></td>
+      <td>${val(x.weight,'kg')}</td>
+      <td>${[x.length,x.width,x.height].map(n=>n===null||n===undefined||n===''?'–':Number(n).toFixed(2)).join(' × ')} m</td>
+      <td>${x.pdfData?`<button class="btn secondary" type="button" onclick="openPlatformEquipmentPdfV95('${x.id}')">${esc(x.pdfName||'PDF öffnen')}</button>`:'–'}</td>
+      <td><button class="btn danger" type="button" onclick="deletePlatformEquipmentV95('${x.id}');renderPlatformSuppliersV363()">Löschen</button></td>
+    </tr>`).join('')}</tbody></table>`:`<div class="platformSupplierEmptyV363">Noch keine Fahrzeuge / Geräte erfasst.</div>`}`;
+   return;
+ }
+
  if(kind==='crowns'){
    let rows=(platformStore.crownStock||[]).filter(x=>(x.supplier||'Brühwiler')==='Brühwiler'&&x.active!==false)
      .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de-CH'));
@@ -12830,12 +13173,13 @@ function renderPlatformSuppliersV363(){
     <button class="platformSupplierHeadV363" type="button" onclick="togglePlatformSupplierV363('${s}')">
       <span class="platformSupplierIdentityV363">${logo}<span>
        <div class="platformSupplierNameV363">${esc(s)}</div>
-       <div class="platformSupplierMetaV363">${c.platforms} Pritschen · ${c.rungs} Rungen${s==='Künzli'?` · ${c.containers} Container`:''}${s==='Brühwiler'?` · ${c.crowns} Kronen`:''}</div>
+       <div class="platformSupplierMetaV363">${c.platforms} Pritschen · ${c.rungs} Rungen${s==='Künzli'?` · ${c.containers} Container`:''}${s==='Brühwiler'?` · ${c.crowns} Kronen`:''} · ${c.equipment} Fahrzeuge/Geräte</div>
       </span></span><span class="platformSupplierChevronV363">⌄</span>
     </button>
     <div class="platformSupplierBodyV363"><div class="platformSupplierSectionsV363">
       ${platformSupplierSectionV363(s,'platforms','Pritschen',c.platforms,true)}
       ${platformSupplierSectionV363(s,'rungs','Rungen',c.rungs,true)}
+      ${platformSupplierSectionV363(s,'equipment','Fahrzeuge / Geräte',c.equipment,true)}
       ${platformSupplierSectionV363(s,'containers','Container',c.containers,s==='Künzli')}
       ${platformSupplierSectionV363(s,'crowns','Kronenstamm',c.crowns,s==='Brühwiler')}
     </div></div>
@@ -12843,7 +13187,7 @@ function renderPlatformSuppliersV363(){
  }).join('');
 
  PLATFORM_SUPPLIERS.forEach(s=>{
-   ['platforms','rungs'].forEach(k=>renderPlatformSupplierSectionV363(s,k));
+   ['platforms','rungs','equipment'].forEach(k=>renderPlatformSupplierSectionV363(s,k));
    if(s==='Künzli'){
      try{renderPlatformSupplierSectionV363(s,'containers')}
      catch(err){
@@ -13324,7 +13668,7 @@ function removePlatformPlanRung(i){
 }
 function changePlatformPlanRung(i,field,value){
  let r=platformPlanRungDraft[i];if(!r)return;
- if(field==='qty')r.qty=Math.max(0,Math.floor(Number(value)||0));
+ if(field==='qty'||field==='crownQty')r[field]=Math.max(0,Math.floor(Number(value)||0));
  else r[field]=value;
  if(field==='supplier'){
    r.height='';
@@ -13341,7 +13685,9 @@ function renderPlatformPlanRungRows(){
    let avail=(r.supplier&&from&&to)?plannedRungsAvailable(r.supplier,from,to,i):0;
    let opts='<option value="">– Höhe wählen –</option>'+hs.map(v=>{
      let s=Number(v).toFixed(2);
-     return `<option value="${s}" ${String(r.height)===s||String(Number(r.height))===String(Number(s))?'selected':''}>${s} m</option>`;
+     let notes=platformRungNotesForHeight(r.supplier,r.kind,v);
+     let noteText=notes.length?` · ${notes.join(' / ')}`:'';
+     return `<option value="${s}" ${String(r.height)===s||String(Number(r.height))===String(Number(s))?'selected':''}>${s} m${esc(noteText)}</option>`;
    }).join('');
    let auto=r.supplier&&r.supplier!=='Künzli'&&hs.length===1;
    return `<div class="platformPlanRungRow">
@@ -14912,6 +15258,13 @@ function supplierRegisteredRungHeights(supplier,kind=''){
    .map(x=>Number(x.height)).filter(v=>Number.isFinite(v)&&v>0).map(v=>+v.toFixed(2));
  return [...new Set(vals)].sort((a,b)=>a-b);
 }
+function platformRungNotesForHeight(supplier,kind,height){
+ const h=Number(height);
+ const notes=(platformStore.rungStock||[])
+   .filter(x=>x.supplier===supplier&&x.active!==false&&rungStockUsableForKind(x,kind)&&Math.abs((Number(x.height)||0)-h)<0.001)
+   .map(x=>String(x.note||'').trim()).filter(Boolean);
+ return [...new Set(notes)];
+}
 function selectedKuenzliPlatformHeights(){
  let pid=E('platformActualPlatform')?.value;
  let p=(platformStore.stock||[]).find(x=>x.id===pid);
@@ -14933,7 +15286,8 @@ function addPlatformRungAllocation(kind){
    kind:kind==='outer'?'outer':'middle',
    supplier:'',
    qty:0,
-   height:''
+   height:'',
+   crownQty:0
  });
  renderPlatformActualRungRows();
 }
@@ -14960,7 +15314,9 @@ function renderPlatformActualRungRows(){
    let available=r.supplier?platformAvailableRungs(r.supplier,i,editingId,r.kind):0;
    let heightOptions='<option value="">– Höhe wählen –</option>'+hs.map(v=>{
      let s=Number(v).toFixed(2);
-     return `<option value="${s}" ${String(r.height)===s||String(Number(r.height))===String(Number(s))?'selected':''}>${s} m</option>`;
+     const notes=platformRungNotesForHeight(r.supplier,r.kind,v);
+     const label=s+' m'+(notes.length?' · '+notes.join(' / '):'');
+     return `<option value="${s}" ${String(r.height)===s||String(Number(r.height))===String(Number(s))?'selected':''}>${esc(label)}</option>`;
    }).join('');
    let nonKuenzliAuto=r.supplier&&r.supplier!=='Künzli'&&hs.length===1;
    return `<div class="platformRungRow">
@@ -14981,7 +15337,12 @@ function renderPlatformActualRungRows(){
          ${heightOptions}
        </select>
        <div class="platformAvailHint">${nonKuenzliAuto?'automatisch aus Stamm':''}</div>
+       ${r.height&&platformRungNotesForHeight(r.supplier,r.kind,r.height).length?`<div class="platformAvailHint"><b>Bemerkung:</b> ${esc(platformRungNotesForHeight(r.supplier,r.kind,r.height).join(' / '))}</div>`:''}
      </label>
+     ${r.kind==='middle'&&r.supplier==='Brühwiler'?`<label>Anz. Kronen
+       <input type="number" min="0" step="1" value="${Number(r.crownQty)||0}"
+         oninput="changePlatformRungAllocation(${i},'crownQty',this.value)">
+     </label>`:''}
      <div class="${r.supplier&&Number(r.qty)>available?'platformAvailWarn':''}">
        ${r.supplier&&Number(r.qty)>available?`Nur ${available} verfügbar`:''}
      </div>
@@ -15039,7 +15400,9 @@ function savePlatformActual(){
    kind:r.kind,
    supplier:r.supplier,
    qty:Number(r.qty)||0,
-   height:+Number(r.height).toFixed(2)
+   height:+Number(r.height).toFixed(2),
+   crownQty:(r.kind==='middle'&&r.supplier==='Brühwiler')?(Number(r.crownQty)||0):0,
+   note:platformRungNotesForHeight(r.supplier,r.kind,r.height).join(' / ')
  }));
  let values={location,projectId,rungAllocations:allocations,status,loadedWith,pickupDate,note,updatedAt:new Date().toISOString()};
  if(existing)Object.assign(existing,values);
@@ -15126,6 +15489,9 @@ function updatePlatformActualStatus(id,value){
  savePlatformStore();
  renderPlatformActual();
  renderPlatformProjectPlanAndOccupancy();
+ // V76: Transportansichten lesen denselben Ist-Status und werden sofort neu gerendert.
+ try{renderPlatformProjectTransports();}catch(_e){}
+ try{renderPlatformTransportOverview();}catch(_e){}
 }
 
 function updatePlatformActualPickupDate(id,value){
@@ -15155,7 +15521,8 @@ function editPlatformActual(id){
  if(Array.isArray(x.rungAllocations)){
    platformActualRungDraft=x.rungAllocations.map((r,i)=>({
      id:'rdedit'+i,kind:r.kind==='outer'?'outer':'middle',
-     supplier:r.supplier||'',qty:Number(r.qty)||0,height:r.height??''
+     supplier:r.supplier||'',qty:Number(r.qty)||0,height:r.height??'',note:r.note||'',
+     crownQty:Number(r.crownQty)||0
    }));
  }else{
    platformActualRungDraft=[];
@@ -15392,10 +15759,9 @@ function platformContainerAssignedToTransportV410(containerId,projectId){
 
 function platformActualInlineStatusV516(a){
  const values=['Frei','In Beladung','Belegt','Transport geplant','Abgeholt'];
- return `<select class="platformInlineStatusV516 ${platformStatusClass(a.status||'Frei')}"
-   onclick="event.stopPropagation()"
-   onchange="updatePlatformActualStatus('${a.id}',this.value)">
-   ${values.map(v=>`<option value="${v}" ${v===(a.status||'Frei')?'selected':''}>${v}</option>`).join('')}
+ const current=a.status||'Frei';
+ return `<select class="platformActualInlineStatusNative ${platformStatusClass(current)}" aria-label="Status" onchange="updatePlatformActualStatus('${a.id}',this.value)">
+   ${values.map(v=>`<option value="${esc(v)}" ${v===current?'selected':''}>${esc(v==='Belegt'?'Abholbereit':v)}</option>`).join('')}
  </select>`;
 }
 
@@ -15935,6 +16301,12 @@ function renderPlatformQuickReturn(){
        <button class="btn secondary" type="button" onclick="returnPlatformRungsToWarehouse('${s}',${i})">Rungen zurück im Lager</button>
      </div>
 
+     ${s==='Brühwiler'?`<div class="platformQuickReturnBlock">
+       <div class="platformQuickReturnLabel">Kronen</div>
+       <select id="platformQuickReturnCrowns${i}">${platformQuickReturnCrownOptionsV94()}</select>
+       <button class="btn secondary" type="button" onclick="returnPlatformCrownsToWarehouseV94(${i})">Kronen zurück im Lager</button>
+     </div>`:''}
+
      <div class="platformQuickReturnBlock">
        <div class="platformQuickReturnLabel">Container</div>
        ${hasContainer?`
@@ -16398,9 +16770,9 @@ function renderDefectManageSummary(){
 }
 
 
-// ===== BV2026-1-15 · echte Lager-Kommissionsumbuchungen mit Teilmengen =====
+// ===== BV2026-1-58 · echte Lager-Kommissionsumbuchungen mit Teilmengen =====
 
-// BV2026-1-15: gelernte Preisstamm-Zuordnung und Gegenbuchungen
+// BV2026-1-58: gelernte Preisstamm-Zuordnung und Gegenbuchungen
 function warehousePriceMapV546(){st.settings=st.settings||{};st.settings.warehouseTransferPriceMapV546=st.settings.warehouseTransferPriceMapV546||{};return st.settings.warehouseTransferPriceMapV546}
 function warehouseMaterialSignatureV546(p){return [p?.idCategory||'',p?.material||'',p?.woodType||p?.holzart||'',p?.length||'',p?.width||'',p?.height||''].map(v=>String(v||'').trim().toLowerCase()).join('|')}
 function mappedWarehousePriceMaterialV546(p){return transferMaterialById(warehousePriceMapV546()[warehouseMaterialSignatureV546(p)])}
@@ -18936,6 +19308,9 @@ async function exportInventoryExcel(){
    let escXml=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
    let table='<table>'+rows.map((r,ri)=>'<tr>'+r.map(v=>`${ri===0?'<th>':'<td>'}${escXml(v)}${ri===0?'</th>':'</td>'}`).join('')+'</tr>').join('')+'</table>';
    let html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body>${table}
+
+
+
 </body></html>`;
    let b=new Blob(['\ufeff',html],{type:'application/vnd.ms-excel;charset=utf-8'}),a=document.createElement('a');
    a.href=URL.createObjectURL(b);a.download=`Holzlager_Gesamtinventar_${exportDateStamp()}.xls`;a.click();
@@ -19638,6 +20013,33 @@ document.addEventListener('DOMContentLoaded',()=>{
         <div id="platformCrownList"></div>
       </div>
 
+      <div id="platformEquipmentSection" style="margin-top:24px;padding-top:20px;border-top:1px solid var(--line)">
+        <h3 style="margin:0 0 4px">Fahrzeuge / Geräte</h3>
+        <p class="muted" style="margin:0 0 12px">Fahrzeuge und Geräte dieses Lieferanten erfassen. Alle Angaben sind optional.</p>
+        <div class="platformEquipmentFormV95">
+          <label>Name
+            <input id="platformEquipmentName" placeholder="optional">
+          </label>
+          <label>Gewicht [kg]
+            <input id="platformEquipmentWeight" type="number" min="0" step="0.01" placeholder="optional">
+          </label>
+          <label>Länge [m]
+            <input id="platformEquipmentLength" type="number" min="0" step="0.01" placeholder="optional">
+          </label>
+          <label>Breite [m]
+            <input id="platformEquipmentWidth" type="number" min="0" step="0.01" placeholder="optional">
+          </label>
+          <label>Höhe [m]
+            <input id="platformEquipmentHeight" type="number" min="0" step="0.01" placeholder="optional">
+          </label>
+          <label>PDF
+            <input id="platformEquipmentPdf" type="file" accept="application/pdf,.pdf">
+          </label>
+          <button class="btn" type="button" onclick="savePlatformEquipmentV95()">+ Fahrzeug / Gerät hinzufügen</button>
+        </div>
+        <div id="platformEquipmentListV95"></div>
+      </div>
+
       <div id="platformStockRungSection">
         <h3 style="margin:0 0 4px">Rungenstamm</h3>
         <p class="muted" style="margin:0 0 12px">Rungen separat erfassen – unabhängig von den Pritschen.</p>
@@ -19758,15 +20160,23 @@ document.addEventListener('DOMContentLoaded',()=>{
             <div class="platformVehicleLine">
               <div id="platformTransportTruckPreview" class="platformVehiclePreview"></div>
               <div class="platformVehicleFields">
-                <label>LKW<select id="platformTransportTractor" onchange="renderPlatformTransportVehiclePreviews()"></select></label>
-                <label>Ladungsträger<select id="platformTransportTruckLoadType" onchange="setPlatformTransportLoadType('truck')"><option value="platform">Pritsche</option><option value="container">Container</option></select></label>
-                <label><span id="platformTransportTruckLoadLabel">Pritsche LKW</span><select id="platformTransportTruckPlatform" onchange="prefillPlatformTransport();syncPlatformTransportPlatformOptions('truck');renderPlatformTransportVehiclePreviews()"></select></label><label id="platformTransportTruckOnPlatformWrapV521">Container auf Pritsche
+                <label>LKW<select id="platformTransportTractor" onchange="renderPlatformTransportVehiclePreviews()"><option value="__unknown__">LKW unbekannt</option></select></label>
+                <label>Ladungsträger<select id="platformTransportTruckLoadType" onchange="setPlatformTransportLoadType('truck')"><option value="platform">Pritsche</option><option value="container">Container</option><option value="equipment">Fahrzeug / Gerät</option></select></label>
+                <label><span id="platformTransportTruckLoadLabel">Pritsche LKW</span><select id="platformTransportTruckPlatform" onchange="prefillPlatformTransport();syncPlatformTransportPlatformOptions('truck');renderPlatformTransportVehiclePreviews()"></select></label>
+<label class="plannedPlatformV516">Pritsche vorausplanen<input id="platformTransportTruckPlannedPlatformV516" placeholder="z. B. PR-02" oninput="renderPlatformTransportVehiclePreviews()"><small>Nur verwenden, wenn die Pritsche noch nicht verfügbar ist.</small></label><label id="platformTransportTruckOnPlatformWrapV521">Container auf Pritsche
 <div class="multiContainerV524" id="platformTransportTruckContainerMultiV524">
  <label class="containerEnableV525"><input type="checkbox" id="platformTransportTruckContainerEnableV525" onchange="toggleContainerLoadV525('truck',this.checked)"> Container mitführen</label>
  <div class="containerSelectLabelV526" id="platformTransportTruckContainerLabelV526" style="display:none">Container auswählen</div><button type="button" class="multiContainerBtnV524" id="platformTransportTruckContainerBtnV525" style="display:none" onclick="toggleContainerMultiV524('truck',event)">Keine Container ausgewählt</button>
  <div class="multiContainerPanelV524" data-side="truck"></div>
 </div>
 <select id="platformTransportTruckOnPlatformContainerV521" multiple style="display:none"></select>
+<div class="multiContainerV524 equipmentMultiV102" id="platformTransportTruckEquipmentMultiV102">
+ <label class="containerEnableV525"><input type="checkbox" id="platformTransportTruckEquipmentEnableV102" onchange="toggleEquipmentLoadV102('truck',this.checked)"> Fahrzeuge / Geräte mitführen</label>
+ <div class="containerSelectLabelV526" id="platformTransportTruckEquipmentLabelV102" style="display:none">Fahrzeuge / Geräte auswählen</div>
+ <button type="button" class="multiContainerBtnV524" id="platformTransportTruckEquipmentBtnV102" style="display:none" onclick="toggleEquipmentMultiV102('truck',event)">Keine Fahrzeuge / Geräte ausgewählt</button>
+ <div class="multiContainerPanelV524" data-equipment-side="truck"></div>
+ <select id="platformTransportTruckEquipmentSelectV102" multiple style="display:none"></select>
+</div>
 </label>
               </div>
             </div>
@@ -19774,15 +20184,23 @@ document.addEventListener('DOMContentLoaded',()=>{
             <div class="platformVehicleLine">
               <div id="platformTransportTrailerPreview" class="platformVehiclePreview"></div>
               <div class="platformVehicleFields">
-                <label>Anhänger<select id="platformTransportTrailer" onchange="updatePlatformTrailerPlatformState();renderPlatformTransportVehiclePreviews()"></select></label>
-                <label>Ladungsträger<select id="platformTransportTrailerLoadType" onchange="setPlatformTransportLoadType('trailer')"><option value="platform">Pritsche</option><option value="container">Container</option></select></label>
-                <label><span id="platformTransportTrailerLoadLabel">Pritsche Anhänger</span><select id="platformTransportTrailerPlatform" onchange="syncPlatformTransportPlatformOptions('trailer');renderPlatformTransportVehiclePreviews()"></select></label><label id="platformTransportTrailerOnPlatformWrapV521">Container auf Pritsche
+                <label>Anhänger<select id="platformTransportTrailer" onchange="updatePlatformTrailerPlatformState();renderPlatformTransportVehiclePreviews()"><option value="__unknown__">Anhänger unbekannt</option></select></label>
+                <label>Ladungsträger<select id="platformTransportTrailerLoadType" onchange="setPlatformTransportLoadType('trailer')"><option value="platform">Pritsche</option><option value="container">Container</option><option value="equipment">Fahrzeug / Gerät</option></select></label>
+                <label><span id="platformTransportTrailerLoadLabel">Pritsche Anhänger</span><select id="platformTransportTrailerPlatform" onchange="syncPlatformTransportPlatformOptions('trailer');renderPlatformTransportVehiclePreviews()"></select></label>
+<label class="plannedPlatformV516">Pritsche vorausplanen<input id="platformTransportTrailerPlannedPlatformV516" placeholder="z. B. PR-02" oninput="renderPlatformTransportVehiclePreviews()"><small>Wird später automatisch der echten Pritsche zugeordnet.</small></label><label id="platformTransportTrailerOnPlatformWrapV521">Container auf Pritsche
 <div class="multiContainerV524" id="platformTransportTrailerContainerMultiV524">
  <label class="containerEnableV525"><input type="checkbox" id="platformTransportTrailerContainerEnableV525" onchange="toggleContainerLoadV525('trailer',this.checked)"> Container mitführen</label>
  <div class="containerSelectLabelV526" id="platformTransportTrailerContainerLabelV526" style="display:none">Container auswählen</div><button type="button" class="multiContainerBtnV524" id="platformTransportTrailerContainerBtnV525" style="display:none" onclick="toggleContainerMultiV524('trailer',event)">Keine Container ausgewählt</button>
  <div class="multiContainerPanelV524" data-side="trailer"></div>
 </div>
 <select id="platformTransportTrailerOnPlatformContainerV521" multiple style="display:none"></select>
+<div class="multiContainerV524 equipmentMultiV102" id="platformTransportTrailerEquipmentMultiV102">
+ <label class="containerEnableV525"><input type="checkbox" id="platformTransportTrailerEquipmentEnableV102" onchange="toggleEquipmentLoadV102('trailer',this.checked)"> Fahrzeuge / Geräte mitführen</label>
+ <div class="containerSelectLabelV526" id="platformTransportTrailerEquipmentLabelV102" style="display:none">Fahrzeuge / Geräte auswählen</div>
+ <button type="button" class="multiContainerBtnV524" id="platformTransportTrailerEquipmentBtnV102" style="display:none" onclick="toggleEquipmentMultiV102('trailer',event)">Keine Fahrzeuge / Geräte ausgewählt</button>
+ <div class="multiContainerPanelV524" data-equipment-side="trailer"></div>
+ <select id="platformTransportTrailerEquipmentSelectV102" multiple style="display:none"></select>
+</div>
 </label>
               </div>
             </div>
@@ -19810,7 +20228,7 @@ document.addEventListener('DOMContentLoaded',()=>{
             <div id="platformTransportTypeHintV370" class="platformTransportTypeHintV370"></div>
           </div>
           <div class="toolbar" style="margin-top:12px">
-            <button id="platformTransportSaveBtn" class="btn" type="button" onclick="savePlatformTransport()">Transport speichern</button>
+            <button id="platformTransportSaveBtn" class="btn" type="button" onclick="return savePlatformTransport();">Transport speichern</button>
             <button id="platformTransportCancelEditBtn" class="btn secondary" type="button" style="display:none" onclick="cancelPlatformTransportEdit()">Bearbeiten abbrechen</button>
             <button class="btn secondary" type="button" onclick="openFreiTransportPdf()">Frei Fahrzeugblatt PDF</button>
           </div>
@@ -19879,6 +20297,14 @@ document.addEventListener('DOMContentLoaded',()=>{
       <div id="platformReservationContainers" class="platformReservationCards"></div>
     </div>
 
+    <div class="platformReservationSection">
+      <div class="platformReservationSectionHead">
+        <h3>Freie Fahrzeuge / Geräte</h3>
+        <div id="platformReservationEquipmentCountV101" class="muted"></div>
+      </div>
+      <div id="platformReservationEquipmentV101" class="platformReservationCards"></div>
+    </div>
+
     <label style="display:block;margin-top:16px;font-weight:800">Bemerkung
       <input id="platformNote" placeholder="optional">
     </label>
@@ -19935,7 +20361,7 @@ document.addEventListener('DOMContentLoaded',()=>{
             <select id="platformActualStatus" onchange="applyPlatformActualStatusColor()">
               <option>Frei</option>
               <option>In Beladung</option>
-              <option>Belegt</option>
+              <option value="Belegt">Abholbereit</option>
               <option>Transport geplant</option>
               <option>Abgeholt</option>
             </select>
@@ -19980,7 +20406,7 @@ document.addEventListener('DOMContentLoaded',()=>{
               <label>Status
                 <select id="platformActualContainerStatus">
                   <option>In Beladung</option>
-                  <option>Belegt</option>
+                  <option value="Belegt">Abholbereit</option>
                   <option>Transport geplant</option>
                   <option>Abgeholt</option>
                 </select>
@@ -21673,290 +22099,1499 @@ function runImportV481(){
 try{const oldApplyV481=applyRemoteEntities;applyRemoteEntities=function(remote,preserveKeys=new Set()){let x=oldApplyV481(remote,preserveKeys);importDoneSessionV481=false;setTimeout(runImportV481,100);return x}}catch(e){}
 window.addEventListener('load',()=>setTimeout(runImportV481,1800));
 
-</script>\n<script>
-/* V495 – lokale Datensicherung + ESC-Auswahl */
-function downloadBackupV495(){
- try{
-  const payload={format:'kuenzli-holzlager-backup',formatVersion:1,createdAt:new Date().toISOString(),storageKey:KEY,warehouseId:cloudCfg?.warehouseId||'hauptlager',data:st};
-  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob),a=document.createElement('a'),d=new Date(),p=n=>String(n).padStart(2,'0');
-  a.href=url;a.download=`kuenzli_holzlager_backup_${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}_${p(d.getHours())}-${p(d.getMinutes())}.json`;
-  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
- }catch(e){alert('Datensicherung konnte nicht erstellt werden:\n'+String(e.message||e))}
-}
-async function restoreBackupV495(file){
- if(!file)return;
- try{
-  const payload=JSON.parse(await file.text());
-  if(!payload||payload.format!=='kuenzli-holzlager-backup'||!payload.data||typeof payload.data!=='object')throw new Error('Keine gültige Künzli-Holzlager-Datensicherung.');
-  if(!confirm('Datensicherung wiederherstellen?\n\nDer aktuelle lokale Datenstand wird durch die Sicherung ersetzt.'))return;
-  st=payload.data;ensureV24();localStorage.setItem(KEY,JSON.stringify(st));refresh();
-  alert('Datensicherung lokal wiederhergestellt.\nBitte kontrollieren und erst danach bei Bedarf „Lokal → Cloud“ ausführen.');
- }catch(e){alert('Wiederherstellung fehlgeschlagen:\n'+String(e.message||e))}
-}
-document.addEventListener('keydown',function(e){
- if(e.key!=='Escape')return;
- if(typeof inventorySelectedV466!=='undefined'&&inventorySelectedV466.size){
-  inventorySelectedV466.clear();
-  if(typeof inventoryLastClickedV490!=='undefined')inventoryLastClickedV490=null;
-  renderInv();e.preventDefault();
- }
-});
-</script>
-<script>
-/* V499 – einmalige Bereinigung leerer Excel-Import-Lagerorte */
-(function cleanupImportedPlaceholderLocationsV499(){
- try{
-  if(localStorage.getItem('kuenzli_cleanup_import_locations_v499')==='done')return;
-  const norm=x=>String(x||'').trim().toLowerCase();
-  const isPlaceholder=x=>{
-    const n=norm(x);
-    return n==='weitere lagerorte' ||
-           n==='weitere lagerorte und gestelle' ||
-           n.startsWith('weitere lagerorte ');
-  };
-  const usedRackIds=new Set((st.packages||[]).map(p=>p.rackId).filter(Boolean));
-  const usedAreaIds=new Set((st.packages||[]).map(p=>p.areaId).filter(Boolean));
+</script>\n
 
-  const removableRackIds=new Set(
-    (st.racks||[])
-      .filter(r=>isPlaceholder(r.name) && !usedRackIds.has(r.id))
-      .map(r=>r.id)
-  );
 
-  const racksAfter=(st.racks||[]).filter(r=>!removableRackIds.has(r.id));
-  const areaHasRemainingRack=id=>racksAfter.some(r=>r.areaId===id);
 
-  const removableAreaIds=new Set(
-    (st.areas||[])
-      .filter(a=>isPlaceholder(a.name) && !usedAreaIds.has(a.id) && !areaHasRemainingRack(a.id))
-      .map(a=>a.id)
-  );
 
-  const changed=removableRackIds.size||removableAreaIds.size;
-  if(changed){
-    st.racks=racksAfter;
-    st.areas=(st.areas||[]).filter(a=>!removableAreaIds.has(a.id));
-    persist();
-  }
-  localStorage.setItem('kuenzli_cleanup_import_locations_v499','done');
- }catch(e){console.warn('V499 Import-Lagerort-Bereinigung:',e)}
-})();
-</script>
-<script>
-/* V500 – Bereinigung der tatsächlich erzeugten Excel-Lagerort-Platzhalter */
-(function cleanupExcelLocationsV500(){
- try{
-  if(localStorage.getItem('kuenzli_cleanup_excel_locations_v500')==='done')return;
-  const norm=x=>String(x||'').trim().toLowerCase().replace(/[–—]/g,'-').replace(/\s+/g,' ');
-  const generated=x=>{
-    const n=norm(x);
-    return n.startsWith('weitere lagerorte - excel lagerort') ||
-           n.startsWith('weitere lagerorte - schreinerei');
-  };
 
-  const packages=st.packages||[];
-  const rackUsed=id=>packages.some(p=>p.rackId===id);
-  const areaUsed=id=>packages.some(p=>p.areaId===id);
 
-  const removeRackIds=new Set(
-    (st.racks||[]).filter(r=>generated(r.name)&&!rackUsed(r.id)).map(r=>r.id)
-  );
-  const racksAfter=(st.racks||[]).filter(r=>!removeRackIds.has(r.id));
 
-  const removeAreaIds=new Set(
-    (st.areas||[]).filter(a=>
-      generated(a.name) &&
-      !areaUsed(a.id) &&
-      !racksAfter.some(r=>r.areaId===a.id)
-    ).map(a=>a.id)
-  );
 
-  if(removeRackIds.size||removeAreaIds.size){
-    st.racks=racksAfter;
-    st.areas=(st.areas||[]).filter(a=>!removeAreaIds.has(a.id));
-    persist();
-  }
-  localStorage.setItem('kuenzli_cleanup_excel_locations_v500','done');
-  console.info('V500 Excel-Lagerorte entfernt:',removeAreaIds.size,'Flächen,',removeRackIds.size,'Gestelle');
- }catch(e){console.warn('V500 Excel-Lagerort-Bereinigung:',e)}
-})();
-</script>
-<script>
-/* V501 – Excel-Import-Gestelle endgültig bereinigen */
-(function cleanupExcelRacksV501(){
- try{
-  if(localStorage.getItem('kuenzli_cleanup_excel_racks_v501')==='done')return;
-  const norm=x=>String(x||'').trim().toLowerCase().replace(/[–—]/g,'-').replace(/\s+/g,' ');
-  const isExcelRackName=x=>norm(x).startsWith('weitere lagerorte - excel lagerort');
 
-  const excelRacks=(st.racks||[]).filter(r=>isExcelRackName(r.name));
-  const excelIds=new Set(excelRacks.map(r=>r.id));
 
-  /* Do not move material that already has a valid non-placeholder rack.
-     Only clear stale references that still point to one of the generated Excel racks. */
-  (st.packages||[]).forEach(p=>{
-    if(excelIds.has(p.rackId)){
-      p.rackId='';
-      p.levelIndex=-1;
-    }
-  });
-
-  st.racks=(st.racks||[]).filter(r=>!excelIds.has(r.id));
-
-  /* Remove now-empty generated Excel areas as well. */
-  const excelAreaIds=new Set(
-    (st.areas||[]).filter(a=>norm(a.name).startsWith('weitere lagerorte - excel lagerort')).map(a=>a.id)
-  );
-  st.areas=(st.areas||[]).filter(a=>{
-    if(!excelAreaIds.has(a.id))return true;
-    return (st.racks||[]).some(r=>r.areaId===a.id) || (st.packages||[]).some(p=>p.areaId===a.id);
-  });
-
-  if(excelIds.size)persist();
-  localStorage.setItem('kuenzli_cleanup_excel_racks_v501','done');
-  console.info('V501 Excel-Gestelle entfernt:',excelIds.size);
- }catch(e){console.warn('V501 Excel-Gestell-Bereinigung:',e)}
-})();
-</script>
-<script>
-/* V502 – Excel-Lagerort-Platzhalter aus allen Anzeigequellen bereinigen */
-(function cleanupExcelLocationLabelsV502(){
- try{
-  if(localStorage.getItem('kuenzli_cleanup_excel_labels_v502')==='done')return;
-  const norm=x=>String(x||'').trim().toLowerCase().replace(/[–—]/g,'-').replace(/\s+/g,' ');
-  const isExcel=x=>norm(x).startsWith('weitere lagerorte - excel lagerort');
-  let changed=false;
-
-  /* Pakete können importierte Lagerort-Texte zusätzlich als Alt-/Metadaten tragen.
-     Nur exakt der Excel-Platzhalter wird geleert. */
-  (st.packages||[]).forEach(p=>{
-    ['location','lagerort','rackName','locationName','importLocation','excelLocation'].forEach(k=>{
-      if(typeof p[k]==='string' && isExcel(p[k])){p[k]='';changed=true;}
-    });
-  });
-
-  /* Alle noch vorhandenen generierten Rack-Datensätze entfernen. */
-  const ids=new Set((st.racks||[]).filter(r=>isExcel(r.name)).map(r=>r.id));
-  if(ids.size){
-    (st.packages||[]).forEach(p=>{
-      if(ids.has(p.rackId)){p.rackId='';p.levelIndex=-1;changed=true;}
-    });
-    st.racks=(st.racks||[]).filter(r=>!ids.has(r.id));
-    changed=true;
-  }
-
-  /* Generierte Flächen nur entfernen, wenn nach der Bereinigung nichts mehr darauf liegt. */
-  const areaIds=new Set((st.areas||[]).filter(a=>isExcel(a.name)).map(a=>a.id));
-  const keepArea=id=>(st.racks||[]).some(r=>r.areaId===id)||(st.packages||[]).some(p=>p.areaId===id);
-  const before=(st.areas||[]).length;
-  st.areas=(st.areas||[]).filter(a=>!areaIds.has(a.id)||keepArea(a.id));
-  if(st.areas.length!==before)changed=true;
-
-  if(changed)persist();
-  localStorage.setItem('kuenzli_cleanup_excel_labels_v502','done');
-  setTimeout(()=>{try{refresh()}catch(_){}},0);
- }catch(e){console.warn('V502 Excel-Lagerort-Anzeige-Bereinigung:',e)}
-})();
-</script>
-<script>
-function savePlatformActualV513(){
- try{
-   if(typeof savePlatformActual!=='function')throw new Error('Speicherfunktion nicht verfügbar.');
-   savePlatformActual();
- }catch(err){
-   console.error('Aktuelle Situation speichern:',err);
-   alert('Aktuelle Situation konnte nicht gespeichert werden: '+(err?.message||String(err)));
- }
-}
-</script>
-<script>
-document.addEventListener('toggle',function(ev){
- const d=ev.target;
- if(!(d instanceof HTMLDetailsElement)||!d.classList.contains('actionMenuV451'))return;
- const panel=d.querySelector('.actionMenuPanelV451'),sum=d.querySelector('summary');
- if(!panel||!sum)return;
- if(d.open){
-   const r=sum.getBoundingClientRect();
-   panel.style.position='fixed';
-   panel.style.zIndex='99999';
-   panel.style.right=Math.max(12,window.innerWidth-r.right)+'px';
-   panel.style.left='auto';
-   panel.style.top=Math.min(window.innerHeight-panel.offsetHeight-12,r.bottom+6)+'px';
-   panel.style.maxHeight='min(70vh,420px)';
-   panel.style.overflowY='auto';
- }else{
-   panel.style.position='';panel.style.right='';panel.style.left='';panel.style.top='';
-   panel.style.maxHeight='';panel.style.overflowY='';
- }
-},true);
-</script>
-</body></html>
-<style>.platformVehicleFields{grid-template-columns:repeat(4,minmax(150px,1fr))!important}@media(max-width:1100px){.platformVehicleFields{grid-template-columns:repeat(2,minmax(180px,1fr))!important}}@media(max-width:700px){.platformVehicleFields{grid-template-columns:1fr!important}}
-/* BV2026-1-15 · aufgeräumte Material-Umbuchung */
-.wtModalV549{max-width:920px!important;width:min(920px,calc(100vw - 32px))!important}
-.wtModalV549 form{display:flex;flex-direction:column;gap:14px}
-.wtSectionV549{border:1px solid var(--line,#d9e1dd);border-radius:14px;padding:16px;background:var(--card,#fff)}
-.wtSectionTitleV549{font-weight:800;font-size:15px;margin-bottom:12px}
-.wtGridV549{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px;align-items:start}
-.wtGrid2V549{grid-template-columns:1fr 1fr}
-.wtModalV549 label{display:flex;flex-direction:column;gap:6px;min-width:0}
-.wtModalV549 input,.wtModalV549 select,.wtModalV549 textarea{width:100%;box-sizing:border-box}
-.wtTargetRowV549{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
-.wtTargetRowV549 .btn{white-space:nowrap}
-.wtValueCardV549{margin-top:12px;padding:14px 16px;border-radius:12px;background:var(--soft,#f4f7f5);display:flex;justify-content:space-between;gap:20px;align-items:center}
-.wtValueCardV549 #wtValueV545{font-size:20px;font-weight:800;white-space:nowrap}
-.wtInfoV549{font-size:13px;color:var(--muted,#66736d);line-height:1.45;padding:0 4px}
-.wtFooterV549{display:flex;justify-content:flex-end;gap:10px;padding-top:2px}
-@media(max-width:760px){.wtGridV549,.wtGrid2V549{grid-template-columns:1fr}.wtTargetRowV549{grid-template-columns:1fr}.wtValueCardV549{align-items:flex-start;flex-direction:column}.wtValueCardV549 #wtValueV545{white-space:normal}}
-
-/* BV2026-1-15 · Material-Pins */
-.materialPinV552{cursor:pointer;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
-.materialPinV552 .pinHead{fill:#d62f2f;stroke:#fff;stroke-width:.35}
-.materialPinV552 .pinNeedle{stroke:#5b1c1c;stroke-width:.35}
-.materialPinV552 .pinLabelBg{fill:rgba(20,52,43,.92);stroke:#fff;stroke-width:.15}
-.materialPinV552 .pinLabel{fill:#fff;font-size:1.15px;font-weight:800;paint-order:stroke;stroke:#17372e;stroke-width:.22}
-#materialPinBtnV552.active{background:#174c3d;color:#fff;border-color:#174c3d}
-#areaSvg.pinModeV552{cursor:crosshair}
-
-/* BV2026-1-15 · Material-Pin Dialog */
-.materialPinDialogV553{max-width:720px!important;width:min(720px,calc(100vw - 32px))!important;padding:24px!important}
-.materialPinHeadV553{align-items:flex-start!important;margin-bottom:22px!important}
-.materialPinHeadV553 h2{margin:0 0 5px!important;font-size:28px!important;line-height:1.15}
-.materialPinFormV553{display:flex;flex-direction:column;gap:18px}
-.materialPinFieldV553{display:flex!important;flex-direction:column!important;gap:7px!important;font-weight:700}
-.materialPinFieldV553 input,.materialPinFieldV553 select,.materialPinFieldV553 textarea{width:100%!important;box-sizing:border-box!important;font-weight:400!important;margin:0!important}
-.materialPinFieldV553 textarea{min-height:92px!important;resize:vertical}
-.materialPinCommissionRowV553{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:stretch}
-.materialPinCommissionRowV553 .btn{white-space:nowrap;min-height:46px}
-.materialPinInfoV553{padding:13px 15px;border:1px solid var(--line,#d9e1dd);border-radius:12px;background:var(--soft,#f4f7f5);color:var(--muted,#66736d);font-size:13px;line-height:1.45}
-.materialPinFooterV553{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:2px}
-.materialPinFooterActionsV553{display:flex;gap:10px;margin-left:auto}
-@media(max-width:620px){
- .materialPinDialogV553{padding:18px!important}
- .materialPinCommissionRowV553{grid-template-columns:1fr}
- .materialPinFooterV553{align-items:stretch;flex-direction:column}
- .materialPinFooterActionsV553{margin-left:0;display:grid;grid-template-columns:1fr 1fr}
-}
-/* BV2026-1-15 · kleine kommissionsfarbige Material-Pins */
-.materialPinLegendV554{display:none;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:12px}
-.materialPinLegendItemV554{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.materialPinLegendItemV554 i{display:inline-block;width:9px;height:9px;border-radius:50%;border:1px solid rgba(0,0,0,.18)}
-
-/* BV2026-1-15 · Pin-Legende als kompakte Kartenüberlagerung rechts oben */
-.areaMapWrap{position:relative}
-.materialPinLegendOverlayV555{
- position:absolute!important;top:12px;right:12px;z-index:18;
- width:190px;max-width:22%;max-height:42%;
- overflow:auto;box-sizing:border-box;
- display:none;flex-direction:column!important;align-items:stretch!important;
- gap:6px!important;padding:10px 12px!important;
- border:1px solid rgba(30,55,47,.22);border-radius:12px;
- background:rgba(255,255,255,.94);box-shadow:0 4px 14px rgba(0,0,0,.14);
- font-size:12px!important;backdrop-filter:blur(3px)
-}
-.materialPinLegendOverlayV555>b{margin-bottom:2px;font-size:12px}
-.materialPinLegendOverlayV555 .materialPinLegendItemV554{display:flex!important;width:100%;gap:7px!important}
-.materialPinLegendOverlayV555 .materialPinLegendItemV554 i{width:10px!important;height:10px!important;flex:0 0 10px}
-@media(max-width:800px){.materialPinLegendOverlayV555{width:165px;max-width:30%;top:8px;right:8px;padding:8px 9px!important}}
+<style>
+/* BV2026-1-85 · Statusauswahl und Bildbeschriftung */
+.platformActualCard,.platformActualTableWrapV378,.platformActualTable,.platformActualTable tbody,.platformActualTable tr,.platformActualTable td{overflow:visible!important}
+.platformActualTableWrapV378{overflow-x:auto!important;overflow-y:visible!important;padding-bottom:12px}
+.platformStatusPicker.open{z-index:100000!important}
+.platformStatusMenu{position:fixed!important;z-index:100001!important}
+.platformVehicleCarrierCoverV77{position:absolute;left:47%;top:25%;width:34%;height:34%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:3px 6px;background:#f5f5f2;border:1px solid #d1d5d2;border-radius:5px;color:#102c25;font-weight:900;font-size:clamp(8px,2.4vw,11px);line-height:1.05;text-align:center;z-index:2}
+.platformVehiclePhoto.trailer .platformVehicleCarrierCoverV77{left:39.5%;top:18%;width:42%;height:40%}
 </style>
+<style>
+/* BV2026-1-85 · Statusfeld oberhalb des jeweiligen Fahrzeugs, nicht auf dem Bild. */
+.platformTransportVehiclePair .platformTransportVehicleMini{padding-top:58px!important}
+.platformTransportVehiclePair .platformVehiclePhoto{overflow:visible!important}
+.platformTransportVehiclePair .platformVehicleLoadPlate{top:-52px!important;left:8%!important;width:84%!important;min-height:44px!important;height:auto!important;z-index:3!important}
+.platformTransportVehiclePair .platformVehiclePhoto.trailer .platformVehicleLoadPlate{top:-52px!important;left:8%!important;width:84%!important;min-height:44px!important}
+</style>
+<style>
+/* BV2026-1-58 · Farben entsprechend Pritschenstatus */
+.platformVehicleLoadPlate.v557-plan{background:#fff3c8!important;border-color:#efd17a!important}
+.platformVehicleLoadPlate.v557-plan strong,.platformVehicleLoadPlate.v557-plan span{color:#795600!important}
+.platformVehicleLoadPlate.v557-load{background:#dcecff!important;border-color:#a9c9ef!important}
+.platformVehicleLoadPlate.v557-load strong,.platformVehicleLoadPlate.v557-load span{color:#164f86!important}
+.platformVehicleLoadPlate.v557-done{background:#e3f4e7!important;border-color:#a9d7b3!important}
+.platformVehicleLoadPlate.v557-done strong,.platformVehicleLoadPlate.v557-done span{color:#176b2c!important}
+.platformVehicleLoadPlate.v557-archive{background:#eef1ef!important;border-color:#cbd3ce!important}
+.platformVehicleLoadPlate.v557-archive strong,.platformVehicleLoadPlate.v557-archive span{color:#44514a!important}
+</style>
+<script>
+/* Nur Darstellung/Farbe ändern; keinerlei Transportdaten verändern. */
+(function(){
+ const oldSvg=platformTransportVehicleSvg;
+ platformTransportVehicleSvg=function(kind,vehicle,carrierId,fallbackLoad,carrierType){
+   let html=oldSvg(kind,vehicle,carrierId,fallbackLoad,carrierType);
+   const text=String(fallbackLoad||'').trim();
+   let cls='';
+   if(/geliefert|abgeholt|abholbereit/i.test(text)) cls='v557-done';
+   else if(/archiv|abgeschlossen/i.test(text)) cls='v557-archive';
+   else if(/in beladung|^beladung$|bestätigt/i.test(text)) cls='v557-load';
+   else if(/transport geplant|geplant|wartet auf/i.test(text)) cls='v557-plan';
+   if(cls) html=html.replace('class="platformVehicleLoadPlate"','class="platformVehicleLoadPlate '+cls+'"');
+   return html;
+ };
+})();
+</script>
+\n<style>\n.platformVehicleLoadPlate.v558-wait strong,.platformVehicleLoadPlate.v558-wait .v558-middle,.platformVehicleLoadPlate.v558-wait .v558-pr{display:block!important;line-height:1.05!important;color:inherit!important}.platformVehicleLoadPlate.v558-wait .v558-middle,.platformVehicleLoadPlate.v558-wait .v558-pr{font-weight:800!important}\n</style>\n<script>\n(function(){\n const oldPair=platformTransportVehiclePairHtml;\n platformTransportVehiclePairHtml=function(t){\n   let html=oldPair(t);\n   return html.replace(/(<div class=\"platformVehicleLoadPlate[^\"]*v557-plan[^\"]*\"[^>]*>)([\\s\\S]*?)(<\\/div>)/g,function(all,a,inside,z){\n     const txt=inside.replace(/<[^>]+>/g,' ').replace(/\\s+/g,' ').trim();\n     const m=txt.match(/Geplant\\s*[·.]?\\s*wartet\\s+auf\\s+(PR\\s*[-.]?\\s*[A-Za-z0-9.-]+)/i);\n     if(!m)return all;\n     const pr=m[1].replace(/\\s+/g,'').replace(/^PR(?!-)/i,'PR-').toUpperCase();\n     return a.replace('v557-plan','v557-plan v558-wait')+'<strong>Geplant</strong><span class=\"v558-middle\">wartet auf</span><span class=\"v558-pr\">'+pr+'</span>'+z;\n   });\n };\n})();\n</script>\n
+<style>
+/* BV2026-1-85 · bestätigte V58-Transportdarstellung bleibt unverändert. */
+.platformProjectRungStockV61{margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#f8faf8}
+</style>
+<script>
+/* BV2026-1-85 · Pritsche und Baustellen-Rungen sind getrennte Bestände. */
+(function(){
+  /* projectRungsOpen muss den normalen Normalize/Save/Backup-Zyklus überleben. */
+  const normalizeV58=normalizePlatformStoreData;
+  normalizePlatformStoreData=function(d){
+    const src=d&&typeof d==='object'?d:{};
+    const out=normalizeV58(src);
+    out.projectRungsOpen=Array.isArray(src.projectRungsOpen)?src.projectRungsOpen:[];
+    return out;
+  };
+  if(!Array.isArray(platformStore.projectRungsOpen))platformStore.projectRungsOpen=[];
+
+  function normPr(v){
+    const m=String(v||'').toUpperCase().match(/\b(?:PR|WP)\s*[-.]?\s*([A-Z0-9.-]+)\b/);
+    if(!m)return '';
+    return 'PR-'+m[1].replace(/^[.-]+|[.-]+$/g,'');
+  }
+  function actualPrV61(a){
+    if(!a)return '';
+    const p=(platformStore.stock||[]).find(x=>String(x.id)===String(a.platformId||a.stockId||''));
+    for(const raw of [a.number,a.name,p?.number,p?.name]){
+      const n=normPr(raw); if(n)return n;
+    }
+    return '';
+  }
+  window.normPlatformNoV516=normPr;
+
+  function cleanAlloc(r){
+    return {supplier:String(r?.supplier||''),kind:r?.kind==='outer'?'outer':'middle',height:+Number(r?.height||0).toFixed(2),qty:Math.max(0,Math.floor(Number(r?.qty)||0)),crownQty:Math.max(0,Math.floor(Number(r?.crownQty)||0))};
+  }
+  function addProjectRungs(projectId,allocs,source=''){
+    if(!projectId)return;
+    if(!Array.isArray(platformStore.projectRungsOpen))platformStore.projectRungsOpen=[];
+    (allocs||[]).map(cleanAlloc).filter(r=>r.supplier&&r.height>0&&r.qty>0).forEach(r=>{
+      let x=platformStore.projectRungsOpen.find(v=>String(v.projectId)===String(projectId)&&v.supplier===r.supplier&&(v.kind==='outer'?'outer':'middle')===r.kind&&Math.abs(Number(v.height||0)-r.height)<.001);
+      if(x){x.qty=(Number(x.qty)||0)+r.qty;x.crownQty=(Number(x.crownQty)||0)+(Number(r.crownQty)||0);x.updatedAt=new Date().toISOString();}
+      else platformStore.projectRungsOpen.push({id:'pro_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8),projectId,supplier:r.supplier,kind:r.kind,height:r.height,qty:r.qty,crownQty:Number(r.crownQty)||0,source:source||'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
+    });
+  }
+  function clearLegacyRungs(a){
+    a.rungAllocations=[];
+    a.middleSupplier='';a.rungSupplier='';a.middleQty=0;a.rungQty=0;a.middleHeight='';
+    a.middleSupplier2='';a.middleQty2=0;a.middleHeight2='';
+    a.outerSupplier='';a.outerQty=0;a.outerHeight='';
+  }
+  function moveActualRungsToProject(a,reason='Baustelle'){
+    if(!a||!a.projectId||a.rungsTransferredToProjectAt)return false;
+    const allocs=(Array.isArray(a.rungAllocations)?a.rungAllocations:[]).filter(r=>(Number(r.qty)||0)>0);
+    if(!allocs.length)return false;
+    addProjectRungs(a.projectId,allocs,reason);
+    clearLegacyRungs(a);
+    a.rungsTransferredToProjectAt=new Date().toISOString();
+    a.updatedAt=a.rungsTransferredToProjectAt;
+    return true;
+  }
+  function migrateDeliveredRungsV61(){
+    let changed=false;
+    (platformStore.actual||[]).forEach(a=>{
+      const loc=String(a.location||'').trim().toLowerCase();
+      if(a.projectId && a.status==='Abgeholt' && loc!=='davos')changed=moveActualRungsToProject(a,'Migration V61 · Baustelle')||changed;
+    });
+    return changed;
+  }
+
+  /* Freier Lagerbestand muss auch Rungen berücksichtigen, die ohne Pritschenbindung auf Baustellen liegen. */
+  const usedBySupplierV58=platformRungsUsedBySupplier;
+  platformRungsUsedBySupplier=function(supplier,excludeActualId=''){
+    let used=usedBySupplierV58(supplier,excludeActualId);
+    (platformStore.projectRungsOpen||[]).forEach(r=>{if(r.supplier===supplier)used+=Number(r.qty)||0;});
+    return used;
+  };
+  const usedExactV58=platformRungUsedExact;
+  platformRungUsedExact=function(supplier,kind,height){
+    let used=usedExactV58(supplier,kind,height);
+    (platformStore.projectRungsOpen||[]).forEach(r=>{
+      if(r.supplier!==supplier||Math.abs((Number(r.height)||0)-height)>=.001)return;
+      const rk=r.kind==='outer'?'outer':'middle';
+      if(kind==='both'||rk===kind)used+=Number(r.qty)||0;
+    });
+    return used;
+  };
+
+  /* Rückgabeauswahl: Projekt + konkrete Rungenart/Höhe, nie Pritsche. */
+  platformQuickReturnRungOptions=function(supplier){
+    const rows=(platformStore.projectRungsOpen||[]).filter(r=>r.supplier===supplier&&(Number(r.qty)||0)>0)
+      .sort((a,b)=>String(platformProjectById(a.projectId)?.name||a.projectId).localeCompare(String(platformProjectById(b.projectId)?.name||b.projectId),'de-CH')||Number(a.height)-Number(b.height));
+    return '<option value="">Rungen / Baustelle wählen</option>'+rows.map(r=>{
+      const p=platformProjectById(r.projectId), kind=r.kind==='outer'?'Aussen':'Mittel';
+      return `<option value="${esc(r.id)}">${esc((p?.name||r.projectId)+' · '+kind+' · '+Number(r.height||0).toFixed(2)+' m · '+(Number(r.qty)||0)+' Stk')}</option>`;
+    }).join('');
+  };
+  returnPlatformRungsToWarehouse=function(supplier,index){
+    const id=E(`platformQuickReturnRungs${index}`)?.value;
+    if(!id)return alert('Bitte zuerst den Rungenbestand einer Baustelle auswählen.');
+    const r=(platformStore.projectRungsOpen||[]).find(x=>String(x.id)===String(id));
+    if(!r||r.supplier!==supplier||(Number(r.qty)||0)<=0)return alert('Dieser Rungenbestand ist nicht mehr verfügbar.');
+    const p=platformProjectById(r.projectId), total=Number(r.qty)||0, kind=r.kind==='outer'?'Aussen':'Mittel';
+    const input=prompt(`Wie viele Rungen kommen tatsächlich zurück?\n\nProjekt: ${p?.name||r.projectId}\nLieferant: ${supplier}\nArt: ${kind}\nHöhe: ${Number(r.height||0).toFixed(2)} m\nAuf Baustelle: ${total} Stück`,String(total));
+    if(input===null)return;
+    const qty=Number(String(input).replace(',','.'));
+    if(!Number.isInteger(qty)||qty<=0)return alert('Bitte eine gültige ganze Stückzahl grösser 0 eingeben.');
+    if(qty>total)return alert(`Es können höchstens ${total} Rungen zurückgebucht werden.`);
+    r.qty=total-qty;r.updatedAt=new Date().toISOString();
+    platformStore.projectRungsOpen=(platformStore.projectRungsOpen||[]).filter(x=>(Number(x.qty)||0)>0||(Number(x.crownQty)||0)>0);
+    savePlatformStore();refreshReturnedAssetViewsV367();
+    alert(`${qty} Rungen wurden zurück ins Lager gebucht.${total-qty>0?`\n${total-qty} Rungen bleiben auf der Baustelle offen.`:'\nDieser Rungenbestand ist vollständig zurückgebucht.'}`);
+  };
+
+  /* Pritschenrückgabe: noch alte, an der Pritsche hängende Baustellen-Rungen zuerst in den Projektbestand lösen. */
+  const returnPlatformV58=returnPlatformToWarehouse;
+  returnPlatformToWarehouse=function(supplier,index){
+    const id=E(`platformQuickReturn${index}`)?.value;
+    const a=(platformStore.actual||[]).find(x=>String(x.id)===String(id));
+    if(a?.projectId)moveActualRungsToProject(a,'Pritschenrückgabe V61');
+    returnPlatformV58(supplier,index);
+  };
+
+  function transportUsesActualElsewhere(actualId,transportId){
+    return (platformStore.transports||[]).some(t=>String(t.id)!==String(transportId)&&!['Abgeschlossen'].includes(t.status)&&[t.actualId,t.trailerActualId].some(x=>String(x||'')===String(actualId)));
+  }
+  function readyActualForDesired(t,desired){
+    const wanted=normPr(desired); if(!wanted)return null;
+    return (platformStore.actual||[]).find(a=>
+      String(a.projectId||'')===String(t.projectId||'') && !a.returnedAt &&
+      ['In Beladung','Belegt'].includes(String(a.status||'')) &&
+      actualPrV61(a)===wanted && !transportUsesActualElsewhere(a.id,t.id)
+    )||null;
+  }
+  function reconcileDesiredPlatformsV61(projectId=''){
+    let changed=false;
+    (platformStore.transports||[]).forEach(t=>{
+      if(projectId&&String(t.projectId)!==String(projectId))return;
+      if((t.transportType||'delivery')!=='delivery'||t.status==='Abgeschlossen')return;
+      if((t.truckLoadType||'platform')==='platform'&&!t.actualId&&t.truckPlannedPlatformV516){
+        const a=readyActualForDesired(t,t.truckPlannedPlatformV516);if(a){t.actualId=a.id;t.updatedAt=new Date().toISOString();changed=true;}
+      }
+      if((t.trailerLoadType||'platform')==='platform'&&!t.trailerActualId&&t.trailerPlannedPlatformV516){
+        const a=readyActualForDesired(t,t.trailerPlannedPlatformV516);if(a&&String(a.id)!==String(t.actualId||'')){t.trailerActualId=a.id;t.updatedAt=new Date().toISOString();changed=true;}
+      }
+    });
+    return changed;
+  }
+
+  /* Im Transportformular nur tatsächlich bereite Ist-Pritschen als konkrete Auswahl anbieten. */
+  const projectActualOptionsV58=platformProjectActualOptions;
+  platformProjectActualOptions=function(truckValue='',trailerValue=''){
+    projectActualOptionsV58(truckValue,trailerValue);
+    if(platformIsReturnTransportV527())return;
+    [['platformTransportTruckPlatform',truckValue],['platformTransportTrailerPlatform',trailerValue]].forEach(([sid,keep])=>{
+      const s=E(sid);if(!s)return;
+      [...s.options].forEach(o=>{
+        if(!o.value||String(o.value)===String(keep||''))return;
+        const a=(platformStore.actual||[]).find(x=>String(x.id)===String(o.value));
+        if(a&&!['In Beladung','Belegt'].includes(String(a.status||'')))o.remove();
+      });
+    });
+  };
+
+  /* Nach Ist-Speicherung kann eine gewünschte PR automatisch konkret werden. */
+  const saveActualV58=savePlatformActual;
+  savePlatformActual=function(){
+    const projectId=selectedPlatformProjectId;
+    saveActualV58();
+    if(reconcileDesiredPlatformsV61(projectId)){
+      syncPlatformActualTransportStatus((platformStore.transports||[]).filter(t=>String(t.projectId)===String(projectId)).flatMap(t=>[t.actualId,t.trailerActualId]).filter(Boolean));
+      savePlatformStore();renderPlatformProjectTransports();renderPlatformTransportOverview();renderPlatformActual();
+    }
+  };
+  window.savePlatformActualV513=function(){return savePlatformActual();};
+
+  /* Bei tatsächlicher Lieferung werden Rungen vom Ladungsträger in den Projekt-/Baustellenbestand überführt. */
+  const setTransportStatusV58=setPlatformTransportStatus;
+  setPlatformTransportStatus=function(id,status){
+    setTransportStatusV58(id,status);
+    const t=(platformStore.transports||[]).find(x=>String(x.id)===String(id));
+    let changed=false;
+    if(t&&(t.transportType||'delivery')==='delivery'&&(status==='Geliefert'||status==='Abgeschlossen')){
+      [t.actualId,t.trailerActualId].filter(Boolean).forEach(aid=>{
+        const a=(platformStore.actual||[]).find(x=>String(x.id)===String(aid));
+        changed=moveActualRungsToProject(a,'Transport geliefert V61')||changed;
+      });
+    }
+    if(changed){savePlatformStore();refreshReturnedAssetViewsV367();}
+  };
+
+  /* Bestehende gelieferte V58/V60-Datensätze einmalig sauber lösen; keine Daten werden verworfen. */
+  loadPlatformStore();
+  if(!Array.isArray(platformStore.projectRungsOpen))platformStore.projectRungsOpen=[];
+  if(migrateDeliveredRungsV61())savePlatformStore();
+  if(reconcileDesiredPlatformsV61())savePlatformStore();
+})();
+</script>
+
+<style>
+/* BV2026-1-85 · native Statusauswahl in der aktuellen Pritschenübersicht */
+.platformActualInlineStatusNative{min-width:190px;max-width:100%;padding:10px 38px 10px 14px;border:1px solid #cfd8d3;border-radius:18px;font:inherit;font-weight:800;cursor:pointer}
+.platformActualInlineStatusNative.statusFree{background:#fff;color:#173f32;border-color:#cfd8d3}
+.platformActualInlineStatusNative.statusLoading{background:#dcecff;color:#164f86;border-color:#a9c9ef}
+.platformActualInlineStatusNative.statusOccupied{background:#e3f4e7;color:#176b2c;border-color:#a9d7b3}
+.platformActualInlineStatusNative.statusTransport{background:#e3f4e7;color:#176b2c;border-color:#a9d7b3}
+.platformActualInlineStatusNative.statusPickedUp{background:#eef1ef;color:#44514a}
+</style>
+
+<style>
+/* BV2026-1-85 · Statusfarben: Frei weiss, Abholbereit grün. */
+.platformActualInlineStatusNative option[value="Frei"]{background:#fff;color:#173f32}
+.platformActualInlineStatusNative option[value="Belegt"]{background:#e3f4e7;color:#176b2c}
+</style>
+
+
+<style>
+/* BV2026-1-85 · Statusfarbe im geschlossenen Feld und in allen Dropdown-Zeilen identisch. */
+.platformActualInlineStatusNative option[value="Frei"]{background:#fff!important;color:#173f32!important}
+.platformActualInlineStatusNative option[value="In Beladung"]{background:#dcecff!important;color:#164f86!important}
+.platformActualInlineStatusNative option[value="Belegt"]{background:#e3f4e7!important;color:#176b2c!important}
+.platformActualInlineStatusNative option[value="Transport geplant"]{background:#e3f4e7!important;color:#176b2c!important}
+.platformActualInlineStatusNative option[value="Abgeholt"]{background:#eef1ef!important;color:#44514a!important}
+</style>
+
+<style>
+/* BV2026-1-87 · geschlossener Status übernimmt exakt die Dropdown-Statusfarbe. */
+.platformActualInlineStatusNative.statusFree{background:#fff!important;color:#173f32!important;border-color:#cfd8d3!important}
+.platformActualInlineStatusNative.statusLoading{background:#dcecff!important;color:#164f86!important;border-color:#a9c9ef!important}
+.platformActualInlineStatusNative.statusOccupied{background:#e3f4e7!important;color:#176b2c!important;border-color:#a9d7b3!important}
+.platformActualInlineStatusNative.statusTransport{background:#e3f4e7!important;color:#176b2c!important;border-color:#a9d7b3!important}
+.platformActualInlineStatusNative.statusPickedUp{background:#eef1ef!important;color:#44514a!important;border-color:#cfd8d3!important}
+</style>
+
+<style>
+/* BV2026-1-87 · Transport geplant gelb – geschlossenes Feld und Dropdown. */
+.platformActualInlineStatusNative.statusTransport{background:#fff1c9!important;color:#805900!important;border-color:#e8c35f!important}
+.platformActualInlineStatusNative option[value="Transport geplant"]{background:#fff1c9!important;color:#805900!important}
+</style>
+
+<style>
+/* BV2026-1-114 · Transportstatus: gleiche Farben im geschlossenen Feld und in den Dropdown-Einträgen. */
+.platformTransportStatusInlineV523 option[value="Geplant"]{background:#fff3c8!important;color:#795600!important}
+.platformTransportStatusInlineV523 option[value="Bestätigt"]{background:#dcecff!important;color:#164f86!important}
+.platformTransportStatusInlineV523 option[value="Geliefert"]{background:#e3f4e7!important;color:#176b2c!important}
+.platformTransportStatusInlineV523 option[value="Abgeschlossen"]{background:#eef1ef!important;color:#44514a!important}
+</style>
+
+
+<!-- BV2026-1-114 · offene Baustellen-Rungen unabhängig von der Pritsche anzeigen -->
+<style>
+.platformOpenSiteRungsV89{margin:12px 0 4px;padding:14px 16px;border:1px solid #d8ded9;border-radius:12px;background:#f8faf8}
+.platformOpenSiteRungsV89 h4{margin:0 0 9px;font-size:16px;color:#173f32}
+.platformOpenSiteRungsV89 table{width:100%;border-collapse:collapse}
+.platformOpenSiteRungsV89 th,.platformOpenSiteRungsV89 td{padding:7px 9px;border-bottom:1px solid #e2e7e3;text-align:left}
+.platformOpenSiteRungsV89 tr:last-child td{border-bottom:0}
+</style>
+<script>
+(function(){
+  function siteRungsForProjectV89(projectId){
+    return (platformStore.projectRungsOpen||[])
+      .filter(r=>String(r.projectId||'')===String(projectId||'') && (Number(r.qty)||0)>0)
+      .slice()
+      .sort((a,b)=>String(a.supplier||'').localeCompare(String(b.supplier||''),'de-CH') || Number(a.height||0)-Number(b.height||0));
+  }
+  function siteRungsHtmlV89(projectId){
+    const rows=siteRungsForProjectV89(projectId);
+    if(!rows.length)return '';
+    return '<div class="platformOpenSiteRungsV89">'+
+      '<h4>Rungen auf Baustelle</h4>'+
+      '<table><thead><tr><th>Lieferant</th><th>Art</th><th>Länge</th><th>Anzahl</th><th>Kronen</th></tr></thead><tbody>'+
+      rows.map(r=>'<tr><td>'+esc(String(r.supplier||'Frei'))+'</td><td>'+(r.kind==='outer'?'Aussen':'Mittel')+'</td><td>'+Number(r.height||0).toFixed(2)+' m</td><td><strong>'+Number(r.qty||0)+' Stk</strong></td><td>'+(Number(r.crownQty||0)>0?'<strong>'+Number(r.crownQty||0)+' Stk</strong>':'–')+'</td></tr>').join('')+
+      '</tbody></table></div>';
+  }
+  const renderProjectTransportsV88=renderPlatformProjectTransports;
+  renderPlatformProjectTransports=function(){
+    renderProjectTransportsV88();
+    const target=E('platformProjectTransportList');
+    if(!target)return;
+    target.querySelectorAll('.platformOpenSiteRungsV89').forEach(x=>x.remove());
+    const html=siteRungsHtmlV89(selectedPlatformProjectId);
+    if(!html)return;
+    const delivered=target.querySelector('[data-transport-group="delivered"]');
+    if(delivered)delivered.insertAdjacentHTML('beforeend',html);
+    else{
+      const done=target.querySelector('[data-transport-group="done"]');
+      const section=document.createElement('section');
+      section.className='platformTransportGroup';
+      section.dataset.transportGroup='site-rungs';
+      section.innerHTML='<h3 style="margin:18px 0 10px">Rungen auf Baustelle</h3>'+html.replace('<h4>Rungen auf Baustelle</h4>','');
+      if(done)target.insertBefore(section,done); else target.appendChild(section);
+    }
+  };
+})();
+</script>
+
+<!-- BV2026-1-114: Anz. Kronen nur für Brühwiler-Mittelrungen; Wert wird mit der Rungenposition gespeichert. -->
+
+
+<script>
+/* BV2026-1-114 · Brühwiler-Kronen werden unabhängig von Mittelrungen zurückgebucht. */
+function platformQuickReturnCrownOptionsV94(){
+  const rows=(platformStore.projectRungsOpen||[])
+    .filter(r=>r.supplier==='Brühwiler' && r.kind!=='outer' && (Number(r.crownQty)||0)>0)
+    .sort((a,b)=>String(platformProjectById(a.projectId)?.name||a.projectId)
+      .localeCompare(String(platformProjectById(b.projectId)?.name||b.projectId),'de-CH')
+      || Number(a.height)-Number(b.height));
+  return '<option value="">Kronen / Baustelle wählen</option>'+rows.map(r=>{
+    const p=platformProjectById(r.projectId);
+    const note=String(r.note||'').trim();
+    const label=(p?.name||r.projectId)+' · Mittel · '+Number(r.height||0).toFixed(2)+' m · '+(Number(r.crownQty)||0)+' Kronen'+(note?' · '+note:'');
+    return '<option value="'+esc(r.id)+'">'+esc(label)+'</option>';
+  }).join('');
+}
+
+function returnPlatformCrownsToWarehouseV94(index){
+  const id=E(`platformQuickReturnCrowns${index}`)?.value;
+  if(!id)return alert('Bitte zuerst den Kronenbestand einer Baustelle auswählen.');
+  const r=(platformStore.projectRungsOpen||[]).find(x=>String(x.id)===String(id));
+  if(!r || r.supplier!=='Brühwiler' || r.kind==='outer' || (Number(r.crownQty)||0)<=0)
+    return alert('Dieser Kronenbestand ist nicht mehr verfügbar.');
+
+  const p=platformProjectById(r.projectId);
+  const total=Math.max(0,Math.floor(Number(r.crownQty)||0));
+  const input=prompt(
+    `Wie viele Kronen kommen tatsächlich zurück?\n\nProjekt: ${p?.name||r.projectId}\nLieferant: Brühwiler\nArt: Mittelrungen\nHöhe: ${Number(r.height||0).toFixed(2)} m\nAuf Baustelle: ${total} Kronen`,
+    String(total)
+  );
+  if(input===null)return;
+  const qty=Number(String(input).replace(',','.'));
+  if(!Number.isInteger(qty)||qty<=0)return alert('Bitte eine gültige ganze Stückzahl grösser 0 eingeben.');
+  if(qty>total)return alert(`Es können höchstens ${total} Kronen zurückgebucht werden.`);
+
+  r.crownQty=total-qty;
+  r.updatedAt=new Date().toISOString();
+
+  // Nur löschen, wenn weder Rungen noch Kronen dieses Projektbestands offen sind.
+  platformStore.projectRungsOpen=(platformStore.projectRungsOpen||[])
+    .filter(x=>(Number(x.qty)||0)>0 || (Number(x.crownQty)||0)>0);
+
+  savePlatformStore();
+  refreshReturnedAssetViewsV367();
+  alert(`${qty} Kronen wurden zurück ins Lager gebucht.${total-qty>0?`\n${total-qty} Kronen bleiben auf der Baustelle offen.`:'\nDieser Kronenbestand ist vollständig zurückgebucht.'}`);
+}
+</script>
+
+<!-- BV2026-1-114 · Fahrzeuge/Geräte mit optionalen Stammdaten und PDF -->
+<style>
+.platformEquipmentFormV95{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end}
+.platformEquipmentFormV95 label{font-size:12px;color:#59655f}.platformEquipmentFormV95 input{display:block;width:100%;margin-top:4px;padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.platformEquipmentPdfActionsV95{display:flex;gap:6px;flex-wrap:wrap}.platformEquipmentEmptyV95{padding:12px 0;color:var(--mut)}
+@media(max-width:850px){.platformEquipmentFormV95{grid-template-columns:1fr 1fr}}@media(max-width:560px){.platformEquipmentFormV95{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  if(!Array.isArray(platformStore.equipmentStock))platformStore.equipmentStock=[];
+  function numV95(id){const raw=String(E(id)?.value||'').trim().replace(',','.');if(!raw)return null;const n=Number(raw);return Number.isFinite(n)&&n>=0?+n.toFixed(2):null;}
+  function fileDataV95(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result||''));r.onerror=()=>reject(r.error||new Error('PDF konnte nicht gelesen werden.'));r.readAsDataURL(file);});}
+  window.savePlatformEquipmentV95=async function(){
+    if(!selectedPlatformSupplier)return alert('Bitte zuerst einen Lieferanten auswählen.');
+    const file=E('platformEquipmentPdf')?.files?.[0]||null;
+    if(file && file.type && file.type!=='application/pdf' && !/\.pdf$/i.test(file.name||''))return alert('Bitte nur eine PDF-Datei auswählen.');
+    let pdfData='';
+    try{if(file)pdfData=await fileDataV95(file)}catch(e){return alert('Die PDF-Datei konnte nicht gelesen werden.');}
+    const now=new Date().toISOString();
+    platformStore.equipmentStock.push({id:'peq'+Date.now(),supplier:selectedPlatformSupplier,name:String(E('platformEquipmentName')?.value||'').trim(),weight:numV95('platformEquipmentWeight'),length:numV95('platformEquipmentLength'),width:numV95('platformEquipmentWidth'),height:numV95('platformEquipmentHeight'),pdfName:file?.name||'',pdfData,active:true,createdAt:now,updatedAt:now});
+    savePlatformStore();
+    renderPlatformSuppliersV363();
+    ['platformEquipmentName','platformEquipmentWeight','platformEquipmentLength','platformEquipmentWidth','platformEquipmentHeight','platformEquipmentPdf'].forEach(id=>{const x=E(id);if(x)x.value='';});
+    renderPlatformEquipmentV95();
+  };
+  window.openPlatformEquipmentPdfV95=function(id){const x=(platformStore.equipmentStock||[]).find(v=>String(v.id)===String(id));if(!x?.pdfData)return;const w=window.open('','_blank');if(!w)return alert('PDF konnte nicht geöffnet werden. Bitte Pop-ups für diese Seite erlauben.');w.location.href=x.pdfData;};
+  window.removePlatformEquipmentPdfV95=function(id){const x=(platformStore.equipmentStock||[]).find(v=>String(v.id)===String(id));if(!x?.pdfData)return;if(!confirm('Hinterlegte PDF wirklich entfernen?'))return;x.pdfData='';x.pdfName='';x.updatedAt=new Date().toISOString();savePlatformStore();renderPlatformEquipmentV95();renderPlatformSuppliersV363();};
+  window.deletePlatformEquipmentV95=function(id){const x=(platformStore.equipmentStock||[]).find(v=>String(v.id)===String(id));if(!x)return;if(!confirm('Fahrzeug / Gerät wirklich löschen?'))return;platformStore.equipmentStock=(platformStore.equipmentStock||[]).filter(v=>String(v.id)!==String(id));savePlatformStore();renderPlatformEquipmentV95();renderPlatformSuppliersV363();};
+  window.renderPlatformEquipmentV95=function(){
+    const box=E('platformEquipmentListV95'),section=E('platformEquipmentSection');if(!box||!section)return;
+    section.style.display=selectedPlatformSupplier?'block':'none';
+    const rows=(platformStore.equipmentStock||[]).filter(x=>(x.supplier||'')===selectedPlatformSupplier&&x.active!==false);
+    if(!rows.length){box.innerHTML='<div class="platformEquipmentEmptyV95">Noch keine Fahrzeuge / Geräte erfasst.</div>';return;}
+    const val=(n,u)=>n===null||n===undefined||n===''?'–':`${Number(n).toFixed(2)} ${u}`;
+    box.innerHTML=`<table class="platformStockTable"><thead><tr><th>Name</th><th>Gewicht</th><th>Abmessungen L × B × H</th><th>PDF</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr><td><b>${esc(x.name||'–')}</b></td><td>${val(x.weight,'kg')}</td><td>${[x.length,x.width,x.height].map(n=>n===null||n===undefined||n===''?'–':Number(n).toFixed(2)).join(' × ')} m</td><td>${x.pdfData?`<div class="platformEquipmentPdfActionsV95"><button class="btn secondary" type="button" onclick="openPlatformEquipmentPdfV95('${x.id}')">${esc(x.pdfName||'PDF öffnen')}</button><button class="btn danger" type="button" onclick="removePlatformEquipmentPdfV95('${x.id}')">PDF entfernen</button></div>`:'–'}</td><td><button class="btn danger" type="button" onclick="deletePlatformEquipmentV95('${x.id}')">Löschen</button></td></tr>`).join('')}</tbody></table>`;
+  };
+  const oldOpen=window.openPlatformSupplier;
+  window.openPlatformSupplier=function(supplier){const r=oldOpen.apply(this,arguments);setTimeout(renderPlatformEquipmentV95,0);return r;};
+  const oldRender=window.renderPlatformManagement;
+  if(typeof oldRender==='function')window.renderPlatformManagement=function(){const r=oldRender.apply(this,arguments);setTimeout(renderPlatformEquipmentV95,0);return r;};
+  setTimeout(renderPlatformEquipmentV95,0);
+})();
+</script>
+
+
+<script>
+(function(){
+  function syncModuleHomeAccountV96(){
+    const cloud=E('moduleHomeCloudV96'), user=E('moduleHomeUserV96'), role=E('moduleHomeRoleV96');
+    const oldCloud=E('syncStatusBadge'), oldUser=E('authHeaderBtn'), oldRole=E('activeRoleBadge');
+    if(cloud && oldCloud){
+      cloud.textContent=oldCloud.textContent||'Cloud';
+      cloud.className='syncBadge '+Array.from(oldCloud.classList).filter(x=>x!=='syncBadge').join(' ');
+      cloud.title=oldCloud.title||'Speicherstatus';
+    }
+    if(user && oldUser) user.textContent=oldUser.textContent||'Konto';
+    if(role && oldRole){
+      role.textContent=oldRole.textContent||'';
+      role.className='statusbadge '+Array.from(oldRole.classList).filter(x=>x!=='statusbadge').join(' ');
+    }
+  }
+
+  const oldShowModuleHomeV96=showModuleHome;
+  showModuleHome=function(){
+    oldShowModuleHomeV96();
+    syncModuleHomeAccountV96();
+  };
+
+  const oldRenderAuthUIV96=renderAuthUI;
+  renderAuthUI=function(){
+    const result=oldRenderAuthUIV96.apply(this,arguments);
+    syncModuleHomeAccountV96();
+    return result;
+  };
+
+  window.syncModuleHomeAccountV96=syncModuleHomeAccountV96;
+  setTimeout(syncModuleHomeAccountV96,0);
+
+  ['syncStatusBadge','authHeaderBtn','activeRoleBadge'].forEach(id=>{
+    const el=E(id);
+    if(el)new MutationObserver(syncModuleHomeAccountV96).observe(el,{subtree:true,childList:true,characterData:true,attributes:true});
+  });
+})();
+</script>
+
+
+<script>
+/* BV2026-1-114 · Direkter Sprung vom Lieferanten-Akkordeon zum Fahrzeuge/Geräte-Formular. */
+window.openPlatformEquipmentFormV98=function(supplier){
+  selectedPlatformSupplier=supplier;
+  updatePlatformStockSupplierFields();
+  openPlatformMasterV362('platforms');
+  setTimeout(function(){
+    if(typeof renderPlatformEquipmentV95==='function')renderPlatformEquipmentV95();
+    const section=E('platformEquipmentSection');
+    const input=E('platformEquipmentName');
+    if(section){
+      section.style.display='block';
+      section.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    if(input)input.focus({preventScroll:true});
+  },80);
+};
+</script>
+
+
+<script>
+/* BV2026-1-114 · Fahrzeuge/Geräte direkt im aufgeklappten Lieferantenbereich erfassen. */
+function platformEquipmentKeyV99(s){return String(s||'').replace(/[^A-Za-z0-9]/g,'_');}
+window.togglePlatformEquipmentInlineV99=function(supplier,force){
+  const box=E('platformEquipmentInlineV99_'+platformEquipmentKeyV99(supplier));
+  if(!box)return;
+  const show=force===undefined?box.style.display==='none':!!force;
+  box.style.display=show?'block':'none';
+  if(show)setTimeout(()=>E('peqNameV99_'+platformEquipmentKeyV99(supplier))?.focus(),0);
+};
+window.savePlatformEquipmentInlineV99=async function(supplier){
+  const k=platformEquipmentKeyV99(supplier);
+  const readNum=id=>{
+    const raw=String(E(id)?.value||'').trim().replace(',','.');
+    if(!raw)return null;
+    const n=Number(raw);
+    return Number.isFinite(n)&&n>=0?+n.toFixed(2):null;
+  };
+  const file=E('peqPdfV99_'+k)?.files?.[0]||null;
+  if(file && file.type && file.type!=='application/pdf' && !/\.pdf$/i.test(file.name||''))return alert('Bitte nur eine PDF-Datei auswählen.');
+  let pdfData='';
+  if(file){
+    try{
+      pdfData=await new Promise((resolve,reject)=>{
+        const r=new FileReader();
+        r.onload=()=>resolve(String(r.result||''));
+        r.onerror=()=>reject(r.error);
+        r.readAsDataURL(file);
+      });
+    }catch(e){return alert('Die PDF-Datei konnte nicht gelesen werden.');}
+  }
+  if(!Array.isArray(platformStore.equipmentStock))platformStore.equipmentStock=[];
+  const now=new Date().toISOString();
+  platformStore.equipmentStock.push({
+    id:'peq'+Date.now(),supplier,
+    name:String(E('peqNameV99_'+k)?.value||'').trim(),
+    weight:readNum('peqWeightV99_'+k),
+    length:readNum('peqLengthV99_'+k),
+    width:readNum('peqWidthV99_'+k),
+    height:readNum('peqHeightV99_'+k),
+    pdfName:file?.name||'',pdfData,active:true,createdAt:now,updatedAt:now
+  });
+  savePlatformStore();
+  renderPlatformSuppliersV363();
+  const card=document.querySelector(`.platformSupplierCardV363[data-supplier="${CSS.escape(supplier)}"]`);
+  card?.classList.add('open');
+  const sec=document.querySelector(`.platformSupplierSectionV363[data-supplier="${CSS.escape(supplier)}"][data-kind="equipment"]`);
+  sec?.classList.add('open');
+};
+</script>
+
+
+<script>
+/* BV2026-1-114 · Fahrzeuge/Geräte in der Projekt-Reservierungsplanung */
+let platformReservationSelectedEquipmentV101=new Set();
+
+function platformEquipmentReservationsV101(x){
+  return Array.isArray(x?.reservations)?x.reservations:[];
+}
+function platformEquipmentFreeForPeriodV101(x,from,to){
+  if(!x||x.active===false)return {free:false,reason:'Nicht verfügbar'};
+  let r=platformEquipmentReservationsV101(x).find(r=>platformOverlap(from,to,r.from,r.to));
+  if(r){
+    let p=platformProjectById(r.projectId);
+    return {free:false,reason:`Reserviert ${platformDateFmt(r.from)}–${platformDateFmt(r.to)}${p?.name?` · ${p.name}`:''}`};
+  }
+  let used=(platformStore.transports||[]).find(t=>{
+    if(['Abgeschlossen','Archiviert'].includes(String(t.status||'')))return false;
+    if(!t.date)return false;
+    return String(t.date)>=String(from)&&String(t.date)<=String(to)&&
+      [t.truckEquipmentId,t.trailerEquipmentId].filter(Boolean).map(String).includes(String(x.id));
+  });
+  if(used)return {free:false,reason:'Bereits einem Transport zugeordnet'};
+  return {free:true,reason:'Frei im gewählten Zeitraum'};
+}
+function togglePlatformReservationEquipmentV101(id){
+  if(platformReservationSelectedEquipmentV101.has(id))platformReservationSelectedEquipmentV101.delete(id);
+  else platformReservationSelectedEquipmentV101.add(id);
+  renderPlatformReservationAvailability();
+}
+function renderPlatformReservationEquipmentV101(from,to){
+  const box=E('platformReservationEquipmentV101'),count=E('platformReservationEquipmentCountV101');
+  if(!box)return;
+  let rows=(platformStore.equipmentStock||[]).filter(x=>x.active!==false)
+    .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de-CH'));
+  let free=rows.filter(x=>platformEquipmentFreeForPeriodV101(x,from,to).free);
+  [...platformReservationSelectedEquipmentV101].forEach(id=>{
+    let x=rows.find(r=>String(r.id)===String(id));
+    if(!x||!platformEquipmentFreeForPeriodV101(x,from,to).free)platformReservationSelectedEquipmentV101.delete(id);
+  });
+  box.innerHTML=rows.length?rows.map(x=>{
+    let av=platformEquipmentFreeForPeriodV101(x,from,to),sel=platformReservationSelectedEquipmentV101.has(x.id);
+    let dims=[x.length,x.width,x.height].map(v=>v===null||v===undefined||v===''?'–':Number(v).toFixed(2)).join(' × ');
+    return `<div class="platformReservationCard ${av.free?'free':'busy'} ${sel?'selected':''}" ${av.free?`onclick="togglePlatformReservationEquipmentV101('${x.id}')"`:''}>
+      <div class="platformReservationState">${av.free?(sel?'Ausgewählt':'Frei'):'Belegt'}</div>
+      <div class="platformReservationCardTitle">${esc(x.name||'Fahrzeug / Gerät')}</div>
+      <div class="platformReservationCardMeta">${x.weight!==null&&x.weight!==undefined&&x.weight!==''?`${Number(x.weight).toFixed(2)} kg · `:''}${dims} m</div>
+      <div class="platformReservationCardMeta">${esc(av.reason)}</div>
+    </div>`;
+  }).join(''):'<div class="platformReservationEmpty">Keine Fahrzeuge / Geräte erfasst.</div>';
+  if(count)count.textContent=`${free.length} von ${rows.length} frei`;
+}
+
+const renderReservationAvailabilityV101=renderPlatformReservationAvailability;
+renderPlatformReservationAvailability=function(force=false){
+  renderReservationAvailabilityV101(force);
+  let from=E('platformFrom')?.value||'',to=E('platformTo')?.value||'';
+  if(from&&to&&to>=from)renderPlatformReservationEquipmentV101(from,to);
+  const info=E('platformReservationSelectionInfo');
+  if(info&&platformReservationSelectedEquipmentV101.size){
+    info.textContent+=` · ${platformReservationSelectedEquipmentV101.size} Fahrzeug/Gerät ausgewählt`;
+  }
+};
+
+const saveVisualReservationV101=savePlatformVisualReservation;
+savePlatformVisualReservation=function(){
+  let projectId=selectedPlatformProjectId,from=E('platformFrom')?.value||'',to=E('platformTo')?.value||'';
+  if(platformReservationSelectedEquipmentV101.size){
+    if(!projectId)return alert('Bitte zuerst ein Projekt auswählen.');
+    if(!from||!to)return alert('Bitte zuerst den Zeitraum definieren.');
+    if(to<from)return alert('Das Bis-Datum darf nicht vor dem Von-Datum liegen.');
+    for(const id of platformReservationSelectedEquipmentV101){
+      const x=(platformStore.equipmentStock||[]).find(v=>String(v.id)===String(id));
+      const av=platformEquipmentFreeForPeriodV101(x,from,to);
+      if(!av.free)return alert(`${x?.name||'Fahrzeug / Gerät'} ist inzwischen nicht mehr verfügbar: ${av.reason}`);
+    }
+  }
+
+  /* Wenn ausschließlich Geräte gewählt sind, selbst speichern; ansonsten bestehende
+     Pritschen-/Containerlogik zuerst unverändert ausführen. */
+  const onlyEquipment=platformReservationSelectedEquipmentV101.size &&
+    !platformReservationSelectedContainers.size &&
+    PLATFORM_SUPPLIERS.every(s=>platformSupplierNeedQtyV434(s)===0);
+
+  if(!onlyEquipment){
+    saveVisualReservationV101();
+    /* Die bestehende Funktion rendert bereits neu; Projekt/Zeitraum bleiben erhalten. */
+  }
+
+  if(platformReservationSelectedEquipmentV101.size){
+    const note=String(E('platformNote')?.value||'').trim(),now=new Date().toISOString();
+    let n=0;
+    [...platformReservationSelectedEquipmentV101].forEach(id=>{
+      const x=(platformStore.equipmentStock||[]).find(v=>String(v.id)===String(id)); if(!x)return;
+      (x.reservations||(x.reservations=[])).push({id:'per'+Date.now()+'_'+n,projectId,from,to,note,createdAt:now,updatedAt:now});
+      x.updatedAt=now;n++;
+    });
+    savePlatformStore();
+    platformReservationSelectedEquipmentV101.clear();
+    if(onlyEquipment&&E('platformNote'))E('platformNote').value='';
+    renderPlatformReservationAvailability();
+    renderPlatformProjectReservationsV396();
+    renderPlatformManagement();
+    renderPlatformProjectOverview();
+    renderPlatformProcessV437();
+    if(onlyEquipment)alert(`${n} Fahrzeug/Gerät${n===1?'':'e'} reserviert.`);
+  }
+};
+
+/* Gantt um Fahrzeuge/Geräte ergänzen, ohne die bestehende Darstellung umzubauen. */
+const renderGanttV101=renderPlatformReservationGantt;
+renderPlatformReservationGantt=function(from='',to=''){
+  renderGanttV101(from,to);
+  const box=E('platformReservationGantt'); if(!box)return;
+  const days=platformGanttDateRange(from,to); if(!days.length)return;
+  const gantt=box.querySelector('.platformGantt'); if(!gantt)return;
+  (platformStore.equipmentStock||[]).filter(x=>x.active!==false).forEach(x=>{
+    let bars=platformEquipmentReservationsV101(x).map(r=>{
+      let p=platformProjectById(r.projectId);
+      return platformGanttBarHtml(r.from,r.to,days,`Reserviert · ${p?.name||'Projekt'}`,'reservation');
+    }).join('');
+    const row=document.createElement('div');
+    row.className='platformGanttRow';
+    row.innerHTML=`<div class="platformGanttLabel">${esc('Fahrzeug/Gerät · '+(x.name||'ohne Name'))}</div><div class="platformGanttTrack">${bars}</div>`;
+    gantt.appendChild(row);
+  });
+};
+</script>
+
+
+<style>
+/* BV2026-1-114 · mehrere Fahrzeuge/Geräte pro LKW bzw. Anhänger */
+.equipmentMultiV102{margin-top:12px}
+</style>
+<script>
+(function(){
+ function capV102(side){return side==='truck'?'Truck':'Trailer'}
+ function elsV102(side){
+   const c=capV102(side),root=E('platformTransport'+c+'EquipmentMultiV102');
+   return {
+     root,check:E('platformTransport'+c+'EquipmentEnableV102'),
+     label:E('platformTransport'+c+'EquipmentLabelV102'),
+     btn:E('platformTransport'+c+'EquipmentBtnV102'),
+     panel:root?.querySelector('[data-equipment-side]'),
+     select:E('platformTransport'+c+'EquipmentSelectV102')
+   };
+ }
+ function selectedV102(side){
+   const {select}=elsV102(side);
+   return select?[...select.selectedOptions].map(o=>String(o.value)).filter(Boolean):[];
+ }
+ function equipmentBusyV102(id){
+   const edit=String(platformTransportEditId||'');
+   return (platformStore.transports||[]).some(t=>{
+     if(String(t.id||'')===edit||['Abgeschlossen','Archiviert'].includes(String(t.status||'')))return false;
+     return [
+       t.truckEquipmentId,t.trailerEquipmentId,
+       ...(t.truckEquipmentIdsV102||[]),...(t.trailerEquipmentIdsV102||[])
+     ].filter(Boolean).map(String).includes(String(id));
+   });
+ }
+ function renderOptionsV102(side,values){
+   const {select}=elsV102(side);if(!select)return;
+   const keep=(values||selectedV102(side)).map(String);
+   let rows=(platformStore.equipmentStock||[]).filter(x=>x.active!==false)
+      .filter(x=>keep.includes(String(x.id))||!equipmentBusyV102(x.id))
+      .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de-CH'));
+   select.innerHTML=rows.map(x=>`<option value="${x.id}" ${keep.includes(String(x.id))?'selected':''}>${esc(platformEquipmentLabelV100(x.id))}</option>`).join('');
+   renderPanelV102(side);
+ }
+ function summaryV102(side){
+   const {btn}=elsV102(side);if(!btn)return;
+   const n=selectedV102(side).length;
+   btn.textContent=n===0?'Keine Fahrzeuge / Geräte ausgewählt':n===1?'1 Fahrzeug / Gerät ausgewählt':`${n} Fahrzeuge / Geräte ausgewählt`;
+ }
+ function renderPanelV102(side){
+   const {panel,select}=elsV102(side);if(!panel||!select)return;
+   panel.innerHTML=[...select.options].map(o=>`<label class="multiContainerOptionV524">
+    <input type="checkbox" value="${esc(o.value)}" ${o.selected?'checked':''}
+      onchange="setEquipmentMultiV102('${side}','${esc(o.value)}',this.checked)">
+    <span>${esc(o.textContent)}</span></label>`).join('')||
+    '<div class="muted" style="padding:10px">Keine verfügbaren Fahrzeuge / Geräte</div>';
+   summaryV102(side);
+ }
+ window.setEquipmentMultiV102=function(side,id,checked){
+   const {select}=elsV102(side);if(!select)return;
+   const o=[...select.options].find(x=>String(x.value)===String(id));if(o)o.selected=checked;
+   summaryV102(side);renderPlatformTransportVehiclePreviews();
+ };
+ window.toggleEquipmentMultiV102=function(side,ev){
+   ev?.preventDefault();ev?.stopPropagation();
+   const {panel}=elsV102(side);if(!panel)return;
+   document.querySelectorAll('[data-equipment-side].open').forEach(p=>{if(p!==panel)p.classList.remove('open')});
+   panel.classList.toggle('open');
+ };
+ window.toggleEquipmentLoadV102=function(side,on){
+   const {btn,label,panel,select}=elsV102(side);
+   if(btn)btn.style.display=on?'block':'none';
+   if(label)label.style.display=on?'block':'none';
+   if(!on){
+     panel?.classList.remove('open');
+     if(select)[...select.options].forEach(o=>o.selected=false);
+     renderPanelV102(side);
+   } else renderOptionsV102(side);
+ };
+ function syncV102(side,values){
+   renderOptionsV102(side,values);
+   const {check,btn,label}=elsV102(side),has=selectedV102(side).length>0;
+   if(check)check.checked=has;
+   if(btn)btn.style.display=has?'block':'none';
+   if(label)label.style.display=has?'block':'none';
+ }
+ window.renderPlatformTransportEquipmentMultiV102=function(truck=[],trailer=[]){
+   syncV102('truck',Array.isArray(truck)?truck:(truck?[truck]:[]));
+   syncV102('trailer',Array.isArray(trailer)?trailer:(trailer?[trailer]:[]));
+ };
+
+ document.addEventListener('click',ev=>{
+   if(!ev.target.closest('.equipmentMultiV102'))
+     document.querySelectorAll('[data-equipment-side].open').forEach(p=>p.classList.remove('open'));
+ });
+
+ /* Save selections on the same transport record after the proven transport save. */
+ const oldSaveV102=savePlatformTransport;
+ savePlatformTransport=function(){
+   const editId=String(platformTransportEditId||'');
+   const truck=selectedV102('truck'),trailer=selectedV102('trailer');
+   const before=new Set((platformStore.transports||[]).map(t=>String(t.id)));
+   const result=oldSaveV102.apply(this,arguments);
+   let row=editId?(platformStore.transports||[]).find(t=>String(t.id)===editId):null;
+   if(!row)row=[...(platformStore.transports||[])].reverse().find(t=>String(t.projectId)===String(selectedPlatformProjectId)&&!before.has(String(t.id)));
+   if(row){
+     row.truckEquipmentIdsV102=truck.slice();
+     row.trailerEquipmentIdsV102=trailer.slice();
+     row.updatedAt=new Date().toISOString();
+     savePlatformStore();
+   }
+   renderPlatformTransportEquipmentMultiV102([],[]);
+   return result;
+ };
+
+ /* Restore selections while editing. */
+ const oldEditV102=editPlatformTransport;
+ editPlatformTransport=function(id){
+   const t=(platformStore.transports||[]).find(x=>String(x.id)===String(id));
+   const result=oldEditV102.apply(this,arguments);
+   setTimeout(()=>renderPlatformTransportEquipmentMultiV102(
+     t?.truckEquipmentIdsV102||[],t?.trailerEquipmentIdsV102||[]
+   ),120);
+   return result;
+ };
+
+ /* Keep lists current when transport date/project changes. */
+ const oldOptsV102=platformProjectActualOptions;
+ platformProjectActualOptions=function(){
+   const result=oldOptsV102.apply(this,arguments);
+   renderPlatformTransportEquipmentMultiV102(selectedV102('truck'),selectedV102('trailer'));
+   return result;
+ };
+
+ setTimeout(()=>renderPlatformTransportEquipmentMultiV102([],[]),0);
+})();
+</script>
+
+
+<script>
+(function(){
+ function cap(side){return side==='truck'?'Truck':'Trailer'}
+ function selectEl(side){return E('platformTransport'+cap(side)+'EquipmentSelectV102')}
+ function root(side){return E('platformTransport'+cap(side)+'EquipmentMultiV102')}
+ function values(side){const e=selectEl(side);return e?[...e.selectedOptions].map(o=>String(o.value)):[]}
+ function ensureCompact(side){
+   const r=root(side);if(!r)return;
+   let c=r.querySelector('.equipmentCompactV103');
+   if(!c){
+     c=document.createElement('div');c.className='equipmentCompactV103';
+     c.innerHTML=`<button type="button" class="btn secondary" onclick="openEquipmentDialogV103('${side}')">Fahrzeuge / Geräte auswählen</button>
+       <span class="equipmentCompactSummaryV103"></span>`;
+     r.appendChild(c);
+   }
+   updateSummary(side);
+ }
+ function updateSummary(side){
+   const r=root(side),sum=r?.querySelector('.equipmentCompactSummaryV103');if(!sum)return;
+   const ids=values(side);
+   if(!ids.length)sum.textContent='Keine ausgewählt';
+   else if(ids.length===1)sum.textContent=platformEquipmentLabelV100(ids[0])||'1 ausgewählt';
+   else sum.textContent=`${ids.length} Fahrzeuge / Geräte ausgewählt`;
+ }
+ function ensureDialog(){
+   let d=E('equipmentDialogV103');if(d)return d;
+   d=document.createElement('div');d.id='equipmentDialogV103';d.className='equipmentDialogV103';
+   d.innerHTML=`<div class="equipmentDialogCardV103" role="dialog" aria-modal="true">
+    <div class="equipmentDialogHeadV103"><h3>Fahrzeuge / Geräte auswählen</h3><button class="btn secondary" type="button" onclick="closeEquipmentDialogV103(false)">✕</button></div>
+    <input id="equipmentDialogSearchV103" class="equipmentDialogSearchV103" type="search" placeholder="Fahrzeug / Gerät suchen …" oninput="filterEquipmentDialogV103()">
+    <div id="equipmentDialogListV103" class="equipmentDialogListV103"></div>
+    <div class="equipmentDialogActionsV103"><button class="btn secondary" type="button" onclick="closeEquipmentDialogV103(false)">Abbrechen</button><button class="btn" type="button" onclick="closeEquipmentDialogV103(true)">Auswahl übernehmen</button></div>
+   </div>`;
+   d.addEventListener('click',e=>{if(e.target===d)closeEquipmentDialogV103(false)});
+   document.body.appendChild(d);return d;
+ }
+ let activeSide=null,original=[];
+ function renderDialog(){
+   const list=E('equipmentDialogListV103');if(!list||!activeSide)return;
+   const sel=selectEl(activeSide),chosen=new Set(sel?[...sel.selectedOptions].map(o=>String(o.value)):[]);
+   const rows=(platformStore.equipmentStock||[]).filter(x=>x.active!==false)
+     .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'de-CH'));
+   list.innerHTML=rows.map(x=>{
+     const id=String(x.id),label=platformEquipmentLabelV100(id),checked=chosen.has(id);
+     return `<label class="equipmentDialogOptionV103" data-search="${esc(String(label).toLowerCase())}">
+       <input type="checkbox" value="${esc(id)}" ${checked?'checked':''}>
+       <span><b>${esc(x.name||'Fahrzeug / Gerät')}</b><div class="equipmentDialogMetaV103">${esc(label)}</div></span>
+     </label>`;
+   }).join('')||'<div class="muted" style="padding:16px">Keine Fahrzeuge / Geräte erfasst.</div>';
+ }
+ window.openEquipmentDialogV103=function(side){
+   activeSide=side;original=values(side);
+   const d=ensureDialog();renderDialog();
+   const q=E('equipmentDialogSearchV103');if(q)q.value='';
+   d.classList.add('open');setTimeout(()=>q?.focus(),0);
+ }
+ window.filterEquipmentDialogV103=function(){
+   const q=String(E('equipmentDialogSearchV103')?.value||'').trim().toLowerCase();
+   E('equipmentDialogListV103')?.querySelectorAll('.equipmentDialogOptionV103').forEach(el=>{
+     el.style.display=!q||String(el.dataset.search||'').includes(q)?'flex':'none';
+   });
+ }
+ window.closeEquipmentDialogV103=function(apply){
+   const d=E('equipmentDialogV103');
+   if(apply&&activeSide){
+     const sel=selectEl(activeSide);
+     const checked=new Set([...E('equipmentDialogListV103').querySelectorAll('input[type=checkbox]:checked')].map(x=>String(x.value)));
+     if(sel){
+       // Keep/create options so selections persist even if an item was filtered from the old list.
+       (platformStore.equipmentStock||[]).filter(x=>x.active!==false).forEach(x=>{
+         if(![...sel.options].some(o=>String(o.value)===String(x.id))){
+           const o=document.createElement('option');o.value=x.id;o.textContent=platformEquipmentLabelV100(x.id);sel.appendChild(o);
+         }
+       });
+       [...sel.options].forEach(o=>o.selected=checked.has(String(o.value)));
+     }
+   } else if(activeSide){
+     const sel=selectEl(activeSide),keep=new Set(original);
+     if(sel)[...sel.options].forEach(o=>o.selected=keep.has(String(o.value)));
+   }
+   if(activeSide)updateSummary(activeSide);
+   d?.classList.remove('open');activeSide=null;original=[];
+   if(typeof renderPlatformTransportVehiclePreviews==='function')renderPlatformTransportVehiclePreviews();
+ }
+ const oldMulti=window.renderPlatformTransportEquipmentMultiV102;
+ window.renderPlatformTransportEquipmentMultiV102=function(){
+   const r=oldMulti?.apply(this,arguments);
+   ensureCompact('truck');ensureCompact('trailer');
+   return r;
+ };
+ setTimeout(()=>{ensureCompact('truck');ensureCompact('trailer')},50);
+})();
+</script>
+
+
+<style>
+/* BV2026-1-114 · Container kompakt wie Fahrzeuge/Geräte */
+.containerCompactV104{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.containerCompactSummaryV104{font-weight:750;color:var(--muted)}
+.containerDialogV104{position:fixed;inset:0;z-index:100001;background:rgba(0,0,0,.34);display:none;align-items:center;justify-content:center;padding:18px}
+.containerDialogV104.open{display:flex}
+.containerDialogCardV104{width:min(680px,96vw);max-height:min(720px,90vh);background:#fff;border-radius:18px;box-shadow:0 20px 70px rgba(0,0,0,.25);padding:18px;display:flex;flex-direction:column;gap:12px}
+.containerDialogHeadV104{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.containerDialogHeadV104 h3{margin:0}
+.containerDialogSearchV104{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font-size:16px}
+.containerDialogListV104{overflow:auto;border:1px solid var(--line);border-radius:12px;min-height:150px}
+.containerDialogOptionV104{display:flex;align-items:center;gap:11px;padding:11px 12px;border-bottom:1px solid var(--line);cursor:pointer}
+.containerDialogOptionV104:last-child{border-bottom:0}
+.containerDialogOptionV104:hover{background:#f3f7f5}
+.containerDialogOptionV104 input{width:20px;height:20px}
+.containerDialogActionsV104{display:flex;justify-content:flex-end;gap:10px}
+/* Alte Container-Mehrfachdarstellung nur visuell ersetzen, Datenfelder bleiben bestehen. */
+.multiContainerV524>.containerEnableV525,
+.multiContainerV524>.containerSelectLabelV526,
+.multiContainerV524>.multiContainerBtnV524,
+.multiContainerV524>.multiContainerPanelV524{display:none!important}
+/* Geräte-Kompaktanzeige aus V103 wieder sichtbar lassen */
+.equipmentMultiV102 .equipmentCompactV103{display:flex!important}
+</style>
+<script>
+(function(){
+ function cap(side){return side==='truck'?'Truck':'Trailer'}
+ function sel(side){return E('platformTransport'+cap(side)+'OnPlatformContainerV521')}
+ function host(side){return sel(side)?.closest('.multiContainerV524')||sel(side)?.parentElement}
+ function vals(side){const e=sel(side);return e?[...e.selectedOptions].map(o=>String(o.value)):[]}
+ function ensure(side){
+   const h=host(side);if(!h)return;
+   let c=h.querySelector('.containerCompactV104');
+   if(!c){
+     c=document.createElement('div');c.className='containerCompactV104';
+     c.innerHTML=`<button type="button" class="btn secondary" onclick="openContainerDialogV104('${side}')">Container auswählen</button><span class="containerCompactSummaryV104"></span>`;
+     h.appendChild(c);
+   }
+   summary(side);
+ }
+ function labelFor(id){
+   const x=(platformStore.containers||[]).find(c=>String(c.id)===String(id));
+   return x?.name||x?.label||x?.number||String(id);
+ }
+ function summary(side){
+   const h=host(side),e=h?.querySelector('.containerCompactSummaryV104');if(!e)return;
+   const a=vals(side);
+   e.textContent=!a.length?'Keine ausgewählt':a.length===1?labelFor(a[0]):`${a.length} Container ausgewählt`;
+ }
+ function dialog(){
+   let d=E('containerDialogV104');if(d)return d;
+   d=document.createElement('div');d.id='containerDialogV104';d.className='containerDialogV104';
+   d.innerHTML=`<div class="containerDialogCardV104"><div class="containerDialogHeadV104"><h3>Container auswählen</h3><button type="button" class="btn secondary" onclick="closeContainerDialogV104(false)">✕</button></div><input id="containerDialogSearchV104" class="containerDialogSearchV104" type="search" placeholder="Container suchen …" oninput="filterContainerDialogV104()"><div id="containerDialogListV104" class="containerDialogListV104"></div><div class="containerDialogActionsV104"><button type="button" class="btn secondary" onclick="closeContainerDialogV104(false)">Abbrechen</button><button type="button" class="btn" onclick="closeContainerDialogV104(true)">Auswahl übernehmen</button></div></div>`;
+   d.addEventListener('click',e=>{if(e.target===d)closeContainerDialogV104(false)});
+   document.body.appendChild(d);return d;
+ }
+ let sideNow=null,old=[];
+ window.openContainerDialogV104=function(side){
+   sideNow=side;old=vals(side);
+   const e=sel(side),list=E('containerDialogListV104')||(()=>{dialog();return E('containerDialogListV104')})();
+   const options=e?[...e.options]:[];
+   list.innerHTML=options.map(o=>`<label class="containerDialogOptionV104" data-search="${esc(String(o.textContent||'').toLowerCase())}"><input type="checkbox" value="${esc(o.value)}" ${o.selected?'checked':''}><span>${esc(o.textContent||o.value)}</span></label>`).join('')||'<div class="muted" style="padding:16px">Keine verfügbaren Container.</div>';
+   const d=dialog(),q=E('containerDialogSearchV104');q.value='';d.classList.add('open');setTimeout(()=>q.focus(),0);
+ }
+ window.filterContainerDialogV104=function(){
+   const q=String(E('containerDialogSearchV104')?.value||'').trim().toLowerCase();
+   E('containerDialogListV104')?.querySelectorAll('.containerDialogOptionV104').forEach(x=>x.style.display=!q||String(x.dataset.search||'').includes(q)?'flex':'none');
+ }
+ window.closeContainerDialogV104=function(apply){
+   if(sideNow){
+     const e=sel(sideNow);
+     const keep=apply?new Set([...E('containerDialogListV104').querySelectorAll('input:checked')].map(x=>String(x.value))):new Set(old);
+     if(e)[...e.options].forEach(o=>o.selected=keep.has(String(o.value)));
+     summary(sideNow);
+   }
+   E('containerDialogV104')?.classList.remove('open');sideNow=null;old=[];
+   if(typeof renderPlatformTransportVehiclePreviews==='function')renderPlatformTransportVehiclePreviews();
+ }
+ function refresh(){ensure('truck');ensure('trailer')}
+ const oldRender=window.renderPlatformTransportContainerMultiV524;
+ if(typeof oldRender==='function')window.renderPlatformTransportContainerMultiV524=function(){const r=oldRender.apply(this,arguments);setTimeout(refresh,0);return r}
+ setTimeout(refresh,80);
+})();
+</script>
+
+
+<style>
+/* BV2026-1-114 · mitgeführte Container/Geräte direkt am Fahrzeug anzeigen */
+.transportExtrasV105{margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#f7f9f8;font-size:14px;line-height:1.45}
+.transportExtrasV105 b{color:var(--green)}
+.transportExtrasV105 .extraRowV105+.extraRowV105{margin-top:4px}
+</style>
+<script>
+(function(){
+ function containerNameV105(id){
+   const c=(platformStore.containers||[]).find(x=>String(x.id)===String(id));
+   return c?.name||c?.label||c?.number||String(id);
+ }
+ function equipmentNameV105(id){
+   const e=(platformStore.equipmentStock||[]).find(x=>String(x.id)===String(id));
+   return e?.name||platformEquipmentLabelV100?.(id)||String(id);
+ }
+ function extraHtmlV105(t,side){
+   const pre=side==='truck'?'truck':'trailer';
+   const containers=[
+     ...(Array.isArray(t[pre+'ContainerIdsV524'])?t[pre+'ContainerIdsV524']:[]),
+     ...(Array.isArray(t[pre+'OnPlatformContainerIdsV524'])?t[pre+'OnPlatformContainerIdsV524']:[])
+   ].filter(Boolean);
+   // tolerate the existing field names used by older container patches
+   ['ContainersV524','ContainerIds','OnPlatformContainerIds'].forEach(k=>{
+     const v=t[pre+k]; if(Array.isArray(v))containers.push(...v.filter(Boolean));
+   });
+   const devices=(t[pre+'EquipmentIdsV102']||[]).filter(Boolean);
+   const c=[...new Set(containers.map(String))],d=[...new Set(devices.map(String))];
+   if(!c.length&&!d.length)return '';
+   let rows='';
+   if(c.length)rows+=`<div class="extraRowV105"><b>Container:</b> ${c.map(x=>esc(containerNameV105(x))).join(' · ')}</div>`;
+   if(d.length)rows+=`<div class="extraRowV105"><b>Fahrzeuge / Geräte:</b> ${d.map(x=>esc(equipmentNameV105(x))).join(' · ')}</div>`;
+   return `<div class="transportExtrasV105">${rows}</div>`;
+ }
+ const oldPairV105=platformTransportVehiclePairHtml;
+ platformTransportVehiclePairHtml=function(t){
+   let html=oldPairV105.apply(this,arguments);
+   const host=document.createElement('div');host.innerHTML=html;
+   const cards=[...host.children];
+   // Pair renderer normally has truck, separator, trailer. Add details to the corresponding visual card.
+   const truckExtra=extraHtmlV105(t,'truck'),trailerExtra=extraHtmlV105(t,'trailer');
+   if(truckExtra){
+     const truck=cards.find(x=>x.querySelector?.('img'))||host.firstElementChild;
+     if(truck)truck.insertAdjacentHTML('beforeend',truckExtra);
+   }
+   if(trailerExtra){
+     const visual=cards.filter(x=>x.querySelector?.('img'));
+     const trailer=visual.length>1?visual[visual.length-1]:null;
+     if(trailer)trailer.insertAdjacentHTML('beforeend',trailerExtra);
+     else host.insertAdjacentHTML('beforeend',trailerExtra);
+   }
+   return host.innerHTML;
+ };
+})();
+</script>
+
+
+<style>
+/* BV2026-1-114 · Zusatzladung eindeutig dem LKW bzw. Anhänger zuordnen */
+.transportExtrasV105{position:relative;margin-top:8px!important;padding:8px 10px!important}
+.transportExtrasV105::before{
+ display:block;font-weight:900;font-size:13px;letter-spacing:.02em;
+ margin-bottom:5px;color:var(--green)
+}
+.transportExtrasV105.v106-truck::before{content:"AUF LKW"}
+.transportExtrasV105.v106-trailer::before{content:"AUF ANHÄNGER"}
+</style>
+<script>
+(function(){
+ const previous=platformTransportVehiclePairHtml;
+ platformTransportVehiclePairHtml=function(t){
+   let html=previous.apply(this,arguments);
+   const host=document.createElement('div');host.innerHTML=html;
+   const extras=[...host.querySelectorAll('.transportExtrasV105')];
+   if(!extras.length)return html;
+
+   /* Die V105-Blöcke anhand der gespeicherten Seite eindeutig beschriften. */
+   const truckHas=(t.truckEquipmentIdsV102||[]).length ||
+     (t.truckContainerIdsV524||[]).length || (t.truckOnPlatformContainerIdsV524||[]).length ||
+     (t.truckContainersV524||[]).length || (t.truckContainerIds||[]).length || (t.truckOnPlatformContainerIds||[]).length;
+   const trailerHas=(t.trailerEquipmentIdsV102||[]).length ||
+     (t.trailerContainerIdsV524||[]).length || (t.trailerOnPlatformContainerIdsV524||[]).length ||
+     (t.trailerContainersV524||[]).length || (t.trailerContainerIds||[]).length || (t.trailerOnPlatformContainerIds||[]).length;
+
+   if(truckHas && trailerHas && extras.length>=2){
+     extras[0].classList.add('v106-truck');
+     extras[1].classList.add('v106-trailer');
+   }else if(truckHas && extras.length){
+     extras[0].classList.add('v106-truck');
+   }else if(trailerHas && extras.length){
+     extras[extras.length-1].classList.add('v106-trailer');
+   }
+   return host.innerHTML;
+ };
+})();
+</script>
+
+
+<style>
+/* BV2026-1-114 · Fahrzeuge/Geräte separat ins Lager zurückbuchen */
+.platformQuickReturnEquipmentV107{margin-top:0}
+</style>
+<script>
+(function(){
+ function equipmentTransportUsagesV107(id){
+   const eid=String(id||'');
+   return (platformStore.transports||[]).filter(t=>{
+     if(['Abgeschlossen','Archiviert'].includes(String(t.status||'')))return false;
+     return [
+       t.truckEquipmentId,t.trailerEquipmentId,
+       ...(t.truckEquipmentIdsV102||[]),...(t.trailerEquipmentIdsV102||[])
+     ].filter(Boolean).map(String).includes(eid);
+   });
+ }
+ function equipmentReturnOptionsV107(supplier){
+   const rows=(platformStore.equipmentStock||[]).filter(x=>
+     (x.supplier||'Künzli')===supplier && x.active!==false && equipmentTransportUsagesV107(x.id).length
+   );
+   return '<option value="">Fahrzeug / Gerät wählen</option>'+rows.map(x=>{
+     const uses=equipmentTransportUsagesV107(x.id);
+     const projectIds=[...new Set(uses.map(t=>String(t.projectId||'')).filter(Boolean))];
+     const projects=projectIds.map(id=>platformProjectById(id)?.name).filter(Boolean).join(', ');
+     return `<option value="${esc(x.id)}">${esc(x.name||'Fahrzeug / Gerät')}${projects?` · ${esc(projects)}`:''}</option>`;
+   }).join('');
+ }
+ window.returnPlatformEquipmentToWarehouseV107=function(supplier,index){
+   const id=E(`platformQuickReturnEquipmentV107_${index}`)?.value;
+   if(!id)return alert('Bitte zuerst ein Fahrzeug / Gerät auswählen.');
+   const x=(platformStore.equipmentStock||[]).find(v=>String(v.id)===String(id));if(!x)return;
+   if((x.supplier||'Künzli')!==supplier)return;
+   if(!confirm(`„${x.name||'Fahrzeug / Gerät'}“ zurück im Lager buchen?\n\nDanach ist es wieder verfügbar.`))return;
+
+   (platformStore.transports||[]).forEach(t=>{
+     t.truckEquipmentIdsV102=(t.truckEquipmentIdsV102||[]).filter(v=>String(v)!==String(id));
+     t.trailerEquipmentIdsV102=(t.trailerEquipmentIdsV102||[]).filter(v=>String(v)!==String(id));
+     if(String(t.truckEquipmentId||'')===String(id))t.truckEquipmentId='';
+     if(String(t.trailerEquipmentId||'')===String(id))t.trailerEquipmentId='';
+     t.updatedAt=new Date().toISOString();
+   });
+   x.lastReturnedAt=new Date().toISOString();
+   x.updatedAt=x.lastReturnedAt;
+   savePlatformStore();
+   renderPlatformQuickReturn();
+   renderPlatformTransportOverview();
+   renderPlatformProjectTransports();
+   if(typeof renderPlatformSuppliersV363==='function')renderPlatformSuppliersV363();
+   if(typeof renderPlatformReservationGantt==='function'&&E('platformReservationGantt'))
+     renderPlatformReservationGantt(E('platformFrom')?.value||'',E('platformTo')?.value||'');
+ }
+ const oldRenderV107=renderPlatformQuickReturn;
+ renderPlatformQuickReturn=function(){
+   oldRenderV107.apply(this,arguments);
+   const box=E('platformQuickReturnGrid');if(!box)return;
+   [...box.querySelectorAll('.platformQuickReturnSupplier')].forEach((card,i)=>{
+     const supplier=PLATFORM_SUPPLIERS[i];if(!supplier)return;
+     const block=document.createElement('div');
+     block.className='platformQuickReturnBlock platformQuickReturnEquipmentV107';
+     const opts=equipmentReturnOptionsV107(supplier);
+     const has=opts.includes('<option value="') && !opts.startsWith('<option value=""></option>');
+     block.innerHTML=`<div class="platformQuickReturnLabel">Fahrzeuge / Geräte</div>
+       ${opts.indexOf('</option><option')>=0?`
+       <select id="platformQuickReturnEquipmentV107_${i}">${opts}</select>
+       <button class="btn secondary" type="button" onclick="returnPlatformEquipmentToWarehouseV107('${supplier}',${i})">Fahrzeug / Gerät zurück im Lager</button>
+       `:`<div class="platformQuickReturnEmpty">Keine Fahrzeuge / Geräte dieses Lieferanten auf Transport / Baustelle.</div>`}`;
+     card.appendChild(block);
+   });
+   searchSelectInit?.(box);
+ }
+ setTimeout(()=>renderPlatformQuickReturn(),0);
+})();
+</script>
+
+
+<style>
+/* BV2026-1-114 · Berechtigungen nach Hauptansicht und Bereich gruppiert */
+.permissionGridV108{grid-template-columns:1fr!important}
+.permissionSectionV108{padding:0!important;border:0!important;background:transparent!important}
+.permissionGroupV108{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden}
+.permissionGroupHeadV108{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;background:#edf3f0}
+.permissionMainV108{font-size:18px!important;font-weight:900!important;margin:0!important}
+.permissionChildrenV108{display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));gap:0;border-top:1px solid var(--line)}
+.permissionChildrenV108 .permissionCheck{padding:12px 15px;margin:0!important;border-bottom:1px solid #edf0ee}
+.permissionAllV108{border:0;background:transparent;color:var(--green);font-weight:800;cursor:pointer;padding:8px}
+@media(max-width:650px){.permissionChildrenV108{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+ const groupsV108={
+  warehouse:['permWarehouse','permMaterial','permControl','permReserved','permArchive','permDefects','permTransfers','permManage']
+ };
+ window.togglePermissionGroupV108=function(group,on){
+   (groupsV108[group]||[]).forEach(id=>{const e=E(id);if(e)e.checked=!!on});
+ };
+})();
+</script>
+
+
+<script>
+/* BV2026-1-114 · Produktion: Projekt erstellen und Kommission separat */
+(function(){
+ function currentPermissionUserV109(){
+   const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
+   const pools=[window.cloudUsers,window.users,window.appUsers].filter(Array.isArray);
+   for(const pool of pools){
+     const u=pool.find(x=>String(x.name||x.displayName||x.username||'').trim()===name);
+     if(u)return u;
+   }
+   return null;
+ }
+ function loadExtraV109(user){
+   const p=user?.permissions||user?.perms||{};
+   const a=E('permProjectCreateV109'),b=E('permCommissionV109');
+   if(a)a.checked=!!p.projectCreate;
+   if(b)b.checked=!!p.commission;
+ }
+ function saveExtraV109(user){
+   if(!user)return;
+   const key=user.permissions?'permissions':(user.perms?'perms':'permissions');
+   user[key]=user[key]||{};
+   user[key].projectCreate=!!E('permProjectCreateV109')?.checked;
+   user[key].commission=!!E('permCommissionV109')?.checked;
+ }
+ const candidates=['editUserPermissions','openUserPermissions','renderUserPermissions'];
+ candidates.forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];
+     window[n]=function(){
+       const r=old.apply(this,arguments);
+       const arg=arguments[0];
+       const u=(arg&&typeof arg==='object')?arg:currentPermissionUserV109();
+       setTimeout(()=>loadExtraV109(u),0);
+       return r;
+     };
+   }
+ });
+ ['saveUserPermissions','savePermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];
+     window[n]=function(){
+       const u=currentPermissionUserV109();
+       saveExtraV109(u);
+       return old.apply(this,arguments);
+     };
+   }
+ });
+})();
+</script>
+
+
+<script>
+/* BV2026-1-114 · Produktionsanalyse als eigene Produktions-Berechtigung */
+(function(){
+ function userV110(){
+   const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
+   for(const pool of [window.cloudUsers,window.users,window.appUsers]){
+     if(Array.isArray(pool)){
+       const u=pool.find(x=>String(x.name||x.displayName||x.username||'').trim()===name);
+       if(u)return u;
+     }
+   }
+   return null;
+ }
+ function loadV110(u){
+   const p=u?.permissions||u?.perms||{};
+   const e=E('permProductionAnalysisV110');if(e)e.checked=!!p.productionAnalysis;
+ }
+ function saveV110(u){
+   if(!u)return;
+   const key=u.permissions?'permissions':(u.perms?'perms':'permissions');
+   u[key]=u[key]||{};
+   u[key].productionAnalysis=!!E('permProductionAnalysisV110')?.checked;
+ }
+ ['editUserPermissions','openUserPermissions','renderUserPermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){
+       const r=old.apply(this,arguments),arg=arguments[0];
+       setTimeout(()=>loadV110(arg&&typeof arg==='object'?arg:userV110()),0);return r;
+     };
+   }
+ });
+ ['saveUserPermissions','savePermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){saveV110(userV110());return old.apply(this,arguments)};
+   }
+ });
+})();
+</script>
+
+
+<script>
+/* BV2026-1-114 · Kleinaufträge: Materialerstellung Künzli / Immer AG separat */
+(function(){
+ function userV111(){
+   const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
+   for(const pool of [window.cloudUsers,window.users,window.appUsers]){
+     if(Array.isArray(pool)){
+       const u=pool.find(x=>String(x.name||x.displayName||x.username||'').trim()===name);
+       if(u)return u;
+     }
+   }
+   return null;
+ }
+ function loadV111(u){
+   const p=u?.permissions||u?.perms||{};
+   const k=E('permSmallOrderMaterialKuenzliV111');
+   const i=E('permSmallOrderMaterialImmerV111');
+   if(k)k.checked=!!p.smallOrderMaterialKuenzli;
+   if(i)i.checked=!!p.smallOrderMaterialImmer;
+ }
+ function saveV111(u){
+   if(!u)return;
+   const key=u.permissions?'permissions':(u.perms?'perms':'permissions');
+   u[key]=u[key]||{};
+   u[key].smallOrderMaterialKuenzli=!!E('permSmallOrderMaterialKuenzliV111')?.checked;
+   u[key].smallOrderMaterialImmer=!!E('permSmallOrderMaterialImmerV111')?.checked;
+ }
+ ['editUserPermissions','openUserPermissions','renderUserPermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){
+       const r=old.apply(this,arguments),arg=arguments[0];
+       setTimeout(()=>loadV111(arg&&typeof arg==='object'?arg:userV111()),0);
+       return r;
+     };
+   }
+ });
+ ['saveUserPermissions','savePermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){saveV111(userV111());return old.apply(this,arguments)};
+   }
+ });
+})();
+</script>
+
+
+<script>
+/* BV2026-1-114 · Löschen von Daten und Rapporten separat berechtigen */
+(function(){
+ function userV112(){
+   const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
+   for(const pool of [window.cloudUsers,window.users,window.appUsers]){
+     if(Array.isArray(pool)){
+       const u=pool.find(x=>String(x.name||x.displayName||x.username||'').trim()===name);
+       if(u)return u;
+     }
+   }
+   return null;
+ }
+ function permsV112(u){return u?.permissions||u?.perms||{}}
+ function loadV112(u){
+   const p=permsV112(u);
+   if(E('permDeleteDataV112'))E('permDeleteDataV112').checked=!!p.deleteData;
+   if(E('permDeleteReportsV112'))E('permDeleteReportsV112').checked=!!p.deleteReports;
+ }
+ function saveV112(u){
+   if(!u)return;
+   const key=u.permissions?'permissions':(u.perms?'perms':'permissions');
+   u[key]=u[key]||{};
+   u[key].deleteData=!!E('permDeleteDataV112')?.checked;
+   u[key].deleteReports=!!E('permDeleteReportsV112')?.checked;
+ }
+ window.canDeleteDataV112=function(){
+   const u=(typeof getCurrentAuthUser==='function'?getCurrentAuthUser():null)||window.currentUser||window.authUser;
+   const p=permsV112(u);
+   return !!(p.deleteData || u?.role==='Administrator' || u?.isAdmin);
+ }
+ window.canDeleteReportsV112=function(){
+   const u=(typeof getCurrentAuthUser==='function'?getCurrentAuthUser():null)||window.currentUser||window.authUser;
+   const p=permsV112(u);
+   return !!(p.deleteReports || u?.role==='Administrator' || u?.isAdmin);
+ }
+ ['editUserPermissions','openUserPermissions','renderUserPermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){
+       const r=old.apply(this,arguments),arg=arguments[0];
+       setTimeout(()=>loadV112(arg&&typeof arg==='object'?arg:userV112()),0);return r;
+     };
+   }
+ });
+ ['saveUserPermissions','savePermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){saveV112(userV112());return old.apply(this,arguments)};
+   }
+ });
+})();
+</script>
+
+
+<script>
+/* BV2026-1-114 · Detailberechtigungen Pritschenverwaltung / Logistik */
+(function(){
+ const defsV113={
+   platformReturn:'permPlatformReturnV113',
+   platformCreateStock:'permPlatformCreateStockV113',
+   platformCreateProject:'permPlatformCreateProjectV113',
+   platformAllTransports:'permPlatformAllTransportsV113',
+   platformSupplierView:'permPlatformSupplierViewV113',
+   platformSupplierEdit:'permPlatformSupplierEditV113',
+   platformDeleteTransport:'permPlatformDeleteTransportV113'
+ };
+ function userV113(){
+   const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
+   for(const pool of [window.cloudUsers,window.users,window.appUsers]){
+     if(Array.isArray(pool)){
+       const u=pool.find(x=>String(x.name||x.displayName||x.username||'').trim()===name);
+       if(u)return u;
+     }
+   }
+   return null;
+ }
+ function loadV113(u){
+   const p=u?.permissions||u?.perms||{};
+   Object.entries(defsV113).forEach(([key,id])=>{const e=E(id);if(e)e.checked=!!p[key]});
+ }
+ function saveV113(u){
+   if(!u)return;
+   const key=u.permissions?'permissions':(u.perms?'perms':'permissions');
+   u[key]=u[key]||{};
+   Object.entries(defsV113).forEach(([name,id])=>u[key][name]=!!E(id)?.checked);
+ }
+ ['editUserPermissions','openUserPermissions','renderUserPermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){
+       const r=old.apply(this,arguments),arg=arguments[0];
+       setTimeout(()=>loadV113(arg&&typeof arg==='object'?arg:userV113()),0);
+       return r;
+     };
+   }
+ });
+ ['saveUserPermissions','savePermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){saveV113(userV113());return old.apply(this,arguments)};
+   }
+ });
+})();
+</script>
+
+
+<style>
+/* BV2026-1-114 · Detailberechtigungen Materiallager */
+.permissionSubgroupV114{grid-column:1/-1;border-bottom:1px solid #edf0ee}
+.permissionSubHeadV114{font-weight:850!important;background:#f8faf9}
+.permissionSubchildrenV114{display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));padding-left:22px;background:#fff}
+.permissionSubchildrenV114 .permissionCheck{padding:11px 15px;margin:0!important;border-top:1px solid #f0f2f1}
+@media(max-width:650px){.permissionSubchildrenV114{grid-template-columns:1fr;padding-left:12px}}
+</style>
+<script>
+/* BV2026-1-114 · Materiallager-Rechte separat speichern */
+(function(){
+ const defsV114={
+   materialMasterData:'permMaterialMasterDataV114',
+   materialPins:'permMaterialPinsV114',
+   materialAreas:'permMaterialAreasV114',
+   materialFormats:'permMaterialFormatsV114',
+   materialColumns:'permMaterialColumnsV114',
+   materialLocations:'permMaterialLocationsV114',
+   materialRacks:'permMaterialRacksV114'
+ };
+ function userV114(){
+   const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
+   for(const pool of [window.cloudUsers,window.users,window.appUsers]){
+     if(Array.isArray(pool)){
+       const u=pool.find(x=>String(x.name||x.displayName||x.username||'').trim()===name);
+       if(u)return u;
+     }
+   }
+   return null;
+ }
+ function loadV114(u){
+   const p=u?.permissions||u?.perms||{};
+   Object.entries(defsV114).forEach(([key,id])=>{const e=E(id);if(e)e.checked=!!p[key]});
+ }
+ function saveV114(u){
+   if(!u)return;
+   const key=u.permissions?'permissions':(u.perms?'perms':'permissions');
+   u[key]=u[key]||{};
+   Object.entries(defsV114).forEach(([name,id])=>u[key][name]=!!E(id)?.checked);
+ }
+ ['editUserPermissions','openUserPermissions','renderUserPermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){
+       const r=old.apply(this,arguments),arg=arguments[0];
+       setTimeout(()=>loadV114(arg&&typeof arg==='object'?arg:userV114()),0);
+       return r;
+     };
+   }
+ });
+ ['saveUserPermissions','savePermissions'].forEach(n=>{
+   if(typeof window[n]==='function'){
+     const old=window[n];window[n]=function(){saveV114(userV114());return old.apply(this,arguments)};
+   }
+ });
+})();
+</script>
