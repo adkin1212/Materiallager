@@ -5,7 +5,7 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; form-action 'self'; img-src 'self' data: blob: https://*.supabase.co; connect-src 'self' https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; media-src 'self' data: blob:; worker-src 'self' blob:; upgrade-insecure-requests">
 <!-- V406: Transporte direkt unter der Projekterfassung -->
-<title>Künzli Lagerverwaltung V345 · BV2026-1-114</title>
+<title>Künzli Lagerverwaltung V345 · BV2026-1-142</title>
 <style>
 :root{--g:#173f32;--bg:#f3f5f3;--line:#d8ded9;--mut:#6a746e;--red:#df3428}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:#17201c}button,input,select,textarea{font:inherit}
@@ -4184,7 +4184,7 @@ window.APP_RELEASE = {
 
 
 <style>
-/* BV2026-1-114 · Cloud/Benutzer/Rolle gehören zur Bereichsauswahl, nicht in die einzelnen Bereiche. */
+/* BV2026-1-142 · Cloud/Benutzer/Rolle gehören zur Bereichsauswahl, nicht in die einzelnen Bereiche. */
 .app > header #syncStatusBadge,
 .app > header #authHeaderBtn,
 .app > header #activeRoleBadge{display:none!important}
@@ -4208,7 +4208,7 @@ window.APP_RELEASE = {
 
 
 <style>
-/* BV2026-1-114 · kompakte Mehrfachauswahl für grosse Gerätebestände */
+/* BV2026-1-142 · kompakte Mehrfachauswahl für grosse Gerätebestände */
 .equipmentMultiV102{margin-top:10px!important}
 .equipmentMultiV102>.containerEnableV525,
 .equipmentMultiV102>.containerSelectLabelV526,
@@ -4573,7 +4573,7 @@ window.APP_RELEASE = {
 <div class="toolbar" style="margin:0">
 <button class="btn secondary" onclick="zoomOutside(-0.2)">−</button>
 <button class="btn secondary" onclick="zoomOutside(0.2)">+</button>
-<button class="btn secondary" onclick="resetOutsideZoom()">Ansicht zurücksetzen</button><button class="btn secondary" id="materialPinBtnV552" onclick="toggleMaterialPinModeV552()">📍 Material-Pin setzen</button><button class="btn" onclick="openProduction()">Produktionshalle öffnen</button>
+<button class="btn secondary" onclick="resetOutsideZoom()">Ansicht zurücksetzen</button><button class="btn secondary" id="materialPinBtnV552" onclick="toggleMaterialPinModeV552()">📍 Material-Pin setzen</button><button class="btn" id="openProductionBtnV127" onclick="openProduction()">Produktionshalle öffnen</button>
 
 </div>
 </div>
@@ -5404,12 +5404,21 @@ window.APP_RELEASE = {
    <div class="permissionGroupV108" data-perm-group="warehouse">
     <div class="permissionGroupHeadV108">
      <label class="permissionCheck permissionMainV108"><input type="checkbox" id="permWarehouse"> Lagerverwaltung</label>
+     <div class="permissionChildrenV108"><label class="permissionCheck"><input type="checkbox" id="permProductionHallV127"> Ansicht Produktionshalle</label></div>
      <button type="button" class="permissionAllV108" onclick="togglePermissionGroupV108('warehouse',true)">Alle auswählen</button>
     </div>
     <div class="permissionChildrenV108">
      <div class="permissionSubgroupV114">
       <label class="permissionCheck permissionSubHeadV114"><input type="checkbox" id="permMaterial"> Materiallager</label>
       <div class="permissionSubchildrenV114">
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialPackageCreateV125"> Pakete erfassen</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialGoLocationV128"> Aktion: Zu Lagerort</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialReserveV128"> Aktion: Reservieren</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialEditPackageV128"> Aktion: Bearbeiten</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialTransferV128"> Aktion: Umbuchen</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialHistoryV128"> Aktion: Verlauf</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialArchivePackageV128"> Aktion: Archiv</label>
+       <label class="permissionCheck"><input type="checkbox" id="permMaterialLocationEditV128"> Lagerort ändern</label>
        <label class="permissionCheck"><input type="checkbox" id="permMaterialMasterDataV114"> Stammdaten / Preise ändern</label>
        <label class="permissionCheck"><input type="checkbox" id="permMaterialPinsV114"> Pins setzen</label>
        <label class="permissionCheck"><input type="checkbox" id="permMaterialAreasV114"> Flächen erstellen / bearbeiten</label>
@@ -5424,7 +5433,7 @@ window.APP_RELEASE = {
      <label class="permissionCheck"><input type="checkbox" id="permArchive"> Archiv</label>
      <label class="permissionCheck"><input type="checkbox" id="permDefects"> Mängel</label>
      <label class="permissionCheck"><input type="checkbox" id="permTransfers"> Umbuchungen</label>
-     <label class="permissionCheck"><input type="checkbox" id="permManage"> Verwalten</label>
+     <label class="permissionCheck"><input type="checkbox" id="permManage"> Verwalten &amp; Einstellungen</label>
     </div>
    </div>
 
@@ -5470,6 +5479,12 @@ window.APP_RELEASE = {
     </div>
    </div>
 
+   <div class="permissionGroupV108" data-perm-group="todo">
+    <div class="permissionGroupHeadV108">
+     <label class="permissionCheck permissionMainV108"><input type="checkbox" id="permTodoV122"> To-do-Liste</label>
+    </div>
+   </div>
+
    <div class="permissionGroupV108" data-perm-group="delete">
     <div class="permissionGroupHeadV108">
      <div class="permissionMainV108">Löschen</div>
@@ -5491,7 +5506,7 @@ window.APP_RELEASE = {
  </div>
  <div class="toolbar" style="justify-content:flex-end;margin-top:14px">
   <button class="btn secondary" type="button" onclick="closeM('permissionModal')">Abbrechen</button>
-  <button class="btn" type="button" onclick="savePermissionEditor()">Berechtigungen speichern</button>
+  <button class="btn" id="permissionSaveBtnV121" type="button" onclick="savePermissionEditorV121(event)">Berechtigungen speichern</button>
  </div>
 </div></div>
 
@@ -5789,6 +5804,7 @@ function addHistory(p,type,details){
  if(!p)return;if(!p.history)p.history=[];p.history.push({at:new Date().toISOString(),type,details:details||'',by:currentUserName()})
 }
 function showHistory(id){
+ if(typeof currentPermissions==='function' && currentPermissions().materialHistory!==true){alert('Für diese Aktion ist keine Berechtigung freigeschaltet.');return;}
  let p=st.packages.find(x=>x.id===id);if(!p)return;
  let rows=(p.history||[]).slice().reverse().map(h=>`<div class="manageItem"><b>${esc(formatDateTime(h.at))} · ${esc(h.type||'Änderung')}</b><div class="muted">${esc(h.by||'–')} · ${esc(h.details||'–')}</div></div>`).join('');
  E('historyTitle').textContent=(p.elementId?p.elementId+' · ':'')+(p.material||'Material');
@@ -5796,6 +5812,7 @@ function showHistory(id){
  E('historyModal').classList.add('open')
 }
 function archivePackage(id){
+ if(typeof currentPermissions==='function' && currentPermissions().materialArchivePackage!==true){alert('Für diese Aktion ist keine Berechtigung freigeschaltet.');return;}
  let p=st.packages.find(x=>x.id===id);if(!p)return;let rq=reservedQty(p),msg='Material „'+(p.material||'')+'“ ins Archiv verschieben?';
  if(rq>0)msg+='\n\nHinweis: Für dieses Material sind noch '+rq+' reserviert. Die Reservierungen bleiben im Verlauf erhalten, gelten nach dem Archivieren aber nicht mehr als aktive Lagerreservierungen.';
  if(!confirm(msg))return;p.status='aufgebraucht';p.archivedAt=new Date().toISOString();addHistory(p,'Archiviert','Material ins Archiv verschoben'+(rq>0?' · vorhandene Reservierung: '+rq:''));persist();if(currentPage==='archive')renderArchive()
@@ -5875,6 +5892,7 @@ function overReservedQty(p){return Math.max(0,reservedQty(p)-reservationTotalQty
 function hasReservation(p){return p&&p.status!=='aufgebraucht'&&reservedQty(p)>0}
 function reservationLabel(p){let q=reservedQty(p);return q>0?`Reserviert: ${Number.isInteger(q)?q:q.toFixed(2)}`:''}
 function reservePackage(id){
+ if(typeof currentPermissions==='function' && currentPermissions().materialReserve!==true){alert('Für diese Aktion ist keine Berechtigung freigeschaltet.');return;}
  ensureReservations();let p=st.packages.find(x=>x.id===id);if(!p)return;
  let free=freeQty(p);
  ensureCommissions();
@@ -6360,10 +6378,28 @@ function defaultPermissionsForRole(role){
 }
 function permissionsForKey(key,role='Mitarbeiter'){
  ensurePermissionStore();
- let saved=st.userPermissions[key];
- let base=defaultPermissionsForRole(role);
- if(!saved)return base;
- return {...base,...saved,projectIds:Array.isArray(saved.projectIds)?saved.projectIds.slice():[]};
+ const saved=st.userPermissions[key];
+
+ // V118: Ein gespeicherter Berechtigungssatz ist vollständig maßgebend.
+ // Nicht vorhandene / nicht gesetzte Rechte sind FALSE und werden nicht mehr
+ // durch die alten Standardrechte wieder auf TRUE gesetzt.
+ if(saved && typeof saved==='object'){
+   const p={};
+   Object.keys(permissionFieldMap()).forEach(k=>p[k] = saved[k]===true);
+   p.allProjects=saved.allProjects===true;
+   p.projectIds=Array.isArray(saved.projectIds)?saved.projectIds.slice():[];
+   return p;
+ }
+
+ // Administrator bleibt bei noch nie konfigurierten Rechten arbeitsfähig.
+ // Alle anderen Cloud-Benutzer starten sicherheitshalber ohne Freigaben.
+ if(role==='Administrator')return defaultPermissionsForRole(role);
+ if(cloudAuthEnabled())return {
+   warehouse:false,material:false,control:false,reserved:false,archive:false,defects:false,
+   transfers:false,manage:false,projects:false,smallOrders:false,platforms:false,tools:false,
+   allProjects:false,projectIds:[]
+ };
+ return defaultPermissionsForRole(role);
 }
 function currentPermissions(){return permissionsForKey(currentPermissionKey(),currentRole())}
 function hasAppPermission(name){
@@ -6407,7 +6443,56 @@ function refreshPermissionVisibility(){
  if(pagePerm[currentPage]&&!p[pagePerm[currentPage]])showPage('map',true);
 }
 function permissionFieldMap(){
- return {warehouse:'permWarehouse',material:'permMaterial',control:'permControl',reserved:'permReserved',archive:'permArchive',defects:'permDefects',transfers:'permTransfers',manage:'permManage',projects:'permProjects',smallOrders:'permSmallOrders',platforms:'permPlatforms',tools:'permTools'};
+ return {
+  warehouse:'permWarehouse',
+  productionHall:'permProductionHallV127',
+  material:'permMaterial',
+  control:'permControl',
+  reserved:'permReserved',
+  archive:'permArchive',
+  defects:'permDefects',
+  transfers:'permTransfers',
+  manage:'permManage',
+  projects:'permProjects',
+  smallOrders:'permSmallOrders',
+  platforms:'permPlatforms',
+  tools:'permTools',
+  todo:'permTodoV122',
+
+  projectCreate:'permProjectCreateV109',
+  commission:'permCommissionV109',
+  productionAnalysis:'permProductionAnalysisV110',
+
+  smallOrderMaterialKuenzli:'permSmallOrderMaterialKuenzliV111',
+  smallOrderMaterialImmer:'permSmallOrderMaterialImmerV111',
+
+  deleteData:'permDeleteDataV112',
+  deleteReports:'permDeleteReportsV112',
+
+  platformReturn:'permPlatformReturnV113',
+  platformCreateStock:'permPlatformCreateStockV113',
+  platformCreateProject:'permPlatformCreateProjectV113',
+  platformAllTransports:'permPlatformAllTransportsV113',
+  platformSupplierView:'permPlatformSupplierViewV113',
+  platformSupplierEdit:'permPlatformSupplierEditV113',
+  platformDeleteTransport:'permPlatformDeleteTransportV113',
+
+  materialPackageCreate:'permMaterialPackageCreateV125',
+  materialGoLocation:'permMaterialGoLocationV128',
+  materialReserve:'permMaterialReserveV128',
+  materialEditPackage:'permMaterialEditPackageV128',
+  materialTransfer:'permMaterialTransferV128',
+  materialHistory:'permMaterialHistoryV128',
+  materialArchivePackage:'permMaterialArchivePackageV128',
+  materialLocationEdit:'permMaterialLocationEditV128',
+  materialMasterData:'permMaterialMasterDataV114',
+  materialPins:'permMaterialPinsV114',
+  materialAreas:'permMaterialAreasV114',
+  materialFormats:'permMaterialFormatsV114',
+  materialColumns:'permMaterialColumnsV114',
+  materialLocations:'permMaterialLocationsV114',
+  materialRacks:'permMaterialRacksV114'
+ };
 }
 function openPermissionEditor(key,label,role='Mitarbeiter'){
  if(!canAdmin()){alert('Berechtigungen können nur von Administratoren geändert werden.');return}
@@ -8307,24 +8392,39 @@ function normalizeProjectAccessData(p){
  return p;
 }
 function openProjectAccessManager(id){
- let p=normalizeProjectAccessData(projectById(id));if(!p){alert('Projekt wurde nicht gefunden.');return}
+ let p=projectById(id);if(!p){alert('Projekt wurde nicht gefunden.');return}
+ p=normalizeProjectAccessData(p);
  if(!canManageProjectAccess(p)){alert('Nur der Ersteller des Projekts oder ein Administrator kann Mitarbeiter einladen.');return}
  projectAccessEditingId=id;
+
+ let m=E('projectAccessModal');
+ if(!m){alert('Projektfreigaben konnten nicht geöffnet werden.');return}
+ if(m.parentElement!==document.body)document.body.appendChild(m);
+
  let title=E('projectAccessTitle'),owner=E('projectAccessOwner'),input=E('projectInviteUsername'),box=E('projectAccessCandidates');
  if(title)title.textContent=[p.number,p.name].filter(Boolean).join(' · ');
  if(owner)owner.textContent=p.createdByName||'Altprojekt – kein Ersteller gespeichert';
  if(input)input.value='';
- renderProjectAccessMembers();
  if(box)box.innerHTML='<div class="muted">Benutzer werden geladen …</div>';
- // Modal sofort öffnen. Das Laden der Benutzerliste darf das Öffnen nicht blockieren.
- let m=E('projectAccessModal');
- if(!m){alert('Projektfreigaben konnten nicht geöffnet werden.');return}
- if(m.parentElement!==document.body)document.body.appendChild(m);
+
+ // Zuerst sichtbar machen. Fehler beim Rendern der Listen dürfen den Button nicht blockieren.
+ m.style.display='grid';
  m.classList.add('open');
- setTimeout(()=>input?.focus(),60);
- Promise.resolve(renderProjectAccessCandidates()).catch(()=>{
-   if(box)box.innerHTML='<div class="muted">Benutzerliste konnte nicht geladen werden. Benutzername kann oben trotzdem manuell eingegeben werden.</div>';
- });
+
+ try{renderProjectAccessMembers()}catch(err){console.error('Projektmitglieder:',err)}
+ setTimeout(function(){
+   try{
+     let r=renderProjectAccessCandidates();
+     if(r&&typeof r.catch==='function')r.catch(function(err){
+       console.error('Projektbenutzer:',err);
+       if(box)box.innerHTML='<div class="muted">Benutzerliste konnte nicht geladen werden. Benutzername kann manuell eingegeben werden.</div>';
+     });
+   }catch(err){
+     console.error('Projektbenutzer:',err);
+     if(box)box.innerHTML='<div class="muted">Benutzerliste konnte nicht geladen werden. Benutzername kann manuell eingegeben werden.</div>';
+   }
+ },0);
+ setTimeout(function(){try{if(input)input.focus()}catch(e){}},60);
 }
 function renderProjectAccessMembers(){
  let p=normalizeProjectAccessData(projectById(projectAccessEditingId)),box=E('projectAccessMembers');if(!p||!box)return;
@@ -16569,7 +16669,13 @@ function resetOutsideZoom(){
  outsideZoom=1;applyOutsideZoom();
  let w=document.querySelector('#page-map .mapwrap');if(w)w.scrollTo({left:0,top:0,behavior:'smooth'});
 }
-function openProduction(){showPage('production');setTimeout(resetProductionZoom,0)}
+function openProduction(){
+ if(typeof currentPermissions==='function' && currentPermissions().productionHall!==true){
+  alert('Für die Ansicht Produktionshalle ist keine Berechtigung freigeschaltet.');
+  return;
+ }
+ showPage('production');setTimeout(resetProductionZoom,0)
+}
 function initMobileMapPan(scrollerId){
  let el=E(scrollerId);if(!el)return;
  el.dataset.panReady='v164';
@@ -16856,6 +16962,7 @@ function saveQuickCommissionV549(e){
  closeM('quickCommissionModalV549');
 }
 function openWarehouseTransferV550(id){
+ if(typeof currentPermissions==='function' && currentPermissions().materialTransfer!==true){alert('Für diese Aktion ist keine Berechtigung freigeschaltet.');return;}
  try{
    let p=(st.packages||[]).find(x=>String(x.id)===String(id));
    if(!p){alert('Umbuchen nicht möglich: Materialeintrag wurde nicht gefunden.');return}
@@ -18095,6 +18202,10 @@ function saveNewMaterialCatalog(e){
 }
 
 function openMaterial(rid=''){
+ if(typeof currentPermissions==='function' && currentPermissions().materialPackageCreate!==true){
+  alert('Für das Erfassen von Paketen ist keine Berechtigung freigeschaltet.');
+  return;
+ }
  editingPackage='';
  E('matTitle').textContent='Material / Paket erfassen';
  let form=E('matModal').querySelector('form');form.reset();
@@ -18109,6 +18220,7 @@ function openMaterial(rid=''){
  fillLevels();ensureIdSettings();ensureCommissions();fillMaterialCatalog('');E('mWoodType').value='';E('mQuality').innerHTML=qualityOptions('');E('mQuality').value='';updateQualityVisibility('');E('mProj').innerHTML=commissionOptions('');E('mCat').value='';E('mElementId').value='';E('mBatchCount').disabled=false;E('mBatchCount').value=1;pendingMaterialPhotoDelete=false;renderMaterialPhotoEditor(null);resetV75Editors(null);updateElementIdPreview();E('matModal').classList.add('open')
 }
 function editPackage(id){
+ if(typeof currentPermissions==='function' && currentPermissions().materialEditPackage!==true){alert('Für diese Aktion ist keine Berechtigung freigeschaltet.');return;}
  let p=st.packages.find(x=>x.id===id);if(!p)return;
  editingPackage=id;
  E('matTitle').textContent='Material / Paket bearbeiten';
@@ -18383,6 +18495,12 @@ const rawFileURL=f=>new Promise((res,rej)=>{let rd=new FileReader();rd.onload=()
 const fileURL=async f=>rawFileURL(await compressImageFile(f,1600,.78));
 async function saveMat(e){
  e.preventDefault();
+ // Neue Pakete nur mit expliziter Berechtigung. Bestehende Pakete können
+ // weiterhin über ihre eigenen Bearbeitungsrechte behandelt werden.
+ if(!editingPackage && typeof currentPermissions==='function' && currentPermissions().materialPackageCreate!==true){
+  alert('Für das Erfassen von Paketen ist keine Berechtigung freigeschaltet.');
+  return;
+ }
  let r=st.racks.find(x=>x.id===E('mRack').value);
  if(!r){alert('Bitte einen Lagerort auswählen.');return}
  let levelRaw=E('mLevel').value,li=levelRaw===''?-1:Number(levelRaw),l=li>=0?r?.levels?.[li]:null;
@@ -18572,6 +18690,7 @@ function renderInv(){
  E('sMat').textContent=new Set(st.packages.map(p=>p.material.toLowerCase())).size
 }
 function jump(rid,pid){
+ if(typeof currentPermissions==='function' && currentPermissions().materialGoLocation!==true){alert('Für diese Aktion ist keine Berechtigung freigeschaltet.');return;}
  let r=st.racks.find(x=>x.id===rid),a=st.areas.find(x=>x.id===r?.areaId);
  selectedPackage=pid;showPage(areaMapType(a)==='production'?'production':'map');renderAreas();openRack(rid);
  setTimeout(()=>{let t=document.querySelector('.pkg.target');if(t)t.scrollIntoView({behavior:'smooth',block:'center',inline:'center'})},80);
@@ -21445,6 +21564,9 @@ function inventorySelectCellV466(p){
  return `<label class="inventoryCheckV466" title="Element auswählen"><input type="checkbox" data-inv-select-v466="${esc(p.id)}" ${inventorySelectedV466.has(p.id)?'checked':''} onclick="inventoryToggleV466('${p.id}',this.checked,event)"><span></span></label>`;
 }
 function inventoryLocationCellV466(p,r,l){
+ let canEdit=false;
+ try{canEdit=currentPermissions().materialLocationEdit===true}catch(e){}
+ if(!canEdit)return `<span class="inventoryLocationReadOnlyV128" title="Lagerort">${esc(r?.name||'–')}</span>`;
  return `<button type="button" class="inventoryLocationBtnV466" onclick="openInventoryLocationV466('${p.id}')" title="Lagerort ändern"><span>${esc(r?.name||'–')}</span><b>✎</b></button>`;
 }
 
@@ -21616,6 +21738,9 @@ function ensureInventoryLocationModalV466(){
 }
 let inventoryLocationTargetV466='';
 function openInventoryLocationV466(id){
+ if(typeof currentPermissions==='function' && currentPermissions().materialLocationEdit!==true){
+  alert('Für das Ändern des Lagerorts ist keine Berechtigung freigeschaltet.');return;
+ }
  let p=(st.packages||[]).find(x=>x.id===id);if(!p)return;
  inventoryLocationTargetV466=id;
  let modal=ensureInventoryLocationModalV466();
@@ -21638,6 +21763,9 @@ function closeInventoryLocationV466(){
  inventoryLocationTargetV466='';
 }
 function saveInventoryLocationV466(){
+ if(typeof currentPermissions==='function' && currentPermissions().materialLocationEdit!==true){
+  alert('Für das Ändern des Lagerorts ist keine Berechtigung freigeschaltet.');return;
+ }
  let source=(st.packages||[]).find(x=>x.id===inventoryLocationTargetV466);if(!source)return;
  let rid=E('inventoryLocationRackV466')?.value||'',levelRaw=E('inventoryLocationLevelV466')?.value||'',li=levelRaw===''?-1:Number(levelRaw);
  let r=st.racks.find(x=>x.id===rid),l=li>=0?r?.levels?.[li]:null;
@@ -22395,7 +22523,7 @@ window.addEventListener('load',()=>setTimeout(runImportV481,1800));
 </style>
 
 <style>
-/* BV2026-1-114 · Transportstatus: gleiche Farben im geschlossenen Feld und in den Dropdown-Einträgen. */
+/* BV2026-1-142 · Transportstatus: gleiche Farben im geschlossenen Feld und in den Dropdown-Einträgen. */
 .platformTransportStatusInlineV523 option[value="Geplant"]{background:#fff3c8!important;color:#795600!important}
 .platformTransportStatusInlineV523 option[value="Bestätigt"]{background:#dcecff!important;color:#164f86!important}
 .platformTransportStatusInlineV523 option[value="Geliefert"]{background:#e3f4e7!important;color:#176b2c!important}
@@ -22403,7 +22531,7 @@ window.addEventListener('load',()=>setTimeout(runImportV481,1800));
 </style>
 
 
-<!-- BV2026-1-114 · offene Baustellen-Rungen unabhängig von der Pritsche anzeigen -->
+<!-- BV2026-1-142 · offene Baustellen-Rungen unabhängig von der Pritsche anzeigen -->
 <style>
 .platformOpenSiteRungsV89{margin:12px 0 4px;padding:14px 16px;border:1px solid #d8ded9;border-radius:12px;background:#f8faf8}
 .platformOpenSiteRungsV89 h4{margin:0 0 9px;font-size:16px;color:#173f32}
@@ -22450,11 +22578,11 @@ window.addEventListener('load',()=>setTimeout(runImportV481,1800));
 })();
 </script>
 
-<!-- BV2026-1-114: Anz. Kronen nur für Brühwiler-Mittelrungen; Wert wird mit der Rungenposition gespeichert. -->
+<!-- BV2026-1-142: Anz. Kronen nur für Brühwiler-Mittelrungen; Wert wird mit der Rungenposition gespeichert. -->
 
 
 <script>
-/* BV2026-1-114 · Brühwiler-Kronen werden unabhängig von Mittelrungen zurückgebucht. */
+/* BV2026-1-142 · Brühwiler-Kronen werden unabhängig von Mittelrungen zurückgebucht. */
 function platformQuickReturnCrownOptionsV94(){
   const rows=(platformStore.projectRungsOpen||[])
     .filter(r=>r.supplier==='Brühwiler' && r.kind!=='outer' && (Number(r.crownQty)||0)>0)
@@ -22500,7 +22628,7 @@ function returnPlatformCrownsToWarehouseV94(index){
 }
 </script>
 
-<!-- BV2026-1-114 · Fahrzeuge/Geräte mit optionalen Stammdaten und PDF -->
+<!-- BV2026-1-142 · Fahrzeuge/Geräte mit optionalen Stammdaten und PDF -->
 <style>
 .platformEquipmentFormV95{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end}
 .platformEquipmentFormV95 label{font-size:12px;color:#59655f}.platformEquipmentFormV95 input{display:block;width:100%;margin-top:4px;padding:9px;border:1px solid var(--line);border-radius:8px;background:#fff}
@@ -22587,7 +22715,7 @@ function returnPlatformCrownsToWarehouseV94(index){
 
 
 <script>
-/* BV2026-1-114 · Direkter Sprung vom Lieferanten-Akkordeon zum Fahrzeuge/Geräte-Formular. */
+/* BV2026-1-142 · Direkter Sprung vom Lieferanten-Akkordeon zum Fahrzeuge/Geräte-Formular. */
 window.openPlatformEquipmentFormV98=function(supplier){
   selectedPlatformSupplier=supplier;
   updatePlatformStockSupplierFields();
@@ -22607,7 +22735,7 @@ window.openPlatformEquipmentFormV98=function(supplier){
 
 
 <script>
-/* BV2026-1-114 · Fahrzeuge/Geräte direkt im aufgeklappten Lieferantenbereich erfassen. */
+/* BV2026-1-142 · Fahrzeuge/Geräte direkt im aufgeklappten Lieferantenbereich erfassen. */
 function platformEquipmentKeyV99(s){return String(s||'').replace(/[^A-Za-z0-9]/g,'_');}
 window.togglePlatformEquipmentInlineV99=function(supplier,force){
   const box=E('platformEquipmentInlineV99_'+platformEquipmentKeyV99(supplier));
@@ -22659,7 +22787,7 @@ window.savePlatformEquipmentInlineV99=async function(supplier){
 
 
 <script>
-/* BV2026-1-114 · Fahrzeuge/Geräte in der Projekt-Reservierungsplanung */
+/* BV2026-1-142 · Fahrzeuge/Geräte in der Projekt-Reservierungsplanung */
 let platformReservationSelectedEquipmentV101=new Set();
 
 function platformEquipmentReservationsV101(x){
@@ -22787,7 +22915,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <style>
-/* BV2026-1-114 · mehrere Fahrzeuge/Geräte pro LKW bzw. Anhänger */
+/* BV2026-1-142 · mehrere Fahrzeuge/Geräte pro LKW bzw. Anhänger */
 .equipmentMultiV102{margin-top:12px}
 </style>
 <script>
@@ -23017,7 +23145,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <style>
-/* BV2026-1-114 · Container kompakt wie Fahrzeuge/Geräte */
+/* BV2026-1-142 · Container kompakt wie Fahrzeuge/Geräte */
 .containerCompactV104{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .containerCompactSummaryV104{font-weight:750;color:var(--muted)}
 .containerDialogV104{position:fixed;inset:0;z-index:100001;background:rgba(0,0,0,.34);display:none;align-items:center;justify-content:center;padding:18px}
@@ -23103,7 +23231,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <style>
-/* BV2026-1-114 · mitgeführte Container/Geräte direkt am Fahrzeug anzeigen */
+/* BV2026-1-142 · mitgeführte Container/Geräte direkt am Fahrzeug anzeigen */
 .transportExtrasV105{margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#f7f9f8;font-size:14px;line-height:1.45}
 .transportExtrasV105 b{color:var(--green)}
 .transportExtrasV105 .extraRowV105+.extraRowV105{margin-top:4px}
@@ -23160,7 +23288,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <style>
-/* BV2026-1-114 · Zusatzladung eindeutig dem LKW bzw. Anhänger zuordnen */
+/* BV2026-1-142 · Zusatzladung eindeutig dem LKW bzw. Anhänger zuordnen */
 .transportExtrasV105{position:relative;margin-top:8px!important;padding:8px 10px!important}
 .transportExtrasV105::before{
  display:block;font-weight:900;font-size:13px;letter-spacing:.02em;
@@ -23201,7 +23329,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <style>
-/* BV2026-1-114 · Fahrzeuge/Geräte separat ins Lager zurückbuchen */
+/* BV2026-1-142 · Fahrzeuge/Geräte separat ins Lager zurückbuchen */
 .platformQuickReturnEquipmentV107{margin-top:0}
 </style>
 <script>
@@ -23276,7 +23404,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <style>
-/* BV2026-1-114 · Berechtigungen nach Hauptansicht und Bereich gruppiert */
+/* BV2026-1-142 · Berechtigungen nach Hauptansicht und Bereich gruppiert */
 .permissionGridV108{grid-template-columns:1fr!important}
 .permissionSectionV108{padding:0!important;border:0!important;background:transparent!important}
 .permissionGroupV108{border:1px solid var(--line);border-radius:14px;background:#fff;margin:12px 0;overflow:hidden}
@@ -23300,7 +23428,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <script>
-/* BV2026-1-114 · Produktion: Projekt erstellen und Kommission separat */
+/* BV2026-1-142 · Produktion: Projekt erstellen und Kommission separat */
 (function(){
  function currentPermissionUserV109(){
    const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
@@ -23352,7 +23480,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <script>
-/* BV2026-1-114 · Produktionsanalyse als eigene Produktions-Berechtigung */
+/* BV2026-1-142 · Produktionsanalyse als eigene Produktions-Berechtigung */
 (function(){
  function userV110(){
    const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
@@ -23392,7 +23520,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <script>
-/* BV2026-1-114 · Kleinaufträge: Materialerstellung Künzli / Immer AG separat */
+/* BV2026-1-142 · Kleinaufträge: Materialerstellung Künzli / Immer AG separat */
 (function(){
  function userV111(){
    const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
@@ -23437,7 +23565,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <script>
-/* BV2026-1-114 · Löschen von Daten und Rapporten separat berechtigen */
+/* BV2026-1-142 · Löschen von Daten und Rapporten separat berechtigen */
 (function(){
  function userV112(){
    const name=(document.querySelector('#permissionEditor h2 + *')?.textContent||'').trim();
@@ -23490,7 +23618,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <script>
-/* BV2026-1-114 · Detailberechtigungen Pritschenverwaltung / Logistik */
+/* BV2026-1-142 · Detailberechtigungen Pritschenverwaltung / Logistik */
 (function(){
  const defsV113={
    platformReturn:'permPlatformReturnV113',
@@ -23540,7 +23668,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 
 
 <style>
-/* BV2026-1-114 · Detailberechtigungen Materiallager */
+/* BV2026-1-142 · Detailberechtigungen Materiallager */
 .permissionSubgroupV114{grid-column:1/-1;border-bottom:1px solid #edf0ee}
 .permissionSubHeadV114{font-weight:850!important;background:#f8faf9}
 .permissionSubchildrenV114{display:grid;grid-template-columns:repeat(2,minmax(180px,1fr));padding-left:22px;background:#fff}
@@ -23548,7 +23676,7 @@ renderPlatformReservationGantt=function(from='',to=''){
 @media(max-width:650px){.permissionSubchildrenV114{grid-template-columns:1fr;padding-left:12px}}
 </style>
 <script>
-/* BV2026-1-114 · Materiallager-Rechte separat speichern */
+/* BV2026-1-142 · Materiallager-Rechte separat speichern */
 (function(){
  const defsV114={
    materialMasterData:'permMaterialMasterDataV114',
@@ -23593,5 +23721,1484 @@ renderPlatformReservationGantt=function(from='',to=''){
      const old=window[n];window[n]=function(){saveV114(userV114());return old.apply(this,arguments)};
    }
  });
+})();
+</script>
+
+
+<style>
+/* BV2026-1-142 · Berechtigungen werden in der Oberfläche tatsächlich durchgesetzt */
+.permHiddenV115{display:none!important}
+</style>
+<script>
+(function(){
+ /* Alle seit V109 ergänzten Rechte werden jetzt über denselben bestehenden
+    st.userPermissions-Speicher geladen und gespeichert. */
+ const oldPermissionFieldMapV115=window.permissionFieldMap;
+ window.permissionFieldMap=function(){
+   const m=oldPermissionFieldMapV115();
+   return Object.assign(m,{
+     projectCreate:'permProjectCreateV109',
+     commission:'permCommissionV109',
+     productionAnalysis:'permProductionAnalysisV110',
+     smallOrderMaterialKuenzli:'permSmallOrderMaterialKuenzliV111',
+     smallOrderMaterialImmer:'permSmallOrderMaterialImmerV111',
+     deleteData:'permDeleteDataV112',
+     deleteReports:'permDeleteReportsV112',
+     platformReturn:'permPlatformReturnV113',
+     platformCreateStock:'permPlatformCreateStockV113',
+     platformCreateProject:'permPlatformCreateProjectV113',
+     platformAllTransports:'permPlatformAllTransportsV113',
+     platformSupplierView:'permPlatformSupplierViewV113',
+     platformSupplierEdit:'permPlatformSupplierEditV113',
+     platformDeleteTransport:'permPlatformDeleteTransportV113',
+     materialMasterData:'permMaterialMasterDataV114',
+     materialPins:'permMaterialPinsV114',
+     materialAreas:'permMaterialAreasV114',
+     materialFormats:'permMaterialFormatsV114',
+     materialColumns:'permMaterialColumnsV114',
+     materialLocations:'permMaterialLocationsV114',
+     materialRacks:'permMaterialRacksV114'
+   });
+ };
+
+ function pv115(k){try{return !!currentPermissions()[k]}catch(e){return false}}
+ function denyV115(){alert('Für diese Funktion ist keine Berechtigung freigeschaltet.');return false}
+ function guardV115(name,perm){
+   const fn=window[name]; if(typeof fn!=='function'||fn._permV115)return;
+   const wrapped=function(){if(!pv115(perm))return denyV115();return fn.apply(this,arguments)};
+   wrapped._permV115=true; window[name]=wrapped;
+ }
+ function hideV115(el,hide){
+   if(!el)return;
+   el.classList.toggle('permHiddenV115',!!hide);
+ }
+ function textHideV115(root,patterns,allowed){
+   if(!root)return;
+   root.querySelectorAll('button,a,summary').forEach(el=>{
+     if(el.closest('#permissionModal'))return;
+     const t=(el.textContent||'').trim();
+     if(patterns.some(rx=>rx.test(t)))hideV115(el,!allowed);
+   });
+ }
+
+ function applyV115(){
+   const p=currentPermissions();
+
+   /* Produktion */
+   hideV115(document.querySelector('button[onclick*="openProjectEditor"]'),!p.projectCreate);
+   hideV115(document.querySelector('.projectMainTab[data-project-home-tab="analysis"]'),!p.productionAnalysis);
+   hideV115(E('projectsHomeTabAnalysis'),!p.productionAnalysis);
+   hideV115(E('projectCommissionsBtn'),!p.commission);
+   textHideV115(E('moduleProjects')||document.body,[/Kommission/i],p.commission);
+
+   /* Pritschenverwaltung / Logistik */
+   hideV115(E('platformQuickReturnCard'),!p.platformReturn);
+   hideV115(document.querySelector('.platformMainTab[data-platform-tab="transports"]'),!p.platformAllTransports);
+   hideV115(E('platformTransportOverview'),!p.platformAllTransports);
+   hideV115(E('platformSupplierOverview'),!p.platformSupplierView);
+
+   const platformRoot=E('modulePlatforms')||document.body;
+   textHideV115(platformRoot,[/Löschen/i],p.platformDeleteTransport);
+   if(!p.platformCreateProject)
+     textHideV115(platformRoot,[/Neues Projekt/i,/Projekt erstellen/i],false);
+   if(!p.platformCreateStock)
+     textHideV115(platformRoot,[/hinzufügen/i,/erfassen/i,/Neue Pritsche/i,/Neue Rungen/i,/Neuer Container/i,/Fahrzeug.*Gerät.*hinzufügen/i],false);
+   if(!p.platformSupplierEdit)
+     textHideV115(E('platformSupplierOverview')||platformRoot,[/Bearbeiten/i,/Ändern/i,/Löschen/i,/hinzufügen/i,/erfassen/i],false);
+
+   /* Materiallager */
+   const warehouseRoot=E('moduleWarehouse')||document.body;
+   hideV115(E('materialPinToggleV552'),!p.materialPins);
+   textHideV115(warehouseRoot,[/Pin setzen/i,/Pin hinzufügen/i],p.materialPins);
+   textHideV115(warehouseRoot,[/Fläche erstellen/i,/Fläche bearbeiten/i,/Neue Fläche/i],p.materialAreas);
+   textHideV115(warehouseRoot,[/Format bearbeiten/i,/Formatbearbeitung/i],p.materialFormats);
+   textHideV115(warehouseRoot,[/Spalten/i],p.materialColumns);
+   textHideV115(warehouseRoot,[/Lagerort ändern/i],p.materialLocations);
+   textHideV115(warehouseRoot,[/Gestell/i,/Ebene/i],p.materialRacks);
+
+   /* Globale Löschrechte: ohne Haken keine allgemeinen Löschaktionen anzeigen.
+      Transporte werden bewusst durch ihr eigenes Recht behandelt. */
+   document.querySelectorAll('button,a').forEach(el=>{
+     if(el.closest('#permissionModal'))return;
+     const oc=String(el.getAttribute('onclick')||'');
+     const t=(el.textContent||'').trim();
+     if(/deletePlatformTransport/.test(oc))hideV115(el,!p.platformDeleteTransport);
+     else if(/\bLöschen\b/i.test(t) && !/platform/i.test(oc))hideV115(el,!p.deleteData);
+   });
+ }
+
+ /* Technische Sperren zusätzlich zum Ausblenden. */
+ [
+   ['openProjectEditor','projectCreate'],
+   ['openCommissionManager','commission'],
+   ['addCommission','commission'],['quickAddCommissionFromMaterial','commission'],
+   ['openMaterialPinCommissionV552','commission'],['saveMaterialPinCommissionV552','commission'],
+   ['deletePlatformTransport','platformDeleteTransport'],
+   ['returnPlatformToWarehouse','platformReturn'],
+   ['returnPlatformRungsToWarehouse','platformReturn'],
+   ['returnPlatformContainerToWarehouse','platformReturn'],
+   ['returnPlatformCrownToWarehouseV94','platformReturn'],
+   ['returnPlatformEquipmentToWarehouseV107','platformReturn'],
+   ['editPlatformStockItem','platformSupplierEdit'],['deletePlatformStockItem','platformSupplierEdit'],
+   ['editPlatformRungStock','platformSupplierEdit'],['deletePlatformRungStock','platformSupplierEdit'],
+   ['editPlatformContainerItem','platformSupplierEdit'],['deletePlatformContainerItem','platformSupplierEdit'],
+   ['editPlatformEquipmentV95','platformSupplierEdit'],['deletePlatformEquipmentV95','platformSupplierEdit'],
+   ['editPlatformCrownItem','platformSupplierEdit'],['deletePlatformCrownItem','platformSupplierEdit'],
+   ['toggleMaterialPinModeV552','materialPins'],['openNewMaterialPinV552','materialPins'],
+   ['openMaterialPinV552','materialPins'],['saveMaterialPinV552','materialPins'],['deleteMaterialPinV552','materialPins'],
+   ['editAreaGeometry','materialAreas'],['addAreaPoint','materialAreas'],['deleteArea','materialAreas'],
+   ['toggleFormatEditV538','materialFormats'],
+   ['moveInventoryColumn','materialColumns'],['resetInventoryColumns','materialColumns'],
+   ['editRackLevel','materialRacks'],['deleteRack','materialRacks']
+ ].forEach(x=>guardV115(x[0],x[1]));
+
+ /* Produktionsanalyse auch gegen direkten Funktionsaufruf sperren. */
+ const oldSetProjectsHomeTabV115=window.setProjectsHomeTab;
+ if(typeof oldSetProjectsHomeTabV115==='function'){
+   window.setProjectsHomeTab=function(tab){
+     if(tab==='analysis'&&!pv115('productionAnalysis'))return denyV115();
+     return oldSetProjectsHomeTabV115.apply(this,arguments);
+   };
+ }
+
+ /* Alle Transporte gegen direkten Reiteraufruf sperren. */
+ const oldSetPlatformMainTabV115=window.setPlatformMainTab;
+ if(typeof oldSetPlatformMainTabV115==='function'){
+   window.setPlatformMainTab=function(tab){
+     if(tab==='transports'&&!pv115('platformAllTransports'))return denyV115();
+     return oldSetPlatformMainTabV115.apply(this,arguments);
+   };
+ }
+
+ /* Bestehende Sichtbarkeitsaktualisierung erweitern. */
+ const oldRefreshPermissionVisibilityV115=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=oldRefreshPermissionVisibilityV115.apply(this,arguments);
+   setTimeout(applyV115,0);
+   return r;
+ };
+
+ /* Nach dynamischen Renderings erneut anwenden. */
+ let pendingV115=false;
+ const obsV115=new MutationObserver(()=>{
+   if(pendingV115)return;
+   pendingV115=true;
+   requestAnimationFrame(()=>{pendingV115=false;applyV115()});
+ });
+ obsV115.observe(document.body,{childList:true,subtree:true});
+
+ setTimeout(()=>{refreshPermissionVisibility();applyV115()},50);
+})();
+</script>
+
+
+<style>
+/* BV2026-1-142 · Abmelden direkt in der Bereichsauswahl */
+#areaLogoutV116{
+  border:1px solid #e0caca;background:#fff5f5;color:#8d2929;
+  border-radius:18px;padding:13px 22px;font-weight:850;font-size:16px;
+  cursor:pointer;margin-left:8px
+}
+#areaLogoutV116:hover{background:#fbe9e9}
+@media(max-width:700px){#areaLogoutV116{padding:11px 15px}}
+</style>
+<script>
+(function(){
+ function logoutV116(){
+   const candidates=['logout','signOut','doLogout','appLogout','logoutUser'];
+   for(const n of candidates){
+     if(typeof window[n]==='function'){
+       window[n]();
+       return;
+     }
+   }
+   /* Fallback: bestehende Login-Sitzung entfernen, ohne Anwendungsdaten zu löschen. */
+   try{
+     ['currentUser','authUser','loggedInUser','sessionUser'].forEach(k=>{
+       sessionStorage.removeItem(k);
+       localStorage.removeItem(k);
+     });
+   }catch(e){}
+   location.reload();
+ }
+ function addV116(){
+   if(document.getElementById('areaLogoutV116'))return;
+   const area=document.getElementById('areaSelection')||
+              document.getElementById('areaSelect')||
+              [...document.querySelectorAll('section,div')].find(x=>
+                /Bereich auswählen/.test(x.textContent||'') &&
+                x.querySelector('button')
+              );
+   if(!area)return;
+
+   const cloud=[...area.querySelectorAll('button,.chip,.pill,span,div')].find(x=>
+     (x.textContent||'').trim()==='Cloud'
+   );
+   const host=cloud?.parentElement;
+   if(!host)return;
+
+   const b=document.createElement('button');
+   b.id='areaLogoutV116';
+   b.type='button';
+   b.textContent='Abmelden';
+   b.onclick=logoutV116;
+   host.appendChild(b);
+ }
+ const obs=new MutationObserver(()=>addV116());
+ obs.observe(document.body,{childList:true,subtree:true});
+ setTimeout(addV116,0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Fix: Detailberechtigungen direkt an den zentralen Berechtigungsspeicher angebunden */
+(function(){
+ function applyPermissionStateV117(){
+   try{
+     if(typeof refreshPermissionVisibility==='function')refreshPermissionVisibility();
+     if(typeof applyV115==='function')applyV115();
+   }catch(e){}
+ }
+ document.addEventListener('change',function(ev){
+   if(ev.target && ev.target.closest && ev.target.closest('#permissionModal')){
+     /* Nur Anzeige; gespeichert wird weiterhin ausschließlich über "Berechtigungen speichern". */
+   }
+ });
+ setTimeout(applyPermissionStateV117,100);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Berechtigungen: deny-by-default + direkte Modul-Sperren */
+(function(){
+ function allowedV118(k){
+   try{return currentPermissions()[k]===true}catch(e){return false}
+ }
+ function denyV118(){alert('Für diesen Bereich ist keine Berechtigung freigeschaltet.');return false}
+
+ function guardV118(name,perm){
+   const fn=window[name];
+   if(typeof fn!=='function'||fn._v118)return;
+   const w=function(){
+     if(!allowedV118(perm))return denyV118();
+     return fn.apply(this,arguments);
+   };
+   w._v118=true;
+   window[name]=w;
+ }
+ [
+   ['openWarehouseModule','warehouse'],
+   ['openProjectsModule','projects'],
+   ['openSmallOrdersModule','smallOrders'],
+   ['openPlatformManagement','platforms'],
+   ['openToolsModule','tools']
+ ].forEach(x=>guardV118(x[0],x[1]));
+
+ function hardRefreshV118(){
+   let p;
+   try{p=currentPermissions()}catch(e){return}
+   const ids={
+     moduleWarehouseTile:'warehouse',
+     moduleProjectsTile:'projects',
+     moduleSmallOrdersTile:'smallOrders',
+     modulePlatformsTile:'platforms',
+     moduleToolsTile:'tools'
+   };
+   Object.entries(ids).forEach(([id,k])=>{
+     const el=document.getElementById(id);
+     if(el)el.style.setProperty('display',p[k]===true?'':'none','important');
+   });
+   const nav={
+     inventory:'material',control:'control',reserved:'reserved',archive:'archive',
+     defects:'defects',transfers:'transfers',manage:'manage'
+   };
+   Object.entries(nav).forEach(([page,k])=>{
+     const el=document.querySelector('.nav[data-page="'+page+'"]');
+     if(el)el.style.setProperty('display',(p.warehouse===true&&p[k]===true)?'':'none','important');
+   });
+   const map=document.querySelector('.nav[data-page="map"]');
+   if(map)map.style.setProperty('display',p.warehouse===true?'':'none','important');
+ }
+
+ const oldRefresh=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof oldRefresh==='function'?oldRefresh.apply(this,arguments):undefined;
+   hardRefreshV118();
+   return r;
+ };
+
+ // Nach Login, Cloud-Sync und dynamischem Rendern nochmals anwenden.
+ document.addEventListener('click',()=>setTimeout(hardRefreshV118,0),true);
+ const mo=new MutationObserver(()=>hardRefreshV118());
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(hardRefreshV118,0);
+ setTimeout(hardRefreshV118,500);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Verwalten und Einstellungen separat freischaltbar */
+(function(){
+ function pV119(k){try{return currentPermissions()[k]===true}catch(e){return false}}
+ function applyV119(){
+   const manage=pV119('manageView');
+   const settings=pV119('settingsView');
+
+   document.querySelectorAll('.nav[data-page="manage"],button,a,summary').forEach(el=>{
+     if(el.closest('#permissionModal'))return;
+     const t=(el.textContent||'').trim();
+     const page=el.getAttribute?.('data-page')||'';
+     if(page==='manage'||/^Verwalten$/i.test(t))
+       el.style.setProperty('display',manage?'':'none','important');
+     if(/^Einstellungen$/i.test(t)||/Einstellungen öffnen/i.test(t))
+       el.style.setProperty('display',settings?'':'none','important');
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyV119(); return r;
+ };
+ const mo=new MutationObserver(applyV119);
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(applyV119,0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · "Verwalten & Einstellungen" ist ein kompletter Hauptbereich */
+(function(){
+ function canManageV120(){
+   try{return currentPermissions().manage===true}catch(e){return false}
+ }
+ function applyManageAreaV120(){
+   const ok=canManageV120();
+   document.querySelectorAll('button,a,.areaCard,.moduleCard,[data-area],[data-module],summary').forEach(el=>{
+     if(el.closest('#permissionModal'))return;
+     const txt=(el.textContent||'').replace(/\s+/g,' ').trim();
+     const key=[
+       el.id||'', el.getAttribute?.('data-area')||'',
+       el.getAttribute?.('data-module')||'', el.getAttribute?.('data-page')||''
+     ].join(' ').toLowerCase();
+
+     if(/verwalten\s*&?\s*einstellungen/i.test(txt) ||
+        /manage|settings|einstellungen|verwalten/.test(key)){
+       el.style.setProperty('display',ok?'':'none','important');
+     }
+   });
+ }
+ const oldRefreshV120=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof oldRefreshV120==='function'?oldRefreshV120.apply(this,arguments):undefined;
+   applyManageAreaV120();
+   return r;
+ };
+ const moV120=new MutationObserver(applyManageAreaV120);
+ moV120.observe(document.body,{childList:true,subtree:true});
+ setTimeout(applyManageAreaV120,0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Reparatur Speichern-Button Berechtigungen */
+(function(){
+ window.savePermissionEditorV121=function(ev){
+   if(ev){ev.preventDefault();ev.stopPropagation();}
+   try{
+     if(!permissionEditorKey){
+       alert('Kein Benutzer für die Berechtigungen ausgewählt.');
+       return false;
+     }
+
+     ensurePermissionStore();
+     const p={};
+     const map=permissionFieldMap();
+
+     Object.keys(map).forEach(function(k){
+       const el=document.getElementById(map[k]);
+       p[k]=!!(el && el.checked);
+     });
+
+     const all=document.getElementById('permAllProjects');
+     p.allProjects=!!(all && all.checked);
+     p.projectIds=Array.from(document.querySelectorAll('.permProjectCheck:checked')).map(function(x){
+       return x.value;
+     });
+
+     /* Zentral speichern */
+     st.userPermissions[permissionEditorKey]=p;
+
+     /* Direkt lokal sichern; danach normale Persistenz/Cloud-Synchronisation. */
+     try{localStorage.setItem(KEY,JSON.stringify(st));}catch(storageErr){
+       console.error('Berechtigungen lokal speichern:',storageErr);
+     }
+
+     try{
+       persist();
+     }catch(persistErr){
+       console.error('Berechtigungen persistieren:',persistErr);
+       /* Die Rechte sind bereits in st + localStorage gesichert. */
+       try{if(typeof queueCloudSync==='function')queueCloudSync();}catch(e){}
+     }
+
+     try{closeM('permissionModal');}catch(e){
+       const m=document.getElementById('permissionModal');
+       if(m)m.classList.remove('open');
+     }
+
+     try{if(typeof renderCloudUsers==='function')renderCloudUsers();}catch(e){}
+     try{if(typeof renderManage==='function')renderManage();}catch(e){}
+     try{if(typeof refreshPermissionVisibility==='function')refreshPermissionVisibility();}catch(e){}
+
+     alert('Berechtigungen gespeichert.');
+     return false;
+   }catch(err){
+     console.error('savePermissionEditorV121',err);
+     alert('Berechtigungen konnten nicht gespeichert werden: '+String(err && err.message || err));
+     return false;
+   }
+ };
+
+ /* Zusätzlich als Event-Listener anbinden, falls Inline-Handler vom Browser/Add-on blockiert wird. */
+ setTimeout(function(){
+   const b=document.getElementById('permissionSaveBtnV121');
+   if(b && !b.dataset.v121Bound){
+     b.dataset.v121Bound='1';
+     b.addEventListener('click',window.savePermissionEditorV121);
+   }
+ },0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · To-do-Liste nur mit eigener Berechtigung sichtbar */
+(function(){
+ function todoAllowedV122(){
+   try{return currentPermissions().todo===true}catch(e){return false}
+ }
+ function applyTodoV122(){
+   const ok=todoAllowedV122();
+   document.querySelectorAll('button,a,.areaCard,.moduleCard,[data-area],[data-module],[data-page],summary').forEach(el=>{
+     if(el.closest('#permissionModal'))return;
+     const txt=(el.textContent||'').replace(/\s+/g,' ').trim();
+     const key=[
+       el.id||'',el.getAttribute?.('data-area')||'',el.getAttribute?.('data-module')||'',
+       el.getAttribute?.('data-page')||'',el.getAttribute?.('onclick')||''
+     ].join(' ').toLowerCase();
+     if(/to-?do/i.test(txt)||/\btodo\b/.test(key)){
+       el.style.setProperty('display',ok?'':'none','important');
+     }
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyTodoV122(); return r;
+ };
+ const mo=new MutationObserver(applyTodoV122);
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(applyTodoV122,0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Rechte für Flächen/Gestelle/Ebenen + dauerhaftes Abmelden */
+(function(){
+ function allowedV123(k){
+   try{return currentPermissions()[k]===true}catch(e){return false}
+ }
+ function denyV123(){alert('Für diese Änderung ist keine Berechtigung freigeschaltet.');return false}
+
+ function guardV123(name,perm){
+   const fn=window[name];
+   if(typeof fn!=='function'||fn._permV123)return;
+   const wrapped=function(){
+     if(!allowedV123(perm))return denyV123();
+     return fn.apply(this,arguments);
+   };
+   wrapped._permV123=true;
+   window[name]=wrapped;
+ }
+
+ /* Nicht nur Erstellen/Bearbeiten, sondern ausdrücklich auch Umbenennen und Löschen sperren. */
+ [
+   ['editAreaGeometry','materialAreas'],['addAreaPoint','materialAreas'],['deleteArea','materialAreas'],
+   ['renameArea','materialAreas'],['editArea','materialAreas'],['saveArea','materialAreas'],
+   ['renameRack','materialRacks'],['editRack','materialRacks'],['deleteRack','materialRacks'],
+   ['addRack','materialRacks'],['createRack','materialRacks'],
+   ['renameRackLevel','materialRacks'],['editRackLevel','materialRacks'],
+   ['deleteRackLevel','materialRacks'],['addRackLevel','materialRacks'],
+   ['createRackLevel','materialRacks'],['saveRackLevel','materialRacks']
+ ].forEach(x=>guardV123(x[0],x[1]));
+
+ function applyMaterialRightsV123(){
+   const areaOK=allowedV123('materialAreas');
+   const rackOK=allowedV123('materialRacks');
+   document.querySelectorAll('button,a,[role="button"],summary').forEach(el=>{
+     if(el.closest('#permissionModal'))return;
+     const t=(el.textContent||'').replace(/\s+/g,' ').trim();
+     const oc=(el.getAttribute('onclick')||'').toLowerCase();
+
+     if((/fläche/i.test(t)||/area/.test(oc)) &&
+        /(umbenenn|bearbeit|lösch|erstell|neu)/i.test(t+' '+oc))
+       el.style.setProperty('display',areaOK?'':'none','important');
+
+     if((/gestell|ebene/i.test(t)||/rack|level/.test(oc)) &&
+        /(umbenenn|bearbeit|lösch|erstell|neu|hinzufüg)/i.test(t+' '+oc))
+       el.style.setProperty('display',rackOK?'':'none','important');
+   });
+ }
+
+ /* Cloud-Abmeldung: zuerst den echten Auth-Provider abmelden.
+    Erst danach lokale Session räumen. So kann die Cloud-Sitzung den Benutzer
+    nicht wenige Sekunden später automatisch wieder anmelden. */
+ window.logoutV123=async function(ev){
+   if(ev){ev.preventDefault();ev.stopPropagation();}
+   const btn=document.getElementById('areaLogoutV116');
+   if(btn){btn.disabled=true;btn.textContent='Abmelden…';}
+
+   try{
+     let handled=false;
+
+     // Firebase compat / global auth
+     try{
+       if(window.firebase && typeof firebase.auth==='function'){
+         const a=firebase.auth();
+         if(a && a.currentUser && typeof a.signOut==='function'){
+           await a.signOut(); handled=true;
+         }
+       }
+     }catch(e){console.warn('Firebase signOut:',e)}
+
+     // App-eigene Auth-Objekte
+     if(!handled){
+       for(const obj of [window.auth,window.firebaseAuth,window.cloudAuth]){
+         try{
+           if(obj && typeof obj.signOut==='function'){
+             await obj.signOut(); handled=true; break;
+           }
+         }catch(e){console.warn('Auth signOut:',e)}
+       }
+     }
+
+     // Bereits vorhandene echte Logout-Funktion, aber nicht den alten V116-Fallback.
+     if(!handled){
+       for(const n of ['signOut','doLogout','appLogout','logoutUser']){
+         try{
+           if(typeof window[n]==='function' && window[n]!==window.logoutV123){
+             const r=window[n]();
+             if(r && typeof r.then==='function')await r;
+             handled=true; break;
+           }
+         }catch(e){console.warn(n,e)}
+       }
+     }
+
+     /* Nur Session/Auth-Schlüssel entfernen – niemals Lager-/Projekt-/Appdaten. */
+     try{
+       const authRx=/(auth|login|logged|session|current.?user|firebase.*user)/i;
+       [localStorage,sessionStorage].forEach(store=>{
+         const del=[];
+         for(let i=0;i<store.length;i++){
+           const k=store.key(i);
+           if(k && authRx.test(k))del.push(k);
+         }
+         del.forEach(k=>store.removeItem(k));
+       });
+     }catch(e){}
+
+     try{
+       window.currentUser=null;
+       window.authUser=null;
+       window.loggedInUser=null;
+     }catch(e){}
+
+     /* Bei Firebase verhindert explizites Sign-out die erneute Auth-State-Anmeldung. */
+     setTimeout(()=>location.reload(),100);
+   }catch(err){
+     console.error('logoutV123',err);
+     if(btn){btn.disabled=false;btn.textContent='Abmelden';}
+     alert('Abmelden ist fehlgeschlagen: '+String(err?.message||err));
+   }
+   return false;
+ };
+
+ function repairLogoutButtonV123(){
+   const b=document.getElementById('areaLogoutV116');
+   if(!b)return;
+   b.onclick=window.logoutV123;
+   b.setAttribute('onclick','return logoutV123(event)');
+ }
+ const oldRefresh=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof oldRefresh==='function'?oldRefresh.apply(this,arguments):undefined;
+   applyMaterialRightsV123(); repairLogoutButtonV123(); return r;
+ };
+ const mo=new MutationObserver(()=>{applyMaterialRightsV123();repairLogoutButtonV123()});
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(()=>{applyMaterialRightsV123();repairLogoutButtonV123()},0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · "Fläche sperren / entsperren" ebenfalls nur mit Flächen-Berechtigung */
+(function(){
+ function areaAllowedV124(){
+   try{return currentPermissions().materialAreas===true}catch(e){return false}
+ }
+ function denyV124(){alert('Für das Sperren oder Entsperren von Flächen ist keine Berechtigung freigeschaltet.');return false}
+
+ function guardV124(name){
+   const fn=window[name];
+   if(typeof fn!=='function'||fn._areaLockV124)return;
+   const w=function(){
+     if(!areaAllowedV124())return denyV124();
+     return fn.apply(this,arguments);
+   };
+   w._areaLockV124=true;
+   window[name]=w;
+ }
+
+ /* Mögliche vorhandene Sperr-/Entsperr-Funktionen technisch schützen. */
+ [
+   'lockArea','unlockArea','toggleAreaLock','setAreaLocked',
+   'lockStorageArea','unlockStorageArea','toggleStorageAreaLock',
+   'toggleAreaLocked','setAreaLock'
+ ].forEach(guardV124);
+
+ function applyV124(){
+   const ok=areaAllowedV124();
+   document.querySelectorAll('button,a,[role="button"],summary').forEach(el=>{
+     if(el.closest('#permissionModal'))return;
+     const txt=(el.textContent||'').replace(/\s+/g,' ').trim();
+     const oc=(el.getAttribute('onclick')||'').toLowerCase();
+     if(/fläche.*(sperren|entsperren)|(sperren|entsperren).*fläche/i.test(txt) ||
+        (/area/.test(oc) && /lock|sperr/.test(oc))){
+       el.style.setProperty('display',ok?'':'none','important');
+     }
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyV124(); return r;
+ };
+ const mo=new MutationObserver(applyV124);
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(applyV124,0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Ohne Berechtigung dürfen keine Pakete erfasst werden */
+(function(){
+ function allowedV125(){
+   try{return currentPermissions().materialPackageCreate===true}catch(e){return false}
+ }
+ function denyV125(){
+   alert('Für das Erfassen von Paketen ist keine Berechtigung freigeschaltet.');
+   return false;
+ }
+ function guardV125(name){
+   const fn=window[name];
+   if(typeof fn!=='function'||fn._packagePermV125)return;
+   const w=function(){
+     if(!allowedV125())return denyV125();
+     return fn.apply(this,arguments);
+   };
+   w._packagePermV125=true;
+   window[name]=w;
+ }
+
+ [
+   'addPackage','createPackage','newPackage','savePackage',
+   'openNewPackage','openPackageEditor','addInventoryPackage',
+   'createInventoryPackage','saveInventoryPackage'
+ ].forEach(guardV125);
+
+ function applyV125(){
+   const ok=allowedV125();
+   document.querySelectorAll('button,a,[role="button"],summary').forEach(el=>{
+     if(el.closest('#permissionModal'))return;
+     const t=(el.textContent||'').replace(/\s+/g,' ').trim();
+     const oc=(el.getAttribute('onclick')||'').toLowerCase();
+     if(/paket/i.test(t) && /(erfass|neu|hinzufüg|anleg|erstell)/i.test(t+' '+oc)){
+       el.style.setProperty('display',ok?'':'none','important');
+     }
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyV125(); return r;
+ };
+ const mo=new MutationObserver(applyV125);
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(applyV125,0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Paket-Erfassung an den echten Funktionen gesperrt */
+(function(){
+ function packageCreateAllowedV126(){
+   try{return currentPermissions().materialPackageCreate===true}catch(e){return false}
+ }
+ function applyPackageCreateV126(){
+   const ok=packageCreateAllowedV126();
+   document.querySelectorAll('[onclick]').forEach(el=>{
+     if(el.closest('#permissionModal'))return;
+     const oc=String(el.getAttribute('onclick')||'');
+     /* editPackage() bleibt sichtbar; nur echte Neuerfassung über openMaterial(). */
+     if(/\bopenMaterial\s*\(/.test(oc)){
+       el.style.setProperty('display',ok?'':'none','important');
+     }
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyPackageCreateV126(); return r;
+ };
+ const mo=new MutationObserver(applyPackageCreateV126);
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(applyPackageCreateV126,0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Produktionshalle nur mit eigener Ansichtsberechtigung */
+(function(){
+ function productionHallAllowedV127(){
+   try{return currentPermissions().productionHall===true}catch(e){return false}
+ }
+ function applyProductionHallPermissionV127(){
+   const ok=productionHallAllowedV127();
+   const b=document.getElementById('openProductionBtnV127');
+   if(b)b.style.setProperty('display',ok?'':'none','important');
+
+   const nav=document.querySelector('.nav[data-page="production"]');
+   if(nav)nav.style.setProperty('display',ok?'':'none','important');
+
+   const page=document.getElementById('page-production');
+   if(page && page.classList.contains('active') && !ok){
+     try{showPage('map')}catch(e){page.classList.remove('active')}
+   }
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyProductionHallPermissionV127(); return r;
+ };
+ const mo=new MutationObserver(applyProductionHallPermissionV127);
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(applyProductionHallPermissionV127,0);
+})();
+</script>
+
+
+<style>
+.inventoryLocationReadOnlyV128{display:inline-block;padding:8px 0;color:inherit}
+</style>
+<script>
+/* BV2026-1-142 · Jede Lager-Aktion mit eigener Berechtigung */
+(function(){
+ const rules=[
+   ['materialGoLocation',/^\s*Zu Lagerort\s*$/i],
+   ['materialReserve',/^\s*Reservieren\s*$/i],
+   ['materialEditPackage',/^\s*Bearbeiten\s*$/i],
+   ['materialTransfer',/Umbuchen/i],
+   ['materialHistory',/^\s*Verlauf\s*$/i],
+   ['materialArchivePackage',/^\s*Archiv\s*$/i]
+ ];
+ function allowed(k){try{return currentPermissions()[k]===true}catch(e){return false}}
+ function apply(){
+   document.querySelectorAll('.inventoryActionPanelV464 button').forEach(b=>{
+     const txt=(b.textContent||'').trim();
+     const rule=rules.find(x=>x[1].test(txt));
+     if(rule)b.style.setProperty('display',allowed(rule[0])?'':'none','important');
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   apply();return r;
+ };
+ const mo=new MutationObserver(apply);
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(apply,0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Projektfreigaben zuverlässig öffnen */
+(function(){
+ window.openProjectAccessManagerV129=function(id,ev){
+   if(ev){ev.preventDefault();ev.stopPropagation();}
+   try{
+     const p=(typeof projectById==='function')?projectById(id):null;
+     if(!p){alert('Projekt wurde nicht gefunden.');return false;}
+     if(typeof canManageProjectAccess==='function' && !canManageProjectAccess(p)){
+       alert('Nur der Ersteller des Projekts oder ein Administrator kann Mitarbeiter einladen.');
+       return false;
+     }
+
+     projectAccessEditingId=id;
+     if(typeof normalizeProjectAccessData==='function')normalizeProjectAccessData(p);
+
+     const title=document.getElementById('projectAccessTitle');
+     const owner=document.getElementById('projectAccessOwner');
+     const input=document.getElementById('projectInviteUsername');
+     const box=document.getElementById('projectAccessCandidates');
+     if(title)title.textContent=[p.number,p.name].filter(Boolean).join(' · ');
+     if(owner)owner.textContent=p.createdByName||'Altprojekt – kein Ersteller gespeichert';
+     if(input)input.value='';
+
+     if(typeof renderProjectAccessMembers==='function')renderProjectAccessMembers();
+
+     const modal=document.getElementById('projectAccessModal');
+     if(!modal){alert('Projektfreigaben konnten nicht geöffnet werden.');return false;}
+     if(modal.parentElement!==document.body)document.body.appendChild(modal);
+     modal.style.removeProperty('display');
+     modal.classList.add('open');
+
+     if(box)box.innerHTML='<div class="muted">Benutzer werden geladen …</div>';
+     setTimeout(function(){try{input&&input.focus()}catch(e){}},50);
+
+     setTimeout(function(){
+       try{
+         const r=renderProjectAccessCandidates();
+         if(r&&typeof r.catch==='function')r.catch(function(err){
+           console.error('Projektfreigaben Benutzerliste:',err);
+           if(box)box.innerHTML='<div class="muted">Benutzerliste konnte nicht geladen werden. Benutzername kann oben trotzdem manuell eingegeben werden.</div>';
+         });
+       }catch(err){
+         console.error('Projektfreigaben Benutzerliste:',err);
+         if(box)box.innerHTML='<div class="muted">Benutzerliste konnte nicht geladen werden. Benutzername kann oben trotzdem manuell eingegeben werden.</div>';
+       }
+     },0);
+     return false;
+   }catch(err){
+     console.error('openProjectAccessManagerV129',err);
+     alert('Projektfreigaben konnten nicht geöffnet werden: '+String(err&&err.message||err));
+     return false;
+   }
+ };
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Projektfreigaben: explizite Modal-Anzeige zurücksetzen */
+(function(){
+ const oldClose=window.closeM;
+ if(typeof oldClose==='function'){
+   window.closeM=function(id){
+     const r=oldClose.apply(this,arguments);
+     if(id==='projectAccessModal'){
+       const m=document.getElementById(id);
+       if(m)m.style.removeProperty('display');
+     }
+     return r;
+   };
+ }
+})();
+</script>
+
+
+<style>
+#projectAccessDebugV131{
+ position:fixed;right:14px;bottom:14px;z-index:2147483647;width:min(560px,calc(100vw - 28px));
+ max-height:55vh;overflow:auto;background:#102f27;color:#fff;border:2px solid #fff;border-radius:14px;
+ box-shadow:0 10px 35px #0005;padding:14px;font:13px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace
+}
+#projectAccessDebugV131 .head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+#projectAccessDebugV131 .head b{font:700 15px/1.2 system-ui,sans-serif}
+#projectAccessDebugV131 button{background:#fff;color:#102f27;border:0;border-radius:8px;padding:6px 9px;font-weight:800;cursor:pointer}
+#projectAccessDebugV131 .ok{color:#a9f5b4}.err{color:#ffb1b1}.info{color:#fff}
+</style>
+<script>
+/* BV2026-1-142 · Sichtbare Diagnose für "Mitarbeiter einladen / Freigaben" */
+(function(){
+ function box(){
+   let b=document.getElementById('projectAccessDebugV131');
+   if(!b){
+     b=document.createElement('div'); b.id='projectAccessDebugV131';
+     b.innerHTML='<div class="head"><b>Diagnose Projektfreigaben</b><button type="button" onclick="this.closest(\'#projectAccessDebugV131\').remove()">Schliessen</button></div><div id="projectAccessDebugLogV131"></div>';
+     document.body.appendChild(b);
+   }
+   return b;
+ }
+ function log(msg,type){
+   box();
+   const l=document.getElementById('projectAccessDebugLogV131');
+   const d=document.createElement('div');
+   d.className=type||'info';
+   d.textContent=new Date().toLocaleTimeString()+'  '+msg;
+   l.appendChild(d); l.scrollTop=l.scrollHeight;
+ }
+ window.debugProjectAccessV131=function(id,ev){
+   if(ev){ev.preventDefault();ev.stopPropagation();}
+   box();
+   const l=document.getElementById('projectAccessDebugLogV131'); if(l)l.innerHTML='';
+   log('Klick erkannt. Projekt-ID: '+id,'ok');
+
+   try{
+     log('projectById vorhanden: '+(typeof projectById==='function'),'info');
+     const p=typeof projectById==='function'?projectById(id):null;
+     log('Projekt gefunden: '+!!p+(p?' · '+[p.number,p.name].filter(Boolean).join(' · '):''),p?'ok':'err');
+     if(!p)return false;
+
+     let can='nicht prüfbar';
+     try{can=typeof canManageProjectAccess==='function'?canManageProjectAccess(p):'Funktion fehlt'}catch(e){can='FEHLER: '+e.message}
+     log('Berechtigung Freigaben verwalten: '+String(can),can===true?'ok':'err');
+
+     const m=document.getElementById('projectAccessModal');
+     log('Modal #projectAccessModal vorhanden: '+!!m,m?'ok':'err');
+     if(m){
+       const cs=getComputedStyle(m);
+       log('Modal vor Öffnen: display='+cs.display+', visibility='+cs.visibility+', opacity='+cs.opacity,'info');
+     }
+
+     log('Rufe openProjectAccessManager() auf …','info');
+     try{
+       if(typeof openProjectAccessManager!=='function')throw new Error('openProjectAccessManager ist nicht definiert');
+       openProjectAccessManager(id);
+       log('openProjectAccessManager() wurde ohne JS-Fehler beendet.','ok');
+     }catch(err){
+       log('FEHLER in openProjectAccessManager: '+String(err&&err.stack||err),'err');
+       return false;
+     }
+
+     const m2=document.getElementById('projectAccessModal');
+     if(m2){
+       const cs2=getComputedStyle(m2);
+       const r=m2.getBoundingClientRect();
+       log('Modal danach: class="'+m2.className+'"','info');
+       log('display='+cs2.display+', visibility='+cs2.visibility+', opacity='+cs2.opacity,'info');
+       log('Position/Grösse: '+Math.round(r.width)+'×'+Math.round(r.height)+' bei '+Math.round(r.left)+'/'+Math.round(r.top),(r.width>0&&r.height>0)?'ok':'err');
+       log('Im sichtbaren Bildschirm: '+(r.bottom>0&&r.right>0&&r.top<innerHeight&&r.left<innerWidth),(r.bottom>0&&r.right>0&&r.top<innerHeight&&r.left<innerWidth)?'ok':'err');
+     }
+   }catch(err){
+     log('UNERWARTETER FEHLER: '+String(err&&err.stack||err),'err');
+   }
+   return false;
+ };
+})();
+</script>
+
+
+<style>
+/* BV2026-1-142 · Projektfreigaben garantiert über der gesamten Anwendung */
+#projectAccessModal{
+ position:fixed!important;
+ inset:0!important;
+ z-index:2147483000!important;
+ background:rgba(0,0,0,.55)!important;
+ padding:18px!important;
+ box-sizing:border-box!important;
+ align-items:center!important;
+ justify-content:center!important;
+ place-items:center!important;
+}
+#projectAccessModal.open{display:flex!important}
+#projectAccessModal>.box{
+ position:relative!important;
+ display:block!important;
+ width:min(760px,calc(100vw - 36px))!important;
+ height:auto!important;
+ max-width:760px!important;
+ max-height:calc(100vh - 36px)!important;
+ margin:auto!important;
+ overflow:auto!important;
+ border-radius:15px!important;
+ padding:15px!important;
+ background:#fff!important;
+ box-sizing:border-box!important;
+ z-index:1!important;
+}
+</style>
+<script>
+/* V132: Diagnose aus V131 entfernen und Modal beim Öffnen sicher nach body verschieben. */
+(function(){
+ const d=document.getElementById('projectAccessDebugV131');if(d)d.remove();
+
+ const old=window.openProjectAccessManager;
+ if(typeof old==='function'){
+   window.openProjectAccessManager=function(id){
+     const m=document.getElementById('projectAccessModal');
+     if(m && m.parentElement!==document.body)document.body.appendChild(m);
+     const r=old.apply(this,arguments);
+     if(m && m.classList.contains('open')){
+       m.style.setProperty('display','flex','important');
+       m.style.setProperty('visibility','visible','important');
+       m.style.setProperty('opacity','1','important');
+     }
+     return r;
+   };
+ }
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Berechtigungen sofort in die Cloud und beim Benutzer zeitnah neu laden */
+(function(){
+ /* Beim Speichern einer Berechtigung nicht nur den verzögerten Queue-Sync abwarten. */
+ const oldSave=window.savePermissionEditorV121;
+ if(typeof oldSave==='function'){
+   window.savePermissionEditorV121=function(ev){
+     const r=oldSave.apply(this,arguments);
+     try{
+       if(typeof pushEntitySync==='function'){
+         setTimeout(function(){pushEntitySync(false).catch(function(e){console.error('Berechtigungen Cloud-Sync:',e)})},50);
+       }
+     }catch(e){console.error('Berechtigungen Cloud-Sync:',e)}
+     return r;
+   };
+ }
+
+ /* Cloud-Benutzer prüfen Berechtigungsänderungen deutlich schneller.
+    Nach pullEntitySync() läuft refresh(), dadurch erscheinen freigegebene Bereiche direkt. */
+ let permissionPollV133=null;
+ function startPermissionPollV133(){
+   if(permissionPollV133)clearInterval(permissionPollV133);
+   permissionPollV133=setInterval(function(){
+     try{
+       if(document.hidden)return;
+       if(typeof cloudAuthEnabled==='function' && !cloudAuthEnabled())return;
+       if(typeof checkCloudForUpdates==='function')checkCloudForUpdates(true);
+     }catch(e){}
+   },2500);
+ }
+ startPermissionPollV133();
+
+ /* Auch beim Zurückkehren in den Tab sofort nach neuen Rechten schauen. */
+ document.addEventListener('visibilitychange',function(){
+   if(!document.hidden){
+     try{if(typeof checkCloudForUpdates==='function')checkCloudForUpdates(true)}catch(e){}
+   }
+ });
+})();
+</script>
+
+
+<style>
+#permDebugV134{position:fixed;right:14px;bottom:14px;z-index:2147483647;width:min(620px,calc(100vw - 28px));max-height:55vh;overflow:auto;background:#10352b;color:#fff;border:2px solid #fff;border-radius:14px;box-shadow:0 10px 35px #0005;padding:14px;font:13px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace}
+#permDebugV134 .head{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px}
+#permDebugV134 button{background:#fff;color:#10352b;border:0;border-radius:8px;padding:6px 9px;font-weight:800}
+</style>
+<script>
+/* BV2026-1-142 · sichtbare Berechtigungsdiagnose */
+(function(){
+ function dbg(msg){
+   let b=document.getElementById('permDebugV134');
+   if(!b){
+     b=document.createElement('div');b.id='permDebugV134';
+     b.innerHTML='<div class="head"><b>Berechtigungsdiagnose</b><button onclick="this.closest(\'#permDebugV134\').remove()">Schliessen</button></div><div id="permDebugLogV134"></div>';
+     document.body.appendChild(b);
+   }
+   const l=document.getElementById('permDebugLogV134'),d=document.createElement('div');
+   d.textContent=new Date().toLocaleTimeString()+'  '+msg;l.appendChild(d);
+ }
+ window.permissionDebugV134=function(){
+   const b=document.getElementById('permDebugV134');if(b)b.remove();
+   try{
+     dbg('Cloud aktiv: '+(typeof cloudAuthEnabled==='function'?cloudAuthEnabled():'?'));
+     dbg('Benutzer: '+String(typeof cloudMember!=='undefined'&&cloudMember?cloudMember.username:'?'));
+     dbg('Rolle: '+String(typeof currentRole==='function'?currentRole():'?'));
+     dbg('Permission-Key: '+String(typeof currentPermissionKey==='function'?currentPermissionKey():'?'));
+     const key=typeof currentPermissionKey==='function'?currentPermissionKey():'';
+     const saved=(typeof st!=='undefined'&&st.userPermissions)?st.userPermissions[key]:undefined;
+     dbg('Gespeichert smallOrders: '+String(saved&&saved.smallOrders));
+     const cp=typeof currentPermissions==='function'?currentPermissions():{};
+     dbg('currentPermissions smallOrders: '+String(cp.smallOrders));
+     const tile=document.getElementById('moduleSmallOrdersTile');
+     dbg('Kleinaufträge-Karte gefunden: '+!!tile);
+     if(tile){
+       dbg('inline display: "'+tile.style.display+'"');
+       dbg('computed display: '+getComputedStyle(tile).display);
+     }
+   }catch(e){dbg('FEHLER: '+String(e&&e.stack||e))}
+ };
+
+ /* Diagnosebutton nur für Administratoren/Lagerverantwortliche sichtbar in Bereichsauswahl */
+ function addBtn(){
+   if(document.getElementById('permDebugBtnV134'))return;
+   const logout=document.getElementById('areaLogoutV116');
+   if(!logout)return;
+   const b=document.createElement('button');
+   b.id='permDebugBtnV134';b.type='button';b.className=logout.className||'btn';
+   b.textContent='Berechtigungen prüfen';
+   b.onclick=permissionDebugV134;
+   logout.parentNode.insertBefore(b,logout);
+ }
+ const mo=new MutationObserver(addBtn);mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(addBtn,0);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Bereichskarten werden ausschliesslich aus aktuellen Rechten gesteuert */
+(function(){
+ function applyAreaCardsV135(){
+   let p={};
+   try{p=currentPermissions()||{}}catch(e){}
+   const map={
+     moduleWarehouseTile:'warehouse',
+     moduleProjectsTile:'projects',
+     moduleSmallOrdersTile:'smallOrders',
+     modulePlatformsTile:'platforms',
+     moduleToolsTile:'tools'
+   };
+   Object.entries(map).forEach(([id,key])=>{
+     const el=document.getElementById(id);
+     if(!el)return;
+     if(p[key]===true){
+       /* Alte Patches hatten display:none teilweise mit !important gesetzt.
+          Deshalb hier die aktuelle Berechtigung ebenfalls mit !important durchsetzen. */
+       el.style.setProperty('display','','important');
+     }else{
+       el.style.setProperty('display','none','important');
+     }
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyAreaCardsV135();
+   return r;
+ };
+ const mo=new MutationObserver(applyAreaCardsV135);
+ mo.observe(document.body,{childList:true,subtree:true});
+ setTimeout(applyAreaCardsV135,0);
+ setTimeout(applyAreaCardsV135,500);
+ setTimeout(applyAreaCardsV135,2000);
+})();
+</script>
+
+
+<style>
+/* BV2026-1-142 · Bereichskarten: Rechte direkt gegen alte CSS-Regeln durchsetzen */
+#moduleSmallOrdersTile.permShowV137,
+#moduleWarehouseTile.permShowV137,
+#moduleProjectsTile.permShowV137,
+#modulePlatformsTile.permShowV137,
+#moduleToolsTile.permShowV137{
+ display:flex!important;
+ visibility:visible!important;
+ opacity:1!important;
+}
+</style>
+<script>
+(function(){
+ /* Kein MutationObserver: V136 konnte durch seine eigenen Style-Änderungen
+    eine Endlosschleife auslösen und den Browser blockieren. */
+ function applyAreaPermissionsV137(){
+   let p={};try{p=currentPermissions()||{}}catch(e){}
+   const map={
+     moduleWarehouseTile:'warehouse',
+     moduleProjectsTile:'projects',
+     moduleSmallOrdersTile:'smallOrders',
+     modulePlatformsTile:'platforms',
+     moduleToolsTile:'tools'
+   };
+   Object.entries(map).forEach(function(entry){
+     const el=document.getElementById(entry[0]), key=entry[1];
+     if(!el)return;
+     const yes=p[key]===true;
+     el.classList.toggle('permShowV137',yes);
+     if(yes){
+       el.hidden=false;
+       el.style.removeProperty('display');
+       el.style.removeProperty('visibility');
+       el.style.removeProperty('opacity');
+     }else{
+       el.classList.remove('permShowV137');
+       el.style.setProperty('display','none','important');
+     }
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyAreaPermissionsV137();
+   return r;
+ };
+ window.applyAreaPermissionsV137=applyAreaPermissionsV137;
+ setTimeout(applyAreaPermissionsV137,0);
+ setTimeout(applyAreaPermissionsV137,750);
+})();
+</script>
+
+
+<style>
+/* BV2026-1-142 · ToDo nur mit expliziter Berechtigung */
+#todoDashboardV518.permTodoShowV138,
+.todoDashboardV518.permTodoShowV138,
+[data-todo-dashboard].permTodoShowV138{
+ display:block!important;
+ visibility:visible!important;
+ opacity:1!important;
+}
+</style>
+<script>
+(function(){
+ function todoAllowedV138(){
+   try{return currentPermissions().todo===true}catch(e){return false}
+ }
+ function applyTodoPermissionV138(){
+   const ok=todoAllowedV138();
+
+   /* ToDo-Dashboard/Karte anhand ID, Klasse und sichtbarem Titel finden. */
+   const found=new Set();
+   ['todoDashboardV518','todoDashboard','todoCard','moduleTodoTile'].forEach(id=>{
+     const e=document.getElementById(id);if(e)found.add(e);
+   });
+   document.querySelectorAll('[class*="todo" i],[id*="todo" i],[data-todo-dashboard]').forEach(e=>{
+     if(e.closest('#permissionModal')||e.id==='permTodoV122')return;
+     const txt=(e.textContent||'').replace(/\s+/g,' ').trim();
+     if(/^ToDo\b/i.test(txt)||/todo/i.test(e.id||'')||/todo/i.test(e.className||''))found.add(e);
+   });
+
+   found.forEach(el=>{
+     /* Nur den eigentlichen sichtbaren ToDo-Bereich steuern, keine Scripts/Formfelder. */
+     if(!el || /^(SCRIPT|STYLE|INPUT|LABEL)$/.test(el.tagName))return;
+     if(ok){
+       el.classList.add('permTodoShowV138');
+       el.hidden=false;
+       el.style.removeProperty('display');
+       el.style.removeProperty('visibility');
+       el.style.removeProperty('opacity');
+     }else{
+       el.classList.remove('permTodoShowV138');
+       el.style.setProperty('display','none','important');
+     }
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyTodoPermissionV138();return r;
+ };
+ window.applyTodoPermissionV138=applyTodoPermissionV138;
+ setTimeout(applyTodoPermissionV138,0);
+ setTimeout(applyTodoPermissionV138,750);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Kleinauftrag-Materialrechte ohne globale Alerts */
+(function(){
+ function allowedV140(kind){
+   try{
+     const p=currentPermissions()||{};
+     return kind==='immer'
+       ? p.smallOrderMaterialImmer===true
+       : p.smallOrderMaterialKuenzli===true;
+   }catch(e){return false}
+ }
+
+ /* Nur echte Benutzer-Klicks abfangen. Keine Funktions-Wrappers,
+    keine Alerts aus render()/setInterval()/Cloud-Sync. */
+ document.addEventListener('click',function(ev){
+   if(!ev.isTrusted)return;
+   const el=ev.target&&ev.target.closest?ev.target.closest('button,a,[role="button"]'):null;
+   if(!el || el.closest('#permissionModal'))return;
+
+   const txt=(el.textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+   const oc=String(el.getAttribute('onclick')||'').toLowerCase();
+   const all=txt+' '+oc;
+
+   if(!/material/.test(all) || !/(neu|erstell|hinzufüg|anleg)/.test(all))return;
+
+   let kind=null;
+   if(/immer/.test(all))kind='immer';
+   else if(/künzli|kuenzli/.test(all))kind='kuenzli';
+   if(!kind || allowedV140(kind))return;
+
+   ev.preventDefault();
+   ev.stopPropagation();
+   ev.stopImmediatePropagation();
+   alert('Für das Erstellen neuer Materialien '+(kind==='immer'?'Immer AG':'Künzli')+' ist keine Berechtigung freigeschaltet.');
+ },true);
+
+ function applyV140(){
+   const ku=allowedV140('kuenzli'), im=allowedV140('immer');
+   document.querySelectorAll('button,a,[role="button"]').forEach(function(el){
+     if(el.closest('#permissionModal'))return;
+     const all=((el.textContent||'')+' '+(el.getAttribute('onclick')||'')).toLowerCase();
+     if(!/material/.test(all)||!/(neu|erstell|hinzufüg|anleg)/.test(all))return;
+     if(/immer/.test(all))el.style.setProperty('display',im?'':'none','important');
+     else if(/künzli|kuenzli/.test(all))el.style.setProperty('display',ku?'':'none','important');
+   });
+ }
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applyV140();return r;
+ };
+ setTimeout(applyV140,0);
+ setTimeout(applyV140,700);
+})();
+</script>
+
+
+<script>
+/* BV2026-1-142 · Lieferantenansicht nur mit "Lieferanten einsehen" */
+(function(){
+ function supplierViewAllowedV141(){
+   try{return currentPermissions().platformSupplierView===true}catch(e){return false}
+ }
+ function applySupplierViewV141(){
+   const ok=supplierViewAllowedV141();
+   document.querySelectorAll('button,a,[role="button"],summary,[data-page],[data-view]').forEach(function(el){
+     if(el.closest('#permissionModal'))return;
+     const txt=(el.textContent||'').replace(/\s+/g,' ').trim();
+     const meta=[
+       el.id||'',el.className||'',el.getAttribute('onclick')||'',
+       el.getAttribute('data-page')||'',el.getAttribute('data-view')||''
+     ].join(' ');
+     if(/lieferant/i.test(txt+' '+meta) && !/(ändern|bearbeit|edit)/i.test(txt+' '+meta)){
+       el.style.setProperty('display',ok?'':'none','important');
+     }
+   });
+ }
+ /* Direkte Klicks auf Lieferantenansichten zusätzlich blockieren. */
+ document.addEventListener('click',function(ev){
+   if(!ev.isTrusted || supplierViewAllowedV141())return;
+   const el=ev.target&&ev.target.closest?ev.target.closest('button,a,[role="button"],summary'):null;
+   if(!el||el.closest('#permissionModal'))return;
+   const all=((el.textContent||'')+' '+(el.getAttribute('onclick')||'')+' '+(el.id||'')).toLowerCase();
+   if(/lieferant/.test(all) && !/(ändern|bearbeit|edit)/.test(all)){
+     ev.preventDefault();ev.stopPropagation();ev.stopImmediatePropagation();
+     alert('Für das Einsehen der Lieferanten ist keine Berechtigung freigeschaltet.');
+   }
+ },true);
+
+ const old=window.refreshPermissionVisibility;
+ window.refreshPermissionVisibility=function(){
+   const r=typeof old==='function'?old.apply(this,arguments):undefined;
+   applySupplierViewV141();return r;
+ };
+ setTimeout(applySupplierViewV141,0);
+ setTimeout(applySupplierViewV141,700);
+})();
+</script>
+
+
+<style>
+/* BV2026-1-142 · Berechtigungen logisch gruppieren */
+#permissionModal .permLogicalGroupV142{
+ margin:10px 12px 12px;border:1px solid #d8e1dd;border-radius:10px;overflow:hidden;background:#fff
+}
+#permissionModal .permLogicalTitleV142{
+ padding:8px 11px;background:#f3f7f5;font-weight:800;font-size:12px;color:#173d33;
+ border-bottom:1px solid #d8e1dd
+}
+#permissionModal .permLogicalBodyV142{
+ display:grid;grid-template-columns:1fr 1fr
+}
+#permissionModal .permLogicalBodyV142>.permissionCheck{
+ margin:0!important;padding:9px 11px!important;border-bottom:1px solid #e8eeeb
+}
+@media(max-width:650px){#permissionModal .permLogicalBodyV142{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+ function labelFor(id){const e=document.getElementById(id);return e?e.closest('label'):null}
+ function makeGroup(parent,title,ids){
+   const labels=ids.map(labelFor).filter(Boolean); if(!labels.length)return;
+   const g=document.createElement('div');g.className='permLogicalGroupV142';
+   const h=document.createElement('div');h.className='permLogicalTitleV142';h.textContent=title;
+   const b=document.createElement('div');b.className='permLogicalBodyV142';
+   g.append(h,b);labels[0].parentNode.insertBefore(g,labels[0]);labels.forEach(x=>b.appendChild(x));
+ }
+ function build(){
+   if(document.querySelector('#permissionModal .permLogicalGroupV142'))return;
+
+   /* Materiallager */
+   const mat=document.getElementById('permMaterial');
+   if(mat){
+     const root=mat.closest('.permissionGroupV108')||mat.parentElement.parentElement;
+     makeGroup(root,'Pakete',[
+       'permMaterialPackageCreateV125','permMaterialEditPackageV128','permMaterialReserveV128',
+       'permMaterialTransferV128','permMaterialArchivePackageV128','permMaterialHistoryV128'
+     ]);
+     makeGroup(root,'Lagerort',[
+       'permMaterialGoLocationV128','permMaterialLocationEditV128','permMaterialLocationsV114'
+     ]);
+     makeGroup(root,'Lagerstruktur',[
+       'permMaterialAreasV114','permMaterialRacksV114','permMaterialPinsV114'
+     ]);
+     makeGroup(root,'Material & Darstellung',[
+       'permMaterialMasterDataV114','permMaterialFormatsV114','permMaterialColumnsV114'
+     ]);
+     makeGroup(root,'Weitere Lagerbereiche',[
+       'permControl','permReserved','permArchive','permDefects','permTransfers','permManage'
+     ]);
+   }
+
+   /* Produktion */
+   const prod=document.getElementById('permProjects');
+   if(prod){
+     const root=prod.closest('.permissionGroupV108')||prod.parentElement.parentElement;
+     makeGroup(root,'Projekt & Produktion',[
+       'permProjectCreateV109','permCommissionV109','permProductionAnalysisV110'
+     ]);
+   }
+
+   /* Kleinaufträge */
+   const small=document.getElementById('permSmallOrders');
+   if(small){
+     const root=small.closest('.permissionGroupV108')||small.parentElement.parentElement;
+     makeGroup(root,'Materialien erstellen',[
+       'permSmallOrderMaterialKuenzliV111','permSmallOrderMaterialImmerV111'
+     ]);
+   }
+
+   /* Logistik */
+   const plat=document.getElementById('permPlatforms');
+   if(plat){
+     const root=plat.closest('.permissionGroupV108')||plat.parentElement.parentElement;
+     makeGroup(root,'Pritschen / Inventar',[
+       'permPlatformReturnV113','permPlatformCreateStockV113'
+     ]);
+     makeGroup(root,'Projekte & Transporte',[
+       'permPlatformCreateProjectV113','permPlatformAllTransportsV113','permPlatformDeleteTransportV113'
+     ]);
+     makeGroup(root,'Lieferanten',[
+       'permPlatformSupplierViewV113','permPlatformSupplierEditV113'
+     ]);
+   }
+
+   /* Löschen */
+   const dd=document.getElementById('permDeleteDataV112');
+   if(dd){
+     const root=dd.closest('.permissionGroupV108')||dd.parentElement.parentElement;
+     makeGroup(root,'Löschen', ['permDeleteDataV112','permDeleteReportsV112']);
+   }
+ }
+ const old=window.openPermissionEditor;
+ if(typeof old==='function'){
+   window.openPermissionEditor=function(){
+     const r=old.apply(this,arguments);setTimeout(build,0);return r;
+   };
+ }
+ setTimeout(build,0);
 })();
 </script>
